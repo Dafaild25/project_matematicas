@@ -33,12 +33,53 @@ Administradores
             Tabla Administradores
       </div>
        <div class="card-body">
-        
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" >
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Correo</th>
+                    <th>Telefono</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Nombre 1</td>
+                <td>Apellido 1</td>
+                <td>Correo 1</td>
+                <td>Telefono 1</td>
+                <td> 
+                  <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+
+                            
+                            <button type="submit" class=" btn btn-primary btn-circle "><span><i class="fas fa-pen"></i></span></button>
+                            
+
+                            
+                          <button type="button" class="btn btn-danger btn-circle" data-bs-toggle="modal" data-bs-target="#confirmarModal"><i class="fas fa-trash"></i></button>
+                                  
+                                        
+                           
+                        </div>
+
+                </td>
+                  
+              </tr>
+            </tbody>    
+        </table>
+        </div>
+      
        </div>  
     </div>
     </div>
 {% endblock %}
 
 {% block js %}
+ <!-- Page level custom scripts -->
+    <script src="{% static 'js/demo/datatables-demo.js' %}"></script>
 
 {% endblock %}
