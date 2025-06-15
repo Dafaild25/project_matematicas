@@ -5,81 +5,80 @@ Administradores
 {% endblock %}
 
 {% block css %}
-<style>
-  body {
-    background-color: #f4f8ff;
-  }
-</style>
+<link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+<link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid">
-<div class="d-sm-flex align-items-center justify-content-between mb-4">
+<div class="container-fluid ">
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Admnistradores</h1>
     <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-            class="fas fa-upload fa-sm text-white-50"></i> Exportar Admnistradores </a>
-</div>
+        class="fas fa-upload fa-sm text-white-50"></i> Exportar Admnistradores </a>
+  </div>
 
-    <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item"><a href="{% url 'inicio' %}">Inicio</a></li>
-        <li class="breadcrumb-item active">Administradores</li>
-    </ol>
-    <div class="mb-4">
-        <a href="{% url 'administrador_create' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Nueva Administrador</a>
+  <ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item"><a href="{% url 'inicio' %}">Inicio</a></li>
+    <li class="breadcrumb-item active">Administradores</li>
+  </ol>
+  <div class="mb-4">
+    <a href="{% url 'administrador_create' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Nueva
+      Administrador</a>
+  </div>
+  <div class="card mb-4">
+    <div class="card-header">
+      <i class="fas fa-table me-1"></i>
+      Tabla Administradores
     </div>
-    <div class="card mb-4">
-       <div class="card-header">
-            <i class="fas fa-table me-1"></i>
-            Tabla Administradores
-      </div>
-       <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" >
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Correo</th>
-                    <th>Telefono</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>Nombre 1</td>
-                <td>Apellido 1</td>
-                <td>Correo 1</td>
-                <td>Telefono 1</td>
-                <td> 
-                  <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Nombre</th>
+              <th>Apellido</th>
+              <th>Correo</th>
+              <th>Telefono</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Nombre 1</td>
+              <td>Apellido 1</td>
+              <td>Correo 1</td>
+              <td>Telefono 1</td>
+              <td>
+                <div class="btn-group" role="group" aria-label="Basic mixed styles example">
 
-                            
-                            <button type="submit" class=" btn btn-primary btn-circle "><span><i class="fas fa-pen"></i></span></button>
-                            
 
-                            
-                          <button type="button" class="btn btn-danger btn-circle" data-bs-toggle="modal" data-bs-target="#confirmarModal"><i class="fas fa-trash"></i></button>
-                                  
-                                        
-                           
-                        </div>
+                  <button type="button" class=" btn btn-primary btn-circle "><span><i
+                        class="fas fa-pen"></i></span></button>
 
-                </td>
-                  
-              </tr>
-            </tbody>    
+
+
+                  <button type="button" class="btn btn-danger btn-circle" data-bs-toggle="modal"
+                    data-bs-target="#confirmarModal"><i class="fas fa-trash"></i></button>
+
+                </div>
+
+              </td>
+
+            </tr>
+          </tbody>
         </table>
-        </div>
-      
-       </div>  
+      </div>
+
     </div>
-    </div>
+  </div>
+</div>
 {% endblock %}
 
 {% block js %}
- <!-- Page level custom scripts -->
-    <script src="{% static 'js/demo/datatables-demo.js' %}"></script>
+<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'vendor/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
 
 {% endblock %}
