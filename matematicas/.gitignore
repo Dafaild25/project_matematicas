@@ -5,26 +5,26 @@ __pycache__/
 *.pyc
 *.pyo
 
-# Django migrations (solo si prefieres generarlas por rama)
-
-!*/migrations/__init__.py
-
-# SQLite database (si no quieres subirla)
+# SQLite database
 db.sqlite3
 
 # Environment variables
 .env
 *.env
 
-# Virtual environment
+# Virtual environments
 venv/
 env/
 
 # VSCode project settings
 .vscode/
 
-# Static files collected
+# Static files (colectados con collectstatic)
+staticfiles/
+static/
 
+# Media uploads
+media/
 
 # Logs
 *.log
