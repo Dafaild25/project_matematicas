@@ -1,0 +1,44 @@
+{% extends 'plantillas/MasterAdmin.html' %}
+{% load static %}
+{% block title %}
+Administradores
+{% endblock %}
+
+{% block css %}
+<style>
+  body {
+    background-color: #f4f8ff;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Admnistradores</h1>
+    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+            class="fas fa-upload fa-sm text-white-50"></i> Exportar Admnistradores </a>
+</div>
+
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="{% url 'inicio' %}">Inicio</a></li>
+        <li class="breadcrumb-item active">Administradores</li>
+    </ol>
+    <div class="mb-4">
+        <a href="{% url 'administrador_create' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Nueva Administrador</a>
+    </div>
+    <div class="card mb-4">
+       <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            Tabla Administradores
+      </div>
+       <div class="card-body">
+        
+       </div>  
+    </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}

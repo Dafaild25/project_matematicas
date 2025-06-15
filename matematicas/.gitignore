@@ -1,0 +1,32 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.so
+
+# Django migrations (solo si prefieres generarlas por rama)
+*/migrations/
+!*/migrations/__init__.py
+
+# SQLite database (si no quieres subirla)
+db.sqlite3
+
+# Environment variables
+.env
+*.env
+
+# Virtual environment
+venv/
+env/
+
+# VSCode project settings
+.vscode/
+
+# Static files collected
+
+
+# Logs
+*.log
+
+# MacOS, Windows junk
+.DS_Store
+Thumbs.db

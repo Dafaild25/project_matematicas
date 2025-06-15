@@ -1,0 +1,67 @@
+{% extends 'plantillas/MasterAdmin.html'%}
+{% block title %}
+Crear Administrador
+{% endblock %}
+{% block css %}
+<style>
+    body {
+        background-color: #f4f8ff;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Admnistradores</h1>
+        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                class="fas fa-upload fa-sm text-white-50"></i> Importar Admnistradores </a>
+    </div>
+
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="{% url 'inicio' %}">Inicio</a></li>
+        <li class="breadcrumb-item active"><a href="{% url 'administrador_index' %}">Administradores</a></li>
+        <li class="breadcrumb-item active">Crear Administrador</li>
+    </ol>
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <input class="form-control" name="nombres" placeholder="Nombres">
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <input class="form-control" name="apellidos" placeholder="Apellidos">
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <input class="form-control" name="dni" type="text" placeholder="DNI">
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <input class="form-control" name="email" type="email" placeholder="Email">
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <input class="form-control" name="username" placeholder="Usuario">
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <input class="form-control" name="password" type="password" placeholder="Contraseña">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <button class="btn btn-primary " type="submit">Crear Administrador</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+
+
+</div>
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}
