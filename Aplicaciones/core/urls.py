@@ -9,8 +9,17 @@ urlpatterns = [
     
     path('', core_views.inicio, name='inicio'),
     
-    # Crud administrador
+    #######################################CRUD ADMINISTRADOR#######################################
+    # Vista Inicial del Administrador
     path('administrador/', crud_administrador_views.index, name='administrador_index'),
-    path('administrador/crear/', crud_administrador_views.create, name='administrador_create'),
+    # Vista para Crear un Administrador
+    path('administrador/create', crud_administrador_views.create, name='administrador_create'),
+    # Metodo para Crear un Nuevo Administrador
+    path('administrador/nuevo/', crud_administrador_views.nuevo_administrador, name='administrador_nuevo'),
+    # Vista para Editar un Administrador
+    path('administrador/editar/<int:id_admin>/', crud_administrador_views.edit, name='administrador_edit'),
+    # Metodo para Actualizar un Administrador
+    path('administrador/actualizar/', crud_administrador_views.actualizar_administrador, name='administrador_actualizar'),
+    
     
 ]
