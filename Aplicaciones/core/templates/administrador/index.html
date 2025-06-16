@@ -22,7 +22,7 @@ Administradores
     <li class="breadcrumb-item active">Administradores</li>
   </ol>
   <div class="mb-4">
-    <a href="{% url 'administrador_create' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Nueva
+    <a href="{% url 'administrador_create' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Nuevo
       Administrador</a>
   </div>
   <div class="card mb-4">
@@ -32,41 +32,48 @@ Administradores
     </div>
     <div class="card-body">
       <div class="table-responsive">
-        <table class="table table-bordered" id="tbl-admin" width="100%" cellspacing="0">
+        <table class="table table-bordered text-center" id="tbl-admin" width="100%" cellspacing="0">
           <thead>
             <tr>
               <th>Id</th>
-              <th>Nombre</th>
-              <th>Apellido</th>
+              <th>Nombres</th>
+              <th>Apellidos</th>
               <th>Correo</th>
-              <th>Telefono</th>
+              <th>Teléfono</th>
+              <th>Estado</th>
               <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>Nombre 1</td>
-              <td>Apellido 1</td>
-              <td>Correo 1</td>
-              <td>Telefono 1</td>
-              <td>
-                <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+            {% for admin in administradores %}
+              <tr>
+                <td>{{admin.adm_id}}</td>
+                <td>{{admin.fk_id_persona.fk_id_usuario.first_name}} {{admin.fk_id_persona.per_segundo_nombre}}</td>
+                <td>{{admin.fk_id_persona.fk_id_usuario.last_name}} {{admin.fk_id_persona.per_segundo_apellido}}</td>
+                <td>{{admin.fk_id_persona.fk_id_usuario.email}}</td>
+                <td>{{admin.fk_id_persona.per_telefono}}</td>
+                {% if admin.adm_estado %}
+                  <td class="text-success">Activo</td>
+                {% else %}
+                  <td class="text-danger">Inactivo</td>
+                {% endif %}
+                <td>
+                  <div class="btn-group" role="group" aria-label="Basic mixed styles example">
 
+                    <a href="{%url 'administrador_edit' admin.adm_id%}" type="button" class=" btn btn-primary btn-circle "><span><i
+                          class="fas fa-pen"></i></span></a>
 
-                  <button type="button" class=" btn btn-primary btn-circle "><span><i
-                        class="fas fa-pen"></i></span></button>
+                    <button type="button" class="btn btn-danger btn-circle" data-bs-toggle="modal"
+                      data-bs-target="#confirmarModal"><i class="fas fa-trash"></i></button>
 
-
-
-                  <button type="button" class="btn btn-danger btn-circle" data-bs-toggle="modal"
-                    data-bs-target="#confirmarModal"><i class="fas fa-trash"></i></button>
-
-                </div>
-
-              </td>
-
-            </tr>
+                  </div>
+                </td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="6">No hay administradores registrados</td>
+              </tr>
+            {% endfor %}
           </tbody>
         </table>
       </div>
