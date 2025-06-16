@@ -3,6 +3,7 @@ from django.urls import path
 # views del core
 from .views import core_views
 from .views import crud_administrador_views
+from .views import loguin_views
 
 
 urlpatterns = [
@@ -12,5 +13,9 @@ urlpatterns = [
     # Crud administrador
     path('administrador/', crud_administrador_views.index, name='administrador_index'),
     path('administrador/crear/', crud_administrador_views.create, name='administrador_create'),
+    
+    
+    # loguin
+    path('loguin/', loguin_views.index, name='loguin_index'),
     
 ]
