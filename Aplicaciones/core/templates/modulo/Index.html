@@ -1,0 +1,227 @@
+{% extends "plantillas/MasterAdmin.html" %}
+{% load static %}
+{% block title %}Módulos{% endblock %}
+{% block css %}
+<style>
+    body {
+        background-color: #f4f8ff;
+    }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+{% endblock %}
+{% block content %}
+<div class="container-fluid ">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Módulos</h1>
+        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                class="fas fa-upload fa-sm text-white-50"></i> Exportar Módulos </a>
+    </div>
+
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="{% url 'inicio' %}">Inicio</a></li>
+        <li class="breadcrumb-item active">Módulos</li>
+    </ol>
+    {% comment %} Modal para crear modulo {% endcomment %}
+    <div class="modal fade" id="modalCrear" tabindex="-1" aria-labelledby="modalCrearLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalCrearLabel">Nuevo Módulo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="crear_modulo" value="1">
+                        <div class="mb-3">
+                            {{ form.mod_nombre.label_tag }}
+                            {{ form.mod_nombre }}
+                            {% if form.mod_nombre.errors %}
+                            <div class="text-danger">{{ form.mod_nombre.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.mod_descripcion.label_tag }}
+                            {{ form.mod_descripcion }}
+                        </div>
+
+                        <div class="form-check mb-3">
+                            {{ form.mod_estado }}
+                            {{ form.mod_estado.label_tag }}
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <a href="{% url 'modulo_index' %}" class="btn btn-secondary">Cancelar</a>
+                    </form>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if form.errors %}
+        <script>
+            var modalCrear = new bootstrap.Modal(document.getElementById('modalCrear'));
+            modalCrear.show();
+        </script>
+    {% endif %}
+
+    {% comment %} fin del modal {% endcomment %}
+
+
+    <div class="mb-4">
+        <a href="#" class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#modalCrear"><i
+                class="fas fa-plus"></i> Nuevo
+            Módulos</a>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            Tabla Modulos
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped" id="tbl-admin" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            
+                            <th>Nombre</th>
+                            <th>Descripción</th>
+                            <th>Estado</th>
+                            <th>Creado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for modulo in modulos %}
+                        <tr>
+                            
+                            <td>{{ modulo.mod_nombre }}</td>
+                            <td>{{ modulo.mod_descripcion }}</td>
+                            <td>{{ modulo.mod_estado|yesno:"Activo,Inactivo" }}</td>
+                            <td>{{ modulo.mod_fecha_creacion|date:"Y-m-d H:i" }}</td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <a href="#"
+                                        class="btn btn-sm btn-primary rounded-circle d-flex align-items-center justify-content-center"
+                                        style="width: 36px; height: 36px;" data-bs-toggle="modal"
+                                        data-bs-target="#modalEditar{{ modulo.mod_id }}">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="#" class="btn btn-sm btn-danger rounded-circle d-flex align-items-center justify-content-center"
+                                    style="width: 36px; height: 36px;" data-bs-toggle="modal" data-bs-target="#modalEliminar{{ modulo.mod_id }}">
+                                    <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- Modal de Edición para cada módulo -->
+                        <div class="modal fade" id="modalEditar{{ modulo.mod_id }}" tabindex="-1"
+                            aria-labelledby="modalEditarLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <form method="POST">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="mod_id" value="{{ modulo.mod_id }}">
+                                        <input type="hidden" name="editar_modulo" value="1">
+
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="modalEditarLabel">Editar Módulo</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Cerrar"></button>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <div class="mb-3">
+                                                <label>Nombre</label>
+                                                {% if modulo_a_editar and modulo_a_editar.mod_id == modulo.mod_id %}
+                                                <input type="text" name="mod_nombre"
+                                                    value="{{ form_editar.data.mod_nombre }}" class="form-control">
+                                                {% if form_editar.errors.mod_nombre %}
+                                                <div class="text-danger">{{ form_editar.errors.mod_nombre.0 }}</div>
+                                                {% endif %}
+                                                {% else %}
+                                                <input type="text" name="mod_nombre" value="{{ modulo.mod_nombre }}"
+                                                    class="form-control">
+                                                {% endif %}
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label>Descripción</label>
+                                                <textarea name="mod_descripcion"
+                                                    class="form-control">{{ modulo.mod_descripcion }}</textarea>
+                                            </div>
+
+                                            <div class="form-check mb-3">
+                                                <input type="checkbox" name="mod_estado" class="form-check-input" 
+                                                {% if modulo.mod_estado %}checked{% endif %}>
+                                                <label class="form-check-label">Activo</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        {% if modulo_a_editar %}
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function () {
+                            var modalEditar = new bootstrap.Modal(document.getElementById('modalEditar{{ modulo_a_editar.mod_id }}'));
+                            modalEditar.show();
+                            });
+                        </script>
+                        {% endif %}
+                        <!-- Fin del Modal de Edición para cada módulo -->
+                        <!-- Modal de eliminación -->
+                        <div class="modal fade" id="modalEliminar{{ modulo.mod_id }}" tabindex="-1" aria-labelledby="modalEliminarLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                            <form method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="mod_id" value="{{ modulo.mod_id }}">
+                                <input type="hidden" name="eliminar_modulo" value="1">
+
+                                <div class="modal-header">
+                                <h5 class="modal-title">Eliminar Módulo</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                </div>
+                                <div class="modal-body">
+                                ¿Estás seguro de que deseas eliminar el <strong>{{ modulo.mod_nombre }}</strong>?
+                                </div>
+                                <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+                                </div>
+                            </form>
+                            </div>
+                        </div>
+                        </div>
+                        <!-- Fin del Modal de eliminación -->
+
+                        {% empty %}
+                        <tr>
+                            <td colspan="6">No hay módulos registrados.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+
+
+        {% endblock %}
+        {% block js %}
+
+        
+
+        
+
+        {% endblock %}

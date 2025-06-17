@@ -57,3 +57,15 @@ class Estudiantes(models.Model):
     est_estado = models.BooleanField(default=True,verbose_name='Estado:')
     def __str__(self):
         return f"{self.est_id}: {self.fk_id_persona.fk_id_usuario.first_name} {self.fk_id_persona.fk_id_usuario.last_name}"
+    
+# MODULO MODULOS  (5,6,7 años) 
+class Modulos(models.Model):
+    mod_id = models.AutoField(primary_key=True)
+    mod_nombre = models.CharField(max_length=50,null=False,unique=True,verbose_name="Nombre del modulo:")
+    mod_descripcion = models.CharField(max_length=100,null=False,verbose_name="Descripción del modulo:")
+    mod_estado = models.BooleanField(default=True,verbose_name='Estado:')
+    mod_fecha_creacion = models.DateTimeField(auto_now_add=True,verbose_name='Creado el:')
+    mod_fecha_actualizacion = models.DateTimeField(auto_now=True,verbose_name='Actualizado el:')
+    
+    def __str__(self):
+        return f"{self.mod_id}: {self.mod_nombre}"

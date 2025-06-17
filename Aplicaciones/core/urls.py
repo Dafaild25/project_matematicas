@@ -4,6 +4,7 @@ from django.urls import path
 from .views import core_views
 from .views import crud_administrador_views
 from .views import loguin_views
+from .views import crud_modulos_views
 
 
 urlpatterns = [
@@ -21,6 +22,17 @@ urlpatterns = [
     path('administrador/editar/<int:id_admin>/', crud_administrador_views.edit, name='administrador_edit'),
     # Metodo para Actualizar un Administrador
     path('administrador/actualizar/', crud_administrador_views.actualizar_administrador, name='administrador_actualizar'),
+    
+    # Ruta para generar un  crud completo en un mismo template con modal
+    path('modulo/', crud_modulos_views.index, name='modulo_index'),
+   
+    
+    
+    
+    
+    
+    
+    
     
     
     
