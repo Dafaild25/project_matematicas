@@ -25,11 +25,15 @@
                 {% csrf_token %}
 
                 <div class="row mb-3">
-                    <div class="col-md-6">
+                    <div class="col-md-2">
+                        {{ form_enunciado.fk_modulo.label_tag }}
+                        {{ form_enunciado.fk_modulo }}
+                    </div>
+                    <div class="col-md-2">
                         {{ form_enunciado.fk_nivel.label_tag }}
                         {{ form_enunciado.fk_nivel }}
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-8">
                         {{ form_enunciado.enun_nombre.label_tag }}
                         {{ form_enunciado.enun_nombre }}
                     </div>
@@ -119,7 +123,36 @@
 </template>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+
+
+     document.addEventListener('DOMContentLoaded', function () {
+        // Script dinámico para niveles dependientes
+        const moduloSelect = document.getElementById('id_fk_modulo');
+        const nivelSelect = document.getElementById('id_fk_nivel');
+
+        if (moduloSelect) {
+            moduloSelect.addEventListener('change', function () {
+                const moduloId = this.value;
+                nivelSelect.innerHTML = '<option value="">Cargando niveles...</option>';
+
+                fetch(`/ajax/niveles/?modulo_id=${moduloId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        nivelSelect.innerHTML = '<option value="">Seleccione nivel</option>';
+                        data.forEach(nivel => {
+                            const option = document.createElement('option');
+                            option.value = nivel.niv_id;
+                            option.textContent = nivel.niv_nombre;
+                            nivelSelect.appendChild(option);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error al cargar niveles:', error);
+                        nivelSelect.innerHTML = '<option value="">Error al cargar niveles</option>';
+                    });
+            });
+        }
+
         function toggleImagenes(container) {
             container.querySelectorAll('.toggle-imagen').forEach(function (checkbox) {
                 checkbox.addEventListener('change', function () {
@@ -134,17 +167,17 @@
             });
         }
 
-        function addOpcionButtons(container) {
-            container.querySelectorAll('.add-opcion').forEach(function (btn) {
-                btn.addEventListener('click', function () {
-                    const preguntaForm = this.closest('.pregunta-form');
-                    const preguntaIndex = Array.from(document.querySelectorAll('.pregunta-form')).indexOf(preguntaForm);
-                    const contenedor = preguntaForm.querySelector('.opcion-list');
-                    const total = contenedor.children.length;
+            function addOpcionButtons(container) {
+                container.querySelectorAll('.add-opcion').forEach(function (btn) {
+                    btn.addEventListener('click', function () {
+                        const preguntaForm = this.closest('.pregunta-form');
+                        const preguntaIndex = Array.from(document.querySelectorAll('.pregunta-form')).indexOf(preguntaForm);
+                        const contenedor = preguntaForm.querySelector('.opcion-list');
+                        const total = contenedor.children.length;
 
-                    const nueva = document.createElement('div');
-                    nueva.classList.add('mb-3');
-                    nueva.innerHTML = `
+                        const nueva = document.createElement('div');
+                        nueva.classList.add('mb-3');
+                        nueva.innerHTML = `
 
                     <div class=" row align-items-center mb-2 ">
                         <div class="col-md-6">
@@ -165,47 +198,47 @@
             
             
           `;
-                    contenedor.appendChild(nueva);
+                        contenedor.appendChild(nueva);
+                    });
                 });
-            });
-        }
+            }
 
-        function enableRemoveButtons(container) {
-            container.querySelectorAll('.remove-pregunta').forEach(function (btn) {
-                btn.addEventListener('click', function () {
-                    this.closest('.pregunta-form').remove();
+            function enableRemoveButtons(container) {
+                container.querySelectorAll('.remove-pregunta').forEach(function (btn) {
+                    btn.addEventListener('click', function () {
+                        this.closest('.pregunta-form').remove();
+                    });
                 });
-            });
-            container.querySelectorAll('.opcion-list').forEach(function (list) {
-                list.addEventListener('click', function (e) {
-                    if (e.target.classList.contains('remove-opcion')) {
-                        e.target.closest('div.mb-3').remove();
-                    }
+                container.querySelectorAll('.opcion-list').forEach(function (list) {
+                    list.addEventListener('click', function (e) {
+                        if (e.target.classList.contains('remove-opcion')) {
+                            e.target.closest('div.mb-3').remove();
+                        }
+                    });
                 });
+            }
+
+            const templateHtml = document.getElementById('pregunta-template').innerHTML;
+            const container = document.getElementById('preguntas-container');
+            let totalForms = parseInt(document.getElementById('id_pregunta-TOTAL_FORMS').value);
+
+            document.getElementById('add-pregunta').addEventListener('click', function () {
+                const newFormHtml = templateHtml.replace(/__prefix__/g, totalForms);
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = newFormHtml;
+                const newForm = tempDiv.firstElementChild;
+                container.appendChild(newForm);
+                document.getElementById('id_pregunta-TOTAL_FORMS').value = totalForms + 1;
+                totalForms++;
+                toggleImagenes(container);
+                addOpcionButtons(container);
+                enableRemoveButtons(container);
             });
-        }
 
-        const templateHtml = document.getElementById('pregunta-template').innerHTML;
-        const container = document.getElementById('preguntas-container');
-        let totalForms = parseInt(document.getElementById('id_pregunta-TOTAL_FORMS').value);
-
-        document.getElementById('add-pregunta').addEventListener('click', function () {
-            const newFormHtml = templateHtml.replace(/__prefix__/g, totalForms);
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = newFormHtml;
-            const newForm = tempDiv.firstElementChild;
-            container.appendChild(newForm);
-            document.getElementById('id_pregunta-TOTAL_FORMS').value = totalForms + 1;
-            totalForms++;
             toggleImagenes(container);
             addOpcionButtons(container);
             enableRemoveButtons(container);
         });
-
-        toggleImagenes(container);
-        addOpcionButtons(container);
-        enableRemoveButtons(container);
-    });
 </script>
 
 

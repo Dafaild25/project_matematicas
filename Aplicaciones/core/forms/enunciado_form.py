@@ -10,17 +10,18 @@ class EnunciadoForm(forms.ModelForm):
         label="Módulo",
         required=True
     )
+
     class Meta:
         model = Enunciados
-        fields = ['fk_nivel', 'enun_nombre']
+        fields = ['fk_modulo', 'fk_nivel', 'enun_nombre']
         widgets = {
             'fk_nivel': forms.Select(attrs={'class': 'form-select'}),
             'enun_nombre': forms.TextInput(attrs={'class': 'form-control'}),
         }
-        
+
     def __init__(self, *args, **kwargs):
-        super(EnunciadoForm, self).__init__(*args, **kwargs)
         data = kwargs.get('data')
+        super().__init__(*args, **kwargs)
         
         if data and 'fk_modulo' in data:
             try:
@@ -32,7 +33,6 @@ class EnunciadoForm(forms.ModelForm):
             self.fields['fk_nivel'].queryset = Niveles.objects.filter(fk_modulo=self.instance.fk_nivel.fk_modulo)
         else:
             self.fields['fk_nivel'].queryset = Niveles.objects.none()
-
 
 
 class PreguntaForm(forms.ModelForm):

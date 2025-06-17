@@ -31,11 +31,11 @@ def index(request):
 
 
 
-
 def create(request):
     if request.method == 'POST':
         print("📥 POST recibido")
-        form_enunciado = EnunciadoForm(request.POST)
+        print("🔎 POST fk_nivel:", request.POST.get("fk_nivel"))
+        form_enunciado = EnunciadoForm(data=request.POST)
         formset_preguntas = PreguntaFormSet(request.POST, request.FILES, prefix='pregunta')
 
         print("✅ Enunciado válido:", form_enunciado.is_valid())
@@ -44,7 +44,9 @@ def create(request):
         if form_enunciado.is_valid() and formset_preguntas.is_valid():
             try:
                 with transaction.atomic():
-                    enunciado = form_enunciado.save()
+                    enunciado = form_enunciado.save(commit=False)
+                    enunciado.fk_nivel = form_enunciado.cleaned_data['fk_nivel']
+                    enunciado.save()
                     print("📌 Enunciado creado:", enunciado)
 
                     preguntas = formset_preguntas.save(commit=False)
@@ -53,7 +55,6 @@ def create(request):
                         pregunta.save()
                         print(f"✅ Pregunta #{index+1} guardada:", pregunta)
 
-                        # Manejo de opciones
                         total_opciones = 0
                         while True:
                             nombre_key = f'opciones-{index}-{total_opciones}-op_nombre'
@@ -62,7 +63,6 @@ def create(request):
                                 break
                             texto = request.POST.get(nombre_key)
                             correcta = request.POST.get(correcta_key) == 'on'
-                            print(f"➕ Opción {total_opciones + 1}: '{texto}' - Correcta: {correcta}")
                             if texto:
                                 Opciones.objects.create(
                                     fk_pregunta=pregunta,
@@ -78,10 +78,8 @@ def create(request):
                 messages.error(request, f'Ocurrió un error: {str(e)}')
         else:
             print("❌ Formulario no válido")
-            if not form_enunciado.is_valid():
-                print("Errores en EnunciadoForm:", form_enunciado.errors.as_data())
-            if not formset_preguntas.is_valid():
-                print("Errores en PreguntaFormSet:", formset_preguntas.errors)
+            print("Errores en EnunciadoForm:", form_enunciado.errors.as_data())
+            print("Errores en Preguntas:", formset_preguntas.errors)
             messages.error(request, 'Revisa los campos del formulario.')
     else:
         form_enunciado = EnunciadoForm()
@@ -93,9 +91,12 @@ def create(request):
     })
 
 
+
+
 def cargar_niveles(request):
     modulo_id = request.GET.get('modulo_id')
-    niveles = Niveles.objects.filter(fk_modulo_id=modulo_id, niv_estado=True).values('id', 'niv_nombre')
+    niveles = Niveles.objects.filter(fk_modulo=modulo_id).values('niv_id', 'niv_nombre')
+
     return JsonResponse(list(niveles), safe=False)
 
  
