@@ -1,0 +1,119 @@
+{% extends "plantillas/MasterAdmin.html" %}
+{% load static %}
+{% block title %}Enunciados{% endblock %}
+
+{% block css %}
+<style>
+    .btn-filtro {
+        margin-right: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid ">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Enunciados</h1>
+        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+            <i class="fas fa-upload fa-sm text-white-50"></i> Exportar Enunciados </a>
+    </div>
+
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="{% url 'inicio' %}">Inicio</a></li>
+        <li class="breadcrumb-item active">Enunciados</li>
+    </ol>
+
+    <div class="mb-3">
+        <a href="{% url 'enunciado_create' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Nuevo Enunciado</a>
+    </div>
+
+    <div class="mb-3">
+        <form method="GET" class="d-flex gap-2">
+            <input type="text" name="buscar" class="form-control" placeholder="Buscar enunciado..."
+                value="{{ request.GET.buscar }}">
+            <button type="submit" class="btn btn-outline-secondary">Buscar</button>
+        </form>
+    </div>
+
+    <div class="mb-3">
+        <a href="{% url 'enunciado_index' %}" class="btn btn-outline-dark btn-filtro">Todos</a>
+        {% for modulo in modulos %}
+        <a href="?modulo={{ modulo.id }}" class="btn btn-outline-primary btn-filtro">{{ modulo.mod_nombre }}</a>
+        {% endfor %}
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            Tabla Enunciados
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <div class="accordion" id="accordionEnunciados">
+                    {% for enunciado in enunciados %}
+                    <div class="accordion-item mb-3">
+                        <h2 class="accordion-header" id="heading{{ forloop.counter }}">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapse{{ forloop.counter }}" aria-expanded="false"
+                                aria-controls="collapse{{ forloop.counter }}">
+                                {{enunciado.fk_nivel.fk_modulo.mod_nombre}}— {{ enunciado.fk_nivel.niv_nombre }}-{{ enunciado.enun_nombre }}
+                            </button>
+                        </h2>
+                        <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse"
+                            aria-labelledby="heading{{ forloop.counter }}" data-bs-parent="#accordionEnunciados">
+                            <div class="accordion-body">
+                                <div class="d-flex justify-content-end ">
+                                    <!-- Botón Editar -->
+                                    <a href="{% url 'enunciado_editar' enunciado.enun_id %}" class="btn btn-sm btn-outline-primary me-2">
+                                        <i class="fas fa-edit"></i> Editar
+                                    </a>
+
+                                    <!-- Botón Eliminar -->
+                                    <form method="POST" action="#" onsubmit="return confirm('¿Estás seguro de eliminar este enunciado?')" style="display:inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                            <i class="fas fa-trash-alt"></i> Eliminar
+                                        </button>
+                                    </form>
+                                </div>
+                                <strong>Preguntas:</strong>
+                                <ul class="list-group">
+                                    {% for pregunta in enunciado.preguntas_set.all %}
+                                    <li class="list-group-item">
+                                        <div class="fw-bold">{{ pregunta.pre_nombre }}</div>
+                                        {% if pregunta.pre_tiene_imagen %}
+                                        <img src="{{ pregunta.pre_imagen.url }}" alt="imagen" class="img-fluid my-2"
+                                            style="max-width: 200px;">
+                                        {% endif %}
+                                        <ul class="mt-2">
+                                            {% for opcion in pregunta.opciones_set.all %}
+                                            <li>
+                                                {{ opcion.op_nombre }}
+                                                {% if opcion.op_correcta %}
+                                                <span class="badge bg-success">Correcta</span>
+                                                {% endif %}
+                                            </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </li>
+                                    {% empty %}
+                                    <li class="list-group-item">Sin preguntas registradas.</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p>No hay enunciados disponibles.</p>
+                    {% endfor %}
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+{% endblock %}

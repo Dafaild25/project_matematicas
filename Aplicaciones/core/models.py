@@ -85,3 +85,40 @@ class Niveles(models.Model):
     
     def __str__(self):
         return f"{self.niv_id}: {self.niv_nombre}"
+
+class Enunciados(models.Model):
+    enun_id = models.AutoField(primary_key=True)
+    fk_nivel = models.ForeignKey(Niveles,verbose_name='Nivel',on_delete=models.CASCADE)
+    enun_nombre = models.CharField(max_length=100,null=False,verbose_name="Enunciado:")
+    enun_estado = models.BooleanField(default=True,verbose_name='Estado:')
+    enun_fecha_creacion = models.DateTimeField(auto_now_add=True,verbose_name='Creado el:')
+    enun_fecha_actualizacion = models.DateTimeField(auto_now=True,verbose_name='Actualizado el:')
+    
+    def __str__(self):
+        return f"{self.enun_id}: {self.enun_nombre}"
+    
+
+class Preguntas(models.Model):
+    pre_id = models.AutoField(primary_key=True)
+    fk_enunciado = models.ForeignKey(Enunciados,verbose_name='Enunciado',on_delete=models.CASCADE)
+    pre_nombre= models.CharField(max_length=100,null=False,verbose_name="Pregunta:")
+    pre_tiene_imagen = models.BooleanField(default=False,verbose_name='Tiene imagen:')
+    pre_imagen = models.ImageField(upload_to='preguntas/',default='Sin Foto',null=True,blank=True,verbose_name="Imagen:")
+    pre_estado = models.BooleanField(default=True,verbose_name='Estado:')
+    pre_fecha_creacion = models.DateTimeField(auto_now_add=True,verbose_name='Creado el:')
+    pre_fecha_actualizacion = models.DateTimeField(auto_now=True,verbose_name='Actualizado el:')
+    
+    def __str__(self):
+        return f"{self.pre_id}: {self.pre_nombre} "
+
+class Opciones(models.Model):
+    op_id = models.AutoField(primary_key=True)
+    fk_pregunta = models.ForeignKey(Preguntas,verbose_name='Pregunta',on_delete=models.CASCADE)
+    op_nombre = models.CharField(max_length=100,null=False,verbose_name="Opcion:")
+    op_correcta = models.BooleanField(default=False,verbose_name='Correcta:')
+    op_estado = models.BooleanField(default=True,verbose_name='Estado:')
+    op_fecha_creacion = models.DateTimeField(auto_now_add=True,verbose_name='Creado el:')
+    op_fecha_actualizacion = models.DateTimeField(auto_now=True,verbose_name='Actualizado el:')
+    
+    def __str__(self):
+        return f"{self.op_id}: {self.op_nombre}"

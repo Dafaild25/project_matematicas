@@ -43,7 +43,7 @@
 
         <!-- Nav Item - Dashboard -->
         <li class="nav-item active">
-          <a class="nav-link" href="index.html">
+          <a class="nav-link" href="{% url 'inicio' %}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span>
           </a>
@@ -81,7 +81,7 @@
             <div class="bg-white py-2 collapse-inner rounded">
               <a class="collapse-item" href="{% url 'modulo_index'%}">Modulos</a>
               <a class="collapse-item" href="{% url 'nivel_index'%}">Niveles</a>
-              <a class="collapse-item" href="#">Preguntas</a>
+              <a class="collapse-item" href="{% url 'enunciado_index'%}">Enunciados</a>
               
             </div>
           </div>

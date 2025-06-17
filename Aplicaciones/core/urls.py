@@ -6,6 +6,7 @@ from .views import crud_administrador_views
 from .views import loguin_views 
 from .views import crud_modulos_views
 from .views import crud_niveles_views
+from .views import crud_enunciado_views
 
 
 urlpatterns = [
@@ -31,6 +32,13 @@ urlpatterns = [
     
     #Ruta para genera un crud completo de los niveles
     path('nivel/', crud_niveles_views.index, name='nivel_index'),
+    
+    #Ruta para listar enunciados
+    path('enunciado/', crud_enunciado_views.index, name='enunciado_index'),
+    path('ajax/niveles/', crud_enunciado_views.cargar_niveles, name='ajax_cargar_niveles'),
+    path('enunciado/create', crud_enunciado_views.create, name='enunciado_create'),
+    path('enunciado/editar/<int:enun_id>', crud_enunciado_views.editar, name='enunciado_editar'),
+    path('enunciado/eliminar/<int:enun_id>', crud_enunciado_views.eliminar, name='enunciado_eliminar'),
 
     
     
