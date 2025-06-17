@@ -3,8 +3,9 @@ from django.urls import path
 # views del core
 from .views import core_views
 from .views import crud_administrador_views
-from .views import loguin_views
+from .views import loguin_views 
 from .views import crud_modulos_views
+from .views import crud_niveles_views
 
 
 urlpatterns = [
@@ -23,9 +24,14 @@ urlpatterns = [
     # Metodo para Actualizar un Administrador
     path('administrador/actualizar/', crud_administrador_views.actualizar_administrador, name='administrador_actualizar'),
     
+    
+    
     # Ruta para generar un  crud completo en un mismo template con modal
     path('modulo/', crud_modulos_views.index, name='modulo_index'),
-   
+    
+    #Ruta para genera un crud completo de los niveles
+    path('nivel/', crud_niveles_views.index, name='nivel_index'),
+
     
     
     

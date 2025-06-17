@@ -69,3 +69,19 @@ class Modulos(models.Model):
     
     def __str__(self):
         return f"{self.mod_id}: {self.mod_nombre}"
+    
+# MODULO NIVELES
+
+class Niveles(models.Model):
+    niv_id = models.AutoField(primary_key=True)
+    fk_modulo = models.ForeignKey(Modulos,verbose_name='Modulo',on_delete=models.CASCADE)
+    niv_nombre = models.CharField(max_length=50,null=False,unique=True,verbose_name="Nombre del nivel:")
+    niv_descripcion = models.CharField(max_length=100,null=False,verbose_name="Descripción del nivel:")
+    orden = models.IntegerField()
+    vidas = models.IntegerField()
+    niv_estado = models.BooleanField(default=True,verbose_name='Estado:')
+    niv_fecha_creacion = models.DateTimeField(auto_now_add=True,verbose_name='Creado el:')
+    niv_fecha_actualizacion = models.DateTimeField(auto_now=True,verbose_name='Actualizado el:')
+    
+    def __str__(self):
+        return f"{self.niv_id}: {self.niv_nombre}"
