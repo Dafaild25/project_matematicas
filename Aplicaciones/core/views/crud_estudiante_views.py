@@ -5,22 +5,22 @@ from Aplicaciones.core.forms import * # Importar clase de registro
 from ..models import * # Importar modelos
 from Aplicaciones.core.validaciones.validar_cedula import * # Importar funciones de validaciones
 
-# VISTA PRINCIPAL PARA LISTAR DOCENTES
+# VISTA PRINCIPAL PARA LISTAR ESTUDIANTES
 def index(request):
-    docentes = Docentes.objects.all()  # Obtener todos los docentes
-    return render(request, 'docente/index.html', {'docentes': docentes})
+    estudiantes = Estudiantes.objects.all()  # Obtener todos los estudiantes
+    return render(request, 'estudiante/index.html', {'estudiantes': estudiantes})
 
-# VISTA PARA FORMULARIO DOCENTES
-def create_docente(request):
-    return render(request, 'docente/Create.html')
+# VISTA PARA FORMULARIO ESTUDIANTE
+def create_estudiante(request):
+    return render(request, 'estudiante/Create.html')
 
-# METODO CREAR UN NUEVO DOCENTE
-def nuevo_docente(request):
+# METODO CREAR UN NUEVO ESTUDIANTE
+def nuevo_estudiante(request):
     if(request.method == 'POST'):
         try:
             formUsuario = UserForm(request.POST) # Instanciar formulario de usuario
             # Campos del Auth_User
-            nombre_grupo = 'Docentes' # Nombre del grupo
+            nombre_grupo = 'Estudiantes' # Nombre del grupo
             grupo, created = Group.objects.get_or_create(name=nombre_grupo)
             usuario = formUsuario.save() # Guardar datos del User
             usuario.groups.add(grupo) # Agregar usuario al grupo
@@ -39,42 +39,42 @@ def nuevo_docente(request):
                 per_telefono = request.POST['telefono']
             )
 
-            # Campos de Docentes
-            docente = Docentes.objects.create( # Crear registro de tabla Docentes
+            # Campos de Estudiantes
+            estudiante = Estudiantes.objects.create( # Crear registro de tabla Estudiantes
                 fk_id_persona=persona,  # Relacionar con la persona creada
-                doc_fotografia= request.FILES.get('fotografia') if 'fotografia' in request.FILES else None,
+                est_fotografia= request.FILES.get('fotografia') if 'fotografia' in request.FILES else None,
             )
         except Exception as e:
-            messages.error(request, f'Error al crear al docente: {str(e)}')
-            print(f'Error al crear el docente: {str(e)}')
-            return redirect('docente_create')  # Redirigir a la vista de creación si hay un error
-    return redirect('docente_index')
+            messages.error(request, f'Error al crear al estudiante: {str(e)}')
+            print(f'Error al crear el estudiante: {str(e)}')
+            return redirect('estudiante_create')  # Redirigir a la vista de creación si hay un error
+    return redirect('estudiante_index')
 
-# VISTA PARA EDITAR UN DOCENTE
-def edit_docente(request, id_docen):
-    docente = get_object_or_404(Docentes,pk=id_docen) # Obtener el docente por su ID
-    persona = docente.fk_id_persona # Obtener la persona asociada al docente
+# VISTA PARA EDITAR UN ESTUDIANTE
+def edit_estudiante(request, id_estud):
+    estudiante = get_object_or_404(Estudiantes,pk=id_estud) # Obtener el estudiante por su ID
+    persona = estudiante.fk_id_persona # Obtener la persona asociada al estudiante
     usuario = persona.fk_id_usuario # Obtener el usuario asociado a la persona
     contexto = {
-        'docente': docente,
+        'estudiante': estudiante,
         'persona': persona,
         'usuario': usuario
     }
-    return render(request,'docente/Edit.html', contexto) # Renderizar la plantilla de edición
+    return render(request,'estudiante/Edit.html', contexto) # Renderizar la plantilla de edición
 
-# METODO PARA ACTUALIZAR UN DOCENTE
-def actualizar_docente(request):
+# METODO PARA ACTUALIZAR UN ESTUDIANTE
+def actualizar_estudiante(request):
     if request.method == 'POST':
         try:
-            # Obtener el ID del docente desde el formulario
-            docen_id = request.POST['docen_id']
-            docente = get_object_or_404(Docentes, pk=docen_id)  # Obtener el docente por su ID
-            # Obtener los datos para tabla Docentes
-            docente.doc_fotografia = request.FILES.get('fotografia') if 'fotografia' in request.FILES else None
-            docente.doc_estado = request.POST['estado']
-            docente.save()  # Actualizar los datos de Docentes
+            # Obtener el ID del estudiante desde el formulario
+            estud_id = request.POST['estud_id']
+            estudiante = get_object_or_404(Estudiantes, pk=estud_id)  # Obtener el estudiante por su ID
+            # Obtener los datos para tabla Estudiantes
+            estudiante.est_fotografia = request.FILES.get('fotografia') if 'fotografia' in request.FILES else None
+            estudiante.est_estado = request.POST['estado']
+            estudiante.save()  # Actualizar los datos de Estudiantes
             # Obtener los datos para tabla Personas
-            persona = docente.fk_id_persona  # Obtener la persona asociada al administrador
+            persona = estudiante.fk_id_persona  # Obtener la persona asociada al administrador
             persona.per_segundo_nombre = request.POST['segundo_nombre'].upper()
             persona.per_segundo_apellido = request.POST['segundo_apellido'].upper()
             persona.per_fecha_nacimiento = request.POST['fecha_nacimiento']
@@ -94,15 +94,15 @@ def actualizar_docente(request):
         except KeyError:
             print("Error al obtener los datos del formulario")
         finally:
-            return redirect('docente_index')
+            return redirect('estudiante_index')
         
-# METODO PARA ELIMINAR UN DOCENTE
-def eliminar_docente(request, id_docen):
-    docente = get_object_or_404(Docentes, pk=id_docen)  # Obtener el docente por su ID
+# METODO PARA ELIMINAR UN ESTUDIANTE
+def eliminar_estudiante(request, id_estud):
+    estudiante = get_object_or_404(Estudiantes, pk=id_estud)  # Obtener el estudiante por su ID
     try:
-        docente.doc_estado = False # Cambiar el estado a inactivo
-        docente.save()  # Guardar los cambios
+        estudiante.est_estado = False # Cambiar el estado a inactivo
+        estudiante.save()  # Guardar los cambios
     except Exception as e:
         messages.error(request, f'Error al eliminar: {str(e)}')
     
-    return redirect('docente_index')
+    return redirect('estudiante_index')

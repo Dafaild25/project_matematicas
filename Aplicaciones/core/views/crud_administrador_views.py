@@ -5,13 +5,13 @@ from Aplicaciones.core.forms import * # Importar clase de registro
 from ..models import * # Importar modelos
 from Aplicaciones.core.validaciones.validar_cedula import * # Importar funciones de validaciones
 
-
+# VISTA PRINCIPAL PARA LISTAR ADMINISTRADORES
 def index(request):
     administradores = Administradores.objects.all()  # Obtener todos los administradores
     return render(request, 'administrador/index.html', {'administradores': administradores})
 
-# VISTA PARA ADMINISTRADORES
-def create(request):
+# VISTA PARA FORMULARIO ADMINISTRADORES
+def create_administrador(request):
     return render(request, 'administrador/Create.html')
 
 # METODO CREAR UN NUEVO ADMINISTRADOR
@@ -51,7 +51,7 @@ def nuevo_administrador(request):
     return redirect('administrador_index')
 
 # VISTA PARA EDITAR UN ADMINISTRADOR
-def edit(request, id_admin):
+def edit_administrador(request, id_admin):
     administrador = get_object_or_404(Administradores,pk=id_admin)  # Obtener el administrador por su ID
     persona = administrador.fk_id_persona  # Obtener la persona asociada al administrador
     usuario = persona.fk_id_usuario  # Obtener el usuario asociado a la persona
@@ -60,7 +60,7 @@ def edit(request, id_admin):
         'persona': persona,
         'usuario': usuario,
     }
-    return render(request, 'administrador/Edit.html', contexto)  # Renderizar la plantilla de edición con el contexto
+    return render(request, 'administrador/Edit.html', contexto)  # Renderizar la plantilla de edición
 
 # METODO PARA ACTUALIZAR UN ADMINISTRADOR
 def actualizar_administrador(request):
@@ -98,10 +98,8 @@ def actualizar_administrador(request):
 
 # METODO PARA ELIMINAR UN ADMINISTRADOR
 def eliminar_administardor(request, id_admin):
-    print(id_admin)
     admin = get_object_or_404(Administradores, pk=id_admin)  # Obtener el administrador por su ID
     try:
-        print(admin)
         admin.adm_estado = False  # Cambiar el estado a inactivo
         admin.save()  # Guardar los cambios
     except Exception as e:
