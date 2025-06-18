@@ -94,6 +94,7 @@ class Enunciados(models.Model):
     enun_id = models.AutoField(primary_key=True)
     fk_nivel = models.ForeignKey(Niveles,verbose_name='Nivel',on_delete=models.CASCADE)
     enun_nombre = models.CharField(max_length=100,null=False,verbose_name="Enunciado:")
+    enum_puntaje = models.DecimalField(max_digits=5,decimal_places=2,null=False,verbose_name="Puntaje:")
     enun_estado = models.BooleanField(default=True,verbose_name='Estado:')
     enun_fecha_creacion = models.DateTimeField(auto_now_add=True,verbose_name='Creado el:')
     enun_fecha_actualizacion = models.DateTimeField(auto_now=True,verbose_name='Actualizado el:')

@@ -25,15 +25,20 @@
                 {% csrf_token %}
 
                 <div class="row mb-3">
-                    <div class="col-md-2">
+                    <div class="col-md-4">
                         {{ form_enunciado.fk_modulo.label_tag }}
                         {{ form_enunciado.fk_modulo }}
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-4">
                         {{ form_enunciado.fk_nivel.label_tag }}
                         {{ form_enunciado.fk_nivel }}
                     </div>
-                    <div class="col-md-8">
+                    
+                    <div class="col-md-4">
+                        {{form_enunciado.enum_puntaje.label_tag}}
+                        {{form_enunciado.enum_puntaje}}
+                    </div>
+                    <div class="col-md-12">
                         {{ form_enunciado.enun_nombre.label_tag }}
                         {{ form_enunciado.enun_nombre }}
                     </div>

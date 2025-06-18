@@ -13,11 +13,24 @@ class EnunciadoForm(forms.ModelForm):
 
     class Meta:
         model = Enunciados
-        fields = ['fk_modulo', 'fk_nivel', 'enun_nombre']
+        fields = ['fk_modulo', 'fk_nivel', 'enun_nombre', 'enum_puntaje']
         widgets = {
             'fk_nivel': forms.Select(attrs={'class': 'form-select'}),
             'enun_nombre': forms.TextInput(attrs={'class': 'form-control'}),
+            'enum_puntaje': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min':0,
+                'max':10,
+                'step':'0.01',
+                'placeholder':'Puntaje entre 0.00 y 10.00'
+            }),
         }
+    
+    def clean_enum_puntaje(self):
+        puntaje = self.cleaned_data.get('enum_puntaje')
+        if puntaje < 0 or puntaje > 10:
+            raise forms.ValidationError('El puntaje debe estar entre 0 y 10.')
+        return puntaje
 
     def __init__(self, *args, **kwargs):
         data = kwargs.get('data')
