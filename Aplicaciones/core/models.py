@@ -75,7 +75,7 @@ class Modulos(models.Model):
 class Niveles(models.Model):
     niv_id = models.AutoField(primary_key=True)
     fk_modulo = models.ForeignKey(Modulos,verbose_name='Modulo',on_delete=models.CASCADE)
-    niv_nombre = models.CharField(max_length=50,null=False,unique=True,verbose_name="Nombre del nivel:")
+    niv_nombre = models.CharField(max_length=50, null=False, verbose_name="Nombre del nivel:")
     niv_descripcion = models.CharField(max_length=100,null=False,verbose_name="Descripción del nivel:")
     orden = models.IntegerField()
     vidas = models.IntegerField()
@@ -85,6 +85,10 @@ class Niveles(models.Model):
     
     def __str__(self):
         return f"{self.niv_id}: {self.niv_nombre}"
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['fk_modulo', 'niv_nombre'], name='unique_nombre_por_modulo')
+        ]
 
 class Enunciados(models.Model):
     enun_id = models.AutoField(primary_key=True)

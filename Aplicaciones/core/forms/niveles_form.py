@@ -15,17 +15,18 @@ class NivelesForm(forms.ModelForm):
 
     def clean_niv_nombre(self):
         nombre = self.cleaned_data.get('niv_nombre')
+        modulo = self.cleaned_data.get('fk_modulo')
 
-        if not nombre:
-            raise forms.ValidationError('El nombre del nivel es obligatorio.')
+        if not nombre or not modulo:
+            return nombre
+        qs = Niveles.objects.filter(fk_modulo=modulo, niv_nombre__iexact=nombre)    
 
         # Validación de unicidad (aunque el modelo ya lo impone)
         if self.instance.pk:
-            if Niveles.objects.exclude(pk=self.instance.pk).filter(niv_nombre__iexact=nombre).exists():
-                raise forms.ValidationError('Ya existe un nivel con este nombre.')
-        else:
-            if Niveles.objects.filter(niv_nombre__iexact=nombre).exists():
-                raise forms.ValidationError('Ya existe un nivel con este nombre.')
+            qs = qs.exclude(pk=self.instance.pk)
+        if qs.exists():
+            raise forms.ValidationError('Ya existe un nivel con este nombre.')
+            
 
         return nombre
     def clean_orden(self):
