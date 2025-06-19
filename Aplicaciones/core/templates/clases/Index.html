@@ -1,0 +1,118 @@
+{% extends "plantillas/MasterAdmin.html" %}
+{% load static %}
+{% block title %}Clases{% endblock %}
+{% block css %}
+
+{% endblock %}
+{% block content %}
+<div class="container-fluid ">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Clases</h1>
+        
+    </div>
+
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="{% url 'inicio' %}">Inicio</a></li>
+        <li class="breadcrumb-item active">Clases</li>
+    </ol>
+
+     {% comment %} Modal para crear modulo {% endcomment %}
+    <div class="modal fade" id="modalCrear" tabindex="-1" aria-labelledby="modalCrearLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalCrearLabel">Nuevo Módulo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="crear_clase" value="1">
+                        <!-- Mostrar errores si los hay -->
+                        {% if form.errors %}
+                            <div class="alert alert-danger">
+                                {{ form.errors }}
+                            </div>
+                        {% endif %}
+
+                        <!-- Campo: Docente -->
+                        <div class="mb-3">
+                            <label for="{{ form.fk_docente.id_for_label }}" class="form-label">Docente</label>
+                            {{ form.fk_docente }}
+                        </div>
+
+                        <!-- Campo: Módulo -->
+                        <div class="mb-3">
+                            <label for="{{ form.fk_modulo.id_for_label }}" class="form-label">Módulo</label>
+                            {{ form.fk_modulo }}
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <a href="{% url 'clase_index' %}" class="btn btn-secondary">Cancelar</a>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if form.errors %}
+        <script>
+            var modalCrear = new bootstrap.Modal(document.getElementById('modalCrear'));
+            modalCrear.show();
+        </script>
+    {% endif %}
+
+    {% comment %} fin del modal {% endcomment %}
+    <div class="mb-4">
+        <a href="#" class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#modalCrear"><i
+                class="fas fa-plus"></i> Nuevo
+            Clases</a>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            Tabla Clases
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                
+                <table class="table table-striped" id="tbl-admin" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Docente</th>
+                            <th>Módulo</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for clase in clases %}
+                            <tr>
+                                <td>{{ clase.id }}</td>
+                                <td>{{ clase.fk_docente }}</td>
+                                <td>{{ clase.fk_modulo }}</td>
+                                <td>
+                                    <a href="#" class="btn btn-primary"><i
+                                            class="fas fa-edit"></i></a>
+                                    <a href="#" class="btn btn-danger"><i
+                                            class="fas fa-trash"></i></a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4">No hay Clases registradas.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+{% block js %}
+
+{% endblock %}

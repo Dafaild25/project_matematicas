@@ -127,3 +127,12 @@ class Opciones(models.Model):
     
     def __str__(self):
         return f"{self.op_id}: {self.op_nombre}"
+    
+    
+class Clases (models.Model):
+    cla_id = models.AutoField(primary_key=True)
+    fk_docente = models.ForeignKey(Docentes,verbose_name='Docente',on_delete=models.CASCADE)
+    fk_modulo = models.ForeignKey(Modulos,verbose_name='Modulo',on_delete=models.CASCADE)
+    cla_estado = models.BooleanField(default=True,verbose_name='Estado:')
+    cla_fecha_creacion = models.DateTimeField(auto_now_add=True,verbose_name='Creado el:')
+    cla_fecha_actualizacion = models.DateTimeField(auto_now=True,verbose_name='Actualizado el:')

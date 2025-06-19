@@ -7,6 +7,7 @@ from .views import loguin_views
 from .views import crud_modulos_views
 from .views import crud_niveles_views
 from .views import crud_enunciado_views
+from .views import crud_clase_views
 
 
 urlpatterns = [
@@ -39,6 +40,9 @@ urlpatterns = [
     path('enunciado/create', crud_enunciado_views.create, name='enunciado_create'),
     path('enunciado/editar/<int:enun_id>', crud_enunciado_views.editar, name='enunciado_editar'),
     path('enunciado/eliminar/<int:enun_id>', crud_enunciado_views.eliminar, name='enunciado_eliminar'),
+    
+    #Ruta para generar un crud de clases
+    path('clase/', crud_clase_views.index, name='clase_index'),
 
     
     
