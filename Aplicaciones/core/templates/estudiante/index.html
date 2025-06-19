@@ -1,0 +1,91 @@
+{% extends 'plantillas/MasterAdmin.html' %}
+{% load static %}
+{% block title %}
+Docentes
+{% endblock %}
+
+{% block css %}
+<link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid ">
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Estudiantes</h1>
+    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+        class="fas fa-upload fa-sm text-white-50"></i> Exportar Estudiantes </a>
+  </div>
+
+  <ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item"><a href="{% url 'inicio' %}">Inicio</a></li>
+    <li class="breadcrumb-item active">Estudiantes</li>
+  </ol>
+  <div class="mb-4">
+    <a href="{% url 'estudiante_create' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Nuevo
+      Estudiante
+    </a>
+  </div>
+  <div class="card mb-4">
+    <div class="card-header">
+      <i class="fas fa-table me-1"></i>
+      Tabla Estudiantes
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered text-center" id="tbl-docente" width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Nombres</th>
+              <th>Apellidos</th>
+              <th>Correo</th>
+              <th>Usuario</th>
+              <th>Teléfono</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for estudiante in estudiantes %}
+              <tr>
+                <td>{{estudiante.est_id}}</td>
+                <td>{{estudiante.fk_id_persona.fk_id_usuario.first_name}} {{estudiante.fk_id_persona.per_segundo_nombre}}</td>
+                <td>{{estudiante.fk_id_persona.fk_id_usuario.last_name}} {{estudiante.fk_id_persona.per_segundo_apellido}}</td>
+                <td>{{estudiante.fk_id_persona.fk_id_usuario.email}}</td>
+                <td>{{estudiante.fk_id_persona.fk_id_usuario.username}}</td>
+                <td>{{estudiante.fk_id_persona.per_telefono}}</td>
+                {% if estudiante.est_estado %}
+                  <td class="text-success">Activo</td>
+                {% else %}
+                  <td class="text-danger">Inactivo</td>
+                {% endif %}
+                <td>
+                  <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+
+                    <a href="{% url 'estudiante_edit' estudiante.est_id %}" type="button" class=" btn btn-primary btn-circle ">
+                      <span><i class="fas fa-pen"></i></span>
+                    </a>
+
+                    <a class="btn btn-danger btn-circle" data-bs-toggle="modal"
+                      data-bs-target="#eliminarModal{{estudiante.est_id}}"><i class="fas fa-trash"></i>
+                  </a>
+                    <!-- MODAL PARA CONFIRMAR ELIMINACION -->
+                    {% include 'estudiante/Modal.html' %}
+                  </div>
+                </td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="8">No hay estudiantes registrados</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
