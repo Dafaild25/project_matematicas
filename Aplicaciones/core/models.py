@@ -79,6 +79,7 @@ class Niveles(models.Model):
     niv_descripcion = models.CharField(max_length=100,null=False,verbose_name="Descripción del nivel:")
     orden = models.IntegerField()
     vidas = models.IntegerField()
+    ruta = models.CharField(max_length=100,null=True,verbose_name="Ruta:")
     niv_estado = models.BooleanField(default=True,verbose_name='Estado:')
     niv_fecha_creacion = models.DateTimeField(auto_now_add=True,verbose_name='Creado el:')
     niv_fecha_actualizacion = models.DateTimeField(auto_now=True,verbose_name='Actualizado el:')
@@ -89,6 +90,19 @@ class Niveles(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['fk_modulo', 'niv_nombre'], name='unique_nombre_por_modulo')
         ]
+
+class Clases (models.Model):
+    cla_id = models.AutoField(primary_key=True)
+    fk_docente = models.ForeignKey(Docentes,verbose_name='Docente',on_delete=models.CASCADE)
+    fk_modulo = models.ForeignKey(Modulos,verbose_name='Modulo',on_delete=models.CASCADE)
+    cla_nombre = models.CharField(max_length=100,null=False,verbose_name="Clase:")
+    cla_estado = models.BooleanField(default=True,verbose_name='Estado:')
+    cla_fecha_creacion = models.DateTimeField(auto_now_add=True,verbose_name='Creado el:')
+    cla_fecha_actualizacion = models.DateTimeField(auto_now=True,verbose_name='Actualizado el:')
+
+
+##Ignoraremos  enunciados  preguntas y opciones
+
 
 class Enunciados(models.Model):
     enun_id = models.AutoField(primary_key=True)
@@ -101,8 +115,6 @@ class Enunciados(models.Model):
     
     def __str__(self):
         return f"{self.enun_id}: {self.enun_nombre}"
-    
-
 class Preguntas(models.Model):
     pre_id = models.AutoField(primary_key=True)
     fk_enunciado = models.ForeignKey(Enunciados,verbose_name='Enunciado',on_delete=models.CASCADE)
@@ -129,10 +141,3 @@ class Opciones(models.Model):
         return f"{self.op_id}: {self.op_nombre}"
     
     
-class Clases (models.Model):
-    cla_id = models.AutoField(primary_key=True)
-    fk_docente = models.ForeignKey(Docentes,verbose_name='Docente',on_delete=models.CASCADE)
-    fk_modulo = models.ForeignKey(Modulos,verbose_name='Modulo',on_delete=models.CASCADE)
-    cla_estado = models.BooleanField(default=True,verbose_name='Estado:')
-    cla_fecha_creacion = models.DateTimeField(auto_now_add=True,verbose_name='Creado el:')
-    cla_fecha_actualizacion = models.DateTimeField(auto_now=True,verbose_name='Actualizado el:')
