@@ -1,0 +1,261 @@
+{% extends "plantillas/MasterAdmin.html" %}
+{% load static %}
+{% block title %}Niveles{% endblock %}
+
+{% block css %}
+<style>
+    body {
+        background-color: #f4f8ff;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Niveles</h1>
+        <a href="#" class="btn btn-sm btn-primary shadow-sm"><i class="fas fa-upload fa-sm text-white-50"></i> Exportar
+            Niveles</a>
+    </div>
+
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="{% url 'inicio' %}">Inicio</a></li>
+        <li class="breadcrumb-item active">Niveles</li>
+    </ol>
+
+    <div class="mb-4">
+        <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCrear"><i
+                class="fas fa-plus"></i> Nuevo Nivel</a>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header"><i class="fas fa-table me-1"></i> Tabla Niveles</div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped" id="tbl-admin" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Módulo</th>
+                            <th>Nombre</th>
+                            <th>Descripción</th>
+                            <th>Orden</th>
+                            <th>Vidas</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for nivel in niveles %}
+                        <tr>
+                            <td>{{ nivel.niv_id }}</td>
+                            <td>{{ nivel.fk_modulo.mod_nombre }}</td>
+                            <td>{{ nivel.niv_nombre }}</td>
+                            <td>{{ nivel.niv_descripcion }}</td>
+                            <td>{{ nivel.orden }}</td>
+                            <td>{{ nivel.vidas }}</td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <a href="#" class="btn btn-sm btn-warning" data-bs-toggle="modal"
+                                        data-bs-target="#modalEditar{{ nivel.niv_id }}">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="#" class="btn btn-sm btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#modalEliminar{{ nivel.niv_id }}">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+
+
+                        <!-- Modal Editar -->
+                        <div class="modal fade" id="modalEditar{{ nivel.niv_id }}" tabindex="-1"
+                            aria-labelledby="modalEditarLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <form method="POST" novalidate>
+                                        {% csrf_token %}
+                                        <input type="hidden" name="editar_nivel" value="1">
+                                        <input type="hidden" name="niv_id" value="{{ nivel.niv_id }}">
+                                        
+
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Editar Nivel</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Cerrar"></button>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <!-- Llenar los campos manualmente -->
+                                            <div class="mb-3">
+                                                <label for="fk_modulo_{{ nivel.niv_id }}">Módulo</label>
+                                                <select name="fk_modulo" class="form-select" id="fk_modulo_{{ nivel.niv_id }}">
+                                                    
+                                                    {% for modulo in form.fields.fk_modulo.queryset %}
+                                                        <option value="{{ modulo.mod_id }}"
+                                                            {% if nivel.fk_modulo.mod_id == modulo.mod_id %}selected{% endif %}>
+                                                            {{ modulo }}
+                                                        </option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="nombre{{ nivel.niv_id }}">Nombre</label>
+                                                <input type="text" name="niv_nombre" class="form-control"
+                                                    id="nombre{{ nivel.niv_id }}" value="{{ nivel.niv_nombre }}">
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="descripcion{{ nivel.niv_id }}">Descripción</label>
+                                                <textarea name="niv_descripcion" class="form-control" rows="2"
+                                                    id="descripcion{{ nivel.niv_id }}">{{ nivel.niv_descripcion }}</textarea>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="orden{{ nivel.niv_id }}">Orden</label>
+                                                {% if nivel_a_editar and nivel_a_editar.niv_id == nivel.niv_id %}
+                                                    <input type="number" name="orden" class="form-control" min="1" max="10"
+                                                        value="{{ form_editar.data.orden }}">
+                                                    {% if form_editar.errors.orden %}
+                                                        <div class="text-danger">{{ form_editar.errors.orden.0 }}</div>
+                                                    {% endif %}
+                                                {% else %}
+                                                    <input type="number" name="orden" class="form-control" min="1" max="10"
+                                                        value="{{ nivel.orden }}">
+                                                {% endif %}
+                                            </div>
+
+
+                                            <div class="mb-3">
+                                                <label for="vidas{{ nivel.niv_id }}">Vidas</label>
+                                                {% if nivel_a_editar and nivel_a_editar.niv_id == nivel.niv_id %}
+                                                    <input type="number" name="vidas" class="form-control" min="1" max="10"
+                                                        value="{{ form_editar.data.vidas }}">
+                                                    {% if form_editar.errors.vidas %}
+                                                        <div class="text-danger">{{ form_editar.errors.vidas.0 }}</div>
+                                                    {% endif %}
+                                                {% else %}
+                                                    <input type="number" name="vidas" class="form-control" min="1" max="10"
+                                                        value="{{ nivel.vidas }}">
+                                                {% endif %}
+                                            </div>
+
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-success">Actualizar</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        {% if nivel_a_editar %}
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function () {
+                                var modalEditar = new bootstrap.Modal(document.getElementById('modalEditar{{ nivel_a_editar.niv_id }}'));
+                                modalEditar.show();
+                            });
+                        </script>
+                        {% endif %}
+
+
+
+                        <!-- Modal Eliminar -->
+                        <div class="modal fade" id="modalEliminar{{ nivel.niv_id }}" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <form method="POST">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="niv_id" value="{{ nivel.niv_id }}">
+                                        <input type="hidden" name="eliminar_nivel" value="1">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Eliminar Nivel</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            ¿Deseas eliminar el nivel <strong>{{ nivel.niv_nombre }}</strong>?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Cancelar</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Crear -->
+<div class="modal fade" id="modalCrear" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="crear_nivel" value="1">
+                <div class="modal-header">
+                    <h5 class="modal-title">Nuevo Nivel</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        {{ form.fk_modulo.label_tag }}
+                        {{ form.fk_modulo }}
+                        {% if form.fk_modulo.errors %}
+                        <div class="text-danger">{{ form.fk_modulo.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.niv_nombre.label_tag }}
+                        {{ form.niv_nombre }}
+                        {% if form.niv_nombre.errors %}
+                        <div class="text-danger">{{ form.niv_nombre.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.niv_descripcion.label_tag }}
+                        {{ form.niv_descripcion }}
+                        {% if form.niv_descripcion.errors %}
+                        <div class="text-danger">{{ form.niv_descripcion.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.orden.label_tag }}
+                        {{ form.orden }}
+                        {% if form.orden.errors %}
+                        <div class="text-danger">{{ form.orden.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.vidas.label_tag }}
+                        {{ form.vidas }}
+                        {% if form.vidas.errors %}
+                        <div class="text-danger">{{ form.vidas.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+
+
+{% endblock %}

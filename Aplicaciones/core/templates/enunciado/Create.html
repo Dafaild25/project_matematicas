@@ -1,0 +1,250 @@
+{% extends "plantillas/MasterAdmin.html" %}
+{% load static %}
+{% block title %}Crear Enunciados{% endblock %}
+{% block css %}
+
+{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Enunciados</h1>
+        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+            <i class="fas fa-upload fa-sm text-white-50"></i> Exportar Enunciados
+        </a>
+    </div>
+
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="{% url 'inicio' %}">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'enunciado_index' %}">Enunciados</a></li>
+        <li class="breadcrumb-item active">Crear Enunciado</li>
+    </ol>
+
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="row mb-3">
+                    <div class="col-md-2">
+                        {{ form_enunciado.fk_modulo.label_tag }}
+                        {{ form_enunciado.fk_modulo }}
+                    </div>
+                    <div class="col-md-2">
+                        {{ form_enunciado.fk_nivel.label_tag }}
+                        {{ form_enunciado.fk_nivel }}
+                    </div>
+                    <div class="col-md-8">
+                        {{ form_enunciado.enun_nombre.label_tag }}
+                        {{ form_enunciado.enun_nombre }}
+                    </div>
+                </div>
+
+                <hr>
+                <h5 class="mb-3">Preguntas</h5>
+                <div id="preguntas-container">
+                    {{ formset_preguntas.management_form }}
+                    {% for form in formset_preguntas %}
+                    <div class="pregunta-form card border shadow-sm p-3 mb-4">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+
+                                    {{ form.pre_nombre }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check mb-2">
+                                    {{ form.pre_tiene_imagen }}
+                                    {{ form.pre_tiene_imagen.label_tag }}
+                                </div>
+
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="mb-3">
+                            {{ form.pre_imagen.label_tag }}
+                            {{ form.pre_imagen }}
+                        </div>
+
+                        <div class="opciones-container">
+                            <h6 class="fw-bold">Opciones</h6>
+                            <div class="opcion-list"></div>
+                            <button type="button" class="btn btn-sm btn-outline-success add-opcion">+ Opción</button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <button type="button" class="btn btn-outline-primary" id="add-pregunta">
+                    + Añadir otra pregunta
+                </button>
+
+                <hr>
+                <button type="submit" class="btn btn-success">Guardar</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<template id="pregunta-template">
+    <div class="pregunta-form card border shadow-sm p-3 mb-4">
+        <button type="button" class="btn-close float-end remove-pregunta" aria-label="Eliminar"></button>
+        <div class="row">
+            <div class="col-md-9 mb-3">
+                <label for="">Pregunta:</label>
+                <input type="text" name="pregunta-__prefix__-pre_nombre" class="form-control"
+                    placeholder="Ingrese una pregunta">
+            </div>
+            <div class="col-md-3 d-flex align-items-center mt-4">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input toggle-imagen"
+                        name="pregunta-__prefix__-pre_tiene_imagen">
+                    <label class="form-check-label ms-1">¿Tiene imagen?</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-3 imagen-field" style="display: none;">
+            <label for="">Imagen:</label>
+            <input type="file" name="pregunta-__prefix__-pre_imagen" class="form-control">
+        </div>
+
+        <input type="hidden" name="pregunta-__prefix__-id" />
+
+        <div class="opciones-container">
+            <h6 class="fw-bold">Opciones</h6>
+            <div class="opcion-list"></div>
+            <button type="button" class="btn btn-sm btn-outline-success add-opcion">+ Opción</button>
+        </div>
+    </div>
+</template>
+
+<script>
+
+
+     document.addEventListener('DOMContentLoaded', function () {
+        // Script dinámico para niveles dependientes
+        const moduloSelect = document.getElementById('id_fk_modulo');
+        const nivelSelect = document.getElementById('id_fk_nivel');
+
+        if (moduloSelect) {
+            moduloSelect.addEventListener('change', function () {
+                const moduloId = this.value;
+                nivelSelect.innerHTML = '<option value="">Cargando niveles...</option>';
+
+                fetch(`/ajax/niveles/?modulo_id=${moduloId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        nivelSelect.innerHTML = '<option value="">Seleccione nivel</option>';
+                        data.forEach(nivel => {
+                            const option = document.createElement('option');
+                            option.value = nivel.niv_id;
+                            option.textContent = nivel.niv_nombre;
+                            nivelSelect.appendChild(option);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error al cargar niveles:', error);
+                        nivelSelect.innerHTML = '<option value="">Error al cargar niveles</option>';
+                    });
+            });
+        }
+
+        function toggleImagenes(container) {
+            container.querySelectorAll('.toggle-imagen').forEach(function (checkbox) {
+                checkbox.addEventListener('change', function () {
+                    const imagenInput = this.closest('.pregunta-form').querySelector('.imagen-field');
+                    if (this.checked) {
+                        imagenInput.style.display = 'block';
+                    } else {
+                        imagenInput.style.display = 'none';
+                        imagenInput.value = '';
+                    }
+                });
+            });
+        }
+
+            function addOpcionButtons(container) {
+                container.querySelectorAll('.add-opcion').forEach(function (btn) {
+                    btn.addEventListener('click', function () {
+                        const preguntaForm = this.closest('.pregunta-form');
+                        const preguntaIndex = Array.from(document.querySelectorAll('.pregunta-form')).indexOf(preguntaForm);
+                        const contenedor = preguntaForm.querySelector('.opcion-list');
+                        const total = contenedor.children.length;
+
+                        const nueva = document.createElement('div');
+                        nueva.classList.add('mb-3');
+                        nueva.innerHTML = `
+
+                    <div class=" row align-items-center mb-2 ">
+                        <div class="col-md-6">
+                            <input type="text" name="opciones-${preguntaIndex}-${total}-op_nombre" class="form-control" placeholder="Texto opción">
+                            
+                        </div>
+                        <div class="col-md-4 d-flex align-items-center">
+                            
+                             <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="opciones-${preguntaIndex}-${total}-op_correcta">
+                                <label class="form-check-label ms-1">¿Es correcta?</label>
+                            </div>
+                        </div>
+                         <div class="col-md-2">
+                            <button type="button" class="btn btn-sm btn-outline-danger remove-opcion"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+            
+            
+          `;
+                        contenedor.appendChild(nueva);
+                    });
+                });
+            }
+
+            function enableRemoveButtons(container) {
+                container.querySelectorAll('.remove-pregunta').forEach(function (btn) {
+                    btn.addEventListener('click', function () {
+                        this.closest('.pregunta-form').remove();
+                    });
+                });
+                container.querySelectorAll('.opcion-list').forEach(function (list) {
+                    list.addEventListener('click', function (e) {
+                        if (e.target.classList.contains('remove-opcion')) {
+                            e.target.closest('div.mb-3').remove();
+                        }
+                    });
+                });
+            }
+
+            const templateHtml = document.getElementById('pregunta-template').innerHTML;
+            const container = document.getElementById('preguntas-container');
+            let totalForms = parseInt(document.getElementById('id_pregunta-TOTAL_FORMS').value);
+
+            document.getElementById('add-pregunta').addEventListener('click', function () {
+                const newFormHtml = templateHtml.replace(/__prefix__/g, totalForms);
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = newFormHtml;
+                const newForm = tempDiv.firstElementChild;
+                container.appendChild(newForm);
+                document.getElementById('id_pregunta-TOTAL_FORMS').value = totalForms + 1;
+                totalForms++;
+                toggleImagenes(container);
+                addOpcionButtons(container);
+                enableRemoveButtons(container);
+            });
+
+            toggleImagenes(container);
+            addOpcionButtons(container);
+            enableRemoveButtons(container);
+        });
+</script>
+
+
+
+
+{% endblock %}
+{% block js %}
+
+{% endblock %}
