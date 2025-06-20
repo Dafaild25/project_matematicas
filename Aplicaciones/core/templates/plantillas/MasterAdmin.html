@@ -15,6 +15,7 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
 
+
     <!-- Custom styles for this template -->
     <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet" />
     {% block css %}
@@ -95,9 +96,9 @@
         </li>
 
          <li class="nav-item">
-          <a class="nav-link" href="#">
+          <a class="nav-link" href="{% url 'matricula_index'%}">
             <i class="fa-solid fa-file"></i>
-            <span>Inscripciones</span>
+            <span>Matriculas</span>
           </a>
         </li>
 
@@ -368,6 +369,7 @@
     <!-- Bootstrap core JavaScript -->
     <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
     <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
+   
 
     <!-- Core plugin JavaScript -->
     <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
@@ -380,8 +382,10 @@
 
     <!-- LIBRERIAS AGREGADAS -->
     <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
-    <script src="{% static 'js/bootstrap.min.js'%}"></script>
+    <script src="{% static 'js/bootstrap.min.js'%}"></script> 
     <script src="{% static 'js/datatables.min.js'%}"></script>
+    <!-- Bootstrap Select JS -->
+    
 
     <!-- INICIALIZACION DE DATATABLES -->
     <script>

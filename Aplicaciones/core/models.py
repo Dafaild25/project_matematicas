@@ -56,7 +56,7 @@ class Estudiantes(models.Model):
     est_fotografia = models.ImageField(upload_to='estudiantes/',default='Sin Foto',null=True,blank=True,verbose_name="Fotografía:")
     est_estado = models.BooleanField(default=True,verbose_name='Estado:')
     def __str__(self):
-        return f"{self.est_id}: {self.fk_id_persona.fk_id_usuario.first_name} {self.fk_id_persona.fk_id_usuario.last_name}"
+        return f" {self.fk_id_persona.fk_id_usuario.first_name} {self.fk_id_persona.fk_id_usuario.last_name}"
     
 # MODULO MODULOS  (5,6,7 años) 
 class Modulos(models.Model):
@@ -99,11 +99,12 @@ class Clases (models.Model):
     cla_estado = models.BooleanField(default=True,verbose_name='Estado:')
     cla_fecha_creacion = models.DateTimeField(auto_now_add=True,verbose_name='Creado el:')
     cla_fecha_actualizacion = models.DateTimeField(auto_now=True,verbose_name='Actualizado el:')
+    
+    def __str__(self):
+        return f" {self.cla_nombre}"
 
 
 ##Ignoraremos  enunciados  preguntas y opciones
-
-
 class Enunciados(models.Model):
     enun_id = models.AutoField(primary_key=True)
     fk_nivel = models.ForeignKey(Niveles,verbose_name='Nivel',on_delete=models.CASCADE)
@@ -140,4 +141,14 @@ class Opciones(models.Model):
     def __str__(self):
         return f"{self.op_id}: {self.op_nombre}"
     
-    
+
+
+# Modulo de  Matriculas
+
+class Matriculas(models.Model):
+    mat_id = models.AutoField(primary_key=True)
+    fk_estudiante = models.ForeignKey(Estudiantes,verbose_name='Estudiante',on_delete=models.CASCADE)
+    fk_clase = models.ForeignKey(Clases,verbose_name='Clase',on_delete=models.CASCADE)
+    mat_estado = models.BooleanField(default=True,verbose_name='Estado:')
+    mat_fecha_creacion = models.DateTimeField(auto_now_add=True,verbose_name='Creado el:')
+    mat_fecha_actualizacion = models.DateTimeField(auto_now=True,verbose_name='Actualizado el:')

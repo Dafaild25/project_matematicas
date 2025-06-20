@@ -9,6 +9,7 @@ from .views import crud_enunciado_views
 from .views import crud_clase_views
 from .views import crud_docente_views
 from .views import crud_estudiante_views
+from .views import crud_matricula_views
 
 
 urlpatterns = [
@@ -71,8 +72,16 @@ urlpatterns = [
     path('enunciado/editar/<int:enun_id>', crud_enunciado_views.editar, name='enunciado_editar'),
     path('enunciado/eliminar/<int:enun_id>', crud_enunciado_views.eliminar, name='enunciado_eliminar'),
     
+    
+    
+    
+    
     #Ruta para generar un crud de clases
     path('clase/', crud_clase_views.index, name='clase_index'),
+    
+    
+    # Ruta para crear las matriculas
+    path('matricula/', crud_matricula_views.index, name='matricula_index'),
 
     # loguin
     path('loguin/', loguin_views.index, name='loguin_index'),
