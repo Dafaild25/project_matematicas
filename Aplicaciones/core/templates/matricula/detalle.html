@@ -31,7 +31,7 @@
                 <div class="row g-3">
                     <div class="col-md-10">
                         <input type="hidden" value="{{ clase.cla_id }}" name="cla_id" id="cla_id">
-                        <select name="estudiante" id="estudiante" class="form-select" placeholder="Estudiante">
+                        <select name="estudiante" id="estudiante" data-live-search="true" class="form-select form-control selectpicker" title="Seleccione un Estudiante">
                             {% for estudiante in estudiantes %}
                             <option value="{{ estudiante.est_id }}">{{ estudiante.fk_id_persona.fk_id_usuario.first_name }} {{ estudiante.fk_id_persona.per_segundo_nombre }} {{ estudiante.fk_id_persona.fk_id_usuario.last_name }}  {{ estudiante.fk_id_persona.per_segundo_apellido }}</option>
                             {% endfor %}
