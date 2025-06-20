@@ -152,3 +152,13 @@ class Matriculas(models.Model):
     mat_estado = models.BooleanField(default=True,verbose_name='Estado:')
     mat_fecha_creacion = models.DateTimeField(auto_now_add=True,verbose_name='Creado el:')
     mat_fecha_actualizacion = models.DateTimeField(auto_now=True,verbose_name='Actualizado el:')
+
+
+class Avance_Matriculados(models.Model):
+    avm_id = models.AutoField(primary_key=True)
+    fk_matricula = models.ForeignKey(Matriculas,verbose_name='Matricula',on_delete=models.CASCADE)
+    fk_nivel = models.ForeignKey(Niveles,verbose_name='Nivel',on_delete=models.CASCADE)
+    avm_nota_final = models.DecimalField(max_digits=5,decimal_places=2,null=False,verbose_name="Nota:")
+    avm_estado = models.BooleanField(default=True,verbose_name='Estado:')
+    avm_fecha_creacion = models.DateTimeField(auto_now_add=True,verbose_name='Creado el:')
+    avm_fecha_actualizacion = models.DateTimeField(auto_now=True,verbose_name='Actualizado el:')

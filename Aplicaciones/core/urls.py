@@ -10,6 +10,7 @@ from .views import crud_clase_views
 from .views import crud_docente_views
 from .views import crud_estudiante_views
 from .views import crud_matricula_views
+from .views import crud_avance_views
 
 
 urlpatterns = [
@@ -82,13 +83,16 @@ urlpatterns = [
     
     # Ruta para crear las matriculas
     #path('matricula/', crud_matricula_views.index, name='matricula_index'),
-    path('matricula/', crud_matricula_views.indexM, name='matricula_index'),
+    path('matricula/', crud_matricula_views.index, name='matricula_index'),
     path('matricula/detalle/<int:cla_id>', crud_matricula_views.detalle, name='matricula_detalle'),
     path('matricula/individual/', crud_matricula_views.matriculaIndividual, name='matricula_individual'),
     path('matricula/listado/<int:cla_id>/',crud_matricula_views.vista_tabla_matriculados, name='matricula_listado'),
     path('matriculas/eliminar/<int:matricula_id>/', crud_matricula_views.eliminar_matricula, name='eliminar_matricula'),
     path('matricula/importar', crud_matricula_views.importar_estudiantes_excel, name='importar_matricula_excel'),
     path('matricula/descargar-plantilla/',crud_matricula_views.descargar_plantilla_estudiantes, name='descargar_plantilla_estudiantes'),
+    
+    #Ruta para ver los avnces de los estudiantes en modo administrador
+    path('avance/<int:cla_id>/', crud_avance_views.index, name='avance_index'),
 
     
     

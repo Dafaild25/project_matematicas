@@ -29,7 +29,8 @@
                     <div class="col ">
                         <div class="card h-100 shadow-sm  " style="border: 1px solid #ff0000;">
                             <div class="card-body">
-                                <h5 class="card-title">{{ clase.cla_nombre }}</h5>
+                                <h5 class="card-title text-center">{{ clase.cla_nombre }}</h5>
+                                <p class="text-muted">CLASE  IMPARTIDA POR: {{ clase.fk_docente}}</p>
                                 <h6 class="card-subtitle mb-2 text-muted"> {{ clase.fk_modulo }}</h6>
                                 <p class="card-text">
                                     {% if clase.cla_estado %}
@@ -39,8 +40,10 @@
                                     {% endif %}
                                 </p>
                             </div>
-                            <div class="card-footer bg-transparent border-top-0">
-                                <a href="{% url 'matricula_detalle' clase.cla_id %}" class="btn btn-primary btn-sm w-100">Ver Detalles</a>
+                            <div class="card-footer bg-transparent border-top-0  gap-2">
+                                <a href="{% url 'matricula_detalle' clase.cla_id %}" class="btn btn-primary btn-sm w-100 mb-2">Detalle Matricula</a>
+                                <a href="{% url 'avance_index' clase.cla_id %}" class="btn btn-success btn-sm w-100 mb-2">Avances</a>
+
                             </div>
                         </div>
                     </div>
