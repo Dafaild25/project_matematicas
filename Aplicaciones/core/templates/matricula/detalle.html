@@ -1,0 +1,230 @@
+{% extends "plantillas/MasterAdmin.html" %}
+{% load static %}
+{% block title %}Matriculas{% endblock %}
+{% block css %}
+
+{% endblock %}
+{% block content %}
+<div class="container-fluid ">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Matriculas</h1>
+        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                class="fas fa-download fa-sm text-white-50"></i> Descargar Formato </a>
+       
+        
+    </div>
+
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="{% url 'inicio' %}">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'matricula_index' %}">Matriculas</a></li>
+        <li class="breadcrumb-item active">Detalle Matricula</li>
+    </ol>
+
+    <!-- Formulario para matricular manualmente -->
+    <div class="card mb-4">
+        <div class="card-header bg-info text-white">
+            <i class="fas fa-user-plus me-1"></i> Matricular Estudiante
+        </div>
+        <div class="card-body">
+            <form method="POST" action="#">
+                {% csrf_token %}
+                <div class="row g-3">
+                    <div class="col-md-10">
+                        <input type="hidden" value="{{ clase.cla_id }}" name="cla_id" id="cla_id">
+                        <select name="estudiante" id="estudiante" class="form-select" placeholder="Estudiante">
+                            {% for estudiante in estudiantes %}
+                            <option value="{{ estudiante.est_id }}">{{ estudiante.fk_id_persona.fk_id_usuario.first_name }} {{ estudiante.fk_id_persona.per_segundo_nombre }} {{ estudiante.fk_id_persona.fk_id_usuario.last_name }}  {{ estudiante.fk_id_persona.per_segundo_apellido }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-2">                        
+                            <button type="button" onclick="matricularEstudiante()" class="btn btn-success">Matricular</button>                        
+                    </div>
+                    
+                </div>
+                
+            </form>
+        </div>
+    </div>
+
+    <!-- Formulario para importación masiva -->
+    <div class="card mb-4">
+        <div class="card-header bg-secondary text-white">
+            <i class="fas fa-file-upload me-1"></i> Importar Estudiantes Masivamente
+        </div>
+        <div class="card-body">
+            <form method="POST" enctype="multipart/form-data" action="#">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-10">
+                        <input type="hidden" value="{{ clase.cla_id }}" name="cla_id">
+                        <input type="file" name="archivo" id="archivo" class="form-control" accept=".xlsx" required>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-success">Importar</button>
+                    </div>
+                </div>
+                
+                
+            </form>
+        </div>
+    </div>
+    
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            Matriculados
+        </div>
+        <div class="card-body" id="contenedor-tabla-matriculados">
+            
+        <!-- aqui va la tabla -->
+        </div>
+    </div>
+</div>
+
+
+<!-- modal de eliminacion de matricula -->
+
+<div class="modal fade" id="modalEliminar" tabindex="-1" aria-labelledby="modalEliminarLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="modalEliminarLabel">Confirmar eliminación</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        ¿Estás seguro de que deseas eliminar esta matrícula?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" id="confirmarEliminarBtn">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% block js %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    recargarTablaMatriculados({{ clase.cla_id }});
+    });
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let cookie of cookies) {
+                cookie = cookie.trim();
+                if (cookie.startsWith(name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    function matricularEstudiante() {
+        const estudiante = document.getElementById('estudiante').value;
+        const cla_id = document.getElementById('cla_id').value;
+        const csrfToken = getCookie('csrftoken');
+
+        fetch("{% url 'matricula_individual' %}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': csrfToken,
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: new URLSearchParams({
+                'estudiante': estudiante,
+                'cla_id': cla_id
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                // Recargar tabla de matriculados
+                
+                
+                recargarTablaMatriculados(cla_id);
+
+            } else {
+                alert(data.message);
+            }
+        });
+    }
+function recargarTablaMatriculados(claseId) {
+    const contenedorTabla = document.getElementById("contenedor-tabla-matriculados");
+    const scrollPosition = contenedorTabla.scrollTop;
+
+    fetch(`/matricula/listado/${claseId}/`)  // URL a la vista
+        .then(response => response.text())
+        .then(html => {
+            contenedorTabla.innerHTML = html;
+
+            $('#tbl-matriculados').DataTable({
+                language: {
+                    search: "Buscar:",
+                    lengthMenu: "Mostrar _MENU_ registros",
+                    info: "Mostrando del _START_ al _END_ de _TOTAL_ registros",
+                    paginate: {
+                        first: "Primero",
+                        last: "Último",
+                        next: "Siguiente",
+                        previous: "Anterior"
+                    }
+                }
+            });
+
+            contenedorTabla.scrollTop = scrollPosition;
+        })
+        .catch(error => {
+            console.error("❌ Error al recargar tabla:", error);
+        });
+}
+
+// aqui se controlara la eliminacion
+let idMatriculaAEliminar = null;
+
+    function mostrarModalEliminar(elemento) {
+        idMatriculaAEliminar = elemento.getAttribute("data-id");
+        const modal = new bootstrap.Modal(document.getElementById('modalEliminar'));
+        modal.show();
+    }
+
+    document.getElementById('confirmarEliminarBtn').addEventListener('click', function () {
+        if (!idMatriculaAEliminar) return;
+
+        const csrfToken = getCookie('csrftoken');
+
+        fetch(`/matriculas/eliminar/${idMatriculaAEliminar}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken,
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                const cla_id = document.getElementById("cla_id").value;
+                recargarTablaMatriculados(cla_id);
+            } else {
+                alert("Error al eliminar la matrícula.");
+            }
+        });
+
+        const modal = bootstrap.Modal.getInstance(document.getElementById('modalEliminar'));
+        modal.hide();
+    });
+
+// fin del control de la eliminaciion
+
+</script>
+{% endblock %}
+
+{% endblock %}

@@ -81,7 +81,16 @@ urlpatterns = [
     
     
     # Ruta para crear las matriculas
-    path('matricula/', crud_matricula_views.index, name='matricula_index'),
+    #path('matricula/', crud_matricula_views.index, name='matricula_index'),
+    path('matricula/', crud_matricula_views.indexM, name='matricula_index'),
+    path('matricula/detalle/<int:cla_id>', crud_matricula_views.detalle, name='matricula_detalle'),
+    path('matricula/individual/', crud_matricula_views.matriculaIndividual, name='matricula_individual'),
+    path('matricula/listado/<int:cla_id>/',crud_matricula_views.vista_tabla_matriculados, name='matricula_listado'),
+    path('matriculas/eliminar/<int:matricula_id>/', crud_matricula_views.eliminar_matricula, name='eliminar_matricula'),
+
+    
+    
+    path('matricula/importar', crud_matricula_views.importar, name='matricula_importar'),
 
     # loguin
     path('loguin/', loguin_views.index, name='loguin_index'),
