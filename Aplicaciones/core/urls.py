@@ -87,10 +87,12 @@ urlpatterns = [
     path('matricula/individual/', crud_matricula_views.matriculaIndividual, name='matricula_individual'),
     path('matricula/listado/<int:cla_id>/',crud_matricula_views.vista_tabla_matriculados, name='matricula_listado'),
     path('matriculas/eliminar/<int:matricula_id>/', crud_matricula_views.eliminar_matricula, name='eliminar_matricula'),
+    path('matricula/importar', crud_matricula_views.importar_estudiantes_excel, name='importar_matricula_excel'),
+    path('matricula/descargar-plantilla/',crud_matricula_views.descargar_plantilla_estudiantes, name='descargar_plantilla_estudiantes'),
 
     
     
-    path('matricula/importar', crud_matricula_views.importar, name='matricula_importar'),
+    #path('matricula/importar', crud_matricula_views.importar, name='matricula_importar'),
 
     # loguin
     path('loguin/', loguin_views.index, name='loguin_index'),

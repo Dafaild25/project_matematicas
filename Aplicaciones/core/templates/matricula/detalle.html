@@ -8,10 +8,10 @@
 <div class="container-fluid ">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Matriculas</h1>
-        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                class="fas fa-download fa-sm text-white-50"></i> Descargar Formato </a>
-       
-        
+        <a href="{% url 'descargar_plantilla_estudiantes' %}" class="btn btn-primary">
+    <i class="fas fa-download"></i> Descargar Plantilla Excel
+</a>
+
     </div>
 
     <ol class="breadcrumb mb-4">
@@ -53,7 +53,7 @@
             <i class="fas fa-file-upload me-1"></i> Importar Estudiantes Masivamente
         </div>
         <div class="card-body">
-            <form method="POST" enctype="multipart/form-data" action="#">
+            <form id="form-importar-excel">
                 {% csrf_token %}
                 <div class="row">
                     <div class="col-md-10">
@@ -223,6 +223,36 @@ let idMatriculaAEliminar = null;
     });
 
 // fin del control de la eliminaciion
+
+
+//aqui se controla la importacion 
+document.getElementById('form-importar-excel').addEventListener('submit', function (e) {
+    e.preventDefault(); // Evita recargar la página
+
+    const formData = new FormData(this);
+    const cla_id = document.getElementById("cla_id").value;
+
+    fetch("{% url 'importar_matricula_excel' %}", {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'  // importante para distinguir petición AJAX
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert(data.message);
+            recargarTablaMatriculados(cla_id);  // actualiza la tabla
+        } else {
+            alert("Error: " + data.message);
+        }
+    })
+    .catch(error => {
+        console.error("Error en la importación:", error);
+        alert("Ocurrió un error al importar el archivo.");
+    });
+});
 
 </script>
 {% endblock %}

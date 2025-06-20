@@ -1,7 +1,9 @@
+import pandas as pd
 import openpyxl
+import io
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from ..models import Matriculas, Estudiantes, Clases,Personas, Matriculas
+from ..models import Matriculas, Estudiantes, Clases,Personas, Matriculas,User
 from ..forms.matricula_form import MatriculasForm
 from django.db import transaction
 from django.http import HttpResponse
@@ -9,6 +11,11 @@ from io import BytesIO
 from openpyxl import Workbook, load_workbook
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
+from openpyxl.utils import get_column_letter
+from openpyxl.styles import Font
+
+
 
 def index(request):
     matriculas = Matriculas.objects.all()
@@ -98,9 +105,119 @@ def eliminar_matricula(request, matricula_id):
         return JsonResponse({'success': False, 'message': 'Matrícula no encontrada'})
 
 
+@csrf_exempt
+def importar_estudiantes_excel(request):
+    if request.method == 'POST' and request.FILES.get('archivo'):
+        archivo_excel = request.FILES['archivo']
+        cla_id = request.POST.get('cla_id')
+        clase = get_object_or_404(Clases, pk=cla_id)
+
+        df = pd.read_excel(archivo_excel, dtype=str)
+
+        duplicados = []
+        agregados = 0
+
+        for index, row in df.iterrows():
+            nombre = str(row.get('nombre', '')).strip().upper()
+            apellido = str(row.get('apellido', '')).strip().upper()
+            segundo_nombre = str(row.get('segundo_nombre', '')).strip().upper()
+            segundo_apellido = str(row.get('segundo_apellido', '')).strip().upper()
+            cedula = str(row.get('cedula', '')).strip().replace('.', '').replace(',', '')
+            telefono = str(row.get('telefono', '')).strip().replace('.', '').replace(',', '')
+            email = row.get('email', f"{cedula}@example.com").strip()
+
+            # Validación de campos mínimos
+            if len(cedula) < 5 or not cedula.isdigit():
+                duplicados.append(f"Fila {index + 2} - Cédula inválida: {cedula}")
+                continue
+
+            # ❌ Si ya existe un usuario con esa cédula, marcar como duplicado
+            if User.objects.filter(username=cedula).exists():
+                duplicados.append(f"Fila {index + 2} - Cédula duplicada: {cedula}")
+                continue
+
+            # ✅ Crear usuario
+            usuario = User.objects.create_user(
+                username=cedula,
+                first_name=nombre,
+                last_name=apellido,
+                email=email,
+                password=cedula
+            )
+
+            # ✅ Crear persona
+            persona = Personas.objects.create(
+                fk_id_usuario=usuario,
+                per_segundo_nombre=segundo_nombre,
+                per_segundo_apellido=segundo_apellido,
+                per_cedula=cedula,
+                per_telefono=telefono
+            )
+
+            # ✅ Crear estudiante
+            estudiante = Estudiantes.objects.create(
+                fk_id_persona=persona
+            )
+
+            # ✅ Matricular si no está ya en la clase
+            if not Matriculas.objects.filter(fk_clase=clase, fk_estudiante=estudiante).exists():
+                Matriculas.objects.create(fk_clase=clase, fk_estudiante=estudiante)
+
+            agregados += 1
+
+        mensaje = f"{agregados} estudiante(s) importado(s) correctamente."
+
+        if duplicados:
+            mensaje += f" {len(duplicados)} fila(s) ignoradas por duplicidad o error:\n" + "\n".join(duplicados)
+
+        return JsonResponse({'success': True, 'message': mensaje})
+
+    return JsonResponse({'success': False, 'message': 'Solicitud inválida'})
 
 
 
+def descargar_plantilla_estudiantes(request):
+    # Crear archivo Excel
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Estudiantes"
+
+    # Encabezados ordenados y estilizados
+    columnas = ['nombre', 'segundo_nombre', 'apellido', 'segundo_apellido', 'cedula', 'telefono', 'email']
+    ws.append(columnas)
+
+    for cell in ws[1]:
+        cell.font = Font(bold=True)
+
+    # Fila de ejemplo (valores como texto, conservando ceros)
+    ejemplo = ['Juan', 'Carlos', 'Pérez', 'González', '0991234567', '0912345678', 'juan.perez@example.com']
+    ws.append(ejemplo)
+
+    # Aplicar formato texto explícito a cédula y teléfono (columnas 5 y 6: E y F)
+    for row in ws.iter_rows(min_row=2, max_row=2, min_col=5, max_col=6):
+        for cell in row:
+            cell.number_format = '@'
+
+    # Ajuste de anchos
+    for col in ws.columns:
+        max_length = 0
+        column = col[0].column_letter
+        for cell in col:
+            if cell.value:
+                max_length = max(max_length, len(str(cell.value)))
+        ws.column_dimensions[column].width = max_length + 2
+
+    # Preparar archivo para descarga
+    output = io.BytesIO()
+    wb.save(output)
+    output.seek(0)
+
+    response = HttpResponse(
+        output,
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    response['Content-Disposition'] = 'attachment; filename=plantilla_estudiantes.xlsx'
+    return response
 def importar(request):
     clases = Clases.objects.all()
     resultados = {}
