@@ -9,6 +9,10 @@ from .views import crud_enunciado_views
 from .views import crud_clase_views
 from .views import crud_docente_views
 from .views import crud_estudiante_views
+# VISTA DOCENTE
+from .views.master_docente import docente_views
+# VISTA ESTUDIANTE
+from .views.master_estudiante import estudiante_views
 
 
 urlpatterns = [
@@ -57,7 +61,15 @@ urlpatterns = [
     # Metodo para Eliminar un Estudiante
     path('estudiante/eliminar/<int:id_estud>/', crud_estudiante_views.eliminar_estudiante, name='estudiante_eliminar'),
 
-    
+    ########################################VISTA DOCENTE###################################
+    # Vista Inicial del Docente
+    path('docente/vista/', docente_views.vista_docente, name='docente_vista'),
+
+    ########################################VISTA ESTUDIANTE##################################
+    # Vista Inicial del Estudiante
+    path('estudiante/vista/', estudiante_views.vista_estudiante, name='estudiante_vista'),
+
+
     # Ruta para generar un  crud completo en un mismo template con modal
     path('modulo/', crud_modulos_views.index, name='modulo_index'),
     
@@ -74,8 +86,15 @@ urlpatterns = [
     #Ruta para generar un crud de clases
     path('clase/', crud_clase_views.index, name='clase_index'),
 
-    # loguin
+    ########################################LOGUIN########################################
+    # Vista de Formulario de Inicio de Sesión
     path('loguin/', loguin_views.index, name='loguin_index'),
+    # Metodo para Iniciar Sesión
+    path('iniciar_sesion/', loguin_views.iniciar_sesion, name='iniciar_sesion'),
+
+    ########################################LOGOUT#######################################
+    # Metodo para Cerrar Sesión
+    path('cerrar_sesion/',loguin_views.cerrar_sesion, name='cerrar_sesion'),
     
 
 ]
