@@ -1,4 +1,4 @@
-{% extends 'plantillas/MasterAdmin.html' %}
+{% extends 'plantillas/MasterEstudiante.html' %}
 {% load static %}
 {% block title %}
 Estudiantes
@@ -18,8 +18,8 @@ Estudiantes
   </div>
 
   <ol class="breadcrumb mb-4">
-    <li class="breadcrumb-item"><a href="{% url 'inicio' %}">Inicio</a></li>
-    <li class="breadcrumb-item active">Estudiantes</li>
+    <li class="breadcrumb-item"><a href="{% url 'core_estudiante' %}">Inicio</a></li>
+    <li class="breadcrumb-item active">Estudiante</li>
   </ol>
   <div class="mb-4">
     <a href="{% url 'administrador_create' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Nuevo

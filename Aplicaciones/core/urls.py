@@ -12,14 +12,14 @@ from .views import crud_estudiante_views
 from .views import crud_matricula_views
 from .views import crud_avance_views
 # VISTA DOCENTE
-from .views.master_docente import docente_views
+from .views.master_docente import core_docente_views
 # VISTA ESTUDIANTE
-from .views.master_estudiante import estudiante_views
+from .views.master_estudiante import core_estudiante_views
 
 
 urlpatterns = [
     
-    path('', core_views.inicio, name='inicio'),
+    path('', core_views.core_admin, name='core_admin'),
     
     #######################################CRUD ADMINISTRADOR################################
     # Vista Inicial del Administrador
@@ -63,22 +63,17 @@ urlpatterns = [
     # Metodo para Eliminar un Estudiante
     path('estudiante/eliminar/<int:id_estud>/', crud_estudiante_views.eliminar_estudiante, name='estudiante_eliminar'),
 
-    ########################################VISTA DOCENTE###################################
-    # Vista Inicial del Docente
-    path('docente/vista/', docente_views.vista_docente, name='docente_vista'),
-
-    ########################################VISTA ESTUDIANTE##################################
-    # Vista Inicial del Estudiante
-    path('estudiante/vista/', estudiante_views.vista_estudiante, name='estudiante_vista'),
 
 
-    # Ruta para generar un  crud completo en un mismo template con modal
+
+    
+    #######################################CRUD MODULO###################################
     path('modulo/', crud_modulos_views.index, name='modulo_index'),
     
-    #Ruta para genera un crud completo de los niveles
+    #######################################CRUD NIVEL###################################
     path('nivel/', crud_niveles_views.index, name='nivel_index'),
     
-    #Ruta para listar enunciados
+     #######################################CRUD ENUNCIADOS###################################
     path('enunciado/', crud_enunciado_views.index, name='enunciado_index'),
     path('ajax/niveles/', crud_enunciado_views.cargar_niveles, name='ajax_cargar_niveles'),
     path('enunciado/create', crud_enunciado_views.create, name='enunciado_create'),
@@ -89,11 +84,11 @@ urlpatterns = [
     
     
     
-    #Ruta para generar un crud de clases
+    #######################################CRUD CLASES###################################
     path('clase/', crud_clase_views.index, name='clase_index'),
     
     
-    # Ruta para crear las matriculas
+    #######################################CRUD MATRULICULAS###################################
     #path('matricula/', crud_matricula_views.index, name='matricula_index'),
     path('matricula/', crud_matricula_views.index, name='matricula_index'),
     path('matricula/detalle/<int:cla_id>', crud_matricula_views.detalle, name='matricula_detalle'),
@@ -103,12 +98,25 @@ urlpatterns = [
     path('matricula/importar', crud_matricula_views.importar_estudiantes_excel, name='importar_matricula_excel'),
     path('matricula/descargar-plantilla/',crud_matricula_views.descargar_plantilla_estudiantes, name='descargar_plantilla_estudiantes'),
     
-    #Ruta para ver los avnces de los estudiantes en modo administrador
+    #######################################CONSULTA DE AVANCE###################################
     path('avance/<int:cla_id>/', crud_avance_views.index, name='avance_index'),
 
     
     
     #path('matricula/importar', crud_matricula_views.importar, name='matricula_importar'),
+    
+    
+    ########################################VISTA DOCENTE###################################
+    # Vista Inicial del Docente
+    path('core/docente/', core_docente_views.core_docente, name='core_docente'),
+
+    ########################################VISTA ESTUDIANTE##################################
+    # Vista Inicial del Estudiante
+    path('core/estudiante/', core_estudiante_views.core_estudiante, name='core_estudiante'),
+    
+    
+    
+    
 
     ########################################LOGUIN########################################
     # Vista de Formulario de Inicio de Sesión

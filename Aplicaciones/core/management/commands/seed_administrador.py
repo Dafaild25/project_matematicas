@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from Aplicaciones.core.models import Personas, Administradores
 
 class Command(BaseCommand):
@@ -21,12 +21,17 @@ class Command(BaseCommand):
             email='admin@admin.com'
         )
 
+        # Agregar al grupo "Administradores" (créalo manualmente si no existe)
+        group_name = 'Administradores'
+        group, created = Group.objects.get_or_create(name=group_name)
+        user.groups.add(group)
+
         # Crear persona
         persona = Personas.objects.create(
             fk_id_usuario=user,
             per_segundo_nombre="David",
             per_segundo_apellido="Yugsi",
-            per_fecha_nacimiento="1998-22-06",
+            per_fecha_nacimiento="1998-06-22",
             per_cedula="1234567890",
             per_telefono="0999999999"
         )
