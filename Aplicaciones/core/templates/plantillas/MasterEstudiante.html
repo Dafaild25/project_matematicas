@@ -46,9 +46,15 @@
 
         <!-- Nav Item - Dashboard -->
         <li class="nav-item active">
-          <a class="nav-link" href="{% url 'core_admin' %}">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span>
+          <a class="nav-link" href="{% url 'core_estudiante' %}">
+            <i class="fa-solid fa-house"></i>
+            <span>Inicio</span>
+          </a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="#">
+            <i class="fa-solid fa-user"></i>
+            <span>Tu perfil</span>
           </a>
         </li>
 
@@ -56,10 +62,10 @@
         <hr class="sidebar-divider" />
 
         <!-- Heading -->
-        <div class="sidebar-heading">Interface</div>
+        <div class="sidebar-heading">Juegos</div>
 
         <!-- Nav Item - Pages Collapse Menu -->
-        <li class="nav-item">
+        {% comment %} <li class="nav-item">
           <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
             <i class="fas fa-fw fa-users"></i>
             <span>Personas</span>
@@ -88,19 +94,19 @@
               
             </div>
           </div>
-        </li>
+        </li> {% endcomment %}
         <!-- Nav Item - Clases -->
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'clase_index' %}">
-            <i class="fa-solid fa-chalkboard-user"></i>
-            <span>Clases</span>
+          <a class="nav-link" href="{% url 'estudiante_modulo' %}">
+            <i class="fa-solid fa-gamepad"></i>
+            <span >Módulos</span>
           </a>
         </li>
 
          <li class="nav-item">
           <a class="nav-link" href="{% url 'matricula_index'%}">
             <i class="fa-solid fa-file"></i>
-            <span>Matriculas</span>
+            <span>Reportes</span>
           </a>
         </li>
 

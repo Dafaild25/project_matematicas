@@ -1,0 +1,154 @@
+{% extends "plantillas/MasterEstudiante.html" %}
+{% block title %}Niveles del {% endblock %}
+
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/niveles_duolingo.css' %}">
+{% endblock %}
+
+{% block content %}
+
+
+
+<div class="container-fluid">
+    <nav class="breadcrumb">
+        <a style="color: #000;" href="{% url 'core_estudiante' %}">🏠 Inicio</a> &nbsp;/&nbsp;
+        <a style="color: #000;" href="{% url 'estudiante_modulo' %}">📚 Módulos</a> &nbsp;/&nbsp;
+        <span style="color: #2632df;">🎯 Niveles</span>
+    </nav>
+
+    <div class="card loading">
+        <div class="card-header">
+            <h2>🌟 Niveles asignados del {{ modulo.mod_nombre }} 🌟</h2>
+        </div>
+        <div class="card-body">
+            <div class="nivel-mapa">
+                {% for nivel in niveles %}
+                    <div class="nivel-circulo nivel-{{ forloop.counter }}" onclick="selectLevel({{ forloop.counter }})">
+                        <div>{{ nivel.niv_nombre }}<br>{{ nivel.niv_descripcion|default:"Nivel" }}</div>
+                    </div>
+                {% empty %}
+                    <div class="alert alert-warning">Este módulo no tiene niveles aún.</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <script>
+        // Animación de entrada
+        document.addEventListener('DOMContentLoaded', function() {
+            const card = document.querySelector('.card');
+            setTimeout(() => {
+                card.style.animationDelay = '0.3s';
+            }, 100);
+        });
+
+        // Función para seleccionar nivel
+        function selectLevel(level) {
+            const circle = document.querySelector(`.nivel-${level}`);
+            
+            // Efecto de click
+            circle.classList.add('clicked');
+            
+            // Crear efecto de partículas
+            createParticles(circle);
+            
+            // Vibración si está disponible
+            if (navigator.vibrate) {
+                navigator.vibrate(50);
+            }
+            
+            // Sonido de click (opcional)
+            playClickSound();
+            
+            // Simular navegación
+            setTimeout(() => {
+                alert(`¡Excelente elección! 🎉\nVas a comenzar el Nivel ${level}\n¡Prepárate para la aventura! 🚀`);
+                circle.classList.remove('clicked');
+            }, 600);
+        }
+
+        // Crear efecto de partículas
+        function createParticles(element) {
+            const rect = element.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            for (let i = 0; i < 8; i++) {
+                const particle = document.createElement('div');
+                particle.style.cssText = `
+                    position: fixed;
+                    width: 8px;
+                    height: 8px;
+                    background: linear-gradient(45deg, #ffd700, #ff6b6b);
+                    border-radius: 50%;
+                    pointer-events: none;
+                    z-index: 1000;
+                    left: ${centerX}px;
+                    top: ${centerY}px;
+                `;
+                
+                document.body.appendChild(particle);
+                
+                const angle = (Math.PI * 2 * i) / 8;
+                const velocity = 100 + Math.random() * 50;
+                const vx = Math.cos(angle) * velocity;
+                const vy = Math.sin(angle) * velocity;
+                
+                particle.animate([
+                    { 
+                        transform: 'translate(0, 0) scale(1)', 
+                        opacity: 1 
+                    },
+                    { 
+                        transform: `translate(${vx}px, ${vy}px) scale(0)`, 
+                        opacity: 0 
+                    }
+                ], {
+                    duration: 800,
+                    easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+                }).onfinish = () => {
+                    document.body.removeChild(particle);
+                };
+            }
+        }
+
+        // Sonido de click (opcional)
+        function playClickSound() {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.1);
+            
+            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.1);
+        }
+
+        // Navegación del breadcrumb
+        function navigateTo(section) {
+            console.log(`Navegando a: ${section}`);
+            // Aquí puedes agregar la lógica de navegación
+        }
+
+        // Efecto de hover adicional
+        document.querySelectorAll('.nivel-circulo').forEach(circle => {
+            circle.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.15) rotate(5deg)';
+            });
+            
+            circle.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1) rotate(0deg)';
+            });
+        });
+    </script>
+{% endblock %}

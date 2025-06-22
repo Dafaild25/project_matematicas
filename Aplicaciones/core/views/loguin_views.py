@@ -28,7 +28,7 @@ def iniciar_sesion(request):
                 if(usuario_autenticado is not None):
                     login(request, usuario_autenticado) # Iniciar sesión del usuario autenticado
                     if(usuario_autenticado.groups.filter(name='Administradores').exists()):
-                        return redirect('inicio') # Redirigir a la vista principal del administrador
+                        return redirect('core_admin') # Redirigir a la vista principal del administrador
                     elif(usuario_autenticado.groups.filter(name='Docentes').exists()):
                         return redirect('core_docente') # Redirigir a la vista principal del docente
                     elif(usuario_autenticado.groups.filter(name='Estudiantes').exists()):

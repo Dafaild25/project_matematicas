@@ -15,6 +15,7 @@ from .views import crud_avance_views
 from .views.master_docente import core_docente_views
 # VISTA ESTUDIANTE
 from .views.master_estudiante import core_estudiante_views
+from .views.master_estudiante import estudiante_modulo_views
 
 
 urlpatterns = [
@@ -113,6 +114,12 @@ urlpatterns = [
     ########################################VISTA ESTUDIANTE##################################
     # Vista Inicial del Estudiante
     path('core/estudiante/', core_estudiante_views.core_estudiante, name='core_estudiante'),
+    path('estudiante/modulo/', estudiante_modulo_views.estudiante_modulo, name='estudiante_modulo'),
+    path('modulo/<int:modulo_id>/niveles/', estudiante_modulo_views.ver_niveles_modulo, name='ver_niveles_modulo'),
+    
+    
+    
+    
     
     
     
