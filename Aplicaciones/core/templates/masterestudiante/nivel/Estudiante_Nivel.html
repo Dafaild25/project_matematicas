@@ -24,9 +24,9 @@
         <div class="card-body">
             <div class="nivel-mapa">
                 {% for nivel in niveles %}
-                    <div class="nivel-circulo nivel-{{ forloop.counter }}" onclick="selectLevel({{ forloop.counter }})">
+                    <a href="{% url 'jugar_nivel' nivel.niv_id %}" class="nivel-circulo nivel-{{ forloop.counter }}">
                         <div>{{ nivel.niv_nombre }}<br>{{ nivel.niv_descripcion|default:"Nivel" }}</div>
-                    </div>
+                    </a>
                 {% empty %}
                     <div class="alert alert-warning">Este módulo no tiene niveles aún.</div>
                 {% endfor %}

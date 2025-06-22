@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
+from django.template.loader import get_template, TemplateDoesNotExist
 from ...models import Estudiantes, Matriculas,Modulos,Niveles,User
 from django.contrib.auth.decorators import login_required
 
@@ -35,3 +36,22 @@ def ver_niveles_modulo(request, modulo_id):
     }
 
     return render(request, 'masterestudiante/nivel/Estudiante_Nivel.html', contexto)
+
+
+
+@login_required
+def jugar_nivel(request, nivel_id):
+    nivel = get_object_or_404(Niveles, pk=nivel_id)
+    template_name = nivel.ruta  # por ejemplo: "estudiante/nivel_1.html"
+
+    try:
+        get_template(template_name)  # verificación opcional
+    except TemplateDoesNotExist:
+        return render(request, "masterestudiante/error.html", {"mensaje": "Nivel no disponible aún."})
+
+    return render(request, template_name, {
+        'nivel': nivel,
+        'modulo': nivel.fk_modulo,  
+    })
+    
+    

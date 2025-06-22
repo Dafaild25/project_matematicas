@@ -1,0 +1,363 @@
+{% extends "plantillas/MasterEstudiante.html" %}
+{% block title %}Estudiantes_Modulos{% endblock %}
+
+
+
+
+
+
+{% block content %}
+
+{% load static %}
+{% block css %} 
+<link rel="stylesheet" href="{% static 'css/Modulo-1/primer-nivel.css' %}">
+{% endblock %}
+
+<div class="container-fluid">
+    <nav class="breadcrumb">
+        <a style="color: #000;" href="{% url 'core_estudiante' %}">🏠 Inicio</a> &nbsp;/&nbsp;
+        <a style="color: #000;" href="{% url 'estudiante_modulo' %}">📚 Módulos</a> &nbsp;/&nbsp;
+        <a style="color: #000;" href="{% url 'ver_niveles_modulo' modulo.mod_id %}"> 🎯 Niveles</a> &nbsp;/&nbsp;
+        <span style="color: #2632df;">🎮 Juego</span>
+    </nav>
+
+    <div class="card loading">
+        <div class="card-header">
+            <h2>🌟 {{nivel.niv_nombre}} -{{nivel.niv_descripcion}} </h2>
+        </div>
+        <div class="card-body">
+            
+        <div class="table-responsive">
+
+
+            <!-- Pantalla del juego -->
+        <div id="gameScreen">
+            <!-- Header con información del juego -->
+            <div class="game-container">
+                <div class="row align-items-center">
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-star text-warning me-2" style="font-size: 1.5rem;"></i>
+                            <span id="questionCounter" class="h4 mb-0 text-primary fw-bold">Pregunta 1 de 5</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <div class="score-display">
+                            <i class="fas fa-trophy me-2"></i>
+                            <span id="scoreDisplay">0</span> puntos
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="lives-container justify-content-end">
+                            <span class="me-2 fw-bold">Vidas:</span>
+                            <div id="livesContainer">
+                                <i class="fas fa-heart heart"></i>
+                                <i class="fas fa-heart heart"></i>
+                                <i class="fas fa-heart heart"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta -->
+            <div class="question-card">
+                <h2 id="questionText" class="question-title">¿Cuántos patitos hay?</h2>
+                <div id="visualDisplay" class="visual-display">🦆🦆🦆</div>
+                <div id="feedbackMessage" class="feedback" style="display: none;"></div>
+            </div>
+
+            <!-- Opciones de respuesta -->
+            <div class="game-container">
+                <div class="row" id="answersContainer">
+                    <!-- Las opciones se generarán dinámicamente -->
+                </div>
+            </div>
+
+            <!-- Barra de progreso -->
+            <div class="game-container">
+                <div class="progress-custom">
+                    <div id="progressBar" class="progress-bar-custom" style="width: 20%"></div>
+                </div>
+                <div class="text-center mt-3">
+                    <span id="progressText" class="fw-bold text-muted">Progreso: 1/5</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pantalla de resultados -->
+        <div id="resultScreen" class="result-card" style="display: none;">
+            <div class="trophy-icon">
+                <i id="resultIcon" class="fas fa-trophy"></i>
+            </div>
+            <h1 class="mb-4">¡Juego Terminado! 🎉</h1>
+            
+            <div class="row">
+                <div class="col-md-6 mx-auto">
+                    <h3 class="mb-4">Tus Resultados:</h3>
+                    
+                    <div class="data-card d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-clipboard-list me-2"></i>Nota Final:</span>
+                        <span id="finalGrade" class="h3 mb-0">A</span>
+                    </div>
+                    
+                    <div class="data-card d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-heart me-2"></i>Vidas Usadas:</span>
+                        <span id="livesUsedDisplay" class="h4 mb-0">0</span>
+                    </div>
+                    
+                    <div class="data-card d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-star me-2"></i>Puntuación:</span>
+                        <span id="finalScoreDisplay" class="h4 mb-0">100/100</span>
+                    </div>
+                    
+                    <div class="data-card d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-check me-2"></i>Correctas:</span>
+                        <span id="correctAnswersDisplay" class="h4 mb-0">5/5</span>
+                    </div>
+                </div>
+            </div>
+            
+            <button id="restartBtn" class="btn btn-restart mt-4">
+                <i class="fas fa-redo me-2"></i>¡Jugar de Nuevo!
+            </button>
+        </div>
+    </div>
+    
+    <script>
+        // Variables del juego
+        let currentQuestion = 0;
+        let score = 0;
+        let lives = 3;
+        let livesUsed = 0;
+        let gameFinished = false;
+
+        // Preguntas del juego
+        const questions = [
+            {
+                question: "¿Cuántos patitos hay?",
+                visual: "🦆🦆🦆",
+                options: [2, 3, 4, 5],
+                correct: 3
+            },
+            {
+                question: "¿Cuánto es 2 + 1?",
+                visual: "🍎🍎 + 🍎 = ?",
+                options: [2, 3, 4, 1],
+                correct: 3
+            },
+            {
+                question: "¿Cuántas estrellas ves?",
+                visual: "⭐⭐⭐⭐⭐",
+                options: [4, 5, 6, 3],
+                correct: 5
+            },
+            {
+                question: "¿Cuánto es 4 - 1?",
+                visual: "🎈🎈🎈🎈 - 🎈 = ?",
+                options: [2, 3, 4, 5],
+                correct: 3
+            },
+            {
+                question: "¿Cuántos corazones hay?",
+                visual: "❤️❤️",
+                options: [1, 2, 3, 4],
+                correct: 2
+            }
+        ];
+
+        // Elementos del DOM
+        const questionCounter = document.getElementById('questionCounter');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const livesContainer = document.getElementById('livesContainer');
+        const questionText = document.getElementById('questionText');
+        const visualDisplay = document.getElementById('visualDisplay');
+        const answersContainer = document.getElementById('answersContainer');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const feedbackMessage = document.getElementById('feedbackMessage');
+        const gameScreen = document.getElementById('gameScreen');
+        const resultScreen = document.getElementById('resultScreen');
+        const restartBtn = document.getElementById('restartBtn');
+
+        // Inicializar el juego
+        function initGame() {
+            displayQuestion();
+            updateUI();
+        }
+
+        // Mostrar pregunta actual
+        function displayQuestion() {
+            const question = questions[currentQuestion];
+            
+            questionText.textContent = question.question;
+            visualDisplay.textContent = question.visual;
+            
+            // Generar botones de respuesta
+            answersContainer.innerHTML = '';
+            question.options.forEach((option, index) => {
+                const col = document.createElement('div');
+                col.className = 'col-6 col-md-3 mb-3';
+                
+                const button = document.createElement('button');
+                button.className = 'btn answer-btn w-100';
+                button.textContent = option;
+                button.onclick = () => selectAnswer(option, button);
+                
+                col.appendChild(button);
+                answersContainer.appendChild(col);
+            });
+        }
+
+        // Manejar selección de respuesta
+        function selectAnswer(selectedAnswer, buttonElement) {
+            const question = questions[currentQuestion];
+            const isCorrect = selectedAnswer === question.correct;
+            
+            // Deshabilitar todos los botones
+            const allButtons = document.querySelectorAll('.answer-btn');
+            allButtons.forEach(btn => btn.onclick = null);
+            
+            if (isCorrect) {
+                score += 20;
+                buttonElement.classList.add('correct');
+                showFeedback('¡Muy bien! 🎉', 'correct');
+            } else {
+                livesUsed++;
+                lives--;
+                buttonElement.classList.add('incorrect');
+                
+                // Mostrar respuesta correcta
+                allButtons.forEach(btn => {
+                    if (parseInt(btn.textContent) === question.correct) {
+                        btn.classList.add('correct');
+                    }
+                });
+                
+                showFeedback('¡Inténtalo de nuevo! 💪', 'incorrect');
+                
+                if (lives <= 0) {
+                    setTimeout(() => {
+                        endGame();
+                    }, 2000);
+                    return;
+                }
+            }
+            
+            updateUI();
+            
+            setTimeout(() => {
+                if (currentQuestion < questions.length - 1) {
+                    currentQuestion++;
+                    displayQuestion();
+                    hideFeedback();
+                } else {
+                    endGame();
+                }
+            }, 2000);
+        }
+
+        // Mostrar feedback
+        function showFeedback(message, type) {
+            feedbackMessage.textContent = message;
+            feedbackMessage.className = `feedback ${type}`;
+            feedbackMessage.style.display = 'block';
+        }
+
+        // Ocultar feedback
+        function hideFeedback() {
+            feedbackMessage.style.display = 'none';
+        }
+
+        // Actualizar interfaz
+        function updateUI() {
+            questionCounter.textContent = `Pregunta ${currentQuestion + 1} de ${questions.length}`;
+            scoreDisplay.textContent = score;
+            
+            // Actualizar vidas
+            const hearts = livesContainer.querySelectorAll('.heart');
+            hearts.forEach((heart, index) => {
+                if (index < lives) {
+                    heart.classList.remove('lost');
+                } else {
+                    heart.classList.add('lost');
+                }
+            });
+            
+            // Actualizar barra de progreso
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            progressBar.style.width = progress + '%';
+            progressText.textContent = `Progreso: ${currentQuestion + 1}/${questions.length}`;
+        }
+
+        // Finalizar juego
+        function endGame() {
+            gameScreen.style.display = 'none';
+            resultScreen.style.display = 'block';
+            
+            const gameData = getGameData();
+            
+            // Mostrar resultados
+            document.getElementById('finalGrade').textContent = gameData.nota;
+            document.getElementById('livesUsedDisplay').textContent = gameData.vidas_usadas;
+            document.getElementById('finalScoreDisplay').textContent = `${gameData.puntuacion}/100`;
+            document.getElementById('correctAnswersDisplay').textContent = `${gameData.preguntas_correctas}/${gameData.preguntas_totales}`;
+            
+            // Cambiar icono según la nota
+            const resultIcon = document.getElementById('resultIcon');
+            if (gameData.nota === 'A') {
+                resultIcon.className = 'fas fa-trophy';
+            } else {
+                resultIcon.className = 'fas fa-star';
+            }
+            
+            // Mostrar datos en consola para captura
+            console.log('Datos del juego:', gameData);
+        }
+
+        // Obtener datos del juego
+        function getGameData() {
+            const percentage = (score / 100) * 100;
+            let nota;
+            if (percentage >= 80) nota = 'A';
+            else if (percentage >= 60) nota = 'B';
+            else if (percentage >= 40) nota = 'C';
+            else nota = 'D';
+            
+            return {
+                nota: nota,
+                vidas_usadas: livesUsed,
+                puntuacion: score,
+                preguntas_correctas: score / 20,
+                preguntas_totales: questions.length
+            };
+        }
+
+        // Reiniciar juego
+        function restartGame() {
+            currentQuestion = 0;
+            score = 0;
+            lives = 3;
+            livesUsed = 0;
+            gameFinished = false;
+            
+            gameScreen.style.display = 'block';
+            resultScreen.style.display = 'none';
+            
+            displayQuestion();
+            updateUI();
+            hideFeedback();
+        }
+
+        // Event listeners
+        restartBtn.onclick = restartGame;
+
+        // Inicializar el juego cuando se carga la página
+        window.onload = initGame;
+    </script>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}      

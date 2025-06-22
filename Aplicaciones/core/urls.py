@@ -118,6 +118,10 @@ urlpatterns = [
     path('modulo/<int:modulo_id>/niveles/', estudiante_modulo_views.ver_niveles_modulo, name='ver_niveles_modulo'),
     
     
+    ########################################Juego del Modulo 1 ##################################
+    path('nivel/<int:nivel_id>/jugar/', estudiante_modulo_views.jugar_nivel, name='jugar_nivel'),
+
+    
     
     
     
