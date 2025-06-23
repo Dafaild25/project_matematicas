@@ -5,12 +5,11 @@ from django.views.decorators.http import require_http_methods
 import json
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
-from ..models import IntentoNivel, Avance_Matriculados, Niveles, Matriculas
+
+from ..models import IntentoNivel, Avance_Matriculados, Niveles, Matriculas,Vidas_Extras
 from django.db.models import Max
 from django.utils import timezone
 
-def cuestionario_Modulo1(request):
-    return render(request, 'cuestionario/cuestionario_Modulo1.html')
 
 @login_required
 @csrf_exempt
@@ -24,7 +23,9 @@ def get_game_info(request):
         # Obtener el nivel
         nivel = get_object_or_404(Niveles, niv_id=nivel_id)
         
-        # Obtener la matrícula del estudiante (necesaria para la relación)
+
+        # Obtener la matrícula del estudiante
+
         matricula = get_object_or_404(Matriculas, fk_estudiante_id=estudiante_id)
         
         # Obtener o crear el avance del estudiante
@@ -33,16 +34,37 @@ def get_game_info(request):
             fk_nivel=nivel,
             defaults={
                 'avm_estado': 'iniciado',
-                'avm_vidas_restantes': nivel.niv_vidas,  # Asumiendo que el campo se llama niv_vidas
             }
         )
         
-        # Si es la primera vez, inicializar vidas
+        # Solo inicializar vidas si es la primera vez o no tiene vidas asignadas
         if created or avance.avm_vidas_restantes is None:
             avance.inicializar_vidas()
         
-        # Verificar si hay vidas adicionales disponibles (si el admin aumentó las vidas)
-        vidas_restauradas = avance.restaurar_vidas_por_cambio_admin()
+        # VERIFICAR si hay vidas extras pendientes de aplicar (solo una vez)
+        vidas_aplicadas = avance.aplicar_vidas_extras_pendientes()
+        
+        # Obtener información sobre vidas extras
+        vidas_extras_info = None
+        try:
+            vidas_extras = Vidas_Extras.objects.get(
+                matricula=matricula,
+                nivel=nivel
+            )
+            vidas_extras_info = {
+                'tiene_vidas_extras': True,
+                'vidas_asignadas': vidas_extras.vidas_asignadas,
+                'fecha_asignacion': vidas_extras.fecha_asignacion,
+                'asignado_por': vidas_extras.asignado_por.username,
+                'ya_aplicadas': vidas_extras.vidas_aplicadas
+            }
+        except Vidas_Extras.DoesNotExist:
+            vidas_extras_info = {
+                'tiene_vidas_extras': False,
+                'vidas_asignadas': nivel.vidas,
+                'ya_aplicadas': True
+            }
+
         
         # Obtener número total de intentos realizados
         intentos_realizados = IntentoNivel.objects.filter(
@@ -50,20 +72,29 @@ def get_game_info(request):
             fk_nivel=nivel
         ).count()
         
+
+        # Construir mensaje sobre vidas
         mensaje_vidas = ""
-        if vidas_restauradas > 0:
-            mensaje_vidas = f"¡El profesor agregó {vidas_restauradas} vida(s) adicional(es)! "
+        if vidas_aplicadas > 0:
+            mensaje_vidas = f"¡El profesor te asignó {vidas_aplicadas} vida(s) adicional(es)! "
         
-        mensaje_vidas += f"Tienes {avance.avm_vidas_restantes} vidas restantes de {nivel.niv_vidas} totales"
+        if vidas_extras_info['tiene_vidas_extras']:
+            mensaje_vidas += f"Tienes {avance.avm_vidas_restantes} vidas restantes de {vidas_extras_info['vidas_asignadas']} asignadas por el profesor"
+        else:
+            mensaje_vidas += f"Tienes {avance.avm_vidas_restantes} vidas restantes de {nivel.vidas} del nivel"
+
         
         return JsonResponse({
             'success': True,
             'vidas_restantes': avance.avm_vidas_restantes,
-            'vidas_totales': nivel.niv_vidas,
+            'vidas_totales': vidas_extras_info['vidas_asignadas'],
+            'vidas_originales_nivel': nivel.vidas,
             'intentos_realizados': intentos_realizados,
             'puede_intentar': avance.puede_intentar(),
             'estado': avance.avm_estado,
-            'vidas_restauradas': vidas_restauradas,
+            'vidas_aplicadas_ahora': vidas_aplicadas,
+            'tiene_vidas_extras': vidas_extras_info['tiene_vidas_extras'],
+            'vidas_extras_info': vidas_extras_info,
             'mensaje': mensaje_vidas
         })
         
@@ -72,6 +103,92 @@ def get_game_info(request):
             'success': False,
             'error': str(e)
         })
+
+
+
+# FUNCIÓN AUXILIAR PARA ASIGNAR VIDAS EXTRAS (para usar en admin o vista específica)
+
+@login_required
+@csrf_exempt
+def asignar_vidas_extras(request):
+    """Vista para que el admin asigne vidas extras a un estudiante específico"""
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            matricula_id = data.get('matricula_id')
+            nivel_id = data.get('nivel_id')
+            vidas_asignadas = data.get('vidas_asignadas')
+            observaciones = data.get('observaciones', '')
+            
+            # Validaciones básicas
+            if not all([matricula_id, nivel_id, vidas_asignadas is not None]):
+                return JsonResponse({
+                    'success': False,
+                    'error': 'Faltan datos requeridos'
+                })
+            
+            if vidas_asignadas < 0:
+                return JsonResponse({
+                    'success': False,
+                    'error': 'Las vidas no pueden ser negativas'
+                })
+            
+            # Obtener objetos
+            matricula = get_object_or_404(Matriculas, mat_id=matricula_id)
+            nivel = get_object_or_404(Niveles, niv_id=nivel_id)
+            
+            # VALIDACIÓN CORREGIDA: No permitir asignar más vidas que las iniciales del nivel
+            if vidas_asignadas > nivel.vidas:
+                return JsonResponse({
+                    'success': False,
+                    'error': f'No se pueden asignar más de {nivel.vidas} vidas. El nivel "{nivel.niv_nombre}" tiene un máximo de {nivel.vidas} vidas.'
+                })
+            
+            # Crear o actualizar vidas extras
+            vidas_extras, created = Vidas_Extras.objects.update_or_create(
+                matricula=matricula,
+                nivel=nivel,
+                defaults={
+                    'vidas_asignadas': vidas_asignadas,
+                    'asignado_por': request.user,
+                    'observaciones': observaciones,
+                    'vidas_aplicadas': False  # IMPORTANTE: Marcar como NO aplicadas
+                }
+            )
+            
+            # Obtener o crear el avance del estudiante
+            avance, _ = Avance_Matriculados.objects.get_or_create(
+                fk_matricula=matricula,
+                fk_nivel=nivel,
+                defaults={'avm_estado': 'iniciado'}
+            )
+            
+            # Inicializar vidas si es necesario
+            avance.inicializar_vidas()
+            
+            # Aplicar las vidas extras inmediatamente
+            diferencia_vidas = avance.aplicar_vidas_extras_pendientes()
+            
+            accion = "creadas" if created else "actualizadas"
+            
+            return JsonResponse({
+                'success': True,
+                'message': f'Vidas extras {accion} correctamente. Estudiante: {matricula.fk_estudiante.username}, Nivel: {nivel.niv_nombre}, Vidas asignadas: {vidas_asignadas}',
+                'diferencia_vidas': diferencia_vidas,
+                'vidas_restantes': avance.avm_vidas_restantes,
+                'vidas_maximas_nivel': nivel.vidas
+            })
+            
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'error': str(e)
+            })
+    
+    return JsonResponse({
+        'success': False,
+        'error': 'Método no permitido'
+    })
 
 
 @login_required
