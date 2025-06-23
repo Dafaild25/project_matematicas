@@ -20,8 +20,8 @@ env/
 .vscode/
 
 # Static files (colectados con collectstatic)
-staticfiles/
-static/
+
+
 
 # Media uploads
 media/

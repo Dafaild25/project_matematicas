@@ -1,0 +1,371 @@
+body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+    }
+
+    .container-fluid {
+        padding: 20px;
+    }
+
+    /* Header animado */
+    .header-section {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(15px);
+        border-radius: 20px;
+        padding: 25px;
+        margin-bottom: 30px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        animation: slideInDown 0.8s ease;
+    }
+
+    .header-title {
+        color: black;
+        font-size: 2.5rem;
+        font-weight: bold;
+        text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+        margin: 0;
+        animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+        from { text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 255, 255, 0.3); }
+        to { text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3), 0 0 30px rgba(255, 255, 255, 0.6); }
+    }
+
+    @keyframes slideInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-50px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Breadcrumb mejorado */
+    .breadcrumb {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 15px 20px;
+        margin-bottom: 30px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        animation: fadeInUp 0.8s ease 0.2s both;
+    }
+
+    .breadcrumb a {
+        color: black;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .breadcrumb a:hover {
+        color: black;
+        text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    }
+
+    .breadcrumb-item.active {
+        color: #2632df;
+    }
+
+    /* Card principal */
+    .main-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: 25px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        overflow: hidden;
+        animation: fadeInUp 0.8s ease 0.4s both;
+    }
+
+    .card-header {
+        background: linear-gradient(135deg, #ff6b6b, #feca57);
+        color: white;
+        padding: 25px;
+        text-align: center;
+        font-size: 1.4rem;
+        font-weight: bold;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .card-header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transform: rotate(45deg);
+        animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+        0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+        100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+    }
+
+    /* Tarjetas de módulos súper animadas */
+    .modulo-card {
+        background: linear-gradient(135deg, #fff 0%, #f8f9ff 100%);
+        border-radius: 20px;
+        border: none;
+        box-shadow: 
+            0 10px 30px rgba(0, 0, 0, 0.1),
+            0 1px 8px rgba(0, 0, 0, 0.05);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        overflow: hidden;
+        position: relative;
+        height: 200px;
+        cursor: pointer;
+        animation: cardSlideIn 0.8s ease both;
+    }
+
+    .modulo-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%);
+        transform: translateX(-100%);
+        transition: transform 0.6s ease;
+    }
+
+    .modulo-card:hover::before {
+        transform: translateX(100%);
+    }
+
+    .modulo-card:hover {
+        transform: translateY(-15px) rotate(2deg);
+        box-shadow: 
+            0 25px 50px rgba(0, 0, 0, 0.2),
+            0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .modulo-card:active {
+        transform: translateY(-10px) scale(0.98);
+    }
+
+    /* Animación de entrada escalonada */
+    @keyframes cardSlideIn {
+        from {
+            opacity: 0;
+            transform: translateY(50px) scale(0.8);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    .modulo-card:nth-child(1) { animation-delay: 0.1s; }
+    .modulo-card:nth-child(2) { animation-delay: 0.2s; }
+    .modulo-card:nth-child(3) { animation-delay: 0.3s; }
+    .modulo-card:nth-child(4) { animation-delay: 0.4s; }
+    .modulo-card:nth-child(5) { animation-delay: 0.5s; }
+    .modulo-card:nth-child(6) { animation-delay: 0.6s; }
+
+    /* Bordes laterales coloridos */
+    .border-left-success {
+        border-left: 6px solid transparent;
+        background: linear-gradient(135deg, #fff, #f8f9ff), 
+                   linear-gradient(90deg, #00d2d3, #54a0ff);
+        background-origin: border-box;
+        background-clip: padding-box, border-box;
+    }
+
+    .modulo-card:nth-child(6n+1) .border-left-success {
+        background: linear-gradient(135deg, #fff, #f8f9ff), 
+                   linear-gradient(90deg, #ff6b6b, #ee5a24);
+    }
+    .modulo-card:nth-child(6n+2) .border-left-success {
+        background: linear-gradient(135deg, #fff, #f8f9ff), 
+                   linear-gradient(90deg, #54a0ff, #2e86de);
+    }
+    .modulo-card:nth-child(6n+3) .border-left-success {
+        background: linear-gradient(135deg, #fff, #f8f9ff), 
+                   linear-gradient(90deg, #5f27cd, #341f97);
+    }
+    .modulo-card:nth-child(6n+4) .border-left-success {
+        background: linear-gradient(135deg, #fff, #f8f9ff), 
+                   linear-gradient(90deg, #00d2d3, #006ba6);
+    }
+    .modulo-card:nth-child(6n+5) .border-left-success {
+        background: linear-gradient(135deg, #fff, #f8f9ff), 
+                   linear-gradient(90deg, #ff9ff3, #f368e0);
+    }
+    .modulo-card:nth-child(6n+6) .border-left-success {
+        background: linear-gradient(135deg, #fff, #f8f9ff), 
+                   linear-gradient(90deg, #feca57, #ff9f43);
+    }
+
+    /* Contenido de la tarjeta */
+    .card-body {
+        padding: 25px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .modulo-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: textGlow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes textGlow {
+        from { filter: brightness(1); }
+        to { filter: brightness(1.2); }
+    }
+
+    .modulo-description {
+        color: #666;
+        font-size: 0.95rem;
+        line-height: 1.4;
+        margin-bottom: 15px;
+    }
+
+    /* Botón súper atractivo */
+    .btn-jugar {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border: none;
+        color: white;
+        padding: 12px 25px;
+        border-radius: 25px;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-jugar::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .btn-jugar:hover::before {
+        left: 100%;
+    }
+
+    .btn-jugar:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        background: linear-gradient(135deg, #54a0ff, #2e86de);
+    }
+
+    .btn-jugar:active {
+        transform: translateY(0);
+    }
+
+    /* Icono animado */
+    .modulo-icon {
+        font-size: 3rem;
+        color: #ddd;
+        transition: all 0.3s ease;
+        animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+    }
+
+    .modulo-card:hover .modulo-icon {
+        color: #667eea;
+        transform: scale(1.1) rotate(10deg);
+    }
+
+    /* Efecto de partículas al hacer hover */
+    .modulo-card::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+    }
+
+    .modulo-card:hover::after {
+        opacity: 1;
+    }
+
+    /* Alert mejorado */
+    .alert-warning {
+        background: linear-gradient(135deg, #feca57, #ff9f43);
+        color: white;
+        border: none;
+        border-radius: 15px;
+        padding: 30px;
+        text-align: center;
+        font-weight: bold;
+        font-size: 1.2rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        animation: bounceIn 0.8s ease both;
+    }
+
+    @keyframes bounceIn {
+        0% {
+            transform: scale(0.3);
+            opacity: 0;
+        }
+        50% {
+            transform: scale(1.05);
+            opacity: 0.8;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .header-title {
+            font-size: 2rem;
+           
+        }
+        
+        .modulo-card {
+            height: auto;
+            min-height: 180px;
+        }
+        
+        .modulo-icon {
+            font-size: 2.5rem;
+        }
+    }
