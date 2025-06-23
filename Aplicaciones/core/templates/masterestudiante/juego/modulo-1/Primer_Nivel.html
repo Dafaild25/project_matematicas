@@ -1,11 +1,10 @@
-{% extends 'plantillas/MasterAdmin.html' %}
+{% extends "plantillas/MasterEstudiante.html" %}
 {% load static %}
-{% block title %}
-Módulo 1 - Números Mágicos
-{% endblock %}
+{% block title %}Estudiantes_Modulos{% endblock %}
 
 {% block css %}
-    <style>
+<link rel="stylesheet" href="{% static 'css/Modulo-1/primer-nivel.css' %}">
+<style>
         body {
             background: linear-gradient(-45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ffa726, #ef5350);
             background-size: 400% 400%;
@@ -383,7 +382,6 @@ Módulo 1 - Números Mágicos
         }
 
         /* Estilos para drag and drop */
-
         .drag-drop-question {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
@@ -486,111 +484,139 @@ Módulo 1 - Números Mágicos
             justify-content: center;
             box-sizing: border-box;
         }
-
     </style>
 {% endblock %}
 
+
 {% block content %}
-<div class="main-container">
-    <div class="floating-elements" id="floating-elements"></div>
-    
-    <!-- Header Card -->
-    <div class="header-card">
-        <h1>🌈 ¡Números Mágicos! 🌈</h1>
-        <p id="main-instruction">🔍 ¡Encuentra los números que tengan 5, 6 y 7! 🔍</p>
+    <div class="container-fluid">
+        <nav class="breadcrumb">
+            <a style="color: #000;" href="{% url 'core_estudiante' %}">🏠 Inicio</a> &nbsp;/&nbsp;
+            <a style="color: #000;" href="{% url 'estudiante_modulo' %}">📚 Módulos</a> &nbsp;/&nbsp;
+            <a style="color: #000;" href="{% url 'ver_niveles_modulo' modulo.mod_id %}"> 🎯 Niveles</a> &nbsp;/&nbsp;
+            <span style="color: #2632df;">🎮 Juego</span>
+        </nav>
+
+        <div class="card loading">
+            <div class="card-header">
+                <h2>🌟 {{nivel.niv_nombre}} -{{nivel.niv_descripcion}} </h2>
+            </div>
+            <div class="card-body">
+
+                <div class="main-container">
+                    <div class="floating-elements" id="floating-elements"></div>
+
+                    <!-- Header Card -->
+                    <div class="header-card">
+                        <h1>🌈 ¡Números Mágicos! 🌈</h1>
+                        <p id="main-instruction">🔍 ¡Encuentra los números que tengan 5, 6 y 7! 🔍</p>
+                    </div>
+
+                    <!-- Game Card -->
+                    <div class="game-card">
+                        <!-- Question Counter -->
+                        <div class="question-counter" id="question-counter">
+                            <i class="fas fa-star mr-2"></i>
+                            Pregunta 1 de 3
+                            <i class="fas fa-star ml-2"></i>
+                        </div>
+
+                        <!-- Instructions -->
+                        <div class="instruction-card" id="instruction-card">
+                            <i class="fas fa-star mr-2"></i>
+                            ¡Selecciona TODOS los números que contengan <strong>5</strong>, <strong>6</strong> y
+                            <strong>7</strong>!
+                            <i class="fas fa-star ml-2"></i>
+                        </div>
+
+                        <!-- Numbers Grid (para preguntas normales) -->
+                        <div class="numbers-grid" id="numbers-container">
+                            <!-- Los números se generarán con JavaScript -->
+                        </div>
+
+                        <!-- Multiple Choice Table (para la pregunta especial) -->
+                        <div class="multiple-choice-table" id="multiple-choice-container" style="display: none;">
+                            <h3>Presiona el número que corresponde:</h3>
+
+                            <div class="choice-row" data-question="quinientos-ochenta-siete">
+                                <div class="choice-label">Quinientos ochenta y siete:</div>
+                                <div class="choice-options">
+                                    <div class="choice-option" data-value="578">578</div>
+                                    <div class="choice-option" data-value="687">687</div>
+                                    <div class="choice-option" data-value="587">587</div>
+                                </div>
+                            </div>
+
+                            <div class="choice-row" data-question="novecientos-dos">
+                                <div class="choice-label">Novecientos dos:</div>
+                                <div class="choice-options">
+                                    <div class="choice-option" data-value="902">902</div>
+                                    <div class="choice-option" data-value="900">900</div>
+                                    <div class="choice-option" data-value="912">912</div>
+                                </div>
+                            </div>
+
+                            <div class="choice-row" data-question="ciento-uno">
+                                <div class="choice-label">Ciento uno:</div>
+                                <div class="choice-options">
+                                    <div class="choice-option" data-value="110">110</div>
+                                    <div class="choice-option" data-value="101">101</div>
+                                    <div class="choice-option" data-value="100">100</div>
+                                </div>
+                            </div>
+
+                            <div class="choice-row" data-question="doscientos-doce">
+                                <div class="choice-label">Doscientos doce:</div>
+                                <div class="choice-options">
+                                    <div class="choice-option" data-value="202">202</div>
+                                    <div class="choice-option" data-value="212">212</div>
+                                    <div class="choice-option" data-value="122">122</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Drag and Drop Question -->
+                        <div class="drag-drop-question" id="drag-drop-container">
+                            <h3
+                                style="color: #ff6b6b; text-align: center; font-size: 1.8rem; margin-bottom: 20px; font-weight: 800;">
+                                📊 ¡Ordena los números de mayor a menor! 📊
+                            </h3>
+                            <div class="drag-numbers-to-sort" id="drag-numbers-to-sort">
+                                <div class="drag-sortable-number" data-value="37" draggable="true">37</div>
+                                <div class="drag-sortable-number" data-value="10" draggable="true">10</div>
+                                <div class="drag-sortable-number" data-value="25" draggable="true">25</div>
+                                <div class="drag-sortable-number" data-value="47" draggable="true">47</div>
+                                <div class="drag-sortable-number" data-value="15" draggable="true">15</div>
+                            </div>
+                            <div class="drag-drop-zone" id="drag-drop-zone">
+                                <div class="drag-drop-slot" data-position="1°"></div>
+                                <div class="drag-drop-slot" data-position="2°"></div>
+                                <div class="drag-drop-slot" data-position="3°"></div>
+                                <div class="drag-drop-slot" data-position="4°"></div>
+                                <div class="drag-drop-slot" data-position="5°"></div>
+                            </div>
+                        </div>
+
+                        <!-- Answer Button -->
+                        <button class="answer-btn" id="answer-btn" onclick="checkAnswer()" disabled>
+                            <i class="fas fa-check mr-2"></i>
+                            ¡RESPONDER!
+                        </button>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+
     </div>
 
-    <!-- Game Card -->
-    <div class="game-card">
-        <!-- Question Counter -->
-        <div class="question-counter" id="question-counter">
-            <i class="fas fa-star mr-2"></i>
-            Pregunta 1 de 3
-            <i class="fas fa-star ml-2"></i>
-        </div>
 
-        <!-- Instructions -->
-        <div class="instruction-card" id="instruction-card">
-            <i class="fas fa-star mr-2"></i>
-            ¡Selecciona TODOS los números que contengan <strong>5</strong>, <strong>6</strong> y <strong>7</strong>!
-            <i class="fas fa-star ml-2"></i>
-        </div>
-
-        <!-- Numbers Grid (para preguntas normales) -->
-        <div class="numbers-grid" id="numbers-container">
-            <!-- Los números se generarán con JavaScript -->
-        </div>
-
-        <!-- Multiple Choice Table (para la pregunta especial) -->
-        <div class="multiple-choice-table" id="multiple-choice-container" style="display: none;">
-            <h3>Presiona el número que corresponde:</h3>
-            
-            <div class="choice-row" data-question="quinientos-ochenta-siete">
-                <div class="choice-label">Quinientos ochenta y siete:</div>
-                <div class="choice-options">
-                    <div class="choice-option" data-value="578">578</div>
-                    <div class="choice-option" data-value="687">687</div>
-                    <div class="choice-option" data-value="587">587</div>
-                </div>
-            </div>
-
-            <div class="choice-row" data-question="novecientos-dos">
-                <div class="choice-label">Novecientos dos:</div>
-                <div class="choice-options">
-                    <div class="choice-option" data-value="902">902</div>
-                    <div class="choice-option" data-value="900">900</div>
-                    <div class="choice-option" data-value="912">912</div>
-                </div>
-            </div>
-
-            <div class="choice-row" data-question="ciento-uno">
-                <div class="choice-label">Ciento uno:</div>
-                <div class="choice-options">
-                    <div class="choice-option" data-value="110">110</div>
-                    <div class="choice-option" data-value="101">101</div>
-                    <div class="choice-option" data-value="100">100</div>
-                </div>
-            </div>
-
-            <div class="choice-row" data-question="doscientos-doce">
-                <div class="choice-label">Doscientos doce:</div>
-                <div class="choice-options">
-                    <div class="choice-option" data-value="202">202</div>
-                    <div class="choice-option" data-value="212">212</div>
-                    <div class="choice-option" data-value="122">122</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Drag and Drop Question -->
-        <div class="drag-drop-question" id="drag-drop-container">
-            <h3 style="color: #ff6b6b; text-align: center; font-size: 1.8rem; margin-bottom: 20px; font-weight: 800;">
-                📊 ¡Ordena los números de mayor a menor! 📊
-            </h3>
-            <div class="drag-numbers-to-sort" id="drag-numbers-to-sort">
-                <div class="drag-sortable-number" data-value="37" draggable="true">37</div>
-                <div class="drag-sortable-number" data-value="10" draggable="true">10</div>  
-                <div class="drag-sortable-number" data-value="25" draggable="true">25</div>
-                <div class="drag-sortable-number" data-value="47" draggable="true">47</div>
-                <div class="drag-sortable-number" data-value="15" draggable="true">15</div>
-            </div>
-            <div class="drag-drop-zone" id="drag-drop-zone">
-                <div class="drag-drop-slot" data-position="1°"></div>
-                <div class="drag-drop-slot" data-position="2°"></div>
-                <div class="drag-drop-slot" data-position="3°"></div>
-                <div class="drag-drop-slot" data-position="4°"></div>
-                <div class="drag-drop-slot" data-position="5°"></div>
-            </div>
-        </div>
-
-        <!-- Answer Button -->
-        <button class="answer-btn" id="answer-btn" onclick="checkAnswer()" disabled>
-            <i class="fas fa-check mr-2"></i>
-            ¡RESPONDER!
-        </button>
-    </div>
-</div>
 {% endblock %}
+
 
 {% block js %}
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -598,6 +624,7 @@ Módulo 1 - Números Mágicos
     // Variables globales para el juego
     window.studentId = 1; // ID del usuario logueado
     window.levelId = 1; // ID del nivel que corresponda
+    const moduloId = {{ modulo_id }};
     
 </script>
 
@@ -619,6 +646,7 @@ Módulo 1 - Números Mágicos
     let levelId = null;
     let vidasRestantes = 0;
     let vidasTotales = 0;
+    let vidasOriginalesNivel = 0;  // ✅ Esta línea FALTABA
     let puedeIntentar = false;
 
     // Variables para controlar recargas
@@ -630,6 +658,9 @@ Módulo 1 - Números Mágicos
     function generateSessionId() {
         return 'game_' + studentId + '_' + levelId + '_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
     }
+
+
+
 
     // Verificar si es una recarga no autorizada
     function isUnauthorizedReload() {
@@ -650,6 +681,8 @@ Módulo 1 - Números Mágicos
         return false;
     }
 
+
+    
     // Registrar sesión actual
     function registerGameSession() {
         const sessionKey = `game_session_${studentId}_${levelId}`;
@@ -740,7 +773,7 @@ Módulo 1 - Números Mágicos
             const data = await response.json();
             if (data.success) {
                 vidasRestantes = data.vidas_restantes;
-                vidasTotales = data.vidas_totales;
+                vidasTotales = data.vidas_originales_nivel;
                 puedeIntentar = data.puede_intentar;
                 
                 console.log(`Vidas: ${vidasRestantes}/${vidasTotales}, Puede intentar: ${puedeIntentar}`);
@@ -855,7 +888,7 @@ Módulo 1 - Números Mágicos
             html: `
                 <div>
                     <p>Has agotado todas las vidas para este nivel.</p>
-                    <p><strong>Vidas utilizadas: ${vidasTotales}/${vidasTotales}</strong></p>
+                    <p><strong>Vidas utilizadas: ${vidasTotales}</p>
                     <br>
                     <p style="color: #666;">Contacta a tu profesor para obtener más intentos.</p>
                 </div>
@@ -866,9 +899,7 @@ Módulo 1 - Números Mágicos
                 popup: 'animated shake'
             }
         }).then(() => {
-
-            window.location.href = '/cuestionario_Modulo1/';
-
+            window.location.href = `/modulo/${moduloId}/niveles/`;
         });
     }
     // Función para calcular puntaje de cada pregunta
@@ -1521,7 +1552,7 @@ Módulo 1 - Números Mágicos
     function showFinalResults() {
         const totalScore = questionScores.reduce((sum, q) => sum + q.score, 0);
         const finalScore = Math.round(totalScore * 100) / 100;
-        
+
         let questionsHTML = '';
         questionScores.forEach((q, index) => {
             const icon = q.isCorrect ? '✅' : '❌';
@@ -1532,16 +1563,16 @@ Módulo 1 - Números Mágicos
                 </div>
             `;
         });
-        
+
         const isPassed = finalScore >= 7;
         const statusColor = isPassed ? '#4CAF50' : '#ff9800';
         const statusText = isPassed ? '¡APROBADO!' : 'Necesitas mejorar';
-        
-        // CORRECCIÓN: Calcular las vidas correctamente
-        const vidasAntes = vidasRestantes; // Vidas antes del intento actual
-        const vidasDespues = vidasRestantes - 1; // Vidas después de usar este intento
-        const vidasRestantesParaIntentar = Math.max(0, vidasDespues); // No puede ser negativo
-        
+
+        // ✅ Cálculo correcto de vidas antes y después
+        const vidasAntes = vidasRestantes;
+        const vidasDespues = Math.max(0, vidasRestantes - 1);
+        const puedeIntentarMas = vidasDespues > 0;
+
         Swal.fire({
             icon: isPassed ? 'success' : 'info',
             title: '¡JUEGO COMPLETADO! 🏆',
@@ -1553,26 +1584,26 @@ Módulo 1 - Números Mágicos
                             <strong>NOTA FINAL: ${finalScore.toFixed(2)}/10</strong>
                         </div>
                     </div>
-                    
+
                     <div style="text-align: left; margin: 20px 0;">
                         <h4>📊 Resumen por pregunta:</h4>
                         ${questionsHTML}
                     </div>
-                    
+
                     <div style="margin: 15px 0; padding: 15px; background: #f0f0f0; border-radius: 10px;">
                         <h4 style="margin: 0 0 10px 0; color: #333;">💖 Estado de vidas:</h4>
                         <p style="margin: 5px 0;"><strong>Vidas antes:</strong> ${vidasAntes}/${vidasTotales}</p>
                         <p style="margin: 5px 0;"><strong>Vidas después:</strong> ${vidasDespues}/${vidasTotales}</p>
-                        ${vidasRestantesParaIntentar > 0 ? 
-                            `<p style="color: #4CAF50; font-weight: bold;">¡Puedes intentar ${vidasRestantesParaIntentar} vez${vidasRestantesParaIntentar !== 1 ? 'es' : ''} más!</p>` : 
+                        ${puedeIntentarMas ? 
+                            `<p style="color: #4CAF50; font-weight: bold;">¡Puedes intentar ${vidasDespues} vez${vidasDespues !== 1 ? 'es' : ''} más!</p>` : 
                             '<p style="color: #f44336; font-weight: bold;">¡Se han agotado todas las vidas!</p>'
                         }
                     </div>
                 </div>
             `,
-            confirmButtonText: vidasRestantesParaIntentar > 0 ? '🔄 Volver a intentar' : '🏠 Volver al menú',
+            confirmButtonText: puedeIntentarMas ? '🔄 Volver a intentar' : '🏠 Volver al menú',
             cancelButtonText: '🏠 Volver al menú',
-            showCancelButton: vidasRestantesParaIntentar > 0,
+            showCancelButton: puedeIntentarMas,
             allowOutsideClick: false,
             customClass: {
                 popup: 'animated tada',
@@ -1580,27 +1611,19 @@ Módulo 1 - Números Mágicos
                 cancelButton: 'btn btn-secondary'
             }
         }).then((result) => {
-            // SIEMPRE guardar el intento ANTES de cualquier acción
-            console.log('Guardando intento con puntaje:', finalScore);
             saveAttempt(finalScore).then((saveResult) => {
                 if (saveResult.success) {
-                    console.log('Intento guardado exitosamente');
-                    
-                    // Actualizar variables con los datos del servidor
                     vidasRestantes = saveResult.vidasRestantes;
                     puedeIntentar = saveResult.puedeIntentar;
-                    
+
                     if (result.isConfirmed && puedeIntentar) {
-                        // Volver a intentar
                         resetGame();
                     } else {
-                        // Volver al menú
                         updateBestScore().then(() => {
-                            window.location.href = '/cuestionario_Modulo1/';
+                            window.location.href = `/modulo/${moduloId}/niveles/`;
                         });
                     }
                 } else {
-                    console.error('Error al guardar intento:', saveResult.error);
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
@@ -1611,6 +1634,7 @@ Módulo 1 - Números Mágicos
             });
         });
     }
+
 
     // Función para obtener CSRF token
     function getCookie(name) {
