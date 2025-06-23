@@ -624,6 +624,7 @@
     // Variables globales para el juego
     window.studentId = 1; // ID del usuario logueado
     window.levelId = 1; // ID del nivel que corresponda
+    const moduloId = {{ modulo_id }};
     
 </script>
 
@@ -645,6 +646,7 @@
     let levelId = null;
     let vidasRestantes = 0;
     let vidasTotales = 0;
+    let vidasOriginalesNivel = 0;  // ✅ Esta línea FALTABA
     let puedeIntentar = false;
 
     // Variables para controlar recargas
@@ -656,6 +658,9 @@
     function generateSessionId() {
         return 'game_' + studentId + '_' + levelId + '_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
     }
+
+
+
 
     // Verificar si es una recarga no autorizada
     function isUnauthorizedReload() {
@@ -676,6 +681,8 @@
         return false;
     }
 
+
+    
     // Registrar sesión actual
     function registerGameSession() {
         const sessionKey = `game_session_${studentId}_${levelId}`;
@@ -766,7 +773,7 @@
             const data = await response.json();
             if (data.success) {
                 vidasRestantes = data.vidas_restantes;
-                vidasTotales = data.vidas_totales;
+                vidasTotales = data.vidas_originales_nivel;
                 puedeIntentar = data.puede_intentar;
                 
                 console.log(`Vidas: ${vidasRestantes}/${vidasTotales}, Puede intentar: ${puedeIntentar}`);
@@ -881,7 +888,7 @@
             html: `
                 <div>
                     <p>Has agotado todas las vidas para este nivel.</p>
-                    <p><strong>Vidas utilizadas: ${vidasTotales}/${vidasTotales}</strong></p>
+                    <p><strong>Vidas utilizadas: ${vidasTotales}</p>
                     <br>
                     <p style="color: #666;">Contacta a tu profesor para obtener más intentos.</p>
                 </div>
@@ -892,7 +899,7 @@
                 popup: 'animated shake'
             }
         }).then(() => {
-            window.location.href = '/cuestionario_Modulo1/';
+            window.location.href = `/modulo/${moduloId}/niveles/`;
         });
     }
     // Función para calcular puntaje de cada pregunta
@@ -1545,7 +1552,7 @@
     function showFinalResults() {
         const totalScore = questionScores.reduce((sum, q) => sum + q.score, 0);
         const finalScore = Math.round(totalScore * 100) / 100;
-        
+
         let questionsHTML = '';
         questionScores.forEach((q, index) => {
             const icon = q.isCorrect ? '✅' : '❌';
@@ -1556,16 +1563,16 @@
                 </div>
             `;
         });
-        
+
         const isPassed = finalScore >= 7;
         const statusColor = isPassed ? '#4CAF50' : '#ff9800';
         const statusText = isPassed ? '¡APROBADO!' : 'Necesitas mejorar';
-        
-        // CORRECCIÓN: Calcular las vidas correctamente
-        const vidasAntes = vidasRestantes; // Vidas antes del intento actual
-        const vidasDespues = vidasRestantes - 1; // Vidas después de usar este intento
-        const vidasRestantesParaIntentar = Math.max(0, vidasDespues); // No puede ser negativo
-        
+
+        // ✅ Cálculo correcto de vidas antes y después
+        const vidasAntes = vidasRestantes;
+        const vidasDespues = Math.max(0, vidasRestantes - 1);
+        const puedeIntentarMas = vidasDespues > 0;
+
         Swal.fire({
             icon: isPassed ? 'success' : 'info',
             title: '¡JUEGO COMPLETADO! 🏆',
@@ -1577,26 +1584,26 @@
                             <strong>NOTA FINAL: ${finalScore.toFixed(2)}/10</strong>
                         </div>
                     </div>
-                    
+
                     <div style="text-align: left; margin: 20px 0;">
                         <h4>📊 Resumen por pregunta:</h4>
                         ${questionsHTML}
                     </div>
-                    
+
                     <div style="margin: 15px 0; padding: 15px; background: #f0f0f0; border-radius: 10px;">
                         <h4 style="margin: 0 0 10px 0; color: #333;">💖 Estado de vidas:</h4>
                         <p style="margin: 5px 0;"><strong>Vidas antes:</strong> ${vidasAntes}/${vidasTotales}</p>
                         <p style="margin: 5px 0;"><strong>Vidas después:</strong> ${vidasDespues}/${vidasTotales}</p>
-                        ${vidasRestantesParaIntentar > 0 ? 
-                            `<p style="color: #4CAF50; font-weight: bold;">¡Puedes intentar ${vidasRestantesParaIntentar} vez${vidasRestantesParaIntentar !== 1 ? 'es' : ''} más!</p>` : 
+                        ${puedeIntentarMas ? 
+                            `<p style="color: #4CAF50; font-weight: bold;">¡Puedes intentar ${vidasDespues} vez${vidasDespues !== 1 ? 'es' : ''} más!</p>` : 
                             '<p style="color: #f44336; font-weight: bold;">¡Se han agotado todas las vidas!</p>'
                         }
                     </div>
                 </div>
             `,
-            confirmButtonText: vidasRestantesParaIntentar > 0 ? '🔄 Volver a intentar' : '🏠 Volver al menú',
+            confirmButtonText: puedeIntentarMas ? '🔄 Volver a intentar' : '🏠 Volver al menú',
             cancelButtonText: '🏠 Volver al menú',
-            showCancelButton: vidasRestantesParaIntentar > 0,
+            showCancelButton: puedeIntentarMas,
             allowOutsideClick: false,
             customClass: {
                 popup: 'animated tada',
@@ -1604,27 +1611,19 @@
                 cancelButton: 'btn btn-secondary'
             }
         }).then((result) => {
-            // SIEMPRE guardar el intento ANTES de cualquier acción
-            console.log('Guardando intento con puntaje:', finalScore);
             saveAttempt(finalScore).then((saveResult) => {
                 if (saveResult.success) {
-                    console.log('Intento guardado exitosamente');
-                    
-                    // Actualizar variables con los datos del servidor
                     vidasRestantes = saveResult.vidasRestantes;
                     puedeIntentar = saveResult.puedeIntentar;
-                    
+
                     if (result.isConfirmed && puedeIntentar) {
-                        // Volver a intentar
                         resetGame();
                     } else {
-                        // Volver al menú
                         updateBestScore().then(() => {
-                            window.location.href = '/cuestionario_Modulo1/';
+                            window.location.href = `/modulo/${moduloId}/niveles/`;
                         });
                     }
                 } else {
-                    console.error('Error al guardar intento:', saveResult.error);
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
@@ -1635,6 +1634,7 @@
             });
         });
     }
+
 
     // Función para obtener CSRF token
     function getCookie(name) {

@@ -182,7 +182,24 @@ class IntentoNivel(models.Model):
         return f"Intento de {self.estudiante.username if self.estudiante else 'Usuario'} - Nivel {self.nivel.id if self.nivel else 'N/A'} - Nota: {self.nota}"
 
 
-
+class Vidas_Extras(models.Model):
+    matricula = models.ForeignKey(Matriculas, on_delete=models.CASCADE)
+    nivel = models.ForeignKey(Niveles, on_delete=models.CASCADE)
+    vidas_asignadas = models.IntegerField(
+        help_text="Vidas totales asignadas para este estudiante en este nivel (puede ser menor, igual o mayor a las vidas iniciales del nivel)"
+    )
+    fecha_asignacion = models.DateTimeField(auto_now_add=True)
+    asignado_por = models.ForeignKey(User, on_delete=models.CASCADE)
+    observaciones = models.TextField(blank=True, null=True, help_text="Razón del cambio de vidas")
+    vidas_aplicadas = models.BooleanField(default=False)  # ✅ NUEVO CAMPO
+    
+    class Meta:
+        unique_together = ('matricula', 'nivel')
+        verbose_name = "Vida Extra"
+        verbose_name_plural = "Vidas Extras"
+    
+    def __str__(self):
+        return f"{self.matricula.fk_estudiante.username} - {self.nivel} - {self.vidas_asignadas} vidas"
 
 class Avance_Matriculados(models.Model):
     ESTADOS_CHOICES = [
@@ -204,7 +221,6 @@ class Avance_Matriculados(models.Model):
         null=True,
         help_text="Mejor nota obtenida en el nivel"
     )
-    # Corregido: era BooleanField con choices, ahora es CharField
     avm_estado = models.CharField(
         max_length=20,
         choices=ESTADOS_CHOICES,
@@ -214,52 +230,66 @@ class Avance_Matriculados(models.Model):
     )
     avm_fecha_creacion = models.DateTimeField(auto_now_add=True, verbose_name='Creado el:')
     avm_fecha_actualizacion = models.DateTimeField(auto_now=True, verbose_name='Actualizado el:')
-    
-    # NUEVO CAMPO PARA VIDAS RESTANTES
     avm_vidas_restantes = models.IntegerField(
-       
         blank=True,
         null=True,
         help_text="Vidas restantes para este nivel"
     )
-    
-    # NUEVO CAMPO PARA RASTREAR FECHA DE ÚLTIMO INTENTO
     avm_ultimo_intento = models.DateTimeField(
         blank=True,
         null=True,
         help_text="Fecha del último intento realizado"
-    )
-    
-    # NUEVO CAMPO PARA GUARDAR LAS VIDAS INICIALES DEL NIVEL
-    avm_vidas_iniciales_nivel = models.IntegerField(
-        
-        blank=True,
-        null=True,
-        help_text="Vidas iniciales que tenía el nivel cuando el estudiante se matriculó"
     )
 
     class Meta:
         db_table = 'avance_estudiante'
         verbose_name = 'Avance de Estudiante'
         verbose_name_plural = 'Avances de Estudiantes'
-        # Corregido: usar los nombres correctos de campos
         unique_together = ['fk_matricula', 'fk_nivel']
         ordering = ['fk_matricula', 'fk_nivel']
 
     def __str__(self):
-        # Corregido: usar los nombres correctos de campos y relaciones
         return f"Avance de {self.fk_matricula.fk_estudiante.username if self.fk_matricula and self.fk_matricula.fk_estudiante else 'Usuario'} - Nivel {self.fk_nivel.niv_id if self.fk_nivel else 'N/A'} - Estado: {self.avm_estado}"
     
-    # MÉTODO PARA INICIALIZAR VIDAS CUANDO UN ESTUDIANTE ACCEDE POR PRIMERA VEZ
     def inicializar_vidas(self):
-        """Inicializa las vidas restantes basándose en el nivel"""
-        if self.avm_vidas_restantes is None or self.avm_vidas_restantes == 0:
-            # Asumiendo que el campo de vidas en Niveles se llama niv_vidas
-            self.avm_vidas_restantes = self.fk_nivel.niv_vidas  
-            self.avm_vidas_iniciales_nivel = self.fk_nivel.niv_vidas
+        """Inicializa las vidas restantes SOLO si no han sido inicializadas"""
+        if self.avm_vidas_restantes is None:
+            self.avm_vidas_restantes = self.fk_nivel.vidas  # Usar vidas del nivel
             self.save()
     
-    # MÉTODO PARA USAR UNA VIDA
+    def aplicar_vidas_extras_pendientes(self):
+        """
+        Aplica vidas extras SOLO si hay vidas extras pendientes de aplicar.
+        Esta función debe ser llamada UNA SOLA VEZ por asignación de admin.
+        """
+        try:
+            vidas_extras = Vidas_Extras.objects.get(
+                matricula=self.fk_matricula,
+                nivel=self.fk_nivel,
+                vidas_aplicadas=False  # Solo si no han sido aplicadas
+            )
+            
+            # Aplicar las vidas extras
+            vidas_anteriores = self.avm_vidas_restantes or 0
+            self.avm_vidas_restantes = vidas_extras.vidas_asignadas
+            
+            # Cambiar estado si es necesario
+            if self.avm_estado == 'sin_vidas' and self.avm_vidas_restantes > 0:
+                self.avm_estado = 'en_progreso'
+            elif self.avm_vidas_restantes == 0:
+                self.avm_estado = 'sin_vidas'
+            
+            # Marcar como aplicadas para evitar que se vuelvan a aplicar
+            vidas_extras.vidas_aplicadas = True
+            vidas_extras.save()
+            
+            self.save()
+            
+            return vidas_extras.vidas_asignadas - vidas_anteriores
+            
+        except Vidas_Extras.DoesNotExist:
+            return 0
+    
     def usar_vida(self):
         """Reduce una vida y actualiza el estado si es necesario"""
         if self.avm_vidas_restantes > 0:
@@ -273,62 +303,6 @@ class Avance_Matriculados(models.Model):
             return True
         return False
     
-    # MÉTODO PARA VERIFICAR SI PUEDE HACER UN INTENTO
     def puede_intentar(self):
         """Verifica si el estudiante puede hacer un intento"""
         return self.avm_vidas_restantes > 0 and self.avm_estado != 'sin_vidas'
-    
-    # MÉTODO DE INSTANCIA para verificar y restaurar vidas por cambios del admin
-    def restaurar_vidas_por_cambio_admin(self):
-        """
-        Verifica si el admin aumentó las vidas del nivel y restaura las vidas adicionales
-        """
-        # Si no tenemos registro de vidas iniciales, establecerlo
-        if self.avm_vidas_iniciales_nivel is None:
-            self.avm_vidas_iniciales_nivel = self.fk_nivel.niv_vidas
-            self.save()
-            return 0
-        
-        # Solo restaurar si el admin AUMENTÓ las vidas del nivel
-        if self.fk_nivel.niv_vidas > self.avm_vidas_iniciales_nivel:
-            # Calcular cuántas vidas nuevas agregó el admin
-            vidas_agregadas_por_admin = self.fk_nivel.niv_vidas - self.avm_vidas_iniciales_nivel
-            
-            # Agregar esas vidas al estudiante
-            self.avm_vidas_restantes += vidas_agregadas_por_admin
-            self.avm_vidas_iniciales_nivel = self.fk_nivel.niv_vidas  # Actualizar el registro
-            
-            # Si estaba sin vidas y ahora tiene vidas, cambiar estado
-            if self.avm_estado == 'sin_vidas' and self.avm_vidas_restantes > 0:
-                self.avm_estado = 'en_progreso'
-            
-            self.save()
-            return vidas_agregadas_por_admin
-        
-        return 0
-
-    # MÉTODO ESTÁTICO para restaurar vidas a todos los estudiantes (para usar desde admin)
-    @staticmethod
-    def restaurar_vidas_todos_estudiantes(nivel_id, vidas_anteriores, vidas_nuevas):
-        """
-        Restaura vidas a todos los estudiantes cuando el admin aumenta las vidas de un nivel
-        """
-        if vidas_nuevas > vidas_anteriores:
-            vidas_adicionales = vidas_nuevas - vidas_anteriores
-            
-            # Obtener todos los avances de estudiantes para este nivel
-            avances = Avance_Matriculados.objects.filter(fk_nivel_id=nivel_id)
-            
-            for avance in avances:
-                # Solo agregar vidas adicionales, no restaurar las perdidas
-                avance.avm_vidas_restantes += vidas_adicionales
-                
-                if avance.avm_estado == 'sin_vidas' and avance.avm_vidas_restantes > 0:
-                    avance.avm_estado = 'en_progreso'
-                
-                avance.save()
-            
-            return f"Se agregaron {vidas_adicionales} vidas a {avances.count()} estudiantes"
-        
-        return "No se agregaron vidas"
-

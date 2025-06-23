@@ -32,6 +32,7 @@ def ver_niveles_modulo(request, modulo_id):
     contexto = {
         'modulo': modulo,
         'niveles': niveles,
+        'modulo_id': modulo_id,  # ← AGREGAR ESTA LÍNEA
         'estudiante': estudiante
     }
 
@@ -52,6 +53,7 @@ def jugar_nivel(request, nivel_id):
     return render(request, template_name, {
         'nivel': nivel,
         'modulo': nivel.fk_modulo,  
+        'modulo_id': nivel.fk_modulo.mod_id,  # ← AGREGAR ESTA LÍNEA
     })
     
     
