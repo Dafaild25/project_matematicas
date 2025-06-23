@@ -122,3 +122,198 @@ class Opciones(models.Model):
     
     def __str__(self):
         return f"{self.op_id}: {self.op_nombre}"
+    
+    
+class IntentoNivel(models.Model):
+    estudiante = models.ForeignKey(
+        Estudiantes,  # Asumiendo que tienes un modelo Estudiante
+        on_delete=models.CASCADE,
+        related_name='intentos_nivel',
+        blank=True,
+        null=True
+    )
+    nivel = models.ForeignKey(
+        'Niveles',  # Asumiendo que tienes un modelo Nivel
+        on_delete=models.CASCADE,
+        related_name='intentos',
+        blank=True,
+        null=True
+    )
+    nota = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        blank=True,
+        null=True,
+        help_text="Nota obtenida en el intento"
+    )
+    fecha = models.DateTimeField(
+        auto_now_add=True,
+        blank=True,
+        null=True
+    )
+    vidas_usadas = models.IntegerField(
+        default=0,
+        blank=True,
+        null=True,
+        help_text="Número de vidas utilizadas en el intento"
+    )
+
+    class Meta:
+        db_table = 'intento_nivel'
+        verbose_name = 'Intento de Nivel'
+        verbose_name_plural = 'Intentos de Nivel'
+        ordering = ['-fecha']
+
+    def __str__(self):
+        return f"Intento de {self.estudiante.username if self.estudiante else 'Usuario'} - Nivel {self.nivel.id if self.nivel else 'N/A'} - Nota: {self.nota}"
+
+
+class AvanceEstudiante(models.Model):
+    ESTADOS_CHOICES = [
+        ('iniciado', 'Iniciado'),
+        ('en_progreso', 'En Progreso'),
+        ('completado', 'Completado'),
+        ('aprobado', 'Aprobado'),
+        ('reprobado', 'Reprobado'),
+        ('sin_vidas', 'Sin Vidas'), # Nuevo estado
+    ]
+
+    estudiante = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='avances',
+        blank=True,
+        null=True
+    )
+    nivel = models.ForeignKey(
+        'Niveles',
+        on_delete=models.CASCADE,
+        related_name='avances_estudiantes',
+        blank=True,
+        null=True
+    )
+    estado = models.CharField(
+        max_length=20,
+        choices=ESTADOS_CHOICES,
+        default='iniciado',
+        blank=True,
+        null=True
+    )
+    nota_final = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        blank=True,
+        null=True,
+        help_text="Mejor nota obtenida en el nivel"
+    )
+    # NUEVO CAMPO PARA VIDAS RESTANTES
+    vidas_restantes = models.IntegerField(
+        default=0,
+        blank=True,
+        null=True,
+        help_text="Vidas restantes para este nivel"
+    )
+    # NUEVO CAMPO PARA RASTREAR FECHA DE ÚLTIMO INTENTO
+    ultimo_intento = models.DateTimeField(
+        blank=True,
+        null=True,
+        help_text="Fecha del último intento realizado"
+    )
+    # NUEVO CAMPO PARA CONTROLAR LAS VIDAS INICIALES DEL NIVEL
+    vidas_iniciales_nivel = models.IntegerField(
+        default=0,
+        blank=True,
+        null=True,
+        help_text="Vidas que tenía el nivel cuando el estudiante empezó"
+    )
+
+    class Meta:
+        db_table = 'avance_estudiante'
+        verbose_name = 'Avance de Estudiante'
+        verbose_name_plural = 'Avances de Estudiantes'
+        unique_together = ['estudiante', 'nivel']
+        ordering = ['estudiante', 'nivel']
+
+    def __str__(self):
+        return f"Avance de {self.estudiante.username if self.estudiante else 'Usuario'} - Nivel {self.nivel.id if self.nivel else 'N/A'} - Estado: {self.estado}"
+    
+    # MÉTODO PARA INICIALIZAR VIDAS CUANDO UN ESTUDIANTE ACCEDE POR PRIMERA VEZ
+    def inicializar_vidas(self):
+        """Inicializa las vidas restantes basándose en el nivel"""
+        if self.vidas_restantes is None or self.vidas_restantes == 0:
+            self.vidas_restantes = self.nivel.vidas
+            self.vidas_iniciales_nivel = self.nivel.vidas  # Guardar las vidas iniciales
+            self.save()
+    
+    # MÉTODO PARA USAR UNA VIDA
+    def usar_vida(self):
+        """Reduce una vida y actualiza el estado si es necesario"""
+        if self.vidas_restantes > 0:
+            self.vidas_restantes -= 1
+            self.ultimo_intento = timezone.now()
+            
+            if self.vidas_restantes == 0:
+                self.estado = 'sin_vidas'
+            
+            self.save()
+            return True
+        return False
+    
+    # MÉTODO PARA VERIFICAR SI PUEDE HACER UN INTENTO
+    def puede_intentar(self):
+        """Verifica si el estudiante puede hacer un intento"""
+        return self.vidas_restantes > 0 and self.estado != 'sin_vidas'
+    
+    # MÉTODO DE INSTANCIA para verificar y restaurar vidas por cambios del admin
+    def restaurar_vidas_por_cambio_admin(self):
+        """
+        Verifica si el admin aumentó las vidas del nivel y restaura las vidas adicionales
+        """
+        # Si no tenemos registro de vidas iniciales, establecerlo
+        if self.vidas_iniciales_nivel is None:
+            self.vidas_iniciales_nivel = self.nivel.vidas
+            self.save()
+            return 0
+        
+        # Solo restaurar si el admin AUMENTÓ las vidas del nivel
+        if self.nivel.vidas > self.vidas_iniciales_nivel:
+            # Calcular cuántas vidas nuevas agregó el admin
+            vidas_agregadas_por_admin = self.nivel.vidas - self.vidas_iniciales_nivel
+            
+            # Agregar esas vidas al estudiante
+            self.vidas_restantes += vidas_agregadas_por_admin
+            self.vidas_iniciales_nivel = self.nivel.vidas  # Actualizar el registro
+            
+            # Si estaba sin vidas y ahora tiene vidas, cambiar estado
+            if self.estado == 'sin_vidas' and self.vidas_restantes > 0:
+                self.estado = 'en_progreso'
+            
+            self.save()
+            return vidas_agregadas_por_admin
+        
+        return 0
+
+    # MÉTODO ESTÁTICO para restaurar vidas a todos los estudiantes (para usar desde admin)
+    @staticmethod
+    def restaurar_vidas_todos_estudiantes(nivel_id, vidas_anteriores, vidas_nuevas):
+        """
+        Restaura vidas a todos los estudiantes cuando el admin aumenta las vidas de un nivel
+        """
+        if vidas_nuevas > vidas_anteriores:
+            vidas_adicionales = vidas_nuevas - vidas_anteriores
+            
+            # Obtener todos los avances de estudiantes para este nivel
+            avances = AvanceEstudiante.objects.filter(nivel_id=nivel_id)
+            
+            for avance in avances:
+                # Solo agregar vidas adicionales, no restaurar las perdidas
+                avance.vidas_restantes += vidas_adicionales
+                
+                if avance.estado == 'sin_vidas' and avance.vidas_restantes > 0:
+                    avance.estado = 'en_progreso'
+                
+                avance.save()
+            
+            return f"Se agregaron {vidas_adicionales} vidas a {avances.count()} estudiantes"
+        
+        return "No se agregaron vidas"

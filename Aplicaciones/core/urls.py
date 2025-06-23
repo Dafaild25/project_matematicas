@@ -4,7 +4,8 @@ from django.urls import path
 from .views import core_views
 from .views import crud_administrador_views
 
-from .views import cuestionario_Modulo1
+from .views.cuestionario_Modulo1 import cuestionario_Modulo1, get_game_info, save_attempt, update_best_score, check_lives_status
+
 
 from .views import loguin_views 
 from .views import crud_modulos_views
@@ -58,5 +59,12 @@ urlpatterns = [
     path('loguin/', loguin_views.index, name='loguin_index'),
     
     # Cuestionario Modulo 1
-    path('cuestionario_Modulo1/', cuestionario_Modulo1.cuestionario_Modulo1, name='cuestionario_Modulo1'),
+    path('cuestionario_Modulo1/', cuestionario_Modulo1, name='cuestionario_Modulo1'),
+    # URLs para el sistema de calificaciones
+    path('get_game_info/', get_game_info, name='get_game_info'),
+    path('save_attempt/', save_attempt, name='save_attempt'),
+    path('update_best_score/', update_best_score, name='update_best_score'),
+    path('check_lives_status/', check_lives_status, name='check_lives_status'),
+
+
 ]
