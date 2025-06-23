@@ -14,6 +14,9 @@
     <link href="{% static 'vendor/fontawesome-free/css/all.min.css'%}" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+    {% comment %} css de bootstrap select  {% endcomment %}
+    <link href="{% static 'vendor/bootstrap-select/css/bootstrap-select.min.css' %}" rel="stylesheet">
+
 
     <!-- Custom styles for this template -->
     <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet" />
@@ -34,7 +37,7 @@
             <i class="fas fa-laugh-wink"></i>
           </div>
           <div class="sidebar-brand-text mx-3">
-            Matemáticas
+            Admin
           </div>
         </a>
 
@@ -43,7 +46,7 @@
 
         <!-- Nav Item - Dashboard -->
         <li class="nav-item active">
-          <a class="nav-link" href="{% url 'inicio' %}">
+          <a class="nav-link" href="{% url 'core_admin' %}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span>
           </a>
@@ -64,9 +67,9 @@
           <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
               
-              <a class="collapse-item" href="{% url 'administrador_index'%}">Administradores</a>
-              <a class="collapse-item" href="#">Docentes</a>
-              <a class="collapse-item" href="#">Estudiantes</a>
+              <a class="collapse-item" href="{% url 'administrador_index' %}">Administradores</a>
+              <a class="collapse-item" href="{% url 'docente_index' %}">Docentes</a>
+              <a class="collapse-item" href="{% url 'estudiante_index' %}">Estudiantes</a>
             </div>
           </div>
         </li>
@@ -85,11 +88,25 @@
             </div>
           </div>
         </li>
+        <!-- Nav Item - Clases -->
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'clase_index' %}">
+            <i class="fa-solid fa-chalkboard-user"></i>
+            <span>Clases</span>
+          </a>
+        </li>
+
+         <li class="nav-item">
+          <a class="nav-link" href="{% url 'matricula_index'%}">
+            <i class="fa-solid fa-file"></i>
+            <span>Matriculas</span>
+          </a>
+        </li>
 
         <!-- Divider -->
         <hr class="sidebar-divider" />
 
-        <!-- Heading -->
+        {% comment %} <!-- Heading -->
         <div class="sidebar-heading">Addons</div>
 
         <!-- Nav Item - Pages Collapse Menu -->
@@ -112,13 +129,7 @@
           </div>
         </li>
 
-        <!-- Nav Item - Charts -->
-        <li class="nav-item">
-          <a class="nav-link" href="charts.html">
-            <i class="fas fa-fw fa-chart-area"></i>
-            <span>Charts</span>
-          </a>
-        </li>
+        
 
         <!-- Nav Item - Tables -->
         <li class="nav-item">
@@ -126,7 +137,7 @@
             <i class="fas fa-fw fa-table"></i>
             <span>Tables</span>
           </a>
-        </li>
+        </li> {% endcomment %}
 
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block" />
@@ -281,7 +292,7 @@
               <!-- Nav Item - User Information -->
               <li class="nav-item dropdown no-arrow">
                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                  <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ user.first_name }} {{ user.last_name }}</span>
                   <img class="img-profile rounded-circle" src="{% static 'img/undraw_profile.svg'%}" />
                 </a>
                 <!-- Dropdown - User Information -->
@@ -299,7 +310,7 @@
                     Activity Log
                   </a>
                   <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                  <a type="submit" class="dropdown-item" href="{% url 'cerrar_sesion' %}">
                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                     Logout
                   </a>
@@ -368,6 +379,9 @@
     <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
     <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
 
+    <script src="{% static 'vendor/bootstrap-select/js/bootstrap-select.min.js' %}"></script>
+   
+
     <!-- Core plugin JavaScript -->
     <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
 
@@ -379,8 +393,10 @@
 
     <!-- LIBRERIAS AGREGADAS -->
     <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
-    <script src="{% static 'js/bootstrap.min.js'%}"></script>
+    <script src="{% static 'js/bootstrap.min.js'%}"></script> 
     <script src="{% static 'js/datatables.min.js'%}"></script>
+    <!-- Bootstrap Select JS -->
+    
 
     <!-- INICIALIZACION DE DATATABLES -->
     <script>

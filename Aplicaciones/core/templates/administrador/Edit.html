@@ -17,7 +17,7 @@ Crear Administrador
     </div>
 
     <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item"><a href="{% url 'inicio' %}">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'core_admin' %}">Inicio</a></li>
         <li class="breadcrumb-item active"><a href="{% url 'administrador_index' %}">Administradores</a></li>
         <li class="breadcrumb-item active">Editar Administrador</li>
     </ol>
@@ -26,7 +26,7 @@ Crear Administrador
             <form method="post" enctype="multipart/form-data" action="{% url 'administrador_actualizar' %}">
                 {% csrf_token %}
                 <div class="row g-4">
-                    <input type="hidden" name="admin_id" id="admin_id" value="{{administrador.adm_id}}">
+                    <input type="text" name="admin_id" value="{{admin.adm_id}}">
                     <div class="col-md-6">
                         <label for="first_name" class="form-label">
                             <b>Primer Nombre: *</b>
@@ -37,7 +37,7 @@ Crear Administrador
                                     <i class="fa fa-user" aria-hidden="true"></i>
                                 </span>
                                 <input type="text" name="first_name" id="first_name" class="form-control" 
-                                placeholder="Ingresar primer nombre" value="{{administrador.fk_id_persona.fk_id_usuario.first_name}}">                  
+                                placeholder="Ingresar primer nombre" value="{{usuario.first_name}}">                  
                             </div>
                         </div>
                         <label for="segundo_nombre" class="form-label">
@@ -49,7 +49,7 @@ Crear Administrador
                                     <i class="fa fa-user" aria-hidden="true"></i>
                                 </span>
                                 <input type="text" name="segundo_nombre" id="segundo_nombre" class="form-control" 
-                                placeholder="Ingresar segundo nombre" value="{{administrador.fk_id_persona.per_segundo_nombre}}">                  
+                                placeholder="Ingresar segundo nombre" value="{{persona.per_segundo_nombre}}">                  
                             </div>
                         </div>
                         <label for="last_name" class="form-label">
@@ -61,7 +61,7 @@ Crear Administrador
                                     <i class="fa fa-user" aria-hidden="true"></i>
                                 </span>
                                 <input type="text" name="last_name" id="last_name" class="form-control" 
-                                placeholder="Ingresar apellido paterno" value="{{administrador.fk_id_persona.fk_id_usuario.last_name}}">     
+                                placeholder="Ingresar apellido paterno" value="{{usuario.last_name}}">     
                             </div>
                         </div>
                          <label for="segundo_apellido" class="form-label">
@@ -73,7 +73,7 @@ Crear Administrador
                                     <i class="fa fa-user" aria-hidden="true"></i>
                                 </span>
                                 <input type="text" name="segundo_apellido" id="segundo_apellido" class="form-control" 
-                                placeholder="Ingresar apellido materno" value="{{administrador.fk_id_persona.per_segundo_apellido}}">     
+                                placeholder="Ingresar apellido materno" value="{{persona.per_segundo_apellido}}">     
                             </div>
                         </div>
                         <label for="fecha_nacimiento" class="form-label">
@@ -85,7 +85,7 @@ Crear Administrador
                                     <i class="fas fa-birthday-cake" aria-hidden="true"></i>
                                 </span>
                                 <input type="date" name="fecha_nacimiento" id="fecha_nacimiento" class="form-control"
-                                     value="{{administrador.fk_id_persona.per_fecha_nacimiento|date:'Y-m-d'}}">                                                             
+                                     value="{{persona.per_fecha_nacimiento|date:'Y-m-d'}}">                                                             
                             </div>
                         </div>
                         <label for="cedula" class="form-label">
@@ -97,7 +97,7 @@ Crear Administrador
                                     <i class="fa-solid fa-id-card" aria-hidden="true"></i>
                                 </span>
                                 <input type="text" name="cedula" id="cedula" class="form-control" 
-                                placeholder="Ingrese su número de cédula" value="{{administrador.fk_id_persona.per_cedula}}">                                                             
+                                placeholder="Ingrese su número de cédula" value="{{persona.per_cedula}}">                                                             
                             </div>
                         </div>
                     </div>
@@ -111,7 +111,7 @@ Crear Administrador
                                     <i class="fa-solid fa-phone" aria-hidden="true"></i>
                                 </span>
                                 <input type="text" name="telefono" id="telefono" class="form-control" 
-                                    placeholder="Ingresar su número de teléfono" value="{{administrador.fk_id_persona.per_telefono}}">                                                             
+                                    placeholder="Ingresar su número de teléfono" value="{{persona.per_telefono}}">                                                             
                             </div>
                         </div>
                         <label for="email" class="form-label">
@@ -122,7 +122,7 @@ Crear Administrador
                                 <i class="fa fa-envelope" aria-hidden="true"></i>
                             </span>
                             <input type="text" name="email" id="email" class="form-control" 
-                                placeholder="ejemplo@ejemplo.com" value="{{administrador.fk_id_persona.fk_id_usuario.email}}">                                
+                                placeholder="ejemplo@ejemplo.com" value="{{usuario.email}}">                                
                         </div>     
                         <label for="fotografia" class="form-label">
                                 <b>Fotografía (Opcional):</b>
@@ -131,7 +131,7 @@ Crear Administrador
                             <span class="input-group-text">
                                 <i class="fa-solid fa-camera" aria-hidden="true"></i>
                             </span>
-                            <input type="file" name="fotografia" id="fotografia" accept="image/*" class="form-control">
+                            <input type="file" name="fotografia" id="fotografia" accept="image/*" class="form-control" value="{{admin.adm_fotografia}}">
                         </div>
                         <label for="username" class="form-label">
                             <b>Nombre de Usuario: *</b>
@@ -141,12 +141,22 @@ Crear Administrador
                                 <i class="fa-solid fa-circle-user" aria-hidden="true"></i>
                             </span>
                             <input type="text" name="username" id="username" class="form-control" 
-                            placeholder="Ingresar nombre de usuario" value="{{administrador.fk_id_persona.fk_id_usuario.username}}">
+                            placeholder="Ingresar nombre de usuario" value="{{usuario.username}}">
+                        </div>
+                        <label for="estado" class="form-label">
+                            <b>Estado: *</b>
+                        </label>
+                        <div class="input-group mb-4">
+                            <span class="input-group-text">
+                                <i class="fa-solid fa-circle-user" aria-hidden="true"></i>
+                            </span>
+                            <input type="text" name="estado" id="estado" class="form-control" 
+                            placeholder="Ingresar estado" value="{{admin.adm_estado}}">
                         </div>
                     </div>
                 </div>       
                 <div class="col-md-12 text-center mt-5">
-                    <button class="btn btn-primary " type="submit">Crear Administrador</button>
+                    <button class="btn btn-primary " type="submit">Actualizar Administrador</button>
                 </div>
             </form>
         </div>

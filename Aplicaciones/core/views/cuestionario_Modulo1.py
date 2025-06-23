@@ -9,8 +9,7 @@ from ..models import IntentoNivel, Avance_Matriculados, Niveles, Matriculas
 from django.db.models import Max
 from django.utils import timezone
 
-def cuestionario_Modulo1(request):
-    return render(request, 'cuestionario/cuestionario_Modulo1.html')
+
 
 @login_required
 @csrf_exempt

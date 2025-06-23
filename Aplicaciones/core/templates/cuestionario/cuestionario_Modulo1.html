@@ -383,108 +383,108 @@ Módulo 1 - Números Mágicos
         }
 
         /* Estilos para drag and drop */
-.drag-drop-question {
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 20px;
-    padding: 20px;
-    margin-bottom: 30px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    display: none;
-}
+        .drag-drop-question {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
 
-.drag-numbers-to-sort {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-bottom: 30px;
-    flex-wrap: wrap;
-}
+        .drag-numbers-to-sort {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
 
-.drag-sortable-number {
-    background: linear-gradient(45deg, #4CAF50, #45a049);
-    color: white;
-    padding: 15px 20px;
-    border-radius: 10px;
-    cursor: grab;
-    font-weight: bold;
-    font-size: 18px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    transition: all 0.3s ease;
-    user-select: none;
-}
+        .drag-sortable-number {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            cursor: grab;
+            font-weight: bold;
+            font-size: 18px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            user-select: none;
+        }
 
-.drag-sortable-number:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-}
+        .drag-sortable-number:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
 
-.drag-sortable-number.dragging {
-    opacity: 0.5;
-    transform: rotate(5deg);
-    cursor: grabbing;
-}
+        .drag-sortable-number.dragging {
+            opacity: 0.5;
+            transform: rotate(5deg);
+            cursor: grabbing;
+        }
 
-.drag-drop-zone {
-    background: #f1f3f4;
-    border: 2px dashed #ddd;
-    border-radius: 10px;
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 20px;
-    min-height: 80px;
-    align-items: center;
-    flex-wrap: wrap;
-}
+        .drag-drop-zone {
+            background: #f1f3f4;
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            min-height: 80px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
 
-.drag-drop-slot {
-    width: 80px;
-    height: 60px;
-    border: 2px dashed #ccc;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    background: white;
-    transition: all 0.3s ease;
-}
+        .drag-drop-slot {
+            width: 80px;
+            height: 60px;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: white;
+            transition: all 0.3s ease;
+        }
 
-.drag-drop-slot::before {
-    content: attr(data-position);
-    position: absolute;
-    top: -25px;
-    font-size: 12px;
-    color: #666;
-    font-weight: bold;
-}
+        .drag-drop-slot::before {
+            content: attr(data-position);
+            position: absolute;
+            top: -25px;
+            font-size: 12px;
+            color: #666;
+            font-weight: bold;
+        }
 
-.drag-drop-slot.drag-over {
-    border-color: #4CAF50;
-    background: #e8f5e8;
-    transform: scale(1.05);
-}
+        .drag-drop-slot.drag-over {
+            border-color: #4CAF50;
+            background: #e8f5e8;
+            transform: scale(1.05);
+        }
 
-.drag-drop-slot.filled {
-    border-color: #4CAF50;
-    background: #e8f5e8;
-}
+        .drag-drop-slot.filled {
+            border-color: #4CAF50;
+            background: #e8f5e8;
+        }
 
-.drag-dropped-number {
-    background: linear-gradient(45deg, #2196F3, #1976D2);
-    color: white;
-    padding: 10px;
-    border-radius: 6px;
-    font-weight: bold;
-    cursor: grab;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-}
+        .drag-dropped-number {
+            background: linear-gradient(45deg, #2196F3, #1976D2);
+            color: white;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: grab;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+        }
     </style>
 {% endblock %}
 

@@ -1,0 +1,63 @@
+{% extends "plantillas/MasterAdmin.html" %}
+{% load static %}
+{% block title %}Avances{% endblock %}
+{% block css %}
+
+{% endblock %}
+{% block content %}
+<div class="container-fluid ">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Matriculas</h1>
+
+
+    </div>
+
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="{% url 'core_admin' %}">Inicio</a></li>
+        <li class="breadcrumb-item active"><a href="{% url 'matricula_index' %}">Matriculas</a></li>
+        <li class="breadcrumb-item active">Avances de los estudiantes</li>
+
+    </ol>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            Tabla Avances de los estudiantes del <strong>{{ clase.fk_modulo.mod_nombre }}</strong>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Estudiante</th>
+                        {% for nivel in niveles %}
+                        <th>{{ nivel.niv_nombre }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for fila in avance_data %}
+                    <tr>
+                        <td>
+                            {{ fila.estudiante.fk_id_persona.fk_id_usuario.first_name }}
+                            {{ fila.estudiante.fk_id_persona.per_segundo_nombre }}
+                            {{ fila.estudiante.fk_id_persona.fk_id_usuario.last_name }}
+                            {{ fila.estudiante.fk_id_persona.per_segundo_apellido }}
+                        </td>
+                        {% for nivel in fila.niveles %}
+                        <td>
+                            {{ nivel.nota }}<br>
+                            
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -19,7 +19,7 @@
     </div>
 
     <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item"><a href="{% url 'inicio' %}">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'core_admin' %}">Inicio</a></li>
         <li class="breadcrumb-item active">Módulos</li>
     </ol>
     {% comment %} Modal para crear modulo {% endcomment %}
@@ -110,6 +110,7 @@
                                         data-bs-target="#modalEditar{{ modulo.mod_id }}">
                                         <i class="fas fa-edit"></i>
                                     </a>
+                                    {% comment %} boton de eliminar {% endcomment %}
                                     <a href="#" class="btn btn-sm btn-danger rounded-circle d-flex align-items-center justify-content-center"
                                     style="width: 36px; height: 36px;" data-bs-toggle="modal" data-bs-target="#modalEliminar{{ modulo.mod_id }}">
                                     <i class="fas fa-trash-alt"></i>

@@ -1,0 +1,149 @@
+{% extends 'plantillas/MasterEstudiante.html' %}
+{% load static %}
+{% block title %}
+Estudiantes
+{% endblock %}
+
+{% block css %}
+<link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                                class="fas fa-download fa-sm text-white-50"></i> Generar Reporte</a>
+                    </div>
+
+                    <!-- Content Row -->
+                    <div class="row">
+
+                        <!-- TOTAL DE cLASES -->
+                      <div class="col-xl-3 col-md-6 mb-4">
+                          <div class="card border-left-primary shadow h-100 py-2">
+                              <div class="card-body">
+                                  <div class="row no-gutters align-items-center">
+                                      <div class="col mr-2">
+                                          <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                              Clases Matriculadas</div>
+                                          <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_clases }}</div>
+                                      </div>
+                                      <div class="col-auto">
+                                          <i class="fas fa-chalkboard fa-2x text-gray-300"></i>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+
+                        <!-- Modulos disponibles -->
+                      <div class="col-xl-3 col-md-6 mb-4">
+                          <div class="card border-left-success shadow h-100 py-2">
+                              <div class="card-body">
+                                  <div class="row no-gutters align-items-center">
+                                      <div class="col mr-2">
+                                          <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                              Módulos Inscritos</div>
+                                          <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_modulos }}</div>
+                                      </div>
+                                      <div class="col-auto">
+                                          <i class="fas fa-book-open fa-2x text-gray-300"></i>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                        <!-- Clases -->
+                      <div class="col-xl-3 col-md-6 mb-4">
+                          <div class="card border-left-info shadow h-100 py-2">
+                              <div class="card-body">
+                                  <div class="row no-gutters align-items-center">
+                                      <div class="col mr-2">
+                                          <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                              Nota Promedio</div>
+                                          <div class="h5 mb-0 font-weight-bold text-gray-800">{{ promedio }}</div>
+                                      </div>
+                                      <div class="col-auto">
+                                          <i class="fas fa-chart-bar fa-2x text-gray-300"></i>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+
+
+                        <!-- Nveles aprobados -->
+                      <div class="col-xl-3 col-md-6 mb-4">
+                          <div class="card border-left-warning shadow h-100 py-2">
+                              <div class="card-body">
+                                  <div class="row no-gutters align-items-center">
+                                      <div class="col mr-2">
+                                          <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                              Niveles Aprobados</div>
+                                          <div class="h5 mb-0 font-weight-bold text-gray-800">{{ niveles_aprobados }}</div>
+                                      </div>
+                                      <div class="col-auto">
+                                          <i class="fas fa-award fa-2x text-gray-300"></i>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                    <!-- Content Row -->
+
+                    <div class="row">
+                      <div class="card border-left-purple shadow h-100 py-2 mb-4">
+                        <div class="card-body">
+                          <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                              <div class="text-xs font-weight-bold text-purple text-uppercase mb-1">Logros</div>
+                              <div class="h5 mb-0 font-weight-bold text-gray-800">🏅 Nivel 1 Completado</div>
+                              <div class="text-muted small mt-1">¡Excelente trabajo!</div>
+                            </div>
+                            <div class="col-auto">
+                              <i class="fas fa-star fa-2x text-gray-300"></i>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+  
+                    </div>
+
+                    <!-- Content Row -->
+                    <div class="row">
+
+                        <!-- Content Column -->
+                        <div class="col-lg-6 mb-4">
+                            <div class="card bg-success text-white shadow">
+                            <div class="card-body">
+                              ¡Sigue así! Cada día aprendes más 💪
+                              <div class="text-white small">No te detengas. ¡Tu esfuerzo vale oro!</div>
+                            </div>
+                          </div>
+
+
+                        </div>
+
+                        <div class="col-lg-6 mb-4">
+                          <div class="card bg-warning text-white shadow">
+                            <div class="card-body">
+                              Consejo del día 🧠:  
+                              <div class="text-white-50 small">Revisa tus clases todos los días para mantener el ritmo.</div>
+                            </div>
+                          </div>
+
+                            
+
+                            
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+{% endblock %}
+
