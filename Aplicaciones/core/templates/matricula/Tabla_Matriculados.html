@@ -1,0 +1,31 @@
+<table class="table table-bordered" id="tbl-matriculados" width="100%" cellspacing="0">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Estudiante</th>
+            <th>Cédula</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for matricula in matriculas %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ matricula.fk_estudiante.fk_id_persona.fk_id_usuario.first_name }} {{ matricula.fk_estudiante.fk_id_persona.per_segundo_nombre }} {{ matricula.fk_estudiante.fk_id_persona.fk_id_usuario.last_name }} {{ matricula.fk_estudiante.fk_id_persona.per_segundo_apellido }}</td>
+            <td>{{ matricula.fk_estudiante.fk_id_persona.per_cedula }}</td>
+            <td>
+                <a href="#" class="btn btn-danger" data-id="{{ matricula.pk }}" onclick="mostrarModalEliminar(this)">Eliminar</a>
+
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+
+
+<script>
+    
+</script>
+

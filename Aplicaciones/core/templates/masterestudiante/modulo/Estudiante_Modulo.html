@@ -1,0 +1,70 @@
+{% extends "plantillas/MasterEstudiante.html" %}
+{% block title %}Estudiantes_Modulos{% endblock %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/estudiante_modulos.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="header-section">
+        <h1  class="header-title">🎮 Tus Módulos de Aventura 🌟</h1>
+    </div>
+
+    <ol class="breadcrumb mb-4">
+        <li  class="breadcrumb-item"><a href="{% url 'core_estudiante' %}">🏠 Inicio</a></li>
+        <li class="breadcrumb-item active">📚 Módulos</li>
+    </ol>
+
+    <div class="card mb-4 main-card">
+        <div class="card-header">
+            <i class="fas fa-rocket me-2"></i>
+            🚀 Módulos asignados - ¡Listos para la diversión! 🎯
+        </div>
+        <div class="card-body">
+            <div class="row">
+                {% for modulo in modulos %}
+                <div class="col-xl-4 col-md-6 mb-4">
+                    <div class="modulo-card" onclick="selectModulo('{{ modulo.mod_nombre }}', '{{ modulo.mod_id }}')">
+                        <div class="card border-left-success shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="modulo-title">
+                                            {{ modulo.mod_nombre }}
+                                        </div>
+                                        <div class="modulo-description">
+                                            {{ modulo.mod_descripcion }}
+                                        </div>
+                                        <div class="mt-3">
+                                            <a href="{% url 'ver_niveles_modulo' modulo.mod_id %}" 
+                                               class="btn btn-jugar"
+                                               onclick="event.stopPropagation()">
+                                                🎯 ¡Jugar Ahora!
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-book modulo-icon"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <div class="alert alert-warning">
+                        🎮 ¡Ups! Aún no estás inscrito en ningún módulo.<br>
+                        ¡Pronto tendrás aventuras increíbles esperándote! 🚀✨
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/estudiante_modulos.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "plantillas/MasterAdmin.html" %}
+{% load static %}
+{% block title %}Matriculas{% endblock %}
+{% block css %}
+
+{% endblock %}
+{% block content %}
+<div class="container-fluid ">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Matriculas</h1>
+       
+        
+    </div>
+
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="{% url 'core_admin' %}">Inicio</a></li>
+        <li class="breadcrumb-item active">Matriculas</li>
+    </ol>
+    
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            Clases Activas
+        </div>
+        <div class="card-body">
+            <div >
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+                    {% for clase in clases %}
+                    <div class="col ">
+                        <div class="card h-100 shadow-sm  " style="border: 1px solid #ff0000;">
+                            <div class="card-body">
+                                <h5 class="card-title text-center">{{ clase.cla_nombre }}</h5>
+                                <p class="text-muted">CLASE  IMPARTIDA POR: {{ clase.fk_docente}}</p>
+                                <h6 class="card-subtitle mb-2 text-muted"> {{ clase.fk_modulo }}</h6>
+                                <p class="card-text">
+                                    {% if clase.cla_estado %}
+                                    <span class="badge bg-success">Activo</span>
+                                    {% else %}
+                                    <span class="badge bg-danger">Inactivo</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <div class="card-footer bg-transparent border-top-0  gap-2">
+                                <a href="{% url 'matricula_detalle' clase.cla_id %}" class="btn btn-primary btn-sm w-100 mb-2">Detalle Matricula</a>
+                                <a href="{% url 'avance_index' clase.cla_id %}" class="btn btn-success btn-sm w-100 mb-2">Avances</a>
+
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="col-12">
+                        <div class="alert alert-info text-center">
+                            No hay clases activas disponibles.
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
