@@ -19,7 +19,7 @@
     </div>
 
     <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item"><a href="{% url 'core_admin' %}">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'inicio' %}">Inicio</a></li>
         <li class="breadcrumb-item active">Niveles</li>
     </ol>
 
@@ -39,9 +39,8 @@
                             <th>Módulo</th>
                             <th>Nombre</th>
                             <th>Descripción</th>
-                            <th>Detalle</th>
-                            <th>Ruta</th>
-                            <th>Estado</th>
+                            <th>Orden</th>
+                            <th>Vidas</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -52,31 +51,15 @@
                             <td>{{ nivel.fk_modulo.mod_nombre }}</td>
                             <td>{{ nivel.niv_nombre }}</td>
                             <td>{{ nivel.niv_descripcion }}</td>
-                            <td>
-                                <div class="d-flex">
-                                    Tiene orden de {{ nivel.orden }}
-                                    con {{nivel.vidas}} vidas
-                                </div>
-                            </td>
-                            <td>
-                                {{ nivel.ruta }}
-                            </td>
-                            <td>
-                               {% if nivel.niv_estado %}
-                                    Activo
-                                {% else %}
-                                    Inactivo
-                                {% endif %}
-                            </td>
+                            <td>{{ nivel.orden }}</td>
+                            <td>{{ nivel.vidas }}</td>
                             <td>
                                 <div class="d-flex gap-2">
-                                    <a href="#" class="btn btn-sm btn-primary rounded-circle d-flex align-items-center justify-content-center"
-                                        style="width: 36px; height: 36px;" data-bs-toggle="modal"
+                                    <a href="#" class="btn btn-sm btn-warning" data-bs-toggle="modal"
                                         data-bs-target="#modalEditar{{ nivel.niv_id }}">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <a href="#" class="btn btn-sm btn-danger rounded-circle d-flex align-items-center justify-content-center"
-                                    style="width: 36px; height: 36px;" data-bs-toggle="modal"
+                                    <a href="#" class="btn btn-sm btn-danger" data-bs-toggle="modal"
                                         data-bs-target="#modalEliminar{{ nivel.niv_id }}">
                                         <i class="fas fa-trash-alt"></i>
                                     </a>
@@ -155,19 +138,6 @@
                                                 {% else %}
                                                     <input type="number" name="vidas" class="form-control" min="1" max="10"
                                                         value="{{ nivel.vidas }}">
-                                                {% endif %}
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="ruta{{ nivel.niv_id }}">Vidas</label>
-                                                {% if nivel_a_editar and nivel_a_editar.niv_id == nivel.niv_id %}
-                                                    <input type="text" name="ruta" class="form-control" 
-                                                        value="{{ form_editar.data.ruta }}">
-                                                    {% if form_editar.errors.ruta %}
-                                                        <div class="text-danger">{{ form_editar.errors.ruta.0 }}</div>
-                                                    {% endif %}
-                                                {% else %}
-                                                    <input type="text" name="ruta" class="form-control" 
-                                                        value="{{ nivel.ruta }}">
                                                 {% endif %}
                                             </div>
 
@@ -272,13 +242,6 @@
                         {{ form.vidas }}
                         {% if form.vidas.errors %}
                         <div class="text-danger">{{ form.vidas.errors.0 }}</div>
-                        {% endif %}
-                    </div>
-                     <div class="mb-3">
-                        {{ form.ruta.label_tag }}
-                        {{ form.ruta }}
-                        {% if form.ruta.errors %}
-                        <div class="text-danger">{{ form.ruta.errors.0 }}</div>
                         {% endif %}
                     </div>
                 </div>

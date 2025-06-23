@@ -40,15 +40,15 @@
                                     <div class="text-center">
                                         <h1 class="h3 text-gray-900 mb-4">¡Bienvenido Campeón!</h1>
                                     </div>
-                                    <form class="user" method="post" action="{% url 'iniciar_sesion' %}">
-                                        {% csrf_token %}
+                                    <form class="user">
                                         <div class="form-group">
-                                            <input type="text" class="form-control form-control-user" name="identificador"
-                                                id="identificador" placeholder="Ingresa tu usuario o email">
+                                            <input type="email" class="form-control form-control-user"
+                                                id="exampleInputEmail" aria-describedby="emailHelp"
+                                                placeholder="Ingresa tu usuario">
                                         </div>
                                         <div class="form-group">
-                                            <input type="password" class="form-control form-control-user" name="password"
-                                                id="password" placeholder="Contraseña">
+                                            <input type="password" class="form-control form-control-user"
+                                                id="exampleInputPassword" placeholder="Contraseña">
                                         </div>
                                         <div class="form-group">
                                             <div class="custom-control custom-checkbox small">
@@ -56,9 +56,9 @@
                                                 <label class="custom-control-label" for="customCheck">Recordar</label>
                                             </div>
                                         </div>
-                                        <button type="submit" class="btn btn-success btn-user btn-block">
+                                        <a href="#" class="btn btn-success btn-user btn-block">
                                             Iniciar sesión
-                                        </button>
+                                        </a>
                                         <hr>
                                     </form>
                                     <div class="text-center">

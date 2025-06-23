@@ -18,7 +18,7 @@ Administradores
   </div>
 
   <ol class="breadcrumb mb-4">
-    <li class="breadcrumb-item"><a href="{% url 'core_admin' %}">Inicio</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'inicio' %}">Inicio</a></li>
     <li class="breadcrumb-item active">Administradores</li>
   </ol>
   <div class="mb-4">
@@ -39,7 +39,6 @@ Administradores
               <th>Nombres</th>
               <th>Apellidos</th>
               <th>Correo</th>
-              <th>Usuario</th>
               <th>Teléfono</th>
               <th>Estado</th>
               <th>Acciones</th>
@@ -52,7 +51,6 @@ Administradores
                 <td>{{admin.fk_id_persona.fk_id_usuario.first_name}} {{admin.fk_id_persona.per_segundo_nombre}}</td>
                 <td>{{admin.fk_id_persona.fk_id_usuario.last_name}} {{admin.fk_id_persona.per_segundo_apellido}}</td>
                 <td>{{admin.fk_id_persona.fk_id_usuario.email}}</td>
-                <td>{{admin.fk_id_persona.fk_id_usuario.username}}</td>
                 <td>{{admin.fk_id_persona.per_telefono}}</td>
                 {% if admin.adm_estado %}
                   <td class="text-success">Activo</td>
@@ -62,21 +60,18 @@ Administradores
                 <td>
                   <div class="btn-group" role="group" aria-label="Basic mixed styles example">
 
-                    <a href="{%url 'administrador_edit' admin.adm_id%}" type="button" class=" btn btn-primary btn-circle ">
-                      <span><i class="fas fa-pen"></i></span>
-                    </a>
+                    <a href="{%url 'administrador_edit' admin.adm_id%}" type="button" class=" btn btn-primary btn-circle "><span><i
+                          class="fas fa-pen"></i></span></a>
 
-                    <a class="btn btn-danger btn-circle" data-bs-toggle="modal"
-                      data-bs-target="#eliminarModal{{admin.adm_id}}"><i class="fas fa-trash"></i>
-                  </a>
-                    <!-- MODAL PARA CONFIRMAR ELIMINACION -->
-                    {% include 'administrador/Modal.html' %}
+                    <button type="button" class="btn btn-danger btn-circle" data-bs-toggle="modal"
+                      data-bs-target="#confirmarModal"><i class="fas fa-trash"></i></button>
+
                   </div>
                 </td>
               </tr>
             {% empty %}
               <tr>
-                <td colspan="8">No hay administradores registrados</td>
+                <td colspan="6">No hay administradores registrados</td>
               </tr>
             {% endfor %}
           </tbody>
