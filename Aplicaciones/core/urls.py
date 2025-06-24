@@ -17,6 +17,7 @@ from .views import crud_matricula_views
 from .views import crud_avance_views
 # VISTA DOCENTE
 from .views.master_docente import core_docente_views
+from .views.master_docente import clases_asignadas_docente
 # VISTA ESTUDIANTE
 from .views.master_estudiante import core_estudiante_views
 from .views.master_estudiante import estudiante_modulo_views
@@ -115,6 +116,8 @@ urlpatterns = [
     ########################################VISTA DOCENTE###################################
     # Vista Inicial del Docente
     path('core/docente/', core_docente_views.core_docente, name='core_docente'),
+    path('docente/clase/', clases_asignadas_docente.clases_asignadas_docente, name='clase_asignada'),
+    path('docente/matriculados/', clases_asignadas_docente.matriculados_asignados_docente, name='matriculados_asignados'),
 
     ########################################VISTA ESTUDIANTE##################################
     # Vista Inicial del Estudiante
