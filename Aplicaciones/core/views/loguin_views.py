@@ -46,4 +46,6 @@ def iniciar_sesion(request):
 # METODO PARA CERRAR SESION
 def cerrar_sesion(request):
     logout(request)
-    return render(request, 'loguin/Index.html')
+    response = redirect('loguin_index')  # Redirigir a la página de inicio de sesión
+    response.delete_cookie('sessionid')  # Eliminar la cookie de sesión
+    return response  # Retornar la respuesta de redirección

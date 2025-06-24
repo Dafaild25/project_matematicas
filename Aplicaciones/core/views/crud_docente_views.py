@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.views.decorators.cache import never_cache # Importar decorador para evitar caché
 from django.contrib import messages  # Importar mensajes
 from django.contrib.auth.models import Group # Importar grupos
 from Aplicaciones.core.forms.user_form import UserForm # Importar clase de registro
 from ..models import * # Importar modelos
 from Aplicaciones.core.validaciones.validar_cedula import * # Importar funciones de validaciones
+
 
 # VISTA PRINCIPAL PARA LISTAR DOCENTES
 def index(request):

@@ -1,5 +1,6 @@
 # Byte-compiled / optimized / DLL files
-__pycache__/
+# Ignorar archivos compilados de Python
+__pycache__/ 
 *.py[cod]
 *.so
 *.pyc
