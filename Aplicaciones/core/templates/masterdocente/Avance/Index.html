@@ -1,0 +1,119 @@
+{% extends 'plantillas/MasterDocente.html' %}
+{% load static %}
+{% block title %}
+Avance Estudiantes
+{% endblock %}
+
+{% block css %}
+<link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid ">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Clases</h1>
+
+    </div>
+
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="{% url 'core_docente' %}">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'clase_asignada'%}">Clases Asignadas</a></li>
+        <li class="breadcrumb-item active">Avance </li>
+    </ol>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            Calificaciones
+        </div>
+        <div class="card-body">
+
+            
+                <table class="table table-striped" id="tbl-matriculados-docente" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th style="width: 1%;">#</th>
+                            <th style="width: 25%;" >Estudiante</th>
+
+                            {% for nivel in niveles %}
+                            <th class="text-center align-items-center justify-content-center ">{{ nivel.niv_nombre }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for fila in avance_data %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td >
+                                {{ fila.estudiante.fk_id_persona.fk_id_usuario.first_name }}
+                                {{ fila.estudiante.fk_id_persona.per_segundo_nombre }}
+                                {{ fila.estudiante.fk_id_persona.fk_id_usuario.last_name }}
+                                {{ fila.estudiante.fk_id_persona.per_segundo_apellido }}
+                            </td>
+                            {% for nivel in fila.niveles %}
+                           <td class="text-center align-items-center justify-content-center">
+                                <div class="d-flex align-items-center justify-content-center gap-2">
+                                    <span class="fw-bold">{{ nivel.nota }}</span>
+
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="dropdown-item" href="#" >
+                                                    📘 Historial de intentos
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="#">❤️ Vidas usadas</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            
+        </div>
+    </div>
+
+</div>
+
+{%block js%}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        
+        recargarTablaMatriculados();
+    });
+    function recargarTablaMatriculados(){
+        $('#tbl-matriculados-docente').DataTable({
+            "language": {
+                "lengthMenu": "Mostrar _MENU_ registros por página",
+                "zeroRecords": "No se encontraron resultados",
+                "info": "Mostrando página _PAGE_ de _PAGES_",
+                "infoEmpty": "No hay registros disponibles",
+                "infoFiltered": "(filtrado de _MAX_ registros totales)",
+                "search": "Buscar:",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                }
+            }
+        });
+
+    }
+</script>
+
+{% endblock %}
+
+
+
+{% endblock %}

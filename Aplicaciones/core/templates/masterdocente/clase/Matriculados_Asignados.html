@@ -28,11 +28,11 @@ Clases Docente
             <i class="fas fa-file-upload me-1"></i> Importar Estudiantes Masivamente
         </div>
         <div class="card-body">
-            <form id="form-importar-excel">
+            <form id="form-importar-excel"  
                 {% csrf_token %}
                 <div class="row">
                     <div class="col-md-10">
-                        <input type="hidden" value="#" name="cla_id">
+                        <input type="hidden" name="cla_id" id="cla_id" value="{{ clase.cla_id }}">
                         <input type="file" name="archivo" id="archivo" class="form-control" accept=".xlsx" required>
                     </div>
                     <div class="col-md-2">
@@ -47,10 +47,365 @@ Clases Docente
 
 
     <div class="card mb-4">
-        <div class="card-header">
-            <i class="fas fa-table me-1"></i>
-            Lista de los estudiantes
+        <div class="card-header d-flex justify-content-between align-items-center">
+    <div>
+        <i class="fas fa-table me-1"></i>
+        Lista de los estudiantes
+    </div>
+    <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#modalCrearEstudiante">
+        <i class="fas fa-user-plus"></i> Agregar estudiante
+    </button>
+</div>
+
+        <div class="card-body" id="contenedor-tabla-matriculados-docente" data-cla-id="{{ clase.cla_id }}">
+            
+        <!-- aqui va la tabla -->
         </div>
-        <div class="card-body">
+</div>
+</div>
+
+
+
+{% comment %} modal para crear un estudiante {% endcomment %}
+
+<!-- Modal Crear Estudiante -->
+<div class="modal fade" id="modalCrearEstudiante" tabindex="-1" aria-labelledby="modalCrearEstudianteLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <form method="POST" action="{% url 'crear_estudiante_docente' %}">
+        {% csrf_token %}
+        <input type="hidden" name="clase_id" value="{{ clase.cla_id }}">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="modalCrearEstudianteLabel">Registrar nuevo estudiante</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-md-6">
+              {{ form.nombre.label_tag }}
+              {{ form.nombre }}
+              {% if form.nombre.errors %}
+              <div class="text-danger">{{ form.nombre.errors.0 }}</div>
+              {% endif %}
+            </div>
+
+            <div class="col-md-6">
+              {{ form.segundo_nombre.label_tag }}
+              {{ form.segundo_nombre }}
+              {% if form.segundo_nombre.errors %}
+              <div class="text-danger">{{ form.segundo_nombre.errors.0 }}</div>
+              {% endif %}
+            </div>
+
+            <div class="col-md-6">
+              {{ form.apellido.label_tag }}
+              {{ form.apellido }}
+              {% if form.apellido.errors %}
+              <div class="text-danger">{{ form.apellido.errors.0 }}</div>
+              {% endif %}
+            </div>
+
+            <div class="col-md-6">
+              {{ form.segundo_apellido.label_tag }}
+              {{ form.segundo_apellido }}
+              {% if form.segundo_apellido.errors %}
+              <div class="text-danger">{{ form.segundo_apellido.errors.0 }}</div>
+              {% endif %}
+            </div>
+
+            <div class="col-md-6">
+              {{ form.email.label_tag }}
+              {{ form.email }}
+              {% if form.email.errors %}
+              <div class="text-danger">{{ form.email.errors.0 }}</div>
+              {% endif %}
+            </div>
+
+            <div class="col-md-6">
+              {{ form.cedula.label_tag }}
+              {{ form.cedula }}
+              {% if form.cedula.errors %}
+              <div class="text-danger">{{ form.cedula.errors.0 }}</div>
+              {% endif %}
+            </div>
+
+            <div class="col-md-6">
+              {{ form.telefono.label_tag }}
+              {{ form.telefono }}
+            </div>
+
+            <div class="col-md-6">
+              {{ form.fecha_nacimiento.label_tag }}
+              {{ form.fecha_nacimiento }}
+            </div>
+
+            <div class="col-md-6">
+              {{ form.contacto_emergencia.label_tag }}
+              {{ form.contacto_emergencia }}
+            </div>
+
+            <div class="col-md-6">
+              {{ form.telefono_emergencia.label_tag }}
+              {{ form.telefono_emergencia }}
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar Estudiante</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% if mostrar_modal %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const modal = new bootstrap.Modal(document.getElementById('modalCrearEstudiante'));
+        modal.show();
+    });
+</script>
+{% endif %}
+
+{% if messages %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  
+
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.onmouseenter = Swal.stopTimer;
+      toast.onmouseleave = Swal.resumeTimer;
+    }
+  });
+
+  {% for message in messages %}
+    Toast.fire({
+      icon: '{% if "success" in message.tags %}success{% elif "error" in message.tags %}error{% elif "warning" in message.tags %}warning{% else %}info{% endif %}',
+      title: '{{ message|escapejs }}'
+    });
+  {% endfor %}
+</script>
+{% endif %}
+
+{% comment %} modal para editar  {% endcomment %}
+
+<!-- Modal Editar Estudiante -->
+<div class="modal fade" id="modalEditarEstudiante" tabindex="-1" aria-labelledby="modalEditarEstudianteLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <form method="POST" action="{% url 'editar_estudiante_docente' %}">
+        {% csrf_token %}
+        <input type="hidden" name="editar_matricula" value="1">
+        <input type="hidden" name="matricula_id">
+        <input type="hidden" name="clase_id" value="{{ clase.cla_id }}">
+
+        <div class="modal-header bg-warning text-white">
+          <h5 class="modal-title" id="modalEditarEstudianteLabel">Editar estudiante matriculado</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label>Nombre</label>
+              <input type="text" name="nombre" class="form-control">
+            </div>
+            <div class="col-md-6">
+              <label>Segundo nombre</label>
+              <input type="text" name="segundo_nombre" class="form-control">
+            </div>
+            <div class="col-md-6">
+              <label>Apellido</label>
+              <input type="text" name="apellido" class="form-control">
+            </div>
+            <div class="col-md-6">
+              <label>Segundo apellido</label>
+              <input type="text" name="segundo_apellido" class="form-control">
+            </div>
+            <div class="col-md-6">
+              <label>Correo electrónico</label>
+              <input type="email" name="email" class="form-control">
+            </div>
+            <div class="col-md-6">
+              <label>Cédula</label>
+              <input type="text" name="cedula" class="form-control">
+            </div>
+            <div class="col-md-6">
+              <label>Teléfono</label>
+              <input type="text" name="telefono" class="form-control">
+            </div>
+            <div class="col-md-6">
+              <label>Fecha de nacimiento</label>
+              <input type="date" name="fecha_nacimiento" class="form-control">
+            </div>
+            <div class="col-md-6">
+              <label>Contacto de emergencia</label>
+              <input type="text" name="contacto_emergencia" class="form-control">
+            </div>
+            <div class="col-md-6">
+              <label>Teléfono de emergencia</label>
+              <input type="text" name="telefono_emergencia" class="form-control">
+            </div>
+            <div class="col-md-6">
+              <label for="edit_password">Contraseña (opcional)</label>
+              <input type="password" name="password" id="edit_password" class="form-control">
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-warning">Actualizar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% comment %} modal para eliminar de esta clase {% endcomment %}
+ <!-- Modal de Confirmación para Eliminar -->
+<div class="modal fade" id="modalEliminarMatricula" tabindex="-1" aria-labelledby="modalEliminarLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="POST" action="{% url 'eliminar_matricula' %}">
+        {% csrf_token %}
+        <input type="hidden" name="matricula_id" id="eliminar_matricula_id">
+        <input type="hidden" name="clase_id" value="{{ clase.cla_id }}">
+        <div class="modal-header bg-danger text-white">
+          <h5 class="modal-title" id="modalEliminarLabel">Confirmar eliminación</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          ¿Estás seguro de que deseas eliminar a este estudiante de la clase?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-danger">Eliminar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+{% block js %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const contenedorTabla = document.getElementById("contenedor-tabla-matriculados-docente");
+    const claId = contenedorTabla.dataset.claId;
+    recargarTablaMatriculados(claId);
+});
+
+// FUNCION PARA CARGAR LA TABLA
+function recargarTablaMatriculados(claseId) {
+    const contenedorTabla = document.getElementById("contenedor-tabla-matriculados-docente");
+    const scrollPosition = contenedorTabla.scrollTop;
+
+    fetch(`/docente/clase/${claseId}/tabla-matriculados/`)
+        .then(response => response.text())
+        .then(html => {
+            contenedorTabla.innerHTML = html;
+
+            // Activar DataTable si está presente
+            $('#tbl-matriculados-docente').DataTable({
+                language: {
+                    search: "Buscar:",
+                    lengthMenu: "Mostrar _MENU_ registros",
+                    info: "Mostrando del _START_ al _END_ de _TOTAL_ registros",
+                    paginate: {
+                        first: "Primero",
+                        last: "Último",
+                        next: "Siguiente",
+                        previous: "Anterior"
+                    }
+                }
+            });
+
+            contenedorTabla.scrollTop = scrollPosition;
+        })
+        .catch(error => {
+            contenedorTabla.innerHTML = `<div class="alert alert-danger">Error cargando tabla: ${error}</div>`;
+        });
+}
+
+//funcion  para el modal de editar 
+function abrirModalEditar(matriculaId) {
+    fetch(`/ajax/estudiante/${matriculaId}/`)
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const estudiante = data.data;
+            document.querySelector('#modalEditarEstudiante input[name="matricula_id"]').value = estudiante.matricula_id;
+            document.querySelector('#modalEditarEstudiante input[name="nombre"]').value = estudiante.nombre;
+            document.querySelector('#modalEditarEstudiante input[name="apellido"]').value = estudiante.apellido;
+            document.querySelector('#modalEditarEstudiante input[name="email"]').value = estudiante.email;
+            document.querySelector('#modalEditarEstudiante input[name="segundo_nombre"]').value = estudiante.segundo_nombre;
+            document.querySelector('#modalEditarEstudiante input[name="segundo_apellido"]').value = estudiante.segundo_apellido;
+            document.querySelector('#modalEditarEstudiante input[name="cedula"]').value = estudiante.cedula;
+            document.querySelector('#modalEditarEstudiante input[name="telefono"]').value = estudiante.telefono;
+            document.querySelector('#modalEditarEstudiante input[name="fecha_nacimiento"]').value = estudiante.fecha_nacimiento;
+            document.querySelector('#modalEditarEstudiante input[name="contacto_emergencia"]').value = estudiante.contacto_emergencia;
+            document.querySelector('#modalEditarEstudiante input[name="telefono_emergencia"]').value = estudiante.telefono_emergencia;
+
+            new bootstrap.Modal(document.getElementById('modalEditarEstudiante')).show();
+        } else {
+            alert('No se pudo cargar el estudiante');
+        }
+    });
+}
+
+
+//funcion para el modal de eliminacion 
+function abrirModalEliminar(matriculaId) {
+    document.getElementById('eliminar_matricula_id').value = matriculaId;
+    let modal = new bootstrap.Modal(document.getElementById('modalEliminarMatricula'));
+    modal.show();
+  }
+
+
+//Controlar la importacion 
+document.getElementById('form-importar-excel').addEventListener('submit', function (e) {
+    e.preventDefault(); // Evita recargar la página
+
+    const formData = new FormData(this);
+    const cla_id = document.getElementById("cla_id").value;
+
+    fetch("{% url 'importar_estudiantes_excel_docente' %}", {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'  // importante para distinguir petición AJAX
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert(data.message);
+            recargarTablaMatriculados(cla_id);  // actualiza la tabla
+        } else {
+            alert("Error: " + data.message);
+        }
+    })
+    .catch(error => {
+        console.error("Error en la importación:", error);
+        alert("Ocurrió un error al importar el archivo.");
+    });
+});
+
+
+</script>
+
+{% endblock %}
 
 {% endblock %}
