@@ -115,7 +115,8 @@ urlpatterns = [
     
     ########################################VISTA DOCENTE###################################
     # Vista Inicial del Docente
-    path('core/docente/', core_docente_views.core_docente, name='core_docente'),
+    path('core/docente/', core_docente_views.dashboard_docente, name='core_docente'),
+    path('docente/datos_modulo/', core_docente_views.datos_modulo, name='datos_modulo'),
     path('docente/clase/', clases_asignadas_docente.clases_asignadas_docente, name='clase_asignada'),
     path('docente/matriculados/', clases_asignadas_docente.matriculados_asignados_docente, name='matriculados_asignados'),
 
