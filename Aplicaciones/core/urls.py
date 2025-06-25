@@ -1,4 +1,6 @@
 from django.urls import path
+
+
 # views del core
 from .views import core_views
 from .views import crud_administrador_views
@@ -18,6 +20,7 @@ from .views import crud_avance_views
 # VISTA DOCENTE
 from .views.master_docente import core_docente_views
 from .views.master_docente import clases_asignadas_docente
+from .views.master_docente import avance_matriculados_docente
 # VISTA ESTUDIANTE
 from .views.master_estudiante import core_estudiante_views
 from .views.master_estudiante import estudiante_modulo_views
@@ -124,8 +127,12 @@ urlpatterns = [
     path('editar-estudiante/', clases_asignadas_docente.editar_estudiante_docente, name='editar_estudiante_docente'),
     path('eliminar-matricula/', clases_asignadas_docente.eliminar_matricula, name='eliminar_matricula'),
     path('docente/importar-estudiantes/', clases_asignadas_docente.importar_estudiantes_excel_docente, name='importar_estudiantes_excel_docente'),
-    #vista para ver el avance los  estudiantes asu cargo 
+    #vista para ver el avance los  estudiantes a su cargo 
     path('docente/clase/<int:cla_id>/notas/', clases_asignadas_docente.ver_notas_estudiantes, name='ver_notas_estudiantes'),
+    path('historial-intentos/', avance_matriculados_docente.historial_intentos, name='historial_intentos'),
+    path('asignar-vidas/', avance_matriculados_docente.asignar_vidas, name='asignar_vidas_docente'),
+
+
 
 
 

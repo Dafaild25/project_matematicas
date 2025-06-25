@@ -30,7 +30,7 @@ Avance Estudiantes
         </div>
         <div class="card-body">
 
-            
+
                 <table class="table table-striped" id="tbl-matriculados-docente" width="100%" cellspacing="0">
                     <thead>
                         <tr>
@@ -63,12 +63,12 @@ Avance Estudiantes
                                         </button>
                                         <ul class="dropdown-menu">
                                             <li>
-                                                <a class="dropdown-item" href="#" >
-                                                    📘 Historial de intentos
+                                                <a class="dropdown-item" href="#"   onclick="verIntentos('{{ fila.matricula_id }}', '{{ nivel.nivel_id }}')">
+                                                    📘 Historial 
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item" href="#">❤️ Vidas usadas</a>
+                                                <a class="dropdown-item" href="#" onclick="abrirModalVidas('{{ fila.matricula_id}}', '{{ nivel.nivel_id }}')">❤️ Vidas </a>
                                             </li>
                                         </ul>
                                     </div>
@@ -79,16 +79,77 @@ Avance Estudiantes
                         {% endfor %}
                     </tbody>
                 </table>
-            
+
         </div>
     </div>
 
 </div>
 
+<!-- modal de intentos -->
+<div class="modal fade" id="modalHistorialIntentos" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">📘 Historial de Intentos</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-striped text-center">
+          <thead>
+            <tr>
+              <th>Nota</th>
+              <th>Vidas Usadas</th>
+              <th>Fecha</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-intentos-body">
+            <!-- Aquí se llenan los intentos vía JavaScript -->
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de vidas extras -->
+
+<div class="modal fade" id="modalVidas" tabindex="-1" aria-labelledby="modalVidasLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="formVidas">
+        {% csrf_token %}
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalVidasLabel">Asignar vidas</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" name="matricula_id" id="vidasMatriculaId">
+          <input type="hidden" name="nivel_id" id="vidasNivelId">
+         <div class="mb-3">
+            <label for="vidas" class="form-label">Número de vidas: <span id="vidasValor">3</span></label>
+            <input type="range" class="form-range" min="0" max="5" step="1" id="vidas" name="vidas" value="3" oninput="document.getElementById('vidasValor').innerText = this.value">
+            </div>
+          <div class="mb-3">
+            <label for="observaciones" class="form-label">Observaciones</label>
+            <textarea class="form-control" name="observaciones" id="observaciones" rows="3"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Asignar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
 {%block js%}
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        
+
         recargarTablaMatriculados();
     });
     function recargarTablaMatriculados(){
@@ -110,6 +171,71 @@ Avance Estudiantes
         });
 
     }
+
+    function verIntentos(matriculaId, nivelId) {
+    fetch(`/historial-intentos/?matricula_id=${matriculaId}&nivel_id=${nivelId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const tbody = document.getElementById('tabla-intentos-body');
+                tbody.innerHTML = '';
+
+                if (data.intentos.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="3" class="text-center">Sin intentos registrados</td></tr>';
+                } else {
+                    data.intentos.forEach(item => {
+                        const fila = `<tr>
+                            <td>${item.nota}</td>
+                            <td>${item.vidas}</td>
+                            <td>${item.fecha}</td>
+                        </tr>`;
+                        tbody.innerHTML += fila;
+                    });
+                }
+
+                const modal = new bootstrap.Modal(document.getElementById('modalHistorialIntentos'));
+                modal.show();
+            }
+        });
+}
+
+//funcion de las vidas extras 
+  function abrirModalVidas(matriculaId, nivelId) {
+    document.getElementById('vidasMatriculaId').value = matriculaId;
+    document.getElementById('vidasNivelId').value = nivelId;
+    document.getElementById('vidas').value = '';
+    document.getElementById('observaciones').value = '';
+    new bootstrap.Modal(document.getElementById('modalVidas')).show();
+  }
+
+  document.getElementById('formVidas').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    const formData = new FormData(this);
+
+    fetch('{% url "asignar_vidas_docente" %}', {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': csrfToken
+      },
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        alert(data.message);
+        bootstrap.Modal.getInstance(document.getElementById('modalVidas')).hide();
+        location.reload(); // Recarga la tabla si deseas
+      } else {
+        alert(data.message || "Error al asignar vidas.");
+      }
+    })
+    .catch(error => {
+      console.error("Error:", error);
+      alert("Ha ocurrido un error inesperado.");
+    });
+  });
 </script>
 
 {% endblock %}

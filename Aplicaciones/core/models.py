@@ -78,7 +78,12 @@ class Modulos(models.Model):
 
 class Niveles(models.Model):
     niv_id = models.AutoField(primary_key=True)
-    fk_modulo = models.ForeignKey(Modulos,verbose_name='Modulo',on_delete=models.CASCADE)
+    fk_modulo = models.ForeignKey(
+        Modulos,
+        verbose_name='Modulo',
+        on_delete=models.CASCADE,
+        related_name='niveles'  
+    )
     niv_nombre = models.CharField(max_length=50, null=False, verbose_name="Nombre del nivel:")
     niv_descripcion = models.CharField(max_length=100,null=False,verbose_name="Descripción del nivel:")
     orden = models.IntegerField()

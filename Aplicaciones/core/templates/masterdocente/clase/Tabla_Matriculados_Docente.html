@@ -11,6 +11,7 @@
     <tbody>
         {% for matricula in matriculas %}
         <tr>
+            
             <td>{{ forloop.counter }}</td>
             <td>{{ matricula.fk_estudiante.fk_id_persona.fk_id_usuario.first_name }} {{ matricula.fk_estudiante.fk_id_persona.per_segundo_nombre }} {{ matricula.fk_estudiante.fk_id_persona.fk_id_usuario.last_name }} {{ matricula.fk_estudiante.fk_id_persona.per_segundo_apellido }}</td>
             <td>{{ matricula.fk_estudiante.fk_id_persona.fk_id_usuario.username }}</td>

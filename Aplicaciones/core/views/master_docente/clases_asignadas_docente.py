@@ -334,6 +334,7 @@ def ver_notas_estudiantes(request, cla_id):
     for matricula in matriculas:
         fila = {
             'estudiante': matricula.fk_estudiante,
+            'matricula_id': matricula.mat_id, 
             'niveles': []
         }
         for nivel in niveles:
@@ -344,12 +345,14 @@ def ver_notas_estudiantes(request, cla_id):
 
             if avance:
                 fila['niveles'].append({
+                    'nivel_id': nivel.niv_id,   
                     'nivel': nivel.niv_nombre,
                     'nota': avance.avm_nota_final,
                     'estado': '✅' if avance.avm_estado else '❌'
                 })
             else:
                 fila['niveles'].append({
+                    'nivel_id': nivel.niv_id, 
                     'nivel': nivel.niv_nombre,
                     'nota': 'Sin jugar',
                     'estado': '—',
