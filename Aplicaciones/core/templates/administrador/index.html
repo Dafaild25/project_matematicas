@@ -60,13 +60,13 @@ Administradores
                   <td class="text-danger">Inactivo</td>
                 {% endif %}
                 <td>
-                  <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                   <div class="d-flex gap-2 justify-content-center">
 
-                    <a href="{%url 'administrador_edit' admin.adm_id%}" type="button" class=" btn btn-primary btn-circle ">
+                    <a href="{%url 'administrador_edit' admin.adm_id%}" type="button" class="btn btn-sm btn-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
                       <span><i class="fas fa-pen"></i></span>
                     </a>
 
-                    <a class="btn btn-danger btn-circle" data-bs-toggle="modal"
+                    <a class="btn btn-sm btn-danger rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;" data-bs-toggle="modal"
                       data-bs-target="#eliminarModal{{admin.adm_id}}"><i class="fas fa-trash"></i>
                   </a>
                     <!-- MODAL PARA CONFIRMAR ELIMINACION -->

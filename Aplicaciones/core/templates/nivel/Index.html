@@ -35,7 +35,7 @@
                 <table class="table table-striped" id="tbl-admin" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th style="width: 1%;">#</th>
                             <th>Módulo</th>
                             <th>Nombre</th>
                             <th>Descripción</th>
@@ -48,7 +48,7 @@
                     <tbody>
                         {% for nivel in niveles %}
                         <tr>
-                            <td>{{ nivel.niv_id }}</td>
+                            <td> {{ forloop.counter }} </td>
                             <td>{{ nivel.fk_modulo.mod_nombre }}</td>
                             <td>{{ nivel.niv_nombre }}</td>
                             <td>{{ nivel.niv_descripcion }}</td>
