@@ -1,7 +1,7 @@
 {% extends "plantillas/MasterDocente.html" %}
 
 {% load static %}
-{% block title %}Dashboard Docente{% endblock %}
+{% block title %}Inicio{% endblock %}
 
 {% block css %}
 <style>
@@ -11,225 +11,154 @@
 
 {% block content %}
 <div class="container-fluid">
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Dashboard Docente</h1>
+    <a href="{}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+      <i class="fas fa-download fa-sm text-white-50"></i> Generar Reporte
+    </a>
+  </div>
 
-    <!-- Filtro de Módulos -->
-    <div class="form-group">
-        <label for="moduloSelect">Seleccionar Módulo:</label>
-        <select id="moduloSelect" class="form-control">
-            <option value="">Seleccione un módulo</option>
-            {% for modulo in modulos %}
-            <option value="{{ modulo.mod_id }}">{{ modulo.mod_nombre }}</option>
-            {% endfor %}
-        </select>
+  <div class="row">
+    <div class="col-xl-4 col-md-6 mb-4">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Clases Impartidas</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_clases }}</div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-chalkboard-teacher fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- Page Heading -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Dashboard Docente</h1>
+    <div class="col-xl-4 col-md-6 mb-4">
+      <div class="card border-left-success shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total de Estudiantes</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_estudiantes }}</div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-user-graduate fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4">
+    <div class="col-md-4">
+      <label for="moduloFiltro">Seleccione un Módulo:</label>
+      <select class="form-control" id="moduloFiltro">
+        <option value="">Todos los Módulos</option>
+        {% for modulo in modulos %}
+          <option value="{{ modulo.mod_id }}">{{ modulo.mod_nombre }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xl-8 col-lg-7">
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Promedio por Clase</h6>
+        </div>
+        <div class="card-body">
+          <div class="chart-bar">
+            <canvas id="barChart"></canvas>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- Content Row -->
-    <div class="row">
-
-        <!-- Total Clases -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-primary shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Total Clases</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_clases }}</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-chalkboard fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <div class="col-xl-4 col-lg-5">
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Promedio General</h6>
         </div>
-
-        <!-- Total Estudiantes -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-success shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Total Estudiantes</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_estudiantes }}</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-user-graduate fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="card-body">
+          <div class="chart-pie pt-4 pb-2">
+            <canvas id="donutChart"></canvas>
+          </div>
+          <div class="mt-4 text-center small" id="donutLabels"></div>
         </div>
-
+      </div>
     </div>
-
-    <!-- Content Row -->
-    <div class="row">
-
-        <!-- Bar Chart -->
-        <div class="col-xl-8 col-lg-7">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Estudiantes por Clase</h6>
-                </div>
-                <div class="card-body">
-                    <div class="chart-bar">
-                        <canvas id="myBarChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Pie Chart -->
-        <div class="col-xl-4 col-lg-5">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Promedio de Calificaciones</h6>
-                </div>
-                <div class="card-body">
-                    <div class="chart-pie pt-4 pb-2">
-                        <canvas id="myPieChart"></canvas>
-                    </div>
-                    <div class="mt-4 text-center small">
-                        <span class="mr-2">
-                            <i class="fas fa-circle text-primary"></i> Promedio
-                        </span>
-                        <span class="mr-2">
-                            <i class="fas fa-circle text-light"></i> Complemento
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
+  </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    var ctxBar = document.getElementById("myBarChart").getContext('2d');
-    var myBarChart = new Chart(ctxBar, {
-        type: 'bar',
-        data: {
-            labels: [],
-            datasets: [{
-                label: "Estudiantes",
-                backgroundColor: "#4e73df",
-                hoverBackgroundColor: "#2e59d9",
-                borderColor: "#4e73df",
-                data: [],
-            }],
-        },
-        options: {
-            maintainAspectRatio: false,
-            scales: {
-                xAxes: [{
-                    time: {
-                        unit: 'clase'
-                    },
-                    gridLines: {
-                        display: false
-                    },
-                    ticks: {
-                        maxTicksLimit: 6
-                    }
-                }],
-                yAxes: [{
-                    ticks: {
-                        min: 0,
-                        maxTicksLimit: 5
-                    },
-                    gridLines: {
-                        color: "rgb(234, 236, 244)",
-                        zeroLineColor: "rgb(234, 236, 244)",
-                        drawBorder: false,
-                        borderDash: [2],
-                        zeroLineBorderDash: [2]
-                    }
-                }],
-            },
-            legend: {
-                display: false
-            }
-        }
-    });
+$(document).ready(function() {
+    var barChart;
+    var donutChart;
 
-    var ctxPie = document.getElementById("myPieChart").getContext('2d');
-    var myPieChart = new Chart(ctxPie, {
-        type: 'doughnut',
-        data: {
-            labels: ["Promedio", "Complemento"],
-            datasets: [{
-                data: [0, 100],
-                backgroundColor: ['#4e73df', '#eaeaea'],
-                hoverBackgroundColor: ['#2e59d9', '#d4d4d4'],
-                hoverBorderColor: "rgba(234, 236, 244, 1)",
-            }],
-        },
-        options: {
-            maintainAspectRatio: false,
-            tooltips: {
-                backgroundColor: "rgb(255,255,255)",
-                bodyFontColor: "#858796",
-                borderColor: '#dddfeb',
-                borderWidth: 1,
-                xPadding: 15,
-                yPadding: 15,
-                displayColors: false,
-                caretPadding: 10,
-            },
-            legend: {
-                display: false
-            },
-            cutoutPercentage: 80,
-        },
-    });
-
-    $(document).ready(function () {
-        $('#moduloSelect').change(function () {
-            var modulo_id = $(this).val();
-            if (modulo_id) {
-                $.ajax({
-                    url: "{% url 'datos_modulo' %}",
-                    type: "POST",
+    function actualizarGraficas(modulo_id) {
+        $.ajax({
+            url: '{% url "obtener_datos_dashboard" %}',
+            type: 'GET',
+            data: { modulo_id: modulo_id },
+            success: function(data) {
+                // Barras verticales con etiquetas de clase
+                if (barChart) barChart.destroy();
+                var ctxBar = document.getElementById('barChart').getContext('2d');
+                barChart = new Chart(ctxBar, {
+                    type: 'bar',
                     data: {
-                        'modulo_id': modulo_id,
-                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'Promedio por Clase',
+                            data: data.values,
+                            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }]
                     },
-                    success: function (response) {
-                        actualizarGraficaBarras(response.barras);
-                        actualizarGraficaDona(response.promedio);
+                    options: {
+                        responsive: true,
+                        scales: {
+                            x: { title: { display: true, text: 'Clases' } },
+                            y: { beginAtZero: true, max: 10, title: { display: true, text: 'Promedio' } }
+                        }
                     }
                 });
+
+                // Dona con promedio general
+                if (donutChart) donutChart.destroy();
+                var ctxDonut = document.getElementById('donutChart').getContext('2d');
+                donutChart = new Chart(ctxDonut, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Promedio General'],
+                        datasets: [{
+                            data: [data.promedio_general, 10 - data.promedio_general],
+                            backgroundColor: ['rgba(75, 192, 192, 0.6)', 'rgba(220, 220, 220, 0.3)'],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: { responsive: true, cutout: '70%' }
+                });
+
+                $('#donutLabels').html("<span><i class='fas fa-circle text-primary'></i> " + data.promedio_general + "</span>");
             }
         });
+    }
 
-        function actualizarGraficaBarras(data) {
-            var labels = [];
-            var datos = [];
-            data.forEach(item => {
-                labels.push(item.clase);
-                datos.push(item.total);
-            });
+    // Cargar inicialmente con todos los módulos
+    actualizarGraficas('');
 
-            myBarChart.data.labels = labels;
-            myBarChart.data.datasets[0].data = datos;
-            myBarChart.update();
-        }
-
-        function actualizarGraficaDona(promedio) {
-            myPieChart.data.datasets[0].data = [promedio, 100 - promedio];
-            myPieChart.update();
-        }
+    $('#moduloFiltro').change(function() {
+        actualizarGraficas($(this).val());
     });
+});
 </script>
 {% endblock %}

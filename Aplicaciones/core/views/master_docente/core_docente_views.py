@@ -1,69 +1,68 @@
 from django.shortcuts import render
-from django.db.models import Count, Avg 
-from django.contrib.auth.models import User # Importar modelo User de Django
-from ...models import *
+from django.db.models import Count, Avg
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+from ...models import *
 
-# Create your views here.
-@csrf_exempt
-def datos_modulo(request):
-    if request.method == 'POST':
-        modulo_id = request.POST.get('modulo_id')
+# Vista para obtener los datos dinámicos del dashboard (llamada por AJAX)
+def obtener_datos_dashboard(request):
+    docente = Docentes.objects.get(fk_id_persona__fk_id_usuario=request.user)
+    modulo_id = request.GET.get('modulo_id')
 
-        clases = Clases.objects.filter(fk_modulo_id=modulo_id)
-        data_barras = []
-        for clase in clases:
-            total_estudiantes = Matriculas.objects.filter(fk_clase=clase).count()
-            data_barras.append({'clase': clase.cla_nombre, 'total': total_estudiantes})
+    if modulo_id:
+        clases = Clases.objects.filter(fk_docente=docente, fk_modulo_id=modulo_id)
+    else:
+        clases = Clases.objects.filter(fk_docente=docente)
 
-        promedio = Avance_Matriculados.objects.filter(
-            fk_matricula__fk_clase__fk_modulo_id=modulo_id
+    labels = []
+    values = []
+    total_notas = 0
+    total_clases = 0
+
+    for clase in clases:
+        matriculas = Matriculas.objects.filter(fk_clase=clase)
+        promedio_clase = Avance_Matriculados.objects.filter(
+            fk_matricula__in=matriculas,
+            fk_nivel__fk_modulo=clase.fk_modulo
         ).aggregate(promedio=Avg('avm_nota_final'))['promedio']
 
-        return JsonResponse({
-            'barras': data_barras,
-            'promedio': float(promedio) if promedio else 0
-        })
-    return JsonResponse({'error': 'Método no permitido'}, status=405)
+        if promedio_clase is not None:
+            labels.append(clase.cla_nombre)
+            values.append(round(promedio_clase, 2))
+            total_notas += promedio_clase
+            total_clases += 1
+
+    if total_clases > 0:
+        promedio_general = round(total_notas / total_clases, 2)
+    else:
+        promedio_general = 0
+
+    return JsonResponse({
+        'labels': labels,
+        'values': values,
+        'promedio_general': promedio_general
+    })
 
 
-
-# DASHBOARD DOCENTE
+# Dashboard Docente Principal
 def dashboard_docente(request):
-    # Obtener docente actual
     docente = Docentes.objects.get(fk_id_persona__fk_id_usuario=request.user)
 
-    # Número de clases
     total_clases = Clases.objects.filter(fk_docente=docente).count()
 
-    # Número de estudiantes (sin duplicados)
-    total_estudiantes = Matriculas.objects.filter(fk_clase__fk_docente=docente).values('fk_estudiante').distinct().count()
-
-    # Estudiantes por módulo
-    estudiantes_por_modulo = Matriculas.objects.filter(
+    total_estudiantes = Matriculas.objects.filter(
         fk_clase__fk_docente=docente
-    ).values(
-        'fk_clase__fk_modulo__mod_nombre'
-    ).annotate(total=Count('fk_estudiante'))
+    ).values('fk_estudiante').distinct().count()
 
-    # Promedio general
+    modulos = Modulos.objects.all()
+
     promedio_estudiantes = Avance_Matriculados.objects.filter(
         fk_matricula__fk_clase__fk_docente=docente
     ).aggregate(promedio=Avg('avm_nota_final'))['promedio']
 
-    modulos = Modulos.objects.all()
-
-   
-    # Enviar datos al template
     context = {
         'total_clases': total_clases,
         'total_estudiantes': total_estudiantes,
-        'estudiantes_por_modulo': list(estudiantes_por_modulo),
         'promedio_estudiantes': float(promedio_estudiantes) if promedio_estudiantes else 0,
         'modulos': modulos
     }
-    return render(request, 'masterdocente/core/Index.html',context );  
-
-def core_docente(request):
-    return render(request, 'masterdocente/core/Index.html' );  
+    return render(request, 'masterdocente/core/Index.html', context)
