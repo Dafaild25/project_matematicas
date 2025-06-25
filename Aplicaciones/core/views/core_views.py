@@ -1,19 +1,50 @@
 from django.shortcuts import render
-from django.views.decorators.cache import never_cache # Importar decorador para evitar caché
-from django.contrib.auth.decorators import login_required
-from ..models import Estudiantes, Modulos, Clases
+from django.http import JsonResponse, HttpResponse
+from django.db.models import Avg
+from ..models import *
 
 # Create your views here.
-@never_cache
-@login_required(login_url="loguin_index")  # Requiere autenticación
-def core_admin(request):
-    total_estudiantes = Estudiantes.objects.count()
+def dashboard_admin(request):
+    # Totales
+    total_docentes = Docentes.objects.count()
     total_modulos = Modulos.objects.count()
-    total_clases = Clases.objects.count()
+    modulos = Modulos.objects.all()
 
     contexto = {
-        'total_estudiantes': total_estudiantes,
+        'total_docentes': total_docentes,
         'total_modulos': total_modulos,
-        'total_clases': total_clases,
+        'modulos': modulos
     }
     return render(request, 'core/index.html', contexto)
+
+def obtener_datos_admin(request):
+    modulo_id = request.GET.get('modulo_id')
+    if modulo_id:
+        clases = Clases.objects.filter(fk_modulo_id=modulo_id)
+    else:
+        clases = Clases.objects.all()
+
+    labels, docentes, values = [], [], []
+    total, count = 0, 0
+
+    for c in clases:
+        # Promedio de la clase
+        prom = Avance_Matriculados.objects.filter(
+            fk_matricula__fk_clase=c
+        ).aggregate(promedio=Avg('avm_nota_final'))['promedio']
+        if prom is not None:
+            labels.append(c.cla_nombre)
+            docentes.append(c.fk_docente.fk_id_persona.fk_id_usuario.get_full_name())
+            values.append(round(prom, 2))
+            total += prom
+            count += 1
+
+    promedio_general = round(total / count, 2) if count else 0
+
+    return JsonResponse({
+        'labels': labels,
+        'docentes': docentes,
+        'values': values,
+        'promedio_general': promedio_general
+    })
+

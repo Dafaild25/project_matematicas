@@ -26,7 +26,8 @@ from .views.master_estudiante import estudiante_modulo_views
 
 urlpatterns = [
     
-    path('', core_views.core_admin, name='core_admin'),
+    path('', core_views.dashboard_admin, name='core_admin'),
+    path('admin/dashboard/data/', core_views.obtener_datos_admin, name='obtener_datos_admin'),
     
     #######################################CRUD ADMINISTRADOR################################
     # Vista Inicial del Administrador
