@@ -9,7 +9,11 @@ class Personas(models.Model):
     fk_id_usuario = models.ForeignKey(User,verbose_name='Usuario',on_delete=models.CASCADE)
     per_segundo_nombre = models.CharField(max_length=50,default="Null",null=False,verbose_name="Segundo nombre:")
     per_segundo_apellido = models.CharField(max_length=50,default="Null",null=False,verbose_name="Segundo apellido:")
-    per_fecha_nacimiento = models.DateField(default="Null",verbose_name="Fecha de nacimiento:")
+    per_fecha_nacimiento = models.DateField(
+    null=True,          # permite guardar NULL en la base de datos
+    blank=True,         # permite dejarlo en blanco en formularios
+    verbose_name="Fecha de nacimiento:"
+)
     per_cedula = models.CharField(max_length=15,default="Null",null=False,verbose_name="Cédula:")
     per_telefono = models.CharField(max_length=15,default="Null",null=True,verbose_name="Teléfono:")
     per_fecha_actualizacion = models.DateTimeField(auto_now=True,verbose_name='Actualizado el:')
@@ -74,7 +78,12 @@ class Modulos(models.Model):
 
 class Niveles(models.Model):
     niv_id = models.AutoField(primary_key=True)
-    fk_modulo = models.ForeignKey(Modulos,verbose_name='Modulo',on_delete=models.CASCADE)
+    fk_modulo = models.ForeignKey(
+        Modulos,
+        verbose_name='Modulo',
+        on_delete=models.CASCADE,
+        related_name='niveles'  
+    )
     niv_nombre = models.CharField(max_length=50, null=False, verbose_name="Nombre del nivel:")
     niv_descripcion = models.CharField(max_length=100,null=False,verbose_name="Descripción del nivel:")
     orden = models.IntegerField()

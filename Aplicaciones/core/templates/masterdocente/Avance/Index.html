@@ -1,55 +1,60 @@
-{% extends "plantillas/MasterAdmin.html" %}
+{% extends 'plantillas/MasterDocente.html' %}
 {% load static %}
-{% block title %}Avances{% endblock %}
+{% block title %}
+Avance Estudiantes
+{% endblock %}
+
 {% block css %}
+<link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
 
 {% endblock %}
+
 {% block content %}
+
 <div class="container-fluid ">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Matriculas</h1>
-
+        <h1 class="h3 mb-0 text-gray-800">Clases</h1>
 
     </div>
 
     <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item"><a href="{% url 'core_admin' %}">Inicio</a></li>
-        <li class="breadcrumb-item active"><a href="{% url 'matricula_index' %}">Matriculas</a></li>
-        <li class="breadcrumb-item active">Avances de los estudiantes</li>
-
+        <li class="breadcrumb-item"><a href="{% url 'core_docente' %}">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'clase_asignada'%}">Clases Asignadas</a></li>
+        <li class="breadcrumb-item active">Avance </li>
     </ol>
 
     <div class="card mb-4">
         <div class="card-header">
             <i class="fas fa-table me-1"></i>
-            Tabla Avances de los estudiantes del <strong>{{ clase.fk_modulo.mod_nombre }}</strong>
+            Calificaciones
         </div>
         <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-striped" id="tbl-matriculados-admin" width="100%" cellspacing="0">
-                <thead>
-                    <tr>
-                        <th style="width: 1%;">#</th>
-                        <th>Estudiante</th>
-                        {% for nivel in niveles %}
-                        <th  class="text-center align-items-center justify-content-center ">{{ nivel.niv_nombre }}</th>
-                        {% endfor %}
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for fila in avance_data %}
-                    <tr>
-                        <td>{{ forloop.counter }}</td>
-                        <td>
-                            
-                            {{ fila.estudiante.fk_id_persona.fk_id_usuario.first_name }}
-                            {{ fila.estudiante.fk_id_persona.per_segundo_nombre }}
-                            {{ fila.estudiante.fk_id_persona.fk_id_usuario.last_name }}
-                            {{ fila.estudiante.fk_id_persona.per_segundo_apellido }}
-                        </td>
-                        {% for nivel in fila.niveles %}
-                        <td class="text-center align-items-center justify-content-center">
-                            <div class="d-flex align-items-center justify-content-center gap-2">
+
+
+                <table class="table table-striped" id="tbl-matriculados-docente" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th style="width: 1%;">#</th>
+                            <th style="width: 25%;" >Estudiante</th>
+
+                            {% for nivel in niveles %}
+                            <th class="text-center align-items-center justify-content-center ">{{ nivel.niv_nombre }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for fila in avance_data %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td >
+                                {{ fila.estudiante.fk_id_persona.fk_id_usuario.first_name }}
+                                {{ fila.estudiante.fk_id_persona.per_segundo_nombre }}
+                                {{ fila.estudiante.fk_id_persona.fk_id_usuario.last_name }}
+                                {{ fila.estudiante.fk_id_persona.per_segundo_apellido }}
+                            </td>
+                            {% for nivel in fila.niveles %}
+                           <td class="text-center align-items-center justify-content-center">
+                                <div class="d-flex align-items-center justify-content-center gap-2">
                                     <span class="fw-bold">{{ nivel.nota }}</span>
 
                                     <div class="btn-group">
@@ -68,18 +73,16 @@
                                         </ul>
                                     </div>
                                 </div>
-                            
-                        </td>
+                            </td>
+                            {% endfor %}
+                        </tr>
                         {% endfor %}
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            </div>
-
+                    </tbody>
+                </table>
 
         </div>
     </div>
+
 </div>
 
 <!-- modal de intentos -->
@@ -142,6 +145,7 @@
   </div>
 </div>
 
+
 {%block js%}
 <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -149,7 +153,7 @@
         recargarTablaMatriculados();
     });
     function recargarTablaMatriculados(){
-        $('#tbl-matriculados-admin').DataTable({
+        $('#tbl-matriculados-docente').DataTable({
             "language": {
                 "lengthMenu": "Mostrar _MENU_ registros por página",
                 "zeroRecords": "No se encontraron resultados",
@@ -235,4 +239,7 @@
 </script>
 
 {% endblock %}
+
+
+
 {% endblock %}
