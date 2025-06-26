@@ -1,0 +1,2162 @@
+{% extends 'plantillas/MasterEstudiante.html' %}
+{% load static %}
+{% block title %}
+  Estudiantes_Modulos
+{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{% static 'css/Modulo-1/primer-nivel.css' %}" />
+  <style>
+    body {
+      background: linear-gradient(-45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ffa726, #ef5350);
+      background-size: 400% 400%;
+      animation: rainbowShift 8s ease infinite;
+      min-height: 100vh;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      overflow-x: hidden;
+    }
+    
+    @keyframes rainbowShift {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+    
+    .main-container {
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .card-header {
+      background: linear-gradient(45deg, #ff6b6b, #feca57);
+      color: white;
+      padding: 25px;
+      text-align: center;
+    }
+    
+    .card-header h2 {
+      font-size: 2.5rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      margin: 0;
+    }
+    
+    .header-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 30px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      animation: bounceIn 1s ease-out;
+      border: 5px solid #ff6b6b;
+    }
+    
+    @keyframes bounceIn {
+      0% {
+        transform: scale(0.3);
+        opacity: 0;
+      }
+      50% {
+        transform: scale(1.05);
+      }
+      70% {
+        transform: scale(0.9);
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+    
+    .header-card h1 {
+      color: #ff6b6b;
+      font-size: 3rem;
+      font-weight: 900;
+      margin-bottom: 15px;
+      text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+      animation: wiggle 2s ease-in-out infinite;
+    }
+    
+    @keyframes wiggle {
+      0%,
+      100% {
+        transform: rotate(0deg);
+      }
+      25% {
+        transform: rotate(1deg);
+      }
+      75% {
+        transform: rotate(-1deg);
+      }
+    }
+    
+    .header-card p {
+      color: #333;
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 0;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%,
+      100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+    }
+    
+    .game-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 30px;
+      padding: 30px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      border: 5px solid #4ecdc4;
+      animation: slideInUp 1s ease-out;
+    }
+    
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(100px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .instruction-card {
+      background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
+      color: white;
+      padding: 25px;
+      border-radius: 25px;
+      margin-bottom: 30px;
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: 800;
+      box-shadow: 0 15px 30px rgba(255, 107, 107, 0.4);
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+    
+    @keyframes glow {
+      from {
+        box-shadow: 0 15px 30px rgba(255, 107, 107, 0.4);
+      }
+      to {
+        box-shadow: 0 15px 30px rgba(255, 107, 107, 0.8);
+      }
+    }
+
+    /* PREGUNTA 1: Contar objetos */
+    .contar-container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      display: grid;
+    }
+
+    .contar-exercise {
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 20px;
+      text-align: center;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .objetos-group {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin: 20px 0;
+      min-height: 120px;
+    }
+
+    .objeto {
+      font-size: 3rem;
+      animation: bounce 2s infinite;
+      animation-delay: calc(var(--i) * 0.2s);
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* PREGUNTA 2: Comparar cantidades */
+    .comparar-container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      display: none;
+    }
+
+    .comparar-exercise {
+      background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 20px;
+      text-align: center;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .grupos-comparacion {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+
+    .grupo-objetos {
+      background: white;
+      border-radius: 15px;
+      padding: 20px;
+      border: 3px solid #4ecdc4;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      min-width: 200px;
+    }
+
+    .grupo-objetos:hover {
+      transform: scale(1.05);
+      border-color: #ff6b6b;
+    }
+
+    .grupo-objetos.selected {
+      border-color: #ffa726;
+      background: #fff3e0;
+      transform: scale(1.1);
+    }
+
+    .grupo-label {
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .objetos-en-grupo {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    /* PREGUNTA 3: Formas geométricas */
+    .formas-container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      display: none;
+    }
+
+    .formas-exercise {
+      background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 20px;
+      text-align: center;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .forma-objetivo {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+    }
+
+    .forma {
+      width: 80px;
+      height: 80px;
+      margin: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 3px solid transparent;
+    }
+
+    .forma:hover {
+      transform: scale(1.1);
+    }
+
+    .forma.selected {
+      border-color: #ffa726;
+      transform: scale(1.2);
+    }
+
+    .circulo {
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff6b6b, #ff4757);
+    }
+
+    .cuadrado {
+      background: linear-gradient(135deg, #4ecdc4, #45b7d1);
+    }
+
+    .triangulo {
+      width: 0;
+      height: 0;
+      border-left: 40px solid transparent;
+      border-right: 40px solid transparent;
+      border-bottom: 70px solid #ffa726;
+      background: none !important;
+    }
+
+    .rectangulo {
+      width: 100px;
+      height: 60px;
+      background: linear-gradient(135deg, #96ceb4, #2ed573);
+    }
+
+    .formas-opciones {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    /* PREGUNTA 4: Patrones de colores */
+    .patrones-container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      display: none;
+    }
+
+    .patron-exercise {
+      background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 20px;
+      text-align: center;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .secuencia-patron {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+
+    .elemento-patron {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: bold;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .patron-rojo { background: linear-gradient(135deg, #ff6b6b, #ff4757); color: white; }
+    .patron-azul { background: linear-gradient(135deg, #4ecdc4, #45b7d1); color: white; }
+    .patron-verde { background: linear-gradient(135deg, #2ed573, #1e824c); color: white; }
+    .patron-amarillo { background: linear-gradient(135deg, #ffa726, #ff8f00); color: white; }
+
+    .patron-missing {
+      background: #ffe082;
+      border: 3px dashed #ff9800;
+      color: #ff9800;
+      font-size: 2.5rem;
+      animation: pulse 2s infinite;
+    }
+
+    .patron-opciones {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .patron-opcion {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 3px solid transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: bold;
+    }
+
+    .patron-opcion:hover {
+      transform: scale(1.1);
+      border-color: #fff;
+    }
+
+    .patron-opcion.selected {
+      border-color: #ffa726;
+      transform: scale(1.2);
+      box-shadow: 0 0 20px rgba(255, 167, 38, 0.5);
+    }
+
+    .number-options {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .number-option {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      border-radius: 15px;
+      padding: 15px 25px;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .number-option:hover {
+      transform: scale(1.1) translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .number-option.selected {
+      background: linear-gradient(135deg, #ffa726 0%, #ff9800 100%);
+      border: 3px solid #fff;
+      transform: scale(1.1);
+    }
+
+    .answer-btn {
+      background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
+      color: white;
+      border: none;
+      padding: 20px 50px;
+      border-radius: 50px;
+      font-size: 1.8rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 15px 30px rgba(255, 107, 107, 0.4);
+      display: block;
+      margin: 0 auto;
+      animation: rainbow 3s ease-in-out infinite;
+    }
+    
+    @keyframes rainbow {
+      0% {
+        filter: hue-rotate(0deg);
+      }
+      100% {
+        filter: hue-rotate(360deg);
+      }
+    }
+    
+    .answer-btn:hover {
+      transform: scale(1.1) translateY(-5px);
+      box-shadow: 0 20px 40px rgba(255, 107, 107, 0.6);
+    }
+    
+    .answer-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      animation: none;
+    }
+    
+    .floating-elements {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    .floating-element {
+      position: absolute;
+      font-size: 2rem;
+      animation: floatAround 8s infinite ease-in-out;
+      opacity: 0.7;
+    }
+    
+    @keyframes floatAround {
+      0%,
+      100% {
+        transform: translateY(0px) rotate(0deg);
+        opacity: 0.7;
+      }
+      25% {
+        transform: translateY(-30px) rotate(90deg);
+        opacity: 1;
+      }
+      50% {
+        transform: translateY(-20px) rotate(180deg);
+        opacity: 0.8;
+      }
+      75% {
+        transform: translateY(-40px) rotate(270deg);
+        opacity: 1;
+      }
+    }
+    
+    .confetti {
+      position: fixed;
+      top: -10px;
+      background-color: #f0f0f0;
+      width: 10px;
+      height: 10px;
+      animation: confetti 3s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 1000;
+    }
+    
+    @keyframes confetti {
+      0% {
+        transform: translateY(-100vh) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+    
+    .question-counter {
+      background: linear-gradient(135deg, #45b7d1 0%, #96ceb4 100%);
+      color: white;
+      padding: 15px 30px;
+      border-radius: 20px;
+      text-align: center;
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 20px rgba(69, 183, 209, 0.3);
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .header-card h1 {
+        font-size: 2.5rem;
+      }
+      .header-card p {
+        font-size: 1.5rem;
+      }
+      .number-option {
+        font-size: 1.5rem;
+        padding: 12px 20px;
+      }
+      .main-container {
+        padding: 15px;
+      }
+      .grupos-comparacion {
+        flex-direction: column;
+        gap: 20px;
+      }
+      .objeto {
+        font-size: 2.5rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .header-card h1 {
+        font-size: 2rem;
+      }
+      .header-card p {
+        font-size: 1.3rem;
+      }
+      .number-option {
+        font-size: 1.3rem;
+        padding: 10px 15px;
+      }
+      .instruction-card {
+        font-size: 1.5rem;
+      }
+      .objeto {
+        font-size: 2rem;
+      }
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="container-fluid">
+    <nav class="breadcrumb">
+      <a style="color: #000;" href="{% url 'core_estudiante' %}">🏠 Inicio</a> &nbsp;/&nbsp;
+      <a style="color: #000;" href="{% url 'estudiante_modulo' %}">📚 Módulos</a> &nbsp;/&nbsp;
+      <a style="color: #000;" href="{% url 'ver_niveles_modulo' modulo.mod_id %}">🎯 Niveles</a> &nbsp;/&nbsp;
+      <span style="color: #2632df;">🎮 Juego</span>
+    </nav>
+
+    <div class="card loading">
+      <div class="card-header">
+        <h2>🌟 {{ nivel.niv_nombre }} - {{ nivel.niv_descripcion }}</h2>
+      </div>
+      <div class="card-body">
+        <div class="main-container">
+          <div class="floating-elements" id="floating-elements"></div>
+
+          <!-- Header Card -->
+          <div class="header-card">
+            <h1>🎨 ¡Matemáticas Divertidas! 🎨</h1>
+            <p id="main-instruction">🚀 ¡Vamos a aprender matemáticas! 🚀</p>
+          </div>
+
+          <!-- Game Card -->
+          <div class="game-card">
+            <!-- Question Counter -->
+            <div class="question-counter" id="question-counter">
+              <i class="fas fa-star mr-2"></i>
+              Pregunta 1 de 4
+              <i class="fas fa-star ml-2"></i>
+            </div>
+
+            <!-- PREGUNTA 1: Contar objetos - 4 ejercicios -->
+            <div class="instruction-card" id="instruction-card">
+              🍎 ¡Cuenta los objetos y elige el número correcto!
+            </div>
+
+            <div class="contar-container" id="contar-container">
+              <!-- Ejercicio 1: 5 manzanas -->
+              <div class="contar-exercise" data-correct="5">
+                <h4 style="color: #ff6b6b; margin-bottom: 15px;">¿Cuántas manzanas hay?</h4>
+                <div class="objetos-group">
+                  <div class="objeto" style="--i: 1">🍎</div>
+                  <div class="objeto" style="--i: 2">🍎</div>
+                  <div class="objeto" style="--i: 3">🍎</div>
+                  <div class="objeto" style="--i: 4">🍎</div>
+                  <div class="objeto" style="--i: 5">🍎</div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="4">4</button>
+                  <button class="number-option" data-value="5">5</button>
+                  <button class="number-option" data-value="6">6</button>
+                </div>
+              </div>
+
+              <!-- Ejercicio 2: 7 estrellas -->
+              <div class="contar-exercise" data-correct="7">
+                <h4 style="color: #4ecdc4; margin-bottom: 15px;">¿Cuántas estrellas hay?</h4>
+                <div class="objetos-group">
+                  <div class="objeto" style="--i: 1">⭐</div>
+                  <div class="objeto" style="--i: 2">⭐</div>
+                  <div class="objeto" style="--i: 3">⭐</div>
+                  <div class="objeto" style="--i: 4">⭐</div>
+                  <div class="objeto" style="--i: 5">⭐</div>
+                  <div class="objeto" style="--i: 6">⭐</div>
+                  <div class="objeto" style="--i: 7">⭐</div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="6">6</button>
+                  <button class="number-option" data-value="7">7</button>
+                  <button class="number-option" data-value="8">8</button>
+                </div>
+              </div>
+
+              <!-- Ejercicio 3: 3 pelotas -->
+              <div class="contar-exercise" data-correct="3">
+                <h4 style="color: #45b7d1; margin-bottom: 15px;">¿Cuántas pelotas hay?</h4>
+                <div class="objetos-group">
+                  <div class="objeto" style="--i: 1">⚽</div>
+                  <div class="objeto" style="--i: 2">⚽</div>
+                  <div class="objeto" style="--i: 3">⚽</div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="2">2</button>
+                  <button class="number-option" data-value="3">3</button>
+                  <button class="number-option" data-value="4">4</button>
+                </div>
+              </div>
+
+              <!-- Ejercicio 4: 8 flores -->
+              <div class="contar-exercise" data-correct="8">
+                <h4 style="color: #96ceb4; margin-bottom: 15px;">¿Cuántas flores hay?</h4>
+                <div class="objetos-group">
+                  <div class="objeto" style="--i: 1">🌸</div>
+                  <div class="objeto" style="--i: 2">🌸</div>
+                  <div class="objeto" style="--i: 3">🌸</div>
+                  <div class="objeto" style="--i: 4">🌸</div>
+                  <div class="objeto" style="--i: 5">🌸</div>
+                  <div class="objeto" style="--i: 6">🌸</div>
+                  <div class="objeto" style="--i: 7">🌸</div>
+                  <div class="objeto" style="--i: 8">🌸</div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="7">7</button>
+                  <button class="number-option" data-value="8">8</button>
+                  <button class="number-option" data-value="9">9</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- PREGUNTA 2: Comparar cantidades - 4 ejercicios -->
+            <div class="comparar-container" id="comparar-container">
+              <h3 style="color: #667eea; text-align: center; font-size: 2.2rem; margin-bottom: 20px; font-weight: 800;">
+                ⚖️ ¡¿Dónde hay más?!
+              </h3>
+              
+              <!-- Comparación 1: 4 vs 6 globos -->
+              <div class="comparar-exercise" data-correct="grupo-b">
+                <div style="font-size: 1.3rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  ¿En qué grupo hay MÁS globos?
+                </div>
+                <div class="grupos-comparacion">
+                  <div class="grupo-objetos" data-grupo="grupo-a">
+                    <div class="grupo-label">Grupo A</div>
+                    <div class="objetos-en-grupo">
+                      <span style="font-size: 2rem;">🎈</span>
+                      <span style="font-size: 2rem;">🎈</span>
+                      <span style="font-size: 2rem;">🎈</span>
+                      <span style="font-size: 2rem;">🎈</span>
+                    </div>
+                  </div>
+                  <div class="grupo-objetos" data-grupo="grupo-b">
+                    <div class="grupo-label">Grupo B</div>
+                    <div class="objetos-en-grupo">
+                      <span style="font-size: 2rem;">🎈</span>
+                      <span style="font-size: 2rem;">🎈</span>
+                      <span style="font-size: 2rem;">🎈</span>
+                      <span style="font-size: 2rem;">🎈</span>
+                      <span style="font-size: 2rem;">🎈</span>
+                      <span style="font-size: 2rem;">🎈</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Comparación 2: 5 vs 3 corazones -->
+              <div class="comparar-exercise" data-correct="grupo-a">
+                <div style="font-size: 1.3rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  ¿En qué grupo hay MÁS corazones?
+                </div>
+                <div class="grupos-comparacion">
+                  <div class="grupo-objetos" data-grupo="grupo-a">
+                    <div class="grupo-label">Grupo A</div>
+                    <div class="objetos-en-grupo">
+                      <span style="font-size: 2rem;">❤️</span>
+                      <span style="font-size: 2rem;">❤️</span>
+                      <span style="font-size: 2rem;">❤️</span>
+                      <span style="font-size: 2rem;">❤️</span>
+                      <span style="font-size: 2rem;">❤️</span>
+                    </div>
+                  </div>
+                  <div class="grupo-objetos" data-grupo="grupo-b">
+                    <div class="grupo-label">Grupo B</div>
+                    <div class="objetos-en-grupo">
+                      <span style="font-size: 2rem;">❤️</span>
+                      <span style="font-size: 2rem;">❤️</span>
+                      <span style="font-size: 2rem;">❤️</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Comparación 3: 2 vs 7 caritas -->
+              <div class="comparar-exercise" data-correct="grupo-b">
+                <div style="font-size: 1.3rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  ¿En qué grupo hay MÁS caritas?
+                </div>
+                <div class="grupos-comparacion">
+                  <div class="grupo-objetos" data-grupo="grupo-a">
+                    <div class="grupo-label">Grupo A</div>
+                    <div class="objetos-en-grupo">
+                      <span style="font-size: 2rem;">😊</span>
+                      <span style="font-size: 2rem;">😊</span>
+                    </div>
+                  </div>
+                  <div class="grupo-objetos" data-grupo="grupo-b">
+                    <div class="grupo-label">Grupo B</div>
+                    <div class="objetos-en-grupo">
+                      <span style="font-size: 2rem;">😊</span>
+                      <span style="font-size: 2rem;">😊</span>
+                      <span style="font-size: 2rem;">😊</span>
+                      <span style="font-size: 2rem;">😊</span>
+                      <span style="font-size: 2rem;">😊</span>
+                      <span style="font-size: 2rem;">😊</span>
+                      <span style="font-size: 2rem;">😊</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Comparación 4: 6 vs 4 dulces -->
+              <div class="comparar-exercise" data-correct="grupo-a">
+                <div style="font-size: 1.3rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  ¿En qué grupo hay MÁS dulces?
+                </div>
+                <div class="grupos-comparacion">
+                  <div class="grupo-objetos" data-grupo="grupo-a">
+                    <div class="grupo-label">Grupo A</div>
+                    <div class="objetos-en-grupo">
+                      <span style="font-size: 2rem;">🍭</span>
+                      <span style="font-size: 2rem;">🍭</span>
+                      <span style="font-size: 2rem;">🍭</span>
+                      <span style="font-size: 2rem;">🍭</span>
+                      <span style="font-size: 2rem;">🍭</span>
+                      <span style="font-size: 2rem;">🍭</span>
+                    </div>
+                  </div>
+                  <div class="grupo-objetos" data-grupo="grupo-b">
+                    <div class="grupo-label">Grupo B</div>
+                    <div class="objetos-en-grupo">
+                      <span style="font-size: 2rem;">🍭</span>
+                      <span style="font-size: 2rem;">🍭</span>
+                      <span style="font-size: 2rem;">🍭</span>
+                      <span style="font-size: 2rem;">🍭</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- PREGUNTA 3: Formas geométricas - 4 ejercicios -->
+            <div class="formas-container" id="formas-container">
+              <h3 style="color: #ff6b6b; text-align: center; font-size: 2.2rem; margin-bottom: 25px; font-weight: 800;">
+                🔷 ¡Encuentra la forma igual!
+              </h3>
+              
+              <!-- Forma 1: Círculo -->
+              <div class="formas-exercise" data-correct="circulo">
+                <div style="font-size: 1.3rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  Encuentra la forma que es igual a esta:
+                </div>
+                <div class="forma-objetivo">
+                  <div class="forma circulo"></div>
+                </div>
+                <div class="formas-opciones">
+                  <div class="forma cuadrado" data-forma="cuadrado"></div>
+                  <div class="forma circulo" data-forma="circulo"></div>
+                  <div class="forma triangulo" data-forma="triangulo"></div>
+                </div>
+              </div>
+
+              <!-- Forma 2: Cuadrado -->
+              <div class="formas-exercise" data-correct="cuadrado">
+                <div style="font-size: 1.3rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  Encuentra la forma que es igual a esta:
+                </div>
+                <div class="forma-objetivo">
+                  <div class="forma cuadrado"></div>
+                </div>
+                <div class="formas-opciones">
+                  <div class="forma rectangulo" data-forma="rectangulo"></div>
+                  <div class="forma triangulo" data-forma="triangulo"></div>
+                  <div class="forma cuadrado" data-forma="cuadrado"></div>
+                </div>
+              </div>
+
+              <!-- Forma 3: Triángulo -->
+              <div class="formas-exercise" data-correct="triangulo">
+                <div style="font-size: 1.3rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  Encuentra la forma que es igual a esta:
+                </div>
+                <div class="forma-objetivo">
+                  <div class="forma triangulo"></div>
+                </div>
+                <div class="formas-opciones">
+                  <div class="forma circulo" data-forma="circulo"></div>
+                  <div class="forma cuadrado" data-forma="cuadrado"></div>
+                  <div class="forma triangulo" data-forma="triangulo"></div>
+                </div>
+              </div>
+
+              <!-- Forma 4: Rectángulo -->
+              <div class="formas-exercise" data-correct="rectangulo">
+                <div style="font-size: 1.3rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  Encuentra la forma que es igual a esta:
+                </div>
+                <div class="forma-objetivo">
+                  <div class="forma rectangulo"></div>
+                </div>
+                <div class="formas-opciones">
+                  <div class="forma triangulo" data-forma="triangulo"></div>
+                  <div class="forma rectangulo" data-forma="rectangulo"></div>
+                  <div class="forma circulo" data-forma="circulo"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- PREGUNTA 4: Patrones de colores - 4 ejercicios -->
+            <div class="patrones-container" id="patrones-container">
+              <h3 style="color: #667eea; text-align: center; font-size: 2.2rem; margin-bottom: 25px; font-weight: 800;">
+                🌈 ¡Completa el patrón de colores!
+              </h3>
+              
+              <!-- Patrón 1: Rojo-Azul-Rojo-? -->
+              <div class="patron-exercise" data-correct="azul">
+                <div style="font-size: 1.3rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  ¿Qué color sigue en el patrón?
+                </div>
+                <div class="secuencia-patron">
+                  <div class="elemento-patron patron-rojo">1</div>
+                  <div class="elemento-patron patron-azul">2</div>
+                  <div class="elemento-patron patron-rojo">3</div>
+                  <div class="elemento-patron patron-missing">?</div>
+                </div>
+                <div class="patron-opciones">
+                  <div class="patron-opcion patron-rojo" data-color="rojo"></div>
+                  <div class="patron-opcion patron-azul" data-color="azul"></div>
+                  <div class="patron-opcion patron-verde" data-color="verde"></div>
+                </div>
+              </div>
+
+              <!-- Patrón 2: Verde-Amarillo-Verde-Amarillo-? -->
+              <div class="patron-exercise" data-correct="verde">
+                <div style="font-size: 1.3rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  ¿Qué color sigue en el patrón?
+                </div>
+                <div class="secuencia-patron">
+                  <div class="elemento-patron patron-verde">1</div>
+                  <div class="elemento-patron patron-amarillo">2</div>
+                  <div class="elemento-patron patron-verde">3</div>
+                  <div class="elemento-patron patron-amarillo">4</div>
+                  <div class="elemento-patron patron-missing">?</div>
+                </div>
+                <div class="patron-opciones">
+                  <div class="patron-opcion patron-verde" data-color="verde"></div>
+                  <div class="patron-opcion patron-amarillo" data-color="amarillo"></div>
+                  <div class="patron-opcion patron-azul" data-color="azul"></div>
+                </div>
+              </div>
+
+              <!-- Patrón 3: Azul-Azul-Rojo-Azul-Azul-? -->
+              <div class="patron-exercise" data-correct="rojo">
+                <div style="font-size: 1.3rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  ¿Qué color sigue en el patrón?
+                </div>
+                <div class="secuencia-patron">
+                  <div class="elemento-patron patron-azul">1</div>
+                  <div class="elemento-patron patron-azul">2</div>
+                  <div class="elemento-patron patron-rojo">3</div>
+                  <div class="elemento-patron patron-azul">4</div>
+                  <div class="elemento-patron patron-azul">5</div>
+                  <div class="elemento-patron patron-missing">?</div>
+                </div>
+                <div class="patron-opciones">
+                  <div class="patron-opcion patron-rojo" data-color="rojo"></div>
+                  <div class="patron-opcion patron-azul" data-color="azul"></div>
+                  <div class="patron-opcion patron-verde" data-color="verde"></div>
+                </div>
+              </div>
+
+              <!-- Patrón 4: Amarillo-Verde-Azul-Amarillo-Verde-? -->
+              <div class="patron-exercise" data-correct="azul">
+                <div style="font-size: 1.3rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  ¿Qué color sigue en el patrón?
+                </div>
+                <div class="secuencia-patron">
+                  <div class="elemento-patron patron-amarillo">1</div>
+                  <div class="elemento-patron patron-verde">2</div>
+                  <div class="elemento-patron patron-azul">3</div>
+                  <div class="elemento-patron patron-amarillo">4</div>
+                  <div class="elemento-patron patron-verde">5</div>
+                  <div class="elemento-patron patron-missing">?</div>
+                </div>
+                <div class="patron-opciones">
+                  <div class="patron-opcion patron-azul" data-color="azul"></div>
+                  <div class="patron-opcion patron-amarillo" data-color="amarillo"></div>
+                  <div class="patron-opcion patron-verde" data-color="verde"></div>
+                </div>
+              </div>
+            </div>
+
+            <br />
+
+            <!-- Answer Button -->
+            <button class="answer-btn" id="answer-btn" onclick="checkAnswer()" disabled>
+              <i class="fas fa-check mr-2"></i>
+              ¡RESPONDER!
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block js %}
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+   
+    // Variables globales para el juego
+    window.studentId = {{ matricula_id}};
+    window.levelId   = {{ level_id }};
+    const moduloId = {{ modulo_id }};
+    
+</script>
+
+<script>
+    let selectedNumbers = [];
+    let currentNumbers = [];
+    let currentQuestion = 1;
+    let totalQuestions = 4;
+    let usedQuestions = new Set();
+    let gameFinished = false;
+    
+    // NUEVAS VARIABLES PARA EL SISTEMA DE CALIFICACIONES
+    let questionScores = [];
+    let currentScore = 0;
+    let maxScorePerQuestion = 10/4;
+    let totalPossibleScore = 10;
+    
+    // VARIABLES PARA EL SISTEMA DE VIDAS
+    let studentId = null;
+    let levelId = null;
+    let vidasRestantes = 0;
+    let vidasTotales = 0;
+    let vidasOriginalesNivel = 0;
+    let puedeIntentar = false;
+
+    // Variables para controlar recargas
+    let gameSessionId = null;
+    let hasGameStarted = false;
+    let pageLoadTime = Date.now();
+
+    // Variables para preguntas específicas
+    let contarSelections = {}; // Para pregunta 1
+    let compararSelections = {}; // Para pregunta 2
+    let formasSelections = {}; // Para pregunta 3
+    let patronesSelections = {}; // Para pregunta 4
+
+    // Generar ID único de sesión
+    function generateSessionId() {
+        return 'game_' + studentId + '_' + levelId + '_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    }
+
+    // Verificar si es una recarga no autorizada
+    function isUnauthorizedReload() {
+        const sessionKey = `game_session_${studentId}_${levelId}`;
+        const storedSession = sessionStorage.getItem(sessionKey);
+        
+        if (storedSession) {
+            const sessionData = JSON.parse(storedSession);
+            const timeDiff = Date.now() - sessionData.timestamp;
+            
+            if (timeDiff < 30000) {
+                console.log('Recarga detectada dentro de', timeDiff, 'ms');
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
+    // Registrar sesión actual
+    function registerGameSession() {
+        const sessionKey = `game_session_${studentId}_${levelId}`;
+        gameSessionId = generateSessionId();
+        
+        const sessionData = {
+            sessionId: gameSessionId,
+            timestamp: Date.now(),
+            questionNumber: currentQuestion,
+            hasStarted: hasGameStarted
+        };
+        
+        sessionStorage.setItem(sessionKey, JSON.stringify(sessionData));
+        console.log('Sesión registrada:', sessionData);
+    }
+
+    // Limpiar sesión al salir
+    function clearGameSession() {
+        const sessionKey = `game_session_${studentId}_${levelId}`;
+        sessionStorage.removeItem(sessionKey);
+        console.log('Sesión limpiada');
+    }
+
+    async function initializeGameData() {
+        studentId = window.studentId || 1;
+        levelId = window.levelId || 1;
+        
+        console.log('Student ID:', studentId, 'Level ID:', levelId);
+        
+        const isReload = isUnauthorizedReload();
+        
+        if (isReload) {
+            console.log('⚠️ RECARGA DETECTADA - Penalizando con una vida');
+            
+            Swal.fire({
+                icon: 'warning',
+                title: '⚠️ Recarga Detectada',
+                html: `
+                    <div>
+                        <p><strong>Se ha detectado una recarga de página.</strong></p>
+                        <p>Como penalización, se restará <span style="color: #f44336; font-weight: bold;">1 vida</span>.</p>
+                        <br>
+                        <p style="color: #666; font-size: 0.9em;">
+                            💡 <strong>Consejo:</strong> Evita recargar la página durante el juego.
+                        </p>
+                    </div>
+                `,
+                confirmButtonText: 'Continuar',
+                allowOutsideClick: false,
+                timer: 4000,
+                timerProgressBar: true
+            });
+            
+            const penaltyResult = await penalizeReload();
+            if (!penaltyResult.success) {
+                console.error('Error al penalizar recarga:', penaltyResult.error);
+            }
+        }
+        
+        registerGameSession();
+        
+        const gameInfo = await getGameInfo();
+        return gameInfo;
+    }
+
+    async function getGameInfo() {
+        try {
+            const response = await fetch('/get_game_info/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    estudiante_id: studentId,
+                    nivel_id: levelId
+                })
+            });
+            
+            const data = await response.json();
+            if (data.success) {
+                vidasRestantes = data.vidas_restantes;
+                vidasTotales = data.vidas_originales_nivel;
+                puedeIntentar = data.puede_intentar;
+                
+                console.log(`Vidas: ${vidasRestantes}/${vidasTotales}, Puede intentar: ${puedeIntentar}`);
+                
+                updateLivesDisplay();
+                
+                if (!puedeIntentar) {
+                    showNoLivesMessage();
+                    return false;
+                }
+                
+                if (data.vidas_restauradas > 0) {
+                    Swal.fire({
+                        icon: 'info',
+                        title: '¡Vidas restauradas!',
+                        text: `Se han agregado ${data.vidas_restauradas} vidas adicionales a este nivel.`,
+                        confirmButtonText: '¡Genial!'
+                    });
+                }
+                
+                return true;
+            } else {
+                console.error('Error al obtener info del juego:', data.error);
+                return false;
+            }
+        } catch (error) {
+            console.error('Error de red al obtener info del juego:', error);
+            return false;
+        }
+    }
+
+    // FUNCIÓN MODIFICADA: Actualizar display de vidas con indicador de estado
+    function updateLivesDisplay() {
+        let livesIndicator = document.getElementById('lives-indicator');
+        if (!livesIndicator) {
+            livesIndicator = document.createElement('div');
+            livesIndicator.id = 'lives-indicator';
+            livesIndicator.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
+                color: white;
+                padding: 15px 20px;
+                border-radius: 25px;
+                font-weight: bold;
+                font-size: 1.1em;
+                box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+                z-index: 1000;
+                font-family: 'Comic Sans MS', cursive, sans-serif;
+                transition: all 0.3s ease;
+            `;
+            document.body.appendChild(livesIndicator);
+        }
+        
+        // Crear corazones para representar vidas
+        let heartsHTML = '';
+        for (let i = 0; i < vidasTotales; i++) {
+            if (i < vidasRestantes) {
+                heartsHTML += '❤️'; // Vida disponible
+            } else {
+                heartsHTML += '🖤'; // Vida usada
+            }
+        }
+        
+        // Cambiar color según vidas restantes
+        let bgColor = 'linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%)';
+        if (vidasRestantes <= 1) {
+            bgColor = 'linear-gradient(135deg, #f44336 0%, #ff9800 100%)';
+            livesIndicator.style.animation = 'pulse 1s infinite';
+        } else if (vidasRestantes <= 2) {
+            bgColor = 'linear-gradient(135deg, #ff9800 0%, #ffc107 100%)';
+        }
+        
+        livesIndicator.style.background = bgColor;
+        
+        livesIndicator.innerHTML = `
+            <div style="text-align: center;">
+                <div style="font-size: 1.2em; margin-bottom: 5px;">${heartsHTML}</div>
+                <div>Vidas: ${vidasRestantes}/${vidasTotales}</div>
+                ${vidasRestantes <= 1 ? '<div style="font-size: 0.8em; color: #ffeb3b;">¡Cuidado!</div>' : ''}
+            </div>
+        `;
+    }
+
+    // NUEVA FUNCIÓN: Mostrar mensaje sin vidas
+    function showNoLivesMessage() {
+        Swal.fire({
+            icon: 'warning',
+            title: '¡Sin vidas restantes! 💔',
+            html: `
+                <div>
+                    <p>Has agotado todas las vidas para este nivel.</p>
+                    <p><strong>Vidas utilizadas: ${vidasTotales}</strong></p>
+                    <br>
+                    <p style="color: #666;">Contacta a tu profesor para obtener más intentos.</p>
+                </div>
+            `,
+            confirmButtonText: 'Volver al menú',
+            allowOutsideClick: false,
+            customClass: {
+                popup: 'animated shake'
+            }
+        }).then(() => {
+            window.location.href = `/modulo/${moduloId}/niveles/`;
+        });
+    }
+
+    // Event listeners para detectar intentos de salida
+    window.addEventListener('beforeunload', function(e) {
+        if (hasGameStarted && currentQuestion > 1 && !gameFinished) {
+            const message = '¿Estás seguro de que quieres salir? Perderás el progreso actual.';
+            e.returnValue = message;
+            return message;
+        }
+        
+        clearGameSession();
+    });
+
+    window.addEventListener('pagehide', function() {
+        clearGameSession();
+    });
+   
+    // Crear elementos flotantes
+    function createFloatingElements() {
+        const container = document.getElementById('floating-elements');
+        const elements = ['🍎', '⭐', '🔷', '🌈', '✨', '🌟', '💫', '⚽', '🎈', '🎯'];
+        
+        for (let i = 0; i < 20; i++) {
+            const element = document.createElement('div');
+            element.className = 'floating-element';
+            element.innerHTML = elements[Math.floor(Math.random() * elements.length)];
+            element.style.left = Math.random() * 100 + '%';
+            element.style.top = Math.random() * 100 + '%';
+            element.style.animationDelay = Math.random() * 8 + 's';
+            element.style.animationDuration = (Math.random() * 4 + 6) + 's';
+            container.appendChild(element);
+        }
+    }
+
+    // Crear confeti
+    function createConfetti() {
+        const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffa726', '#ef5350'];
+        
+        for (let i = 0; i < 50; i++) {
+            setTimeout(() => {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 3000);
+            }, i * 100);
+        }
+    }
+
+    // Función para calcular puntaje de cada pregunta
+    function calculateQuestionScore(isCorrect, questionType, details = {}) {
+        let score = 0;
+        
+        if (questionType === 'contar') {
+            // Pregunta 1: Contar objetos
+            const totalQuestions = 4; // 4 ejercicios de conteo
+            score = (details.correctCount / totalQuestions) * maxScorePerQuestion;
+        } 
+        else if (questionType === 'comparar') {
+            // Pregunta 2: Comparar cantidades
+            const totalComparisons = 4; // 4 comparaciones
+            score = (details.correctCount / totalComparisons) * maxScorePerQuestion;
+        }
+        else if (questionType === 'formas') {
+            // Pregunta 3: Formas geométricas
+            const totalFormas = 4; // 4 formas
+            score = (details.correctCount / totalFormas) * maxScorePerQuestion;
+        }
+        else if (questionType === 'patrones') {
+            // Pregunta 4: Patrones
+            const totalPatrones = 4; // 4 patrones
+            score = (details.correctCount / totalPatrones) * maxScorePerQuestion;
+        }
+        else {
+            // Otros tipos: todo o nada
+            score = isCorrect ? maxScorePerQuestion : 0;
+        }
+        
+        return Math.round(score * 100) / 100;
+    }
+
+    // Función principal para mostrar preguntas
+    function displayNumbers() {
+        if (currentQuestion === 1 && !hasGameStarted) {
+            hasGameStarted = true;
+            registerGameSession();
+        }
+
+        // Ocultar TODOS los contenedores
+        document.getElementById('contar-container').style.display = 'none';
+        document.getElementById('comparar-container').style.display = 'none';
+        document.getElementById('formas-container').style.display = 'none';
+        document.getElementById('patrones-container').style.display = 'none';
+
+        // PREGUNTA 1: Contar objetos
+        if (currentQuestion === 1) {
+            document.getElementById('contar-container').style.display = 'block';
+            setupContarQuestion();
+            
+            document.getElementById('main-instruction').innerHTML = '🍎 ¡Cuenta los objetos y encuentra el número!';
+            document.getElementById('instruction-card').innerHTML = `
+                🍎 Cuenta cada objeto uno por uno y elige el número correcto
+            `;
+        }
+        
+        // PREGUNTA 2: Comparar cantidades
+        else if (currentQuestion === 2) {
+            document.getElementById('comparar-container').style.display = 'block';
+            setupCompararQuestion();
+            
+            document.getElementById('main-instruction').innerHTML = '⚖️ ¡Encuentra dónde hay más objetos!';
+            document.getElementById('instruction-card').innerHTML = `
+                ⚖️ Compara los dos grupos y elige el que tiene MÁS objetos
+            `;
+        }
+        
+        // PREGUNTA 3: Formas geométricas
+        else if (currentQuestion === 3) {
+            document.getElementById('formas-container').style.display = 'block';
+            setupFormasQuestion();
+            
+            document.getElementById('main-instruction').innerHTML = '🔷 ¡Encuentra la forma igual!';
+            document.getElementById('instruction-card').innerHTML = `
+                🔷 Mira bien la forma y encuentra su igual entre las opciones
+            `;
+        }
+        
+        // PREGUNTA 4: Patrones
+        else if (currentQuestion === 4) {
+            document.getElementById('patrones-container').style.display = 'block';
+            setupPatronesQuestion();
+            
+            document.getElementById('main-instruction').innerHTML = '🌈 ¡Completa el patrón de colores!';
+            document.getElementById('instruction-card').innerHTML = `
+                🌈 Mira el patrón de colores y encuentra cuál sigue
+            `;
+        }
+
+        // Actualizar contador
+        document.getElementById('question-counter').innerHTML = `
+            <i class="fas fa-star mr-2"></i>
+            Pregunta ${currentQuestion} de ${totalQuestions}
+            <i class="fas fa-star ml-2"></i>
+        `;
+    }
+
+    // Configurar pregunta 1: Contar objetos
+    function setupContarQuestion() {
+        contarSelections = {};
+        
+        document.querySelectorAll('.contar-exercise .number-option').forEach(btn => {
+            btn.classList.remove('selected');
+            
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode.replaceChild(newBtn, btn);
+        });
+        
+        document.querySelectorAll('.contar-exercise .number-option').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const contarExercise = this.closest('.contar-exercise');
+                const exerciseIndex = Array.from(document.querySelectorAll('.contar-exercise')).indexOf(contarExercise);
+                
+                // Limpiar selección previa en este ejercicio
+                contarExercise.querySelectorAll('.number-option').forEach(b => {
+                    b.classList.remove('selected');
+                });
+                
+                // Marcar como seleccionado
+                this.classList.add('selected');
+                
+                // Guardar selección
+                contarSelections[exerciseIndex] = parseInt(this.dataset.value);
+                
+                // Verificar si hay al menos una selección para habilitar botón
+                const hasSelections = Object.keys(contarSelections).length > 0;
+                document.getElementById('answer-btn').disabled = !hasSelections;
+                
+                // Efecto visual
+                this.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            });
+        });
+        
+        document.getElementById('answer-btn').disabled = true;
+    }
+
+    // Configurar pregunta 2: Comparar cantidades
+    function setupCompararQuestion() {
+        compararSelections = {};
+        
+        document.querySelectorAll('.grupo-objetos').forEach(btn => {
+            btn.classList.remove('selected');
+            
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode.replaceChild(newBtn, btn);
+        });
+        
+        document.querySelectorAll('.comparar-exercise .grupo-objetos').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const compararExercise = this.closest('.comparar-exercise');
+                const exerciseIndex = Array.from(document.querySelectorAll('.comparar-exercise')).indexOf(compararExercise);
+                
+                // Limpiar selección previa en este ejercicio
+                compararExercise.querySelectorAll('.grupo-objetos').forEach(b => {
+                    b.classList.remove('selected');
+                });
+                
+                // Marcar como seleccionado
+                this.classList.add('selected');
+                
+                // Guardar selección
+                compararSelections[exerciseIndex] = this.dataset.grupo;
+                
+                // Verificar si hay al menos una selección para habilitar botón
+                const hasSelections = Object.keys(compararSelections).length > 0;
+                document.getElementById('answer-btn').disabled = !hasSelections;
+                
+                // Efecto visual
+                this.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            });
+        });
+        
+        document.getElementById('answer-btn').disabled = true;
+    }
+
+    // Configurar pregunta 3: Formas geométricas
+    function setupFormasQuestion() {
+        formasSelections = {};
+        
+        document.querySelectorAll('.formas-opciones .forma').forEach(btn => {
+            btn.classList.remove('selected');
+            
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode.replaceChild(newBtn, btn);
+        });
+        
+        document.querySelectorAll('.formas-exercise .forma[data-forma]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const formasExercise = this.closest('.formas-exercise');
+                const exerciseIndex = Array.from(document.querySelectorAll('.formas-exercise')).indexOf(formasExercise);
+                
+                // Limpiar selección previa en este ejercicio
+                formasExercise.querySelectorAll('.forma[data-forma]').forEach(b => {
+                    b.classList.remove('selected');
+                });
+                
+                // Marcar como seleccionado
+                this.classList.add('selected');
+                
+                // Guardar selección
+                formasSelections[exerciseIndex] = this.dataset.forma;
+                
+                // Verificar si hay al menos una selección para habilitar botón
+                const hasSelections = Object.keys(formasSelections).length > 0;
+                document.getElementById('answer-btn').disabled = !hasSelections;
+                
+                // Efecto visual
+                this.style.transform = 'scale(1.2)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            });
+        });
+        
+        document.getElementById('answer-btn').disabled = true;
+    }
+
+    // Configurar pregunta 4: Patrones
+    function setupPatronesQuestion() {
+        patronesSelections = {};
+        
+        document.querySelectorAll('.patron-opcion').forEach(btn => {
+            btn.classList.remove('selected');
+            
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode.replaceChild(newBtn, btn);
+        });
+        
+        document.querySelectorAll('.patron-exercise .patron-opcion').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const patronExercise = this.closest('.patron-exercise');
+                const exerciseIndex = Array.from(document.querySelectorAll('.patron-exercise')).indexOf(patronExercise);
+                
+                // Limpiar selección previa en este ejercicio
+                patronExercise.querySelectorAll('.patron-opcion').forEach(b => {
+                    b.classList.remove('selected');
+                });
+                
+                // Marcar como seleccionado
+                this.classList.add('selected');
+                
+                // Guardar selección
+                patronesSelections[exerciseIndex] = this.dataset.color;
+                
+                // Verificar si hay al menos una selección para habilitar botón
+                const hasSelections = Object.keys(patronesSelections).length > 0;
+                document.getElementById('answer-btn').disabled = !hasSelections;
+                
+                // Efecto visual
+                this.style.transform = 'scale(1.2)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            });
+        });
+        
+        document.getElementById('answer-btn').disabled = true;
+    }
+
+    // Función principal para verificar respuestas
+    function checkAnswer() {
+        if (gameFinished) return;
+
+        gameFinished = true;
+        
+        let isCorrect = false;
+        let feedback = '';
+        let questionType = '';
+        let score = 0;
+        let details = {};
+
+        if (currentQuestion === 1) {
+            // Pregunta 1: Contar objetos
+            questionType = 'contar';
+            const contarExercises = document.querySelectorAll('.contar-exercise');
+            let correct = 0;
+
+            contarExercises.forEach((exercise, index) => {
+                const correctAnswer = parseInt(exercise.dataset.correct);
+                const userAnswer = contarSelections[index];
+                
+                if (userAnswer === correctAnswer) {
+                    correct++;
+                }
+            });
+
+            const total = contarExercises.length;
+            details = { correctCount: correct, totalCount: total };
+            isCorrect = correct === total;
+
+            if (correct === total) {
+                feedback = '🎉 ¡Fantástico! Contaste todos los objetos correctamente.';
+            } else if (correct >= 3) {
+                feedback = `🌟 ¡Muy bien! Contaste ${correct} de ${total} grupos correctamente.`;
+            } else if (correct >= 2) {
+                feedback = `👍 ¡Bien! Contaste ${correct} de ${total} grupos correctamente.`;
+            } else {
+                feedback = `💡 Recuerda: Cuenta cada objeto uno por uno con tu dedito.`;
+            }
+        }
+        else if (currentQuestion === 2) {
+            // Pregunta 2: Comparar cantidades
+            questionType = 'comparar';
+            const compararExercises = document.querySelectorAll('.comparar-exercise');
+            let correct = 0;
+
+            compararExercises.forEach((exercise, index) => {
+                const correctAnswer = exercise.dataset.correct;
+                const userAnswer = compararSelections[index];
+                
+                if (userAnswer === correctAnswer) {
+                    correct++;
+                }
+            });
+
+            const total = compararExercises.length;
+            details = { correctCount: correct, totalCount: total };
+            isCorrect = correct === total;
+
+            if (correct === total) {
+                feedback = '🎉 ¡Excelente! Identificaste correctamente dónde hay más objetos.';
+            } else if (correct >= 3) {
+                feedback = `🌟 ¡Muy bien! Acertaste ${correct} de ${total} comparaciones.`;
+            } else if (correct >= 2) {
+                feedback = `👍 ¡Bien! Acertaste ${correct} de ${total} comparaciones.`;
+            } else {
+                feedback = `💡 Recuerda: Cuenta los objetos de cada grupo y elige el que tiene más.`;
+            }
+        }
+        else if (currentQuestion === 3) {
+            // Pregunta 3: Formas geométricas
+            questionType = 'formas';
+            const formasExercises = document.querySelectorAll('.formas-exercise');
+            let correct = 0;
+
+            formasExercises.forEach((exercise, index) => {
+                const correctAnswer = exercise.dataset.correct;
+                const userAnswer = formasSelections[index];
+                
+                if (userAnswer === correctAnswer) {
+                    correct++;
+                }
+            });
+
+            const total = formasExercises.length;
+            details = { correctCount: correct, totalCount: total };
+            isCorrect = correct === total;
+
+            if (correct === total) {
+                feedback = '🎉 ¡Increíble! Reconociste todas las formas perfectamente.';
+            } else if (correct >= 3) {
+                feedback = `🌟 ¡Muy bien! Reconociste ${correct} de ${total} formas.`;
+            } else if (correct >= 2) {
+                feedback = `👍 ¡Bien! Reconociste ${correct} de ${total} formas.`;
+            } else {
+                feedback = `💡 Recuerda: Mira bien la forma objetivo y busca una exactamente igual.`;
+            }
+        }
+        else if (currentQuestion === 4) {
+            // Pregunta 4: Patrones
+            questionType = 'patrones';
+            const patronExercises = document.querySelectorAll('.patron-exercise');
+            let correct = 0;
+
+            patronExercises.forEach((exercise, index) => {
+                const correctAnswer = exercise.dataset.correct;
+                const userAnswer = patronesSelections[index];
+                
+                if (userAnswer === correctAnswer) {
+                    correct++;
+                }
+            });
+
+            const total = patronExercises.length;
+            details = { correctCount: correct, totalCount: total };
+            isCorrect = correct === total;
+
+            if (correct === total) {
+                feedback = '🎉 ¡Maravilloso! Completaste todos los patrones perfectamente.';
+            } else if (correct >= 3) {
+                feedback = `🌟 ¡Muy bien! Completaste ${correct} de ${total} patrones.`;
+            } else if (correct >= 2) {
+                feedback = `👍 ¡Bien! Completaste ${correct} de ${total} patrones.`;
+            } else {
+                feedback = `💡 Recuerda: Mira el orden de los colores y encuentra cuál sigue.`;
+            }
+        }
+
+        // Calcular puntaje
+        score = calculateQuestionScore(isCorrect, questionType, details);
+        questionScores.push({
+            question: currentQuestion,
+            score: score,
+            maxScore: maxScorePerQuestion,
+            isCorrect: isCorrect,
+            type: questionType
+        });
+
+        // Mostrar resultado
+        setTimeout(() => {
+            if (isCorrect) {
+                createConfetti();
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡CORRECTO! 🌟',
+                    html: `
+                        <div>
+                            <p>${feedback}</p>
+                            <div style="font-size: 1.2em; margin: 15px 0; color: #4CAF50;">
+                                <strong>Puntaje: ${score.toFixed(2)}/${maxScorePerQuestion.toFixed(2)} puntos</strong>
+                            </div>
+                        </div>
+                    `,
+                    confirmButtonText: currentQuestion < totalQuestions ? '¡Siguiente pregunta!' : '¡Ver resultados!',
+                    allowOutsideClick: false,
+                    customClass: {
+                        popup: 'animated bounceIn',
+                        confirmButton: 'btn btn-success'
+                    }
+                }).then(() => {
+                    nextQuestion();
+                });
+            } else {
+                Swal.fire({
+                    icon: 'info',
+                    title: '¡Sigue intentando! 💪',
+                    html: `
+                        <div>
+                            <p>${feedback}</p>
+                            <div style="font-size: 1.2em; margin: 15px 0; color: #ff9800;">
+                                <strong>Puntaje: ${score.toFixed(2)}/${maxScorePerQuestion.toFixed(2)} puntos</strong>
+                            </div>
+                        </div>
+                    `,
+                    confirmButtonText: 'Continuar',
+                    allowOutsideClick: false,
+                    customClass: {
+                        popup: 'animated shake',
+                        confirmButton: 'btn btn-primary'
+                    }
+                }).then(() => {
+                    nextQuestion();
+                });
+            }
+        }, 1500);
+    }
+
+    // Pasar a la siguiente pregunta
+    function nextQuestion() {
+        if (currentQuestion >= totalQuestions) {
+            showFinalResults();
+        } else {
+            currentQuestion++;
+            gameFinished = false;
+            displayNumbers();
+        }
+    }
+
+    // Mostrar resultados finales (MODIFICADO para mostrar solo un botón cuando no hay vidas)
+    async function showFinalResults() {
+        // Calcular puntaje total
+        const finalScore = questionScores.reduce((total, q) => total + q.score, 0);
+        const percentage = (finalScore / totalPossibleScore) * 100;
+        
+        // Determinar mensaje de estado
+        let statusMessage, statusColor, icon;
+        if (percentage >= 90) {
+            statusMessage = "¡SOBRESALIENTE!";
+            statusColor = "#4CAF50";
+            icon = "success";
+        } else if (percentage >= 80) {
+            statusMessage = "¡EXCELENTE!";
+            statusColor = "#4CAF50";
+            icon = "success";
+        } else if (percentage >= 70) {
+            statusMessage = "¡MUY BIEN!";
+            statusColor = "#2196F3";
+            icon = "success";
+        } else if (percentage >= 60) {
+            statusMessage = "¡BIEN!";
+            statusColor = "#FF9800";
+            icon = "info";
+        } else {
+            statusMessage = "Necesitas mejorar";
+            statusColor = "#FF9800";
+            icon = "warning";
+        }
+
+        // Crear resumen de preguntas
+        const questionNames = [
+            '🍎 Contar objetos',
+            '⚖️ Comparar cantidades', 
+            '🔷 Formas geométricas',
+            '🌈 Patrones de colores'
+        ];
+        
+        let questionSummaryHTML = '';
+        questionScores.forEach((q, index) => {
+            const emoji = q.isCorrect ? '✅' : '❌';
+            questionSummaryHTML += `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin: 8px 0; padding: 8px 0; border-bottom: 1px solid #eee;">
+                    <span style="font-weight: 500;">Pregunta ${q.question}: ${emoji}</span>
+                    <span style="font-weight: 600; color: ${q.isCorrect ? '#4CAF50' : '#f44336'};">${q.score.toFixed(2)}/${q.maxScore.toFixed(2)} puntos</span>
+                </div>
+            `;
+        });
+
+        // Guardar intento
+        const saveResult = await saveAttempt(finalScore);
+        
+        // Crear HTML del resultado final
+        const resultHTML = `
+            <div style="text-align: center; font-family: 'Comic Sans MS', cursive;">
+                <!-- Título principal -->
+                <div style="background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%); color: white; padding: 20px; border-radius: 15px; margin-bottom: 20px;">
+                    <h2 style="margin: 0; font-size: 1.8rem; font-weight: 900;">
+                        ¡JUEGO COMPLETADO! 🏆
+                    </h2>
+                </div>
+
+                <!-- Estado y nota -->
+                <div style="background: ${statusColor}; color: white; padding: 15px; border-radius: 12px; margin-bottom: 20px;">
+                    <div style="font-size: 1.4rem; font-weight: 700; margin-bottom: 8px;">
+                        ${statusMessage}
+                    </div>
+                    <div style="font-size: 1.6rem; font-weight: 900;">
+                        NOTA FINAL: ${finalScore.toFixed(2)}/10
+                    </div>
+                </div>
+
+                <!-- Resumen por pregunta -->
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; margin-bottom: 20px; text-align: left;">
+                    <h4 style="margin: 0 0 15px 0; color: #333; font-size: 1.3rem; font-weight: 700; text-align: center;">
+                        📊 Resumen por pregunta:
+                    </h4>
+                    ${questionSummaryHTML}
+                </div>
+
+                <!-- Estado de vidas -->
+                <div style="background: #f0f0f0; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+                    <h4 style="margin: 0 0 15px 0; color: #666; font-size: 1.3rem; font-weight: 700;">
+                        💗 Estado de vidas:
+                    </h4>
+                    <div style="font-size: 1.1rem; line-height: 1.6;">
+                        <div><strong>Vidas antes:</strong> ${vidasTotales}/${vidasTotales}</div>
+                        <div><strong>Vidas después:</strong> ${saveResult.vidasRestantes}/${vidasTotales}</div>
+                        <div style="color: #4CAF50; font-weight: 600; margin-top: 10px;">
+                            ${saveResult.puedeIntentar ? '¡Puedes intentar 1 vez más!' : '¡Sin vidas restantes!'}
+                        </div>
+                    </div>
+                </div>
+
+                ${saveResult.success && saveResult.data.is_best_score ? 
+                    '<div style="background: #fff3cd; color: #856404; padding: 15px; border-radius: 10px; margin-bottom: 15px;"><strong>🏆 ¡Nuevo mejor puntaje!</strong></div>' : ''
+                }
+                
+                ${saveResult.success && saveResult.data.nivel_completado ? 
+                    '<div style="background: #d1ecf1; color: #0c5460; padding: 15px; border-radius: 10px; margin-bottom: 15px;"><strong>🎉 ¡Nivel completado!</strong></div>' : ''
+                }
+            </div>
+        `;
+
+        // CAMBIO PRINCIPAL: Determinar qué botones mostrar según las vidas restantes
+        let buttonsConfig = {};
+        
+        if (saveResult.puedeIntentar) {
+            // Tiene vidas: mostrar ambos botones
+            buttonsConfig = {
+                showCancelButton: true,
+                confirmButtonText: '🏠 Volver al menú',
+                cancelButtonText: '🔄 Jugar de nuevo'
+            };
+        } else {
+            // Sin vidas: solo mostrar botón de volver al menú
+            buttonsConfig = {
+                showCancelButton: false,
+                confirmButtonText: '🏠 Volver al menú'
+            };
+        }
+
+        // Mostrar resultados
+        Swal.fire({
+            icon: icon,
+            title: false, // No mostrar título por defecto
+            html: resultHTML,
+            ...buttonsConfig,
+            allowOutsideClick: false,
+            width: '600px',
+            customClass: {
+                popup: 'animated bounceIn',
+                confirmButton: 'btn btn-primary',
+                cancelButton: 'btn btn-success'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Volver al menú
+                window.location.href = `/modulo/${moduloId}/niveles/`;
+            } else {
+                // Reiniciar juego (solo disponible si tiene vidas)
+                if (saveResult.puedeIntentar) {
+                    resetGame();
+                } else {
+                    showNoLivesMessage();
+                }
+            }
+        });
+
+        // Actualizar mejor puntaje
+        await updateBestScore();
+    }
+
+    // Función para obtener CSRF token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // FUNCIÓN MODIFICADA: saveAttempt actualizada
+    async function saveAttempt(finalScore) {
+        try {
+            console.log('Enviando datos:', {
+                estudiante_id: studentId,
+                nivel_id: levelId,
+                puntaje_total: finalScore
+            });
+
+            const response = await fetch('/save_attempt/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    estudiante_id: studentId,
+                    nivel_id: levelId,
+                    puntaje_total: finalScore
+                })
+            });
+            
+            const data = await response.json();
+            console.log('Respuesta del servidor:', data);
+            
+            if (data.success) {
+                // Actualizar variables locales
+                vidasRestantes = data.vidas_restantes;
+                puedeIntentar = data.puede_continuar;
+                
+                // Actualizar display de vidas
+                updateLivesDisplay();
+                
+                console.log('Intento guardado correctamente con nota:', data.nota);
+                return { 
+                    success: true, 
+                    data: data,
+                    vidasRestantes: vidasRestantes,
+                    puedeIntentar: puedeIntentar
+                };
+            } else {
+                console.error('Error del servidor:', data.error);
+                return { success: false, error: data.error };
+            }
+        } catch (error) {
+            console.error('Error de red al guardar intento:', error);
+            return { success: false, error: 'Error de conexión: ' + error.message };
+        }
+    }
+
+    // Actualizar mejor puntaje
+    async function updateBestScore() {
+        try {
+            const response = await fetch('/update_best_score/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    estudiante_id: studentId,
+                    nivel_id: levelId
+                })
+            });
+            
+            const data = await response.json();
+            if (data.success) {
+                console.log('Mejor puntaje actualizado:', data.best_score);
+            } else {
+                console.error('Error al actualizar mejor puntaje:', data.error);
+            }
+        } catch (error) {
+            console.error('Error al actualizar mejor puntaje:', error);
+        }
+    }
+
+    // Función para penalizar recarga
+    async function penalizeReload() {
+        try {
+            const response = await fetch('/penalize_reload/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    estudiante_id: studentId,
+                    nivel_id: levelId
+                })
+            });
+            
+            const data = await response.json();
+            if (data.success) {
+                vidasRestantes = data.vidas_restantes;
+                updateLivesDisplay();
+                return { success: true };
+            } else {
+                return { success: false, error: data.error };
+            }
+        } catch (error) {
+            return { success: false, error: error.message };
+        }
+    }
+
+    // Reiniciar juego
+    function resetGame() {
+        currentQuestion = 1;
+        selectedNumbers = [];
+        currentNumbers = [];
+        usedQuestions.clear();
+        gameFinished = false;
+        hasGameStarted = false;
+        
+        // Reiniciar variables de puntaje
+        questionScores = [];
+        currentScore = 0;
+        
+        // Reiniciar variables de preguntas específicas
+        contarSelections = {};
+        compararSelections = {};
+        formasSelections = {};
+        patronesSelections = {};
+        
+        clearGameSession();
+        registerGameSession();
+        
+        // Ocultar contenedores
+        const containers = [
+            'comparar-container',
+            'formas-container', 
+            'patrones-container'
+        ];
+        
+        containers.forEach(containerId => {
+            const container = document.getElementById(containerId);
+            if (container) {
+                container.style.display = 'none';
+            }
+        });
+        
+        // Limpiar selecciones
+        document.querySelectorAll('.number-option, .grupo-objetos, .forma[data-forma], .patron-opcion').forEach(btn => {
+            btn.classList.remove('selected');
+        });
+        
+        displayNumbers();
+    }
+
+    // Agregar animación de pulso para vidas bajas
+    const pulseStyle = document.createElement('style');
+    pulseStyle.textContent = `
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    `;
+    document.head.appendChild(pulseStyle);
+
+    // Inicializar el juego cuando la página carga
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof initializeGameData === 'function') {
+            initializeGameData().then((canPlay) => {
+                if (canPlay) {
+                    createFloatingElements();
+                    displayNumbers();
+                }
+            }).catch((error) => {
+                console.error('Error al inicializar el juego:', error);
+            });
+        } else {
+            console.error('La función initializeGameData no está definida');
+        }
+        
+        // Atajo de teclado para responder
+        document.addEventListener('keydown', function(e) {
+            const answerBtn = document.getElementById('answer-btn');
+            if (e.key === 'Enter' && answerBtn && !answerBtn.disabled) {
+                if (typeof checkAnswer === 'function') {
+                    checkAnswer();
+                }
+            }
+        });
+    
+        // Configurar SweetAlert2 con estilos personalizados
+        const swalStyle = document.createElement('style');
+        swalStyle.textContent = `
+            .swal2-popup {
+                font-family: 'Comic Sans MS', cursive, sans-serif !important;
+                border-radius: 20px !important;
+            }
+            .swal2-title {
+                color: #ff6b6b !important;
+                font-weight: 900 !important;
+            }
+            .swal2-confirm {
+                background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%) !important;
+                border: none !important;
+                border-radius: 25px !important;
+                font-weight: 700 !important;
+                padding: 12px 30px !important;
+            }
+            .swal2-cancel {
+                background: linear-gradient(135deg, #96ceb4 0%, #45b7d1 100%) !important;
+                border: none !important;
+                border-radius: 25px !important;
+                font-weight: 700 !important;
+                padding: 12px 30px !important;
+            }
+        `;
+        document.head.appendChild(swalStyle);
+    });
+</script>
+{% endblock %}
