@@ -126,13 +126,18 @@ Crear Administrador
                                 placeholder="ejemplo@ejemplo.com" value="{{usuarios.data.email}}">                                
                         </div>     
                         <label for="fotografia" class="form-label">
-                                <b>Fotografía (Opcional):</b>
-                            </label>
+                            <b>Fotografía (Opcional):</b>
+                        </label>
+                        <!-- Campo para subir una nueva foto -->
                         <div class="input-group mb-4">
                             <span class="input-group-text">
                                 <i class="fa-solid fa-camera" aria-hidden="true"></i>
                             </span>
                             <input type="file" name="fotografia" id="fotografia" accept="image/*" class="form-control">
+                        </div>
+                        <!-- Imagen para previsualización -->
+                        <div class="d-flex justify-content-center">
+                            <img id="preview" src="#" alt="Previsualización" class="img-thumbnail" style="max-width: 150px; display: none;">
                         </div>
                         <label for="username" class="form-label">
                             <b>Nombre de Usuario: *</b>
