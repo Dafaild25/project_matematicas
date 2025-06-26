@@ -57,7 +57,7 @@ def asignar_vidas(request):
 
         if avance:
             vidas_aplicadas = avance.aplicar_vidas_extras_pendientes()
-            return JsonResponse({'success': True, 'message': f'{vidas_aplicadas} vida(s) aplicadas correctamente.'})
+            return JsonResponse({'success': True, 'message': f'Vidas asignadas correctamente.'})
         else:
             return JsonResponse({'success': True, 'message': 'Vidas asignadas. Se aplicarán al iniciar el nivel.'})
 

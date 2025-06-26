@@ -93,6 +93,9 @@ Avance Estudiantes
                                             <li>
                                                 <a class="dropdown-item" href="#" onclick="abrirModalVidas('{{ fila.matricula_id}}', '{{ nivel.nivel_id }}')">❤️ Vidas </a>
                                             </li>
+                                             <li>
+                                                <a class="dropdown-item" href="{% url 'reporte_intento_individual' matricula_id=fila.matricula_id nivel_id=nivel.nivel_id %}"> pdf Historial </a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>
@@ -181,6 +184,8 @@ Avance Estudiantes
 
 
 {%block js%}
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
 
@@ -256,18 +261,41 @@ Avance Estudiantes
       body: formData
     })
     .then(response => response.json())
-    .then(data => {
+   .then(data => {
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        }
+      });
+
       if (data.success) {
-        alert(data.message);
+        Toast.fire({
+          icon: 'success',
+          title: data.message
+        });
         bootstrap.Modal.getInstance(document.getElementById('modalVidas')).hide();
-        location.reload(); // Recarga la tabla si deseas
+        setTimeout(() => location.reload(), 3200); // Espera a que termine el toast
       } else {
-        alert(data.message || "Error al asignar vidas.");
+        Toast.fire({
+          icon: 'error',
+          title: data.message || "Error al asignar vidas."
+        });
       }
     })
     .catch(error => {
       console.error("Error:", error);
-      alert("Ha ocurrido un error inesperado.");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error inesperado',
+        text: 'Ha ocurrido un error inesperado.',
+        confirmButtonColor: '#d33',
+      });
     });
   });
 </script>
