@@ -1,7 +1,12 @@
 from .base import *
 import dj_database_url
+import os
+from pathlib import Path
 
 DEBUG = False
+
+# Añadir esto para permitir que Railway acceda
+ALLOWED_HOSTS = ["*"]  # O mejor: ["projectmatematicas-production.up.railway.app"]
 
 DATABASES = {
     'default': dj_database_url.config(
@@ -11,10 +16,10 @@ DATABASES = {
     )
 }
 
-import os
-from pathlib import Path
-
+# Archivos estáticos
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
-
-STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Recolectar archivos estáticos en producción
+# Asegúrate de haber ejecutado `python manage.py collectstatic`
