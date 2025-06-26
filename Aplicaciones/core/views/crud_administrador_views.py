@@ -4,17 +4,22 @@ from django.contrib.auth.models import Group # Importar grupos
 from Aplicaciones.core.forms.user_form import UserForm # Importar clase de registro
 from ..models import * # Importar modelos
 from Aplicaciones.core.validaciones.validar_cedula import * # Importar funciones de validaciones
+from Aplicaciones.core.decorators import rol_required # Importar decorador para requerir administrador
 
 # VISTA PRINCIPAL PARA LISTAR ADMINISTRADORES
+@rol_required('administrador')
 def index(request):
-    administradores = Administradores.objects.all()  # Obtener todos los administradores
+    # Obtener todos los administradores excluyendo al usuario logueado
+    administradores = Administradores.objects.exclude(fk_id_persona__fk_id_usuario=request.user) 
     return render(request, 'administrador/index.html', {'administradores': administradores})
 
 # VISTA PARA FORMULARIO ADMINISTRADORES
+@rol_required('administrador')
 def create_administrador(request):
     return render(request, 'administrador/Create.html')
 
 # METODO CREAR UN NUEVO ADMINISTRADOR
+@rol_required('administrador')
 def nuevo_administrador(request):
     if(request.method == 'POST'):
         try:
@@ -25,15 +30,15 @@ def nuevo_administrador(request):
             usuario = formUsuario.save() # Guardar datos del User
             usuario.groups.add(grupo) # Agregar usuario al grupo
             #  Cambiar  a mayúsculas
-            usuario.first_name = usuario.first_name.upper()
-            usuario.last_name = usuario.last_name.upper()         
+            usuario.first_name = usuario.first_name.title()  # Primera letra mayúscula
+            usuario.last_name = usuario.last_name.title()       
             usuario.save()  # Guardar los cambios
 
             # Campos de Personas
             persona = Personas.objects.create(# Crear  registro de tabla Personas
                 fk_id_usuario=usuario,  # Relacionar con el usuario creado
-                per_segundo_nombre = request.POST['segundo_nombre'].upper(),
-                per_segundo_apellido = request.POST['segundo_apellido'].upper(),
+                per_segundo_nombre = request.POST['segundo_nombre'].title(),
+                per_segundo_apellido = request.POST['segundo_apellido'].title(),
                 per_fecha_nacimiento = request.POST['fecha_nacimiento'],
                 per_cedula = request.POST['cedula'],
                 per_telefono = request.POST['telefono']
@@ -51,6 +56,7 @@ def nuevo_administrador(request):
     return redirect('administrador_index')
 
 # VISTA PARA EDITAR UN ADMINISTRADOR
+@rol_required('administrador')
 def edit_administrador(request, id_admin):
     administrador = get_object_or_404(Administradores,pk=id_admin)  # Obtener el administrador por su ID
     persona = administrador.fk_id_persona  # Obtener la persona asociada al administrador
@@ -63,6 +69,7 @@ def edit_administrador(request, id_admin):
     return render(request, 'administrador/Edit.html', contexto)  # Renderizar la plantilla de edición
 
 # METODO PARA ACTUALIZAR UN ADMINISTRADOR
+@rol_required('administrador')
 def actualizar_administrador(request):
     if request.method == 'POST':
         try:
@@ -70,13 +77,14 @@ def actualizar_administrador(request):
             admin_id = request.POST['admin_id']
             administrador = get_object_or_404(Administradores, pk=admin_id)  # Obtener el administrador por su ID
             # Obtener los datos para tabla Administradores
-            administrador.adm_fotografia = request.FILES.get('fotografia') if 'fotografia' in request.FILES else None
-            administrador.adm_estado = request.POST['estado']
+            if 'fotografia' in request.FILES:
+                administrador.adm_fotografia = request.FILES['fotografia']           
+            administrador.adm_estado = True if request.POST.get('estado') == 'True' else False
             administrador.save()  # Actualizar los datos de Administradores
             # Obtener los datos para tabla Personas
             persona = administrador.fk_id_persona  # Obtener la persona asociada al administrador
-            persona.per_segundo_nombre = request.POST['segundo_nombre'].upper()
-            persona.per_segundo_apellido = request.POST['segundo_apellido'].upper()
+            persona.per_segundo_nombre = request.POST['segundo_nombre'].title() # Cambiar a mayúsculas
+            persona.per_segundo_apellido = request.POST['segundo_apellido'].title() 
             persona.per_fecha_nacimiento = request.POST['fecha_nacimiento']
             persona.per_cedula = request.POST['cedula']
             persona.per_telefono = request.POST['telefono']
@@ -86,8 +94,12 @@ def actualizar_administrador(request):
             usuario = persona.fk_id_usuario  # Obtener el usuario asociado a la persona
             formUsuario = UserForm(request.POST, instance=usuario)  # Instanciar formulario
             if formUsuario.is_valid(): # Validar el formulario
-                usuario.first_name = usuario.first_name.upper()
-                usuario.last_name = usuario.last_name.upper()      
+                usuario.first_name = usuario.first_name.title() 
+                usuario.last_name = usuario.last_name.title() 
+                # Validar si se quiere cambiar la contraseña
+                nueva_contrasena = request.POST.get('password')
+                if nueva_contrasena:
+                    usuario.set_password(nueva_contrasena)
                 usuario = formUsuario.save()
             else:
                 print("Formulario de usuario no válido:", formUsuario.errors)
@@ -97,11 +109,11 @@ def actualizar_administrador(request):
             return redirect('administrador_index')
 
 # METODO PARA ELIMINAR UN ADMINISTRADOR
+@rol_required('administrador')
 def eliminar_administardor(request, id_admin):
     admin = get_object_or_404(Administradores, pk=id_admin)  # Obtener el administrador por su ID
     try:
-        admin.adm_estado = False  # Cambiar el estado a inactivo
-        admin.save()  # Guardar los cambios
+        admin.delete()  # Eliminar usuario
     except Exception as e:
         messages.error(request, f'Error al eliminar: {str(e)}')
     

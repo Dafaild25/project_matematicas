@@ -85,7 +85,7 @@
                 <table class="table table-striped" id="tbl-admin" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th style="width: 1%;">#</th>
                             <th>Docente</th>
                             <th>Módulo</th>
                             <th>Nombre</th>
@@ -96,7 +96,7 @@
                     <tbody>
                         {% for clase in clases %}
                             <tr>
-                                <td>{{ clase.cla_id }}</td>
+                                <td>{{ forloop.counter }}</td>
                                 <td>
                                     {{ clase.fk_docente }} 
                                 <td>{{ clase.fk_modulo.mod_nombre }}</td>

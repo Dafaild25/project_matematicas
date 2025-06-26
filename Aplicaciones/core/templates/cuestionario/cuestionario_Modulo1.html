@@ -383,6 +383,7 @@ Módulo 1 - Números Mágicos
         }
 
         /* Estilos para drag and drop */
+
         .drag-drop-question {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
@@ -485,6 +486,7 @@ Módulo 1 - Números Mágicos
             justify-content: center;
             box-sizing: border-box;
         }
+
     </style>
 {% endblock %}
 
@@ -864,7 +866,9 @@ Módulo 1 - Números Mágicos
                 popup: 'animated shake'
             }
         }).then(() => {
-            window.location.href = 'ver_niveles_modulo' modulo.mod_id;
+
+            window.location.href = '/cuestionario_Modulo1/';
+
         });
     }
     // Función para calcular puntaje de cada pregunta

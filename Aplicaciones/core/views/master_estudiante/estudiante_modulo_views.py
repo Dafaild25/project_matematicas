@@ -1,11 +1,11 @@
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from django.template.loader import get_template, TemplateDoesNotExist
+from Aplicaciones.core.decorators import rol_required # Importar decorador para requerir estudiante
 from ...models import Estudiantes, Matriculas,Modulos,Niveles,User,Personas
-from django.contrib.auth.decorators import login_required
 
 
-@login_required
+@rol_required('estudiante')
 def estudiante_modulo(request):
     estudiante = Estudiantes.objects.get(fk_id_persona__fk_id_usuario=request.user)
 
@@ -20,7 +20,7 @@ def estudiante_modulo(request):
     }
     return render(request, 'masterestudiante/modulo/Estudiante_Modulo.html', contexto)
 
-@login_required
+@rol_required('estudiante')
 def ver_niveles_modulo(request, modulo_id):
     estudiante = Estudiantes.objects.get(fk_id_persona__fk_id_usuario=request.user)
     
@@ -39,7 +39,8 @@ def ver_niveles_modulo(request, modulo_id):
     return render(request, 'masterestudiante/nivel/Estudiante_Nivel.html', contexto)
 
 
-@login_required
+
+@rol_required('estudiante')
 def jugar_nivel(request, nivel_id):
     nivel = get_object_or_404(Niveles, pk=nivel_id)
     template_name = nivel.ruta  # ej. "estudiante/nivel_1.html"

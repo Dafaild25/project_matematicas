@@ -14,6 +14,7 @@ from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 from openpyxl.utils import get_column_letter
 from openpyxl.styles import Font
+from django.db.models import Count
 
 
 
@@ -58,9 +59,13 @@ from openpyxl.styles import Font
 #         'clases': clases,
 #     })
     
-def index (request):
-    clases=Clases.objects.all()
-    return render(request, 'matricula/IndexM.html', {'clases':clases})
+def index(request):
+    clases = Clases.objects.annotate(
+        num_matriculados=Count('matriculas'),
+        
+    )
+
+    return render(request, 'matricula/IndexM.html', {'clases': clases})
 
 def detalle(request, cla_id):
     clase = get_object_or_404(Clases, pk=cla_id)

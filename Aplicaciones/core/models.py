@@ -9,7 +9,11 @@ class Personas(models.Model):
     fk_id_usuario = models.ForeignKey(User,verbose_name='Usuario',on_delete=models.CASCADE)
     per_segundo_nombre = models.CharField(max_length=50,default="Null",null=False,verbose_name="Segundo nombre:")
     per_segundo_apellido = models.CharField(max_length=50,default="Null",null=False,verbose_name="Segundo apellido:")
-    per_fecha_nacimiento = models.DateField(null=True, blank=True, default=None, verbose_name="Fecha de nacimiento:")
+    per_fecha_nacimiento = models.DateField(
+    null=True,          # permite guardar NULL en la base de datos
+    blank=True,         # permite dejarlo en blanco en formularios
+    verbose_name="Fecha de nacimiento:"
+)
     per_cedula = models.CharField(max_length=15,default="Null",null=False,verbose_name="Cédula:")
     per_telefono = models.CharField(max_length=15,default="Null",null=True,verbose_name="Teléfono:")
     per_fecha_actualizacion = models.DateTimeField(auto_now=True,verbose_name='Actualizado el:')
@@ -28,7 +32,7 @@ class Administradores(models.Model):
     adm_id = models.AutoField(primary_key=True)
     # Clave foranea Persona
     fk_id_persona = models.ForeignKey(Personas,verbose_name='Persona',on_delete=models.CASCADE)
-    adm_fotografia = models.ImageField(default='Sin Foto',null=True,blank=True,verbose_name="Fotografía:")
+    adm_fotografia = models.ImageField(upload_to='administradores/' ,default=None,null=True,blank=True,verbose_name="Fotografía:")
     adm_estado = models.BooleanField(default=True,verbose_name='Estado:')
     
     def __str__(self):
@@ -40,7 +44,7 @@ class Docentes(models.Model):
     # Clave foranea Persona
     fk_id_persona = models.ForeignKey(Personas,verbose_name='Persona',on_delete=models.CASCADE)
     doc_cargo = models.CharField(max_length=100,default="Null",null=False,verbose_name="Cargo:")
-    doc_fotografia = models.ImageField(upload_to='docentes/',default='Sin Foto',verbose_name="Fotografía:")
+    doc_fotografia = models.ImageField(upload_to='docentes/',default=None,verbose_name="Fotografía:")
     doc_estado = models.BooleanField(default=True,verbose_name='Estado:')
     
     def __str__(self):
@@ -53,10 +57,10 @@ class Estudiantes(models.Model):
     fk_id_persona = models.ForeignKey(Personas,verbose_name='Persona',on_delete=models.CASCADE)
     est_contacto_emergencia = models.CharField(max_length=50,default="Null",null=True,verbose_name="Contacto de emergencia:")
     est_telefono_emergencia = models.CharField(max_length=15,default="Null",null=True,verbose_name="Teléfono de emergencia:")
-    est_fotografia = models.ImageField(upload_to='estudiantes/',default='Sin Foto',null=True,blank=True,verbose_name="Fotografía:")
+    est_fotografia = models.ImageField(upload_to='estudiantes/',default=None,null=True,blank=True,verbose_name="Fotografía:")
     est_estado = models.BooleanField(default=True,verbose_name='Estado:')
     def __str__(self):
-        return f" {self.fk_id_persona.fk_id_usuario.first_name} {self.fk_id_persona.fk_id_usuario.last_name}"
+        return f"{self.est_id}: {self.fk_id_persona.fk_id_usuario.first_name} {self.fk_id_persona.fk_id_usuario.last_name}"
     
 # MODULO MODULOS  (5,6,7 años) 
 class Modulos(models.Model):
@@ -74,7 +78,12 @@ class Modulos(models.Model):
 
 class Niveles(models.Model):
     niv_id = models.AutoField(primary_key=True)
-    fk_modulo = models.ForeignKey(Modulos,verbose_name='Modulo',on_delete=models.CASCADE)
+    fk_modulo = models.ForeignKey(
+        Modulos,
+        verbose_name='Modulo',
+        on_delete=models.CASCADE,
+        related_name='niveles'  
+    )
     niv_nombre = models.CharField(max_length=50, null=False, verbose_name="Nombre del nivel:")
     niv_descripcion = models.CharField(max_length=100,null=False,verbose_name="Descripción del nivel:")
     orden = models.IntegerField()
@@ -90,7 +99,7 @@ class Niveles(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['fk_modulo', 'niv_nombre'], name='unique_nombre_por_modulo')
         ]
-
+    
 class Clases (models.Model):
     cla_id = models.AutoField(primary_key=True)
     fk_docente = models.ForeignKey(Docentes,verbose_name='Docente',on_delete=models.CASCADE)
@@ -103,19 +112,18 @@ class Clases (models.Model):
     def __str__(self):
         return f" {self.cla_nombre}"
 
-
-##Ignoraremos  enunciados  preguntas y opciones
 class Enunciados(models.Model):
     enun_id = models.AutoField(primary_key=True)
     fk_nivel = models.ForeignKey(Niveles,verbose_name='Nivel',on_delete=models.CASCADE)
     enun_nombre = models.CharField(max_length=100,null=False,verbose_name="Enunciado:")
-    enum_puntaje = models.DecimalField(max_digits=5,decimal_places=2,null=False,verbose_name="Puntaje:")
     enun_estado = models.BooleanField(default=True,verbose_name='Estado:')
     enun_fecha_creacion = models.DateTimeField(auto_now_add=True,verbose_name='Creado el:')
     enun_fecha_actualizacion = models.DateTimeField(auto_now=True,verbose_name='Actualizado el:')
     
     def __str__(self):
         return f"{self.enun_id}: {self.enun_nombre}"
+    
+
 class Preguntas(models.Model):
     pre_id = models.AutoField(primary_key=True)
     fk_enunciado = models.ForeignKey(Enunciados,verbose_name='Enunciado',on_delete=models.CASCADE)
@@ -140,6 +148,7 @@ class Opciones(models.Model):
     
     def __str__(self):
         return f"{self.op_id}: {self.op_nombre}"
+
 
 
 class Matriculas(models.Model):
@@ -221,6 +230,7 @@ class Avance_Matriculados(models.Model):
         null=True,
         help_text="Mejor nota obtenida en el nivel"
     )
+
     avm_estado = models.CharField(
         max_length=20,
         choices=ESTADOS_CHOICES,
@@ -230,11 +240,14 @@ class Avance_Matriculados(models.Model):
     )
     avm_fecha_creacion = models.DateTimeField(auto_now_add=True, verbose_name='Creado el:')
     avm_fecha_actualizacion = models.DateTimeField(auto_now=True, verbose_name='Actualizado el:')
+
     avm_vidas_restantes = models.IntegerField(
+
         blank=True,
         null=True,
         help_text="Vidas restantes para este nivel"
     )
+
     avm_ultimo_intento = models.DateTimeField(
         blank=True,
         null=True,
@@ -245,10 +258,12 @@ class Avance_Matriculados(models.Model):
         db_table = 'avance_estudiante'
         verbose_name = 'Avance de Estudiante'
         verbose_name_plural = 'Avances de Estudiantes'
+
         unique_together = ['fk_matricula', 'fk_nivel']
         ordering = ['fk_matricula', 'fk_nivel']
 
     def __str__(self):
+
         return f"Avance de {self.fk_matricula.fk_estudiante.username if self.fk_matricula and self.fk_matricula.fk_estudiante else 'Usuario'} - Nivel {self.fk_nivel.niv_id if self.fk_nivel else 'N/A'} - Estado: {self.avm_estado}"
     
     def inicializar_vidas(self):
@@ -290,6 +305,7 @@ class Avance_Matriculados(models.Model):
         except Vidas_Extras.DoesNotExist:
             return 0
     
+
     def usar_vida(self):
         """Reduce una vida y actualiza el estado si es necesario"""
         if self.avm_vidas_restantes > 0:
@@ -303,6 +319,8 @@ class Avance_Matriculados(models.Model):
             return True
         return False
     
+
     def puede_intentar(self):
         """Verifica si el estudiante puede hacer un intento"""
         return self.avm_vidas_restantes > 0 and self.avm_estado != 'sin_vidas'
+

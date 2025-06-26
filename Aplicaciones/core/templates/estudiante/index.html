@@ -33,10 +33,10 @@ Docentes
     </div>
     <div class="card-body">
       <div class="table-responsive">
-        <table class="table table-bordered text-center" id="tbl-docente" width="100%" cellspacing="0">
+        <table class="table table-bordered text-center" id="tbl-estudiante" width="100%" cellspacing="0">
           <thead>
             <tr>
-              <th>Id</th>
+              <th>#</th>
               <th>Nombres</th>
               <th>Apellidos</th>
               <th>Correo</th>
@@ -49,7 +49,7 @@ Docentes
           <tbody>
             {% for estudiante in estudiantes %}
               <tr>
-                <td>{{estudiante.est_id}}</td>
+                <td>{{ forloop.counter }}</td>
                 <td>{{estudiante.fk_id_persona.fk_id_usuario.first_name}} {{estudiante.fk_id_persona.per_segundo_nombre}}</td>
                 <td>{{estudiante.fk_id_persona.fk_id_usuario.last_name}} {{estudiante.fk_id_persona.per_segundo_apellido}}</td>
                 <td>{{estudiante.fk_id_persona.fk_id_usuario.email}}</td>
@@ -61,13 +61,13 @@ Docentes
                   <td class="text-danger">Inactivo</td>
                 {% endif %}
                 <td>
-                  <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                  <div class="d-flex gap-2 justify-content-center">
 
-                    <a href="{% url 'estudiante_edit' estudiante.est_id %}" type="button" class=" btn btn-primary btn-circle ">
+                    <a href="{% url 'estudiante_edit' estudiante.est_id %}" type="button" class="btn btn-sm btn-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
                       <span><i class="fas fa-pen"></i></span>
                     </a>
 
-                    <a class="btn btn-danger btn-circle" data-bs-toggle="modal"
+                    <a class="btn btn-sm btn-danger rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;" data-bs-toggle="modal"
                       data-bs-target="#eliminarModal{{estudiante.est_id}}"><i class="fas fa-trash"></i>
                   </a>
                     <!-- MODAL PARA CONFIRMAR ELIMINACION -->
@@ -87,5 +87,38 @@ Docentes
     </div>
   </div>
 </div>
+
+{% block js %}
+
+<script>
+
+  document.addEventListener('DOMContentLoaded', function () {
+    recargarTablaDocentes(); // Asegúrate de llamar a la función cuando el DOM esté listo
+});
+
+function recargarTablaDocentes() {
+    
+    if ($.fn.DataTable.isDataTable('#tbl-docente')) {
+        $('#tbl-estudiante').DataTable().clear().destroy();
+    }
+
+    $('#tbl-estudiante').DataTable({
+        language: {
+            search: "Buscar:",
+            lengthMenu: "Mostrar _MENU_ registros",
+            info: "Mostrando del _START_ al _END_ de _TOTAL_ registros",
+            paginate: {
+                first: "Primero",
+                last: "Último",
+                next: "Siguiente",
+                previous: "Anterior"
+            }
+        }
+    });
+}
+
+</script>
 {% endblock %}
 
+
+{% endblock %}

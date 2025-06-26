@@ -14,7 +14,7 @@
     </div>
 
     <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item"><a href="{% url 'core_admin' %}">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'inicio' %}">Inicio</a></li>
         <li class="breadcrumb-item"><a href="{% url 'enunciado_index' %}">Enunciados</a></li>
         <li class="breadcrumb-item active">Crear Enunciado</li>
     </ol>
@@ -25,20 +25,15 @@
                 {% csrf_token %}
 
                 <div class="row mb-3">
-                    <div class="col-md-4">
+                    <div class="col-md-2">
                         {{ form_enunciado.fk_modulo.label_tag }}
                         {{ form_enunciado.fk_modulo }}
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-2">
                         {{ form_enunciado.fk_nivel.label_tag }}
                         {{ form_enunciado.fk_nivel }}
                     </div>
-                    
-                    <div class="col-md-4">
-                        {{form_enunciado.enum_puntaje.label_tag}}
-                        {{form_enunciado.enum_puntaje}}
-                    </div>
-                    <div class="col-md-12">
+                    <div class="col-md-8">
                         {{ form_enunciado.enun_nombre.label_tag }}
                         {{ form_enunciado.enun_nombre }}
                     </div>

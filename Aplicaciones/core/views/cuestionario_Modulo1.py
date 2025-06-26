@@ -5,12 +5,11 @@ from django.views.decorators.http import require_http_methods
 import json
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
+
 from ..models import IntentoNivel, Avance_Matriculados, Niveles, Matriculas,Vidas_Extras
 from django.db.models import Max
 from django.utils import timezone
 
-
-# VISTA DE EJERCICIOS CORREGIDA
 
 @csrf_exempt
 def get_game_info(request):
@@ -23,6 +22,7 @@ def get_game_info(request):
         # Obtener el nivel
         nivel = get_object_or_404(Niveles, niv_id=nivel_id)
         
+
         # SOLUCIÓN: Manejar múltiples matrículas
         try:
             # Primero intentar obtener una matrícula activa específica
@@ -95,6 +95,7 @@ def get_game_info(request):
                 'vidas_asignadas': nivel.vidas,
                 'ya_aplicadas': True
             }
+
         
         # Obtener número total de intentos realizados
         intentos_realizados = IntentoNivel.objects.filter(
@@ -102,6 +103,7 @@ def get_game_info(request):
             fk_nivel=nivel
         ).count()
         
+
         # Construir mensaje sobre vidas
         mensaje_vidas = ""
         if vidas_aplicadas > 0:
@@ -111,6 +113,7 @@ def get_game_info(request):
             mensaje_vidas += f"Tienes {avance.avm_vidas_restantes} vidas restantes de {vidas_extras_info['vidas_asignadas']} asignadas por el profesor"
         else:
             mensaje_vidas += f"Tienes {avance.avm_vidas_restantes} vidas restantes de {nivel.vidas} del nivel"
+
         
         return JsonResponse({
             'success': True,

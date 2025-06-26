@@ -1,90 +1,164 @@
-{% extends 'plantillas/MasterDocente.html' %}
+{% extends "plantillas/MasterDocente.html" %}
+
 {% load static %}
-{% block title %}
-Docentes
-{% endblock %}
+{% block title %}Inicio{% endblock %}
 
 {% block css %}
-<link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
-
+<style>
+  body { background-color: #f4f8ff; }
+</style>
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid ">
+<div class="container-fluid">
   <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Docente</h1>
-    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-        class="fas fa-upload fa-sm text-white-50"></i> Exportar Admnistradores </a>
+    <h1 class="h3 mb-0 text-gray-800">Dashboard Docente</h1>
+    <a href="{}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+      <i class="fas fa-download fa-sm text-white-50"></i> Generar Reporte
+    </a>
   </div>
 
-  <ol class="breadcrumb mb-4">
-    <li class="breadcrumb-item"><a href="{% url 'core_docente' %}">Inicio</a></li>
-    <li class="breadcrumb-item active">Docentes</li>
-  </ol>
-  <div class="mb-4">
-    <a href="{% url 'administrador_create' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Nuevo
-      Administrador</a>
-  </div>
-  <div class="card mb-4">
-    <div class="card-header">
-      <i class="fas fa-table me-1"></i>
-      Tabla Administradores
-    </div>
-    <div class="card-body">
-      <div class="table-responsive">
-        <table class="table table-bordered text-center" id="tbl-admin" width="100%" cellspacing="0">
-          <thead>
-            <tr>
-              <th>Id</th>
-              <th>Nombres</th>
-              <th>Apellidos</th>
-              <th>Correo</th>
-              <th>Usuario</th>
-              <th>Teléfono</th>
-              <th>Estado</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for admin in administradores %}
-              <tr>
-                <td>{{admin.adm_id}}</td>
-                <td>{{admin.fk_id_persona.fk_id_usuario.first_name}} {{admin.fk_id_persona.per_segundo_nombre}}</td>
-                <td>{{admin.fk_id_persona.fk_id_usuario.last_name}} {{admin.fk_id_persona.per_segundo_apellido}}</td>
-                <td>{{admin.fk_id_persona.fk_id_usuario.email}}</td>
-                <td>{{admin.fk_id_persona.fk_id_usuario.username}}</td>
-                <td>{{admin.fk_id_persona.per_telefono}}</td>
-                {% if admin.adm_estado %}
-                  <td class="text-success">Activo</td>
-                {% else %}
-                  <td class="text-danger">Inactivo</td>
-                {% endif %}
-                <td>
-                  <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-
-                    <a href="{%url 'administrador_edit' admin.adm_id%}" type="button" class=" btn btn-primary btn-circle ">
-                      <span><i class="fas fa-pen"></i></span>
-                    </a>
-
-                    <a class="btn btn-danger btn-circle" data-bs-toggle="modal"
-                      data-bs-target="#eliminarModal{{admin.adm_id}}"><i class="fas fa-trash"></i>
-                  </a>
-                    <!-- MODAL PARA CONFIRMAR ELIMINACION -->
-                    {% include 'administrador/Modal.html' %}
-                  </div>
-                </td>
-              </tr>
-            {% empty %}
-              <tr>
-                <td colspan="8">No hay administradores registrados</td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+  <div class="row">
+    <div class="col-xl-4 col-md-6 mb-4">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Clases Impartidas</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_clases }}</div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-chalkboard-teacher fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
       </div>
+    </div>
 
+    <div class="col-xl-4 col-md-6 mb-4">
+      <div class="card border-left-success shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total de Estudiantes</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_estudiantes }}</div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-user-graduate fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4">
+    <div class="col-md-4">
+      <label for="moduloFiltro">Seleccione un Módulo:</label>
+      <select class="form-control" id="moduloFiltro">
+        <option value="">Todos los Módulos</option>
+        {% for modulo in modulos %}
+          <option value="{{ modulo.mod_id }}">{{ modulo.mod_nombre }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xl-8 col-lg-7">
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Promedio por Clase</h6>
+        </div>
+        <div class="card-body">
+          <div class="chart-bar">
+            <canvas id="barChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-4 col-lg-5">
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Promedio General</h6>
+        </div>
+        <div class="card-body">
+          <div class="chart-pie pt-4 pb-2">
+            <canvas id="donutChart"></canvas>
+          </div>
+          <div class="mt-4 text-center small" id="donutLabels"></div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 {% endblock %}
 
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+$(document).ready(function() {
+    var barChart;
+    var donutChart;
+
+    function actualizarGraficas(modulo_id) {
+        $.ajax({
+            url: '{% url "obtener_datos_dashboard" %}',
+            type: 'GET',
+            data: { modulo_id: modulo_id },
+            success: function(data) {
+                // Barras verticales con etiquetas de clase
+                if (barChart) barChart.destroy();
+                var ctxBar = document.getElementById('barChart').getContext('2d');
+                barChart = new Chart(ctxBar, {
+                    type: 'bar',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'Promedio por Clase',
+                            data: data.values,
+                            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            x: { title: { display: true, text: 'Clases' } },
+                            y: { beginAtZero: true, max: 10, title: { display: true, text: 'Promedio' } }
+                        }
+                    }
+                });
+
+                // Dona con promedio general
+                if (donutChart) donutChart.destroy();
+                var ctxDonut = document.getElementById('donutChart').getContext('2d');
+                donutChart = new Chart(ctxDonut, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Promedio General'],
+                        datasets: [{
+                            data: [data.promedio_general, 10 - data.promedio_general],
+                            backgroundColor: ['rgba(75, 192, 192, 0.6)', 'rgba(220, 220, 220, 0.3)'],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: { responsive: true, cutout: '70%' }
+                });
+
+                $('#donutLabels').html("<span><i class='fas fa-circle text-primary'></i> " + data.promedio_general + "</span>");
+            }
+        });
+    }
+
+    // Cargar inicialmente con todos los módulos
+    actualizarGraficas('');
+
+    $('#moduloFiltro').change(function() {
+        actualizarGraficas($(this).val());
+    });
+});
+</script>
+{% endblock %}

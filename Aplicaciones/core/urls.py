@@ -1,4 +1,6 @@
 from django.urls import path
+from django.contrib.auth.views import PasswordChangeView # Importar vista de cambio de contraseña propia de Django
+
 # views del core
 from .views import core_views
 from .views import crud_administrador_views
@@ -17,6 +19,8 @@ from .views import crud_matricula_views
 from .views import crud_avance_views
 # VISTA DOCENTE
 from .views.master_docente import core_docente_views
+from .views.master_docente import clases_asignadas_docente
+from .views.master_docente import avance_matriculados_docente
 # VISTA ESTUDIANTE
 from .views.master_estudiante import core_estudiante_views
 from .views.master_estudiante import estudiante_modulo_views
@@ -25,7 +29,12 @@ from .views.master_estudiante import estudiante_modulo_views
 
 urlpatterns = [
     
-    path('', core_views.core_admin, name='core_admin'),
+    path('', core_views.dashboard_admin, name='core_admin'),
+    path('admin/dashboard/data/', core_views.obtener_datos_admin, name='obtener_datos_admin'),
+
+    ########################################CAMBIO DE CONTRASEÑA################################
+    # Vista para Cambiar la Contraseña del Usuario
+    path('cambiar_contrasena/', PasswordChangeView.as_view(template_name='usuarios/cambiar_contrasena.html'), name='cambiar_contrasena'),
     
     #######################################CRUD ADMINISTRADOR################################
     # Vista Inicial del Administrador
@@ -114,7 +123,26 @@ urlpatterns = [
     
     ########################################VISTA DOCENTE###################################
     # Vista Inicial del Docente
-    path('core/docente/', core_docente_views.core_docente, name='core_docente'),
+    path('core/docente/', core_docente_views.dashboard_docente, name='core_docente'),
+    path('dashboard/obtener_datos/', core_docente_views.obtener_datos_dashboard, name='obtener_datos_dashboard'),
+    path('docente/clase/', clases_asignadas_docente.clases_asignadas_docente, name='clase_asignada'),
+    path('docente/matriculados/<int:clase_id>/', clases_asignadas_docente.matriculados_asignados_docente, name='matriculados_asignados'),
+    path('docente/clase/<int:cla_id>/tabla-matriculados/', clases_asignadas_docente.vista_tabla_matriculados_docente, name='tabla_matriculados_docente'),
+    path('docente/crear-estudiante/', clases_asignadas_docente.crear_estudiante_docente, name='crear_estudiante_docente'),
+    path('ajax/estudiante/<int:matricula_id>/', clases_asignadas_docente.obtener_datos_estudiante, name='ajax_datos_estudiante'),
+    path('editar-estudiante/', clases_asignadas_docente.editar_estudiante_docente, name='editar_estudiante_docente'),
+    path('eliminar-matricula/', clases_asignadas_docente.eliminar_matricula, name='eliminar_matricula'),
+    path('docente/importar-estudiantes/', clases_asignadas_docente.importar_estudiantes_excel_docente, name='importar_estudiantes_excel_docente'),
+    #vista para ver el avance los  estudiantes a su cargo 
+    path('docente/clase/<int:cla_id>/notas/', clases_asignadas_docente.ver_notas_estudiantes, name='ver_notas_estudiantes'),
+    path('historial-intentos/', avance_matriculados_docente.historial_intentos, name='historial_intentos'),
+    path('asignar-vidas/', avance_matriculados_docente.asignar_vidas, name='asignar_vidas_docente'),
+
+
+
+
+
+    
 
     ########################################VISTA ESTUDIANTE##################################
     # Vista Inicial del Estudiante
