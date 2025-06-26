@@ -1,31 +1,15 @@
-from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.template.loader import get_template
-from django.template import Context
-from django.conf import settings
+from django.shortcuts import get_object_or_404
+from easy_pdf.views import render_to_pdf_response
 from datetime import datetime
-from io import BytesIO
-from xhtml2pdf import pisa
-import os
 
-# Importar modelos
 from ...models import Clases, Niveles, Matriculas, Avance_Matriculados, IntentoNivel
-
-# Función auxiliar para convertir HTML a PDF con xhtml2pdf
-def generar_pdf_desde_html(html_string):
-    resultado = BytesIO()
-    pisa_status = pisa.CreatePDF(html_string, dest=resultado)
-    if pisa_status.err:
-        return None
-    return resultado.getvalue()
 
 
 @login_required
 def generar_pdf_nivel(request, clase_id, nivel_id):
     clase = get_object_or_404(Clases, cla_id=clase_id)
     nivel = get_object_or_404(Niveles, niv_id=nivel_id)
-
     matriculas = Matriculas.objects.filter(fk_clase=clase, mat_estado=True)
 
     avance_data = []
@@ -34,18 +18,11 @@ def generar_pdf_nivel(request, clase_id, nivel_id):
     for matricula in matriculas:
         estudiante = matricula.fk_estudiante
         try:
-            avance = Avance_Matriculados.objects.get(
-                fk_matricula=matricula,
-                fk_nivel=nivel
-            )
-            intentos = IntentoNivel.objects.filter(
-                fk_matricula=matricula,
-                fk_nivel=nivel
-            ).count()
+            avance = Avance_Matriculados.objects.get(fk_matricula=matricula, fk_nivel=nivel)
+            intentos = IntentoNivel.objects.filter(fk_matricula=matricula, fk_nivel=nivel).count()
             nota = avance.avm_nota_final or 0
             if nota > 0:
                 notas_para_promedio.append(nota)
-
             avance_data.append({
                 'estudiante': estudiante,
                 'nota': nota,
@@ -83,23 +60,13 @@ def generar_pdf_nivel(request, clase_id, nivel_id):
         'docente_nombre': f"{clase.fk_docente.fk_id_persona.fk_id_usuario.first_name} {clase.fk_docente.fk_id_persona.fk_id_usuario.last_name}"
     }
 
-    template = get_template('reportes/pdf_nivel.html')
-    html_string = template.render(context)
-    pdf = generar_pdf_desde_html(html_string)
-
-    if pdf is None:
-        return HttpResponse("Error al generar el PDF", status=500)
-
-    response = HttpResponse(pdf, content_type='application/pdf')
-    response['Content-Disposition'] = f'inline; filename="avance_{clase.cla_nombre}_{nivel.niv_nombre}.pdf"'
-    return response
+    return render_to_pdf_response(request, 'reportes/pdf_nivel.html', context)
 
 
 @login_required
 def generar_pdf_general(request, clase_id):
     clase = get_object_or_404(Clases, cla_id=clase_id)
     niveles = Niveles.objects.filter(fk_modulo=clase.fk_modulo, niv_estado=True).order_by('orden')
-
     matriculas = Matriculas.objects.filter(fk_clase=clase, mat_estado=True)
 
     avance_data = []
@@ -111,10 +78,7 @@ def generar_pdf_general(request, clase_id):
 
         for nivel in niveles:
             try:
-                avance = Avance_Matriculados.objects.get(
-                    fk_matricula=matricula,
-                    fk_nivel=nivel
-                )
+                avance = Avance_Matriculados.objects.get(fk_matricula=matricula, fk_nivel=nivel)
                 nota = avance.avm_nota_final or 0
                 niveles_data.append({
                     'nivel_id': nivel.niv_id,
@@ -166,13 +130,4 @@ def generar_pdf_general(request, clase_id):
         'docente_nombre': f"{clase.fk_docente.fk_id_persona.fk_id_usuario.first_name} {clase.fk_docente.fk_id_persona.fk_id_usuario.last_name}"
     }
 
-    template = get_template('reportes/pdf_general.html')
-    html_string = template.render(context)
-    pdf = generar_pdf_desde_html(html_string)
-
-    if pdf is None:
-        return HttpResponse("Error al generar el PDF", status=500)
-
-    response = HttpResponse(pdf, content_type='application/pdf')
-    response['Content-Disposition'] = f'inline; filename="avance_general_{clase.cla_nombre}.pdf"'
-    return response
+    return render_to_pdf_response(request, 'reportes/pdf_general.html', context)
