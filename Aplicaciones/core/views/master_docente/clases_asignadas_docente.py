@@ -11,6 +11,8 @@ from django.contrib.auth.models import Group
 from django.views.decorators.http import require_GET, require_POST
 import pandas as pd
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models import Avg
+
 
 
 
@@ -258,6 +260,8 @@ def importar_estudiantes_excel_docente(request):
             cedula = str(row.get('cedula', '')).strip().replace('.', '').replace(',', '')
             telefono = str(row.get('telefono', '')).strip().replace('.', '').replace(',', '')
             email = str(row.get('email', f"{cedula}@example.com")).strip()
+            
+            print(f"Nombre procesado: {nombre}, Apellido: {apellido}")
 
             # Validación básica de cédula
             if len(cedula) < 5 or not cedula.isdigit():
@@ -359,9 +363,23 @@ def ver_notas_estudiantes(request, cla_id):
                     'nivel_estado': nivel.niv_estado
                 })
         data.append(fila)
+        
+    # Calcular promedios por nivel
+    promedios_por_nivel = {}
+    for nivel in niveles:
+        promedio = Avance_Matriculados.objects.filter(
+            fk_matricula__fk_clase=clase,
+            fk_nivel=nivel,
+            avm_nota_final__isnull=False
+        ).aggregate(prom=Avg('avm_nota_final'))['prom']
+
+        promedios_por_nivel[nivel.niv_id] = round(promedio, 2) if promedio is not None else "-"
+
+        
 
     return render(request, 'masterdocente/avance/Index.html', {
         'clase': clase,
         'niveles': niveles,
-        'avance_data': data
+        'avance_data': data,
+        'promedios_por_nivel': promedios_por_nivel
     })

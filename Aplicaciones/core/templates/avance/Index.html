@@ -26,6 +26,7 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
+              {% load custom_filters %}
                 <table class="table table-striped" id="tbl-matriculados-admin" width="100%" cellspacing="0">
                 <thead>
                     <tr>
@@ -73,6 +74,16 @@
                         {% endfor %}
                     </tr>
                     {% endfor %}
+                    <tr style="background-color: #f2f2f2; font-weight: bold;">
+                      <td>—</td> <!-- Columna del contador -->
+                      <td>Promedio del nivel</td> <!-- Columna del nombre -->
+
+                      {% for nivel in niveles %}
+                      <td class="text-center">
+                          {{ promedios_por_nivel|get_item:nivel.niv_id }}
+                      </td>
+                      {% endfor %}
+                  </tr>
                 </tbody>
             </table>
             </div>
