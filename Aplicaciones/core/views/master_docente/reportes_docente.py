@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.template.loader import get_template
 from django.template import Context
-from weasyprint import HTML, CSS
+from weasyprint import HTML
 from django.conf import settings
 from datetime import datetime
 import os
