@@ -1,20 +1,17 @@
 import pandas as pd
-import openpyxl
 import io
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from ..models import Matriculas, Estudiantes, Clases,Personas, Matriculas,User
-from ..forms.matricula_form import MatriculasForm
-from django.db import transaction
 from django.http import HttpResponse
-from io import BytesIO
 from openpyxl import Workbook, load_workbook
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
-from openpyxl.utils import get_column_letter
 from openpyxl.styles import Font
 from django.db.models import Count
+from django.contrib.auth.models import User, Group
+from django.contrib.auth.decorators import login_required
 
 
 
@@ -223,18 +220,22 @@ def descargar_plantilla_estudiantes(request):
     )
     response['Content-Disposition'] = 'attachment; filename=plantilla_estudiantes.xlsx'
     return response
+@login_required
 def importar(request):
     clases = Clases.objects.all()
     resultados = {}
+    advertencias = []
 
     # Descargar plantilla
     if request.method == 'POST' and 'descargar_plantilla' in request.POST:
         wb = Workbook()
         ws = wb.active
         ws.title = 'Estudiantes'
-        ws.append(['Nombres', 'Apellidos', 'Segundo Nombre', 'Segundo Apellido', 'Cédula', 'Teléfono', 'Fecha Nacimiento', 'Contacto Emergencia', 'Teléfono Emergencia'])
-
-        # Exportar
+        ws.append([
+            'Nombres', 'Apellidos', 'Segundo Nombre', 'Segundo Apellido',
+            'Cédula', 'Teléfono', 'Fecha Nacimiento',
+            'Contacto Emergencia', 'Teléfono Emergencia'
+        ])
         response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
         response['Content-Disposition'] = 'attachment; filename=plantilla_estudiantes.xlsx'
         wb.save(response)
@@ -248,40 +249,94 @@ def importar(request):
         if archivo_excel and clase_id:
             wb = load_workbook(filename=archivo_excel)
             ws = wb.active
-            clase = Clases.objects.get(pk=clase_id)
-            estudiantes_importados = []
+            clase = get_object_or_404(Clases, pk=clase_id)
+            agregados = 0
+            matriculados_existentes = 0
 
             for i, row in enumerate(ws.iter_rows(min_row=2, values_only=True)):
-                nombres, apellidos, segundo_nombre, segundo_apellido, cedula, telefono, fecha_nac, contacto_emer, tel_emer = row
+                nombre, apellido, segundo_nombre, segundo_apellido, cedula, telefono, fecha_nac, contacto_emer, tel_emer = row
 
-                persona, creada = Personas.objects.get_or_create(
+                if not cedula or not str(cedula).isdigit() or len(str(cedula)) < 5:
+                    advertencias.append(f"Fila {i+2}: Cédula inválida.")
+                    continue
+
+                cedula = str(cedula).strip()
+                nombre = str(nombre or '').strip().title()
+                apellido = str(apellido or '').strip().title()
+                segundo_nombre = str(segundo_nombre or '').strip().title()
+                segundo_apellido = str(segundo_apellido or '').strip().title()
+                telefono = str(telefono or '').strip()
+                email = f"{cedula}@example.com"
+                
+                print(f"Nombre procesado: {nombre}, Apellido: {apellido}")
+                # Verificar si ya existe el usuario
+                usuario = User.objects.filter(username=cedula).first()
+
+                if usuario:
+                    # Verificar si existe persona asociada
+                    persona = Personas.objects.filter(fk_id_usuario=usuario).first()
+                    if not persona:
+                        persona = Personas.objects.create(
+                            fk_id_usuario=usuario,
+                            per_segundo_nombre=segundo_nombre,
+                            per_segundo_apellido=segundo_apellido,
+                            per_cedula=cedula,
+                            per_telefono=telefono,
+                            per_fecha_nacimiento=fecha_nac
+                        )
+
+                    # Verificar si existe estudiante asociado
+                    estudiante = Estudiantes.objects.filter(fk_id_persona=persona).first()
+                    if not estudiante:
+                        estudiante = Estudiantes.objects.create(
+                            fk_id_persona=persona,
+                            est_contacto_emergencia=contacto_emer,
+                            est_telefono_emergencia=tel_emer
+                        )
+
+                    # Verificar si ya está matriculado
+                    if Matriculas.objects.filter(fk_clase=clase, fk_estudiante=estudiante).exists():
+                        advertencias.append(f"Fila {i+2}: Estudiante ya matriculado.")
+                    else:
+                        Matriculas.objects.create(fk_clase=clase, fk_estudiante=estudiante)
+                        matriculados_existentes += 1
+                    continue  # Pasar a la siguiente fila
+
+                # Si no existe el usuario, lo creamos
+                usuario = User.objects.create_user(
+                    username=cedula,
+                    first_name=nombre,
+                    last_name=apellido,
+                    email=email,
+                    password=cedula
+                )
+
+                grupo_estudiantes, _ = Group.objects.get_or_create(name="Estudiantes")
+                usuario.groups.add(grupo_estudiantes)
+
+                persona = Personas.objects.create(
+                    fk_id_usuario=usuario,
+                    per_segundo_nombre=segundo_nombre,
+                    per_segundo_apellido=segundo_apellido,
                     per_cedula=cedula,
-                    defaults={
-                        'fk_id_usuario_id': 1,  # Asignar usuario dummy o generar uno si hace falta
-                        'per_segundo_nombre': segundo_nombre,
-                        'per_segundo_apellido': segundo_apellido,
-                        'per_fecha_nacimiento': fecha_nac,
-                        'per_telefono': telefono,
-                    }
+                    per_telefono=telefono,
+                    per_fecha_nacimiento=fecha_nac
                 )
 
-                estudiante, creado = Estudiantes.objects.get_or_create(
+                estudiante = Estudiantes.objects.create(
                     fk_id_persona=persona,
-                    defaults={
-                        'est_contacto_emergencia': contacto_emer,
-                        'est_telefono_emergencia': tel_emer
-                    }
+                    est_contacto_emergencia=contacto_emer,
+                    est_telefono_emergencia=tel_emer
                 )
 
-                Matriculas.objects.get_or_create(
-                    fk_estudiante=estudiante,
-                    fk_clase=clase
-                )
+                Matriculas.objects.create(fk_clase=clase, fk_estudiante=estudiante)
+                agregados += 1
 
-                estudiantes_importados.append(estudiante)
+            mensaje = f"{agregados} estudiante(s) nuevo(s) importado(s). {matriculados_existentes} estudiante(s) existente(s) matriculado(s)."
+            if advertencias:
+                mensaje += f"\n{len(advertencias)} advertencia(s):\n" + "\n".join(advertencias)
 
-            resultados[clase] = estudiantes_importados
-            messages.success(request, "Importación realizada correctamente.")
+            messages.success(request, mensaje)
         else:
             messages.error(request, "Debe seleccionar una clase y subir un archivo.")
 

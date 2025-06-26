@@ -13,7 +13,7 @@ Avance Estudiantes
 
 <div class="container-fluid ">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Clases</h1>
+        <h1 class="h3 mb-0 text-gray-800">{{ clase.cla_nombre }}</h1>
 
     </div>
 
@@ -24,13 +24,36 @@ Avance Estudiantes
     </ol>
 
     <div class="card mb-4">
-        <div class="card-header">
-            <i class="fas fa-table me-1"></i>
-            Calificaciones
-        </div>
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <div>
+              <i class="fas fa-table me-1"></i>
+              <strong>{{ clase.fk_modulo.mod_nombre }}</strong>
+          </div>
+          <div class="btn-group">
+              <button type="button" class="btn btn-sm btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                  📄 PDF
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end">
+                  {% for nivel in niveles %}
+                  <li>
+                      <a class="dropdown-item" href="#" >
+                          Nivel {{ nivel.niv_nombre }}
+                      </a>
+                  </li>
+                  {% endfor %}
+                  <li><hr class="dropdown-divider"></li>
+                  <li>
+                      <a class="dropdown-item text-primary fw-bold" href="#" >
+                          📘 Todos los niveles
+                      </a>
+                  </li>
+              </ul>
+          </div>
+      </div>
+
         <div class="card-body">
-
-
+                <div class="table-responsive"> 
+                {% load custom_filters %}
                 <table class="table table-striped" id="tbl-matriculados-docente" width="100%" cellspacing="0">
                     <thead>
                         <tr>
@@ -77,8 +100,19 @@ Avance Estudiantes
                             {% endfor %}
                         </tr>
                         {% endfor %}
+                        <tr style="background-color: #f2f2f2; font-weight: bold;">
+                            <td>—</td> <!-- Columna del contador -->
+                            <td>Promedio del nivel</td> <!-- Columna del nombre -->
+
+                            {% for nivel in niveles %}
+                            <td class="text-center">
+                                {{ promedios_por_nivel|get_item:nivel.niv_id }}
+                            </td>
+                            {% endfor %}
+                        </tr>
                     </tbody>
                 </table>
+            </div>
 
         </div>
     </div>
