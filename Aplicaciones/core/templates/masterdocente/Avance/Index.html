@@ -36,16 +36,22 @@ Avance Estudiantes
               <ul class="dropdown-menu dropdown-menu-end">
                   {% for nivel in niveles %}
                   <li>
-                      <a class="dropdown-item" href="#" >
-                          Nivel {{ nivel.niv_nombre }}
+                      <a class="dropdown-item" href="{% url 'pdf_nivel' clase.cla_id nivel.niv_id %}" target="_blank" rel="noopener noreferrer">
+                          <i class="fas fa-file-alt text-primary"></i> PDF {{ nivel.niv_nombre }}
                       </a>
                   </li>
                   {% endfor %}
                   <li><hr class="dropdown-divider"></li>
                   <li>
-                      <a class="dropdown-item text-primary fw-bold" href="#" >
-                          📘 Todos los niveles
+                      <a class="dropdown-item text-primary fw-bold" href="{% url 'pdf_general' clase.cla_id %}" target="_blank" rel="noopener noreferrer">
+                          <i class="fas fa-file-pdf text-danger"></i> 📘 PDF Reporte General
                       </a>
+                  </li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li class="px-3 py-2">
+                      <small class="text-muted">
+                          <i class="fas fa-info-circle"></i> Los PDFs se abren en nueva pestaña
+                      </small>
                   </li>
               </ul>
           </div>
@@ -180,11 +186,45 @@ Avance Estudiantes
 </div>
 
 
+<!-- Alerta de éxito para PDFs -->
+<div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
+  <div id="pdfToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header bg-success text-white">
+      <i class="fas fa-external-link-alt me-2"></i>
+      <strong class="me-auto">PDF Abierto</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+      El PDF se ha abierto en una nueva pestaña para su visualización.
+    </div>
+  </div>
+</div>
+
+
 {%block js%}
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-
+       document.addEventListener("DOMContentLoaded", function() {
         recargarTablaMatriculados();
+        
+        // Mejorar la experiencia de visualización de PDFs
+        document.querySelectorAll('a[href*="pdf"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                // Mostrar indicador de carga
+                const originalText = this.innerHTML;
+                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando PDF...';
+                this.style.pointerEvents = 'none';
+                
+                // Restaurar el texto después de un momento
+                setTimeout(() => {
+                    this.innerHTML = originalText;
+                    this.style.pointerEvents = 'auto';
+                    
+                    // Mostrar toast de confirmación
+                    const toast = new bootstrap.Toast(document.getElementById('pdfToast'));
+                    toast.show();
+                }, 1000);
+            });
+        });
     });
     function recargarTablaMatriculados(){
         $('#tbl-matriculados-docente').DataTable({
