@@ -1,10 +1,10 @@
-# Imagen base oficial de Python
+# Imagen base ligera de Python
 FROM python:3.11-slim
 
-# Establecer el directorio de trabajo
+# Establecer directorio de trabajo
 WORKDIR /app
 
-# Instalar dependencias del sistema necesarias para PDF, Pillow, PostgreSQL
+# Instalar dependencias del sistema para WeasyPrint, PostgreSQL, Pillow, etc.
 RUN apt-get update && apt-get install -y \
     build-essential \
     libffi-dev \
@@ -17,27 +17,29 @@ RUN apt-get update && apt-get install -y \
     libpangoft2-1.0-0 \
     libgdk-pixbuf2.0-0 \
     libpq-dev \
-    python3-cairocffi \
+    libcairo2 \
+    pango1.0-tools \
     fonts-liberation \
     fonts-dejavu \
     libfreetype6 \
     libharfbuzz-dev \
     libfribidi-dev \
-    cairo \
-    pango \
     curl \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Copiar el código del proyecto
+# Copiar archivos del proyecto
 COPY . /app/
 
 # Instalar dependencias de Python
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
+
+# Recopilar archivos estáticos de Django
 RUN python manage.py collectstatic --noinput
 
-# Expone el puerto (si usas gunicorn)
+# Exponer el puerto en Railway
 EXPOSE 8000
 
-# Comando para iniciar la app en producción
+# Comando para ejecutar Gunicorn como servidor de producción
 CMD ["gunicorn", "matematicas.wsgi:application", "--bind", "0.0.0.0:8000"]
