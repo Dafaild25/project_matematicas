@@ -933,6 +933,292 @@
                 font-size: 1rem !important;
             }
         }
+        /* NUEVOS ESTILOS RESPONSIVE - AGREGAR AL FINAL */
+    
+        /* Mejoras para móvil en drag and drop */
+        .drag-sortable-number {
+            touch-action: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        
+        /* RESPONSIVE BREAKPOINTS */
+        @media (max-width: 1024px) {
+            .main-container {
+                padding: 15px;
+                max-width: 100%;
+            }
+            
+            .matching-content {
+                gap: 30px;
+            }
+            
+            .matching-left-column {
+                flex: 0 0 150px;
+            }
+            
+            .matching-number {
+                font-size: 1.8rem;
+                padding: 12px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-card h1 { 
+                font-size: 2.5rem; 
+            }
+            
+            .header-card p { 
+                font-size: 1.5rem; 
+            }
+            
+            .instruction-card {
+                font-size: 1.5rem;
+                padding: 20px;
+            }
+            
+            .numbers-grid { 
+                grid-template-columns: repeat(2, 1fr); 
+                gap: 20px; 
+            }
+            
+            .number-btn { 
+                font-size: 2rem; 
+                padding: 25px 15px; 
+            }
+            
+            .choice-row { 
+                flex-direction: column; 
+                align-items: flex-start; 
+            }
+            
+            .choice-label { 
+                margin-bottom: 10px; 
+                min-width: auto; 
+                width: 100%;
+                text-align: center;
+            }
+            
+            .choice-options {
+                justify-content: center;
+                width: 100%;
+            }
+            
+            .choice-option {
+                font-size: 1.1rem;
+                padding: 8px 16px;
+            }
+            
+            .drag-numbers-to-sort {
+                gap: 10px;
+            }
+            
+            .drag-sortable-number {
+                font-size: 16px;
+                padding: 12px 16px;
+            }
+            
+            .drag-drop-zone {
+                padding: 15px;
+                gap: 8px;
+            }
+            
+            .drag-drop-slot {
+                width: 60px;
+                height: 50px;
+            }
+            
+            .drag-drop-slot::before {
+                font-size: 10px;
+                top: -20px;
+            }
+            
+            .mobile-instruction {
+                display: block;
+            }
+            
+            /* Matching responsive */
+            .matching-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .matching-left-column {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+                flex: none;
+            }
+            
+            .matching-number {
+                font-size: 1.5rem;
+                padding: 10px;
+                min-width: 80px;
+            }
+            
+            .matching-right-column {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .matching-dots {
+                min-height: 100px;
+                padding: 15px;
+            }
+            
+            .quantity-label {
+                font-size: 1.3rem;
+            }
+            
+            .emoji {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-container {
+                padding: 10px;
+            }
+            
+            .header-card {
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+            
+            .header-card h1 { 
+                font-size: 2rem; 
+            }
+            
+            .header-card p { 
+                font-size: 1.3rem; 
+            }
+            
+            .game-card {
+                padding: 20px;
+            }
+            
+            .number-btn { 
+                font-size: 1.8rem; 
+                padding: 20px 12px; 
+            }
+            
+            .instruction-card { 
+                font-size: 1.3rem;
+                padding: 15px;
+            }
+            
+            .answer-btn {
+                font-size: 1.5rem;
+                padding: 15px 35px;
+            }
+            
+            .question-counter {
+                font-size: 1.2rem;
+                padding: 12px 20px;
+            }
+            
+            .choice-label {
+                font-size: 1.3rem;
+            }
+            
+            .choice-option {
+                font-size: 1rem;
+                padding: 6px 12px;
+                min-width: 50px;
+            }
+            
+            .drag-sortable-number {
+                font-size: 14px;
+                padding: 10px 12px;
+            }
+            
+            .drag-drop-slot {
+                width: 50px;
+                height: 40px;
+            }
+            
+            .matching-number {
+                font-size: 1.2rem;
+                padding: 8px;
+                min-width: 60px;
+            }
+            
+            .quantity-label {
+                font-size: 1.1rem;
+            }
+            
+            .emoji {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 320px) {
+            .numbers-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .number-btn {
+                font-size: 1.6rem;
+                padding: 18px 10px;
+            }
+            
+            .drag-drop-zone {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .matching-left-column {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .drag-drop-slot {
+                width: 45px;
+                height: 35px;
+            }
+            
+            .drag-sortable-number {
+                font-size: 12px;
+                padding: 8px 10px;
+            }
+        }
+
+        /* Touch improvements */
+        @media (hover: none) and (pointer: coarse) {
+            .number-btn:hover,
+            .choice-option:hover,
+            .matching-number:hover,
+            .matching-dots:hover {
+                transform: none;
+            }
+            
+            .number-btn:active {
+                transform: scale(0.95);
+            }
+            
+            .choice-option:active {
+                transform: scale(0.95);
+            }
+        }
+
+        /* Utility classes */
+        .mobile-device .number-btn:hover,
+        .mobile-device .choice-option:hover,
+        .mobile-device .matching-number:hover,
+        .mobile-device .matching-dots:hover {
+            transform: none !important;
+        }
+        
+        .mobile-device .number-btn:active,
+        .mobile-device .choice-option:active {
+            transform: scale(0.95) !important;
+            transition: transform 0.1s ease !important;
+        }
 </style>
 {% endblock %}
 
@@ -1030,13 +1316,29 @@
                             <h3 style="color: #74b9ff; text-align: center; font-size: 1.8rem; margin-bottom: 20px; font-weight: 800;">
                                 🔢 ¡Ordena los números de MENOR a MAYOR! 🔢
                             </h3>
-                            <div class="drag-numbers-to-sort" id="drag-numbers-to-sort">
-                                <div class="drag-sortable-number" data-value="32" draggable="true">32</div>
-                                <div class="drag-sortable-number" data-value="11" draggable="true">11</div>
-                                <div class="drag-sortable-number" data-value="28" draggable="true">28</div>
-                                <div class="drag-sortable-number" data-value="46" draggable="true">46</div>
-                                <div class="drag-sortable-number" data-value="18" draggable="true">18</div>
+                            
+                            <!-- NUEVA INSTRUCCIÓN PARA EL SISTEMA DE CLICK -->
+                            <div class="click-instruction" style="
+                                background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+                                color: white;
+                                padding: 15px;
+                                border-radius: 10px;
+                                margin-bottom: 20px;
+                                text-align: center;
+                                font-weight: bold;
+                            ">
+                                🖱️ <strong>Instrucciones:</strong> Haz clic en los números en el orden correcto (de menor a mayor).
+                                <br>💡 <strong>Tip:</strong> Puedes hacer clic en las casillas naranjas para quitar números.
                             </div>
+                            
+                            <div class="drag-numbers-to-sort" id="drag-numbers-to-sort">
+                                <div class="drag-sortable-number" data-value="32" draggable="false">32</div>
+                                <div class="drag-sortable-number" data-value="11" draggable="false">11</div>
+                                <div class="drag-sortable-number" data-value="28" draggable="false">28</div>
+                                <div class="drag-sortable-number" data-value="46" draggable="false">46</div>
+                                <div class="drag-sortable-number" data-value="18" draggable="false">18</div>
+                            </div>
+                            
                             <div class="drag-drop-zone" id="drag-drop-zone">
                                 <div class="drag-drop-slot" data-position="1°"></div>
                                 <div class="drag-drop-slot" data-position="2°"></div>
@@ -1184,6 +1486,10 @@
         '31': '#27ae60',
         '47': '#f39c12'
     };
+
+    // NUEVAS VARIABLES PARA MÓVIL - AGREGAR ESTAS
+    let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
 
     // Generar ID único de sesión
     function generateSessionId() {
@@ -1716,108 +2022,451 @@
         }
     }
 
-    // Mostrar la pregunta de drag and drop
+    // REEMPLAZAR la función showDragDropQuestion existente
     function showDragDropQuestion() {
-        // Las otras preguntas se ocultan en showQuestion(), así que esto no es necesario
-        // pero está bien dejarlo para asegurar
         document.getElementById('numbers-container').style.display = 'none';
-        
-        // MOSTRAR el contenedor de drag and drop (estaba oculto)
         document.getElementById('drag-drop-container').style.display = 'block';
         
-        // Cambiar las instrucciones
-        document.getElementById('main-instruction').innerHTML = '🔢 ¡Ordena los números del más pequeño al más grande!';
+        // Cambiar las instrucciones para el nuevo sistema
+        document.getElementById('main-instruction').innerHTML = '🔢 ¡Ordena los números haciendo clic!';
         document.getElementById('instruction-card').innerHTML = `
-            <i class="fas fa-sort-numeric-up mr-2"></i>
-            ¡Arrastra los números y colócalos en orden de MENOR a MAYOR!
-            <i class="fas fa-sort-numeric-up ml-2"></i>
+            <i class="fas fa-mouse-pointer mr-2"></i>
+            ¡Haz clic en los números en el orden de MENOR a MAYOR! 
+            <br><small>💡 Tip: Puedes hacer clic en las casillas para quitar números</small>
+            <i class="fas fa-mouse-pointer ml-2"></i>
         `;
 
-        // Actualizar contador de preguntas
         document.getElementById('question-counter').innerHTML = `
             <i class="fas fa-star mr-2"></i>
             Pregunta ${currentQuestion} de ${totalQuestions}
             <i class="fas fa-star ml-2"></i>
         `;
 
-        // Resetear drag and drop
-        resetDragDrop();
-        
-        // Inicializar drag and drop
-        initDragDrop();
-        
-        // Deshabilitar botón hasta que se complete el ordenamiento
-        document.getElementById('answer-btn').disabled = true;
-        document.getElementById('answer-btn').textContent = 'Completa el ordenamiento';
+        // Inicializar el nuevo sistema
+        initClickToOrder();
     }
 
     // Variables para drag and drop
-    let draggedElement = null;
-    const correctDragOrder = [11, 18, 28, 32, 46]; // Orden de menor a mayor
+    let orderSequence = []; // Array para mantener el orden de los números seleccionados
+    let clickOrder = 1; // Contador para el orden de clic
+    const correctOrderNumbers = [11, 18, 28, 32, 46]; // Orden correcto de menor a mayor
 
+    // NUEVA función para inicializar el sistema de click-to-order
+    function initClickToOrder() {
+        const sortableNumbers = document.querySelectorAll('.drag-sortable-number');
+        const dropSlots = document.querySelectorAll('.drag-drop-slot');
 
-    // Inicializar drag and drop
+        // Resetear variables
+        orderSequence = [];
+        clickOrder = 1;
+
+        // Limpiar slots existentes
+        dropSlots.forEach(slot => {
+            slot.innerHTML = '';
+            slot.classList.remove('filled', 'drag-over', 'mobile-target');
+            slot.setAttribute('data-slot-number', '');
+        });
+
+        // Configurar números clicables
+        sortableNumbers.forEach(number => {
+            number.style.display = 'flex';
+            number.classList.remove('mobile-selected', 'dragging', 'selected', 'placed');
+            number.style.cursor = 'pointer';
+            number.style.opacity = '1';
+            
+            // Remover todos los event listeners anteriores clonando el elemento
+            const newNumber = number.cloneNode(true);
+            number.parentNode.replaceChild(newNumber, number);
+            
+            // Agregar nuevo event listener para el clic
+            newNumber.addEventListener('click', function(e) {
+                e.preventDefault();
+                handleNumberClick(this);
+            });
+        });
+
+        // Configurar slots clicables para remover números
+        dropSlots.forEach(slot => {
+            slot.addEventListener('click', function(e) {
+                e.preventDefault();
+                handleSlotClick(this);
+            });
+        });
+
+        // Resetear botón
+        document.getElementById('answer-btn').disabled = true;
+        updateButtonText();
+    }
+
+    // NUEVA función para manejar clic en números
+    function handleNumberClick(numberElement) {
+        const numberValue = parseInt(numberElement.getAttribute('data-value'));
+        
+        // Verificar si el número ya está colocado
+        if (numberElement.classList.contains('placed')) {
+            // Si ya está colocado, removerlo y reorganizar
+            removeNumberFromOrder(numberValue, numberElement);
+            return;
+        }
+
+        // Verificar si hay espacio disponible
+        if (orderSequence.length >= 5) {
+            Swal.fire({
+                icon: 'info',
+                title: '¡Espacios llenos!',
+                text: 'Ya has colocado todos los números. Puedes hacer clic en una casilla para remover un número.',
+                timer: 2000,
+                showConfirmButton: false
+            });
+            return;
+        }
+
+        // Agregar número al orden
+        addNumberToOrder(numberValue, numberElement);
+    }
+
+    // NUEVA función para agregar número al orden
+    function addNumberToOrder(numberValue, numberElement) {
+        // Encontrar el siguiente slot vacío
+        const emptySlot = document.querySelector('.drag-drop-slot:not(.filled)');
+        
+        if (!emptySlot) {
+            console.error('No hay slots vacíos disponibles');
+            return;
+        }
+
+        // Agregar a la secuencia
+        orderSequence.push({
+            value: numberValue,
+            order: clickOrder,
+            element: numberElement,
+            slot: emptySlot
+        });
+
+        // Crear elemento visual en el slot
+        const slotNumber = document.createElement('div');
+        slotNumber.className = 'drag-dropped-number click-ordered-number';
+        slotNumber.textContent = numberValue;
+        slotNumber.setAttribute('data-value', numberValue);
+        slotNumber.setAttribute('data-order', clickOrder);
+        
+        // Agregar indicador de orden
+        const orderIndicator = document.createElement('div');
+        orderIndicator.className = 'order-indicator';
+        orderIndicator.textContent = clickOrder;
+        slotNumber.appendChild(orderIndicator);
+
+        // Colocar en el slot
+        emptySlot.appendChild(slotNumber);
+        emptySlot.classList.add('filled');
+        emptySlot.setAttribute('data-slot-number', numberValue);
+
+        // Marcar el número original como colocado
+        numberElement.classList.add('placed');
+        numberElement.style.opacity = '0.4';
+        numberElement.style.transform = 'scale(0.9)';
+
+        // Incrementar contador
+        clickOrder++;
+
+        // Verificar si está completo
+        checkOrderComplete();
+        
+        // Efectos visuales
+        createClickEffect(numberElement);
+        
+        console.log('Orden actual:', orderSequence.map(item => item.value));
+    }
+
+    // NUEVA función para remover número del orden
+    function removeNumberFromOrder(numberValue, numberElement) {
+        // Encontrar el número en la secuencia
+        const index = orderSequence.findIndex(item => item.value === numberValue);
+        
+        if (index === -1) {
+            console.error('Número no encontrado en la secuencia');
+            return;
+        }
+
+        // Obtener el item a remover
+        const itemToRemove = orderSequence[index];
+        
+        // Remover del slot
+        const slotElement = itemToRemove.slot.querySelector('.click-ordered-number');
+        if (slotElement) {
+            slotElement.remove();
+        }
+        itemToRemove.slot.classList.remove('filled');
+        itemToRemove.slot.setAttribute('data-slot-number', '');
+
+        // Remover de la secuencia
+        orderSequence.splice(index, 1);
+
+        // Restaurar apariencia del número original
+        numberElement.classList.remove('placed');
+        numberElement.style.opacity = '1';
+        numberElement.style.transform = 'scale(1)';
+
+        // Reorganizar los números restantes y actualizar orden visual
+        reorganizeOrder();
+        
+        // Verificar completitud
+        checkOrderComplete();
+        
+        console.log('Número removido. Orden actual:', orderSequence.map(item => item.value));
+    }
+
+    // NUEVA función para reorganizar el orden después de una eliminación
+    function reorganizeOrder() {
+        // Limpiar todos los slots
+        const dropSlots = document.querySelectorAll('.drag-drop-slot');
+        dropSlots.forEach(slot => {
+            slot.innerHTML = '';
+            slot.classList.remove('filled');
+            slot.setAttribute('data-slot-number', '');
+        });
+
+        // Reorganizar secuencia y recolocar en orden
+        orderSequence.forEach((item, index) => {
+            const newSlot = dropSlots[index];
+            const newOrder = index + 1;
+            
+            // Crear nuevo elemento visual
+            const slotNumber = document.createElement('div');
+            slotNumber.className = 'drag-dropped-number click-ordered-number';
+            slotNumber.textContent = item.value;
+            slotNumber.setAttribute('data-value', item.value);
+            slotNumber.setAttribute('data-order', newOrder);
+            
+            // Agregar indicador de orden actualizado
+            const orderIndicator = document.createElement('div');
+            orderIndicator.className = 'order-indicator';
+            orderIndicator.textContent = newOrder;
+            slotNumber.appendChild(orderIndicator);
+
+            // Colocar en el nuevo slot
+            newSlot.appendChild(slotNumber);
+            newSlot.classList.add('filled');
+            newSlot.setAttribute('data-slot-number', item.value);
+            
+            // Actualizar referencia del slot en la secuencia
+            item.slot = newSlot;
+            item.order = newOrder;
+        });
+
+        // Actualizar contador de orden
+        clickOrder = orderSequence.length + 1;
+    }
+
+    // NUEVA función para manejar clic en slots (para remover números)
+    function handleSlotClick(slotElement) {
+        const slotNumber = slotElement.getAttribute('data-slot-number');
+        
+        if (!slotNumber || slotNumber === '') {
+            return; // Slot vacío, no hacer nada
+        }
+
+        const numberValue = parseInt(slotNumber);
+        
+        // Encontrar el elemento número original
+        const originalNumber = document.querySelector(`.drag-sortable-number[data-value="${numberValue}"]`);
+        
+        if (originalNumber) {
+            removeNumberFromOrder(numberValue, originalNumber);
+        }
+    }
+
+    // NUEVA función para verificar si el orden está completo
+    function checkOrderComplete() {
+        const answerBtn = document.getElementById('answer-btn');
+        
+        if (orderSequence.length === 5) {
+            answerBtn.disabled = false;
+            updateButtonText('¡VERIFICAR ORDEN!');
+        } else {
+            answerBtn.disabled = true;
+            updateButtonText();
+        }
+    }
+
+    // NUEVA función para actualizar texto del botón
+    function updateButtonText(customText = null) {
+        const answerBtn = document.getElementById('answer-btn');
+        
+        if (customText) {
+            answerBtn.innerHTML = `<i class="fas fa-check mr-2"></i> ${customText}`;
+        } else {
+            const remaining = 5 - orderSequence.length;
+            answerBtn.innerHTML = `<i class="fas fa-sort-numeric-up mr-2"></i> Faltan ${remaining} números`;
+        }
+    }
+
+    // NUEVA función para verificar el orden de los números
+    function checkClickOrder() {
+        const userOrder = orderSequence.map(item => item.value);
+        const isCorrect = userOrder.every((value, index) => value === correctOrderNumbers[index]);
+        
+        // Efectos visuales en los slots
+        const dropSlots = document.querySelectorAll('.drag-drop-slot.filled');
+        dropSlots.forEach((slot, index) => {
+            const slotNumber = slot.querySelector('.click-ordered-number');
+            if (slotNumber) {
+                const numberValue = parseInt(slotNumber.getAttribute('data-value'));
+                
+                if (numberValue === correctOrderNumbers[index]) {
+                    slot.classList.add('correct-slot');
+                    slotNumber.classList.add('correct-number');
+                } else {
+                    slot.classList.add('incorrect-slot');
+                    slotNumber.classList.add('incorrect-number');
+                }
+            }
+        });
+
+        // Deshabilitar más interacciones
+        document.querySelectorAll('.drag-sortable-number').forEach(num => {
+            num.style.cursor = 'not-allowed';
+            num.style.pointerEvents = 'none';
+        });
+
+        document.querySelectorAll('.drag-drop-slot').forEach(slot => {
+            slot.style.cursor = 'not-allowed';
+            slot.style.pointerEvents = 'none';
+        });
+
+        return {
+            isCorrect: isCorrect,
+            message: isCorrect ? 
+                '🎉 ¡Excelente! Has ordenado correctamente los números de menor a mayor.' :
+                '❌ El orden no es correcto. Recuerda: debe ser de MENOR a MAYOR.'
+        };
+    }
+
+    // NUEVA función para crear efecto visual al hacer clic
+    function createClickEffect(element) {
+        const effect = document.createElement('div');
+        effect.style.cssText = `
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            background: #4CAF50;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: clickPulse 0.6s ease-out;
+            pointer-events: none;
+            z-index: 1000;
+        `;
+        
+        element.style.position = 'relative';
+        element.appendChild(effect);
+        
+        setTimeout(() => {
+            if (effect.parentNode) {
+                effect.remove();
+            }
+        }, 600);
+    }
+
+    // NUEVA función para resetear el sistema de click-to-order
+    function resetClickToOrder() {
+        orderSequence = [];
+        clickOrder = 1;
+        
+        const sortableNumbers = document.querySelectorAll('.drag-sortable-number');
+        const dropSlots = document.querySelectorAll('.drag-drop-slot');
+        
+        // Limpiar slots
+        dropSlots.forEach(slot => {
+            slot.innerHTML = '';
+            slot.classList.remove('filled', 'correct-slot', 'incorrect-slot');
+            slot.setAttribute('data-slot-number', '');
+            slot.style.cursor = 'pointer';
+            slot.style.pointerEvents = 'auto';
+        });
+        
+        // Restaurar números
+        sortableNumbers.forEach(number => {
+            number.style.display = 'flex';
+            number.classList.remove('placed');
+            number.style.opacity = '1';
+            number.style.transform = 'scale(1)';
+            number.style.cursor = 'pointer';
+            number.style.pointerEvents = 'auto';
+        });
+        
+        // Resetear botón
+        document.getElementById('answer-btn').disabled = true;
+        updateButtonText();
+    }
+
+    // FUNCIÓN PARA DETECTAR MÓVIL - AGREGAR ESTA
+    function detectMobile() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+               (navigator.maxTouchPoints && navigator.maxTouchPoints > 2);
+    }
+    
+    // FUNCIÓN PARA CONFIGURAR OPTIMIZACIONES TÁCTILES - AGREGAR ESTA
+    function setupTouchOptimizations() {
+        if (detectMobile()) {
+            document.addEventListener('touchstart', function(e) {
+                if (e.touches.length > 1) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+
+            let lastTouchEnd = 0;
+            document.addEventListener('touchend', function(e) {
+                const now = (new Date()).getTime();
+                if (now - lastTouchEnd <= 300) {
+                    e.preventDefault();
+                }
+                lastTouchEnd = now;
+            }, false);
+
+            document.body.classList.add('mobile-device');
+        }
+    }
+    
+    // MODIFICAR TU FUNCIÓN initDragDrop EXISTENTE - REEMPLAZAR CON ESTA
     function initDragDrop() {
         const sortableNumbers = document.querySelectorAll('.drag-sortable-number');
         const dropSlots = document.querySelectorAll('.drag-drop-slot');
 
-        // Event listeners para números arrastrables
-        sortableNumbers.forEach(number => {
-            // Remover listeners previos para evitar duplicados
-            number.removeEventListener('dragstart', handleDragStart);
-            number.removeEventListener('dragend', handleDragEnd);
-            
-            // Agregar listeners
-            number.addEventListener('dragstart', handleDragStart);
-            number.addEventListener('dragend', handleDragEnd);
-        });
-
-        // Event listeners para slots
         dropSlots.forEach(slot => {
-            // Remover listeners previos
-            slot.removeEventListener('dragover', handleDragOver);
-            slot.removeEventListener('drop', handleDrop);
-            slot.removeEventListener('dragenter', handleDragEnter);
-            slot.removeEventListener('dragleave', handleDragLeave);
-            slot.removeEventListener('click', handleSlotClick);
-            
-            // Agregar listeners
-            slot.addEventListener('dragover', handleDragOver);
-            slot.addEventListener('drop', handleDrop);
-            slot.addEventListener('dragenter', handleDragEnter);
-            slot.addEventListener('dragleave', handleDragLeave);
-            slot.addEventListener('click', handleSlotClick); // Para devolver números al hacer clic
+            const existing = slot.querySelector('.drag-dropped-number');
+            if (existing) {
+                existing.remove();
+                slot.classList.remove('filled');
+            }
         });
-    }
 
-    // Funciones de drag and drop
-    function handleDragStart(e) {
-        draggedElement = this;
-        this.classList.add('dragging');
-        e.dataTransfer.effectAllowed = 'move';
-    }
+        sortableNumbers.forEach(number => {
+            number.style.display = 'block';
+            number.classList.remove('mobile-selected');
+            
+            if (isMobile) {
+                number.addEventListener('touchstart', handleMobileTouchStart, { passive: false });
+                number.addEventListener('click', handleMobileNumberSelect);
+            } else {
+                number.addEventListener('dragstart', handleDragStart);
+                number.addEventListener('dragend', handleDragEnd);
+            }
+        });
 
-    function handleDragEnd(e) {
-        this.classList.remove('dragging');
-        // No resetear draggedElement aquí, se hace en handleDrop
-    }
-
-    function handleDragOver(e) {
-        e.preventDefault();
-        e.dataTransfer.dropEffect = 'move';
-        return false;
-    }
-
-    function handleDragEnter(e) {
-        e.preventDefault();
-        // Solo agregar efecto visual si el slot está vacío
-        if (!this.querySelector('.drag-dropped-number')) {
-            this.classList.add('drag-over');
-        }
-    }
-
-    function handleDragLeave(e) {
-        this.classList.remove('drag-over');
+        dropSlots.forEach(slot => {
+            slot.classList.remove('mobile-target');
+            
+            if (isMobile) {
+                slot.addEventListener('click', handleMobileSlotSelect);
+            } else {
+                slot.addEventListener('dragover', handleDragOver);
+                slot.addEventListener('drop', handleDrop);
+                slot.addEventListener('dragenter', handleDragEnter);
+                slot.addEventListener('dragleave', handleDragLeave);
+            }
+        });
     }
 
     // Función para verificar si el drag and drop está completo
@@ -1841,51 +2490,6 @@
             answerBtn.disabled = true;
             answerBtn.textContent = `Faltan ${dropSlots.length - filledSlots} números`;
         }
-    }
-    function handleDrop(e) {
-        e.stopPropagation();
-        e.preventDefault();
-        this.classList.remove('drag-over');
-
-        // Si el slot ya tiene un número, intercambiar
-        const existingNumber = this.querySelector('.drag-dropped-number');
-        
-        if (draggedElement) {
-            if (existingNumber) {
-                // Intercambiar: devolver el número existente al área de números
-                const numbersContainer = document.getElementById('drag-numbers-to-sort');
-                const originalNumbers = document.querySelectorAll('.drag-sortable-number');
-                
-                // Encontrar y mostrar el número original correspondiente
-                originalNumbers.forEach(num => {
-                    if (num.getAttribute('data-value') === existingNumber.getAttribute('data-value')) {
-                        num.style.display = 'flex';
-                    }
-                });
-                
-                existingNumber.remove();
-            }
-
-            // Crear el número en el slot
-            const droppedNumber = document.createElement('div');
-            droppedNumber.className = 'drag-dropped-number';
-            droppedNumber.textContent = draggedElement.textContent;
-            droppedNumber.setAttribute('data-value', draggedElement.getAttribute('data-value'));
-            
-            this.appendChild(droppedNumber);
-            this.classList.add('filled');
-            
-            // Ocultar el número original
-            draggedElement.style.display = 'none';
-            
-            // Resetear elemento arrastrado
-            draggedElement = null;
-            
-            // Verificar si el drag and drop está completo
-            checkDragDropComplete();
-        }
-        
-        return false;
     }
 
     // Manejar clic en slot para devolver números
@@ -1911,105 +2515,9 @@
         }
     }
 
-    function handleDroppedDragStart(e) {
-        draggedElement = this;
-        this.classList.add('dragging');
-        e.dataTransfer.effectAllowed = 'move';
-        
-        // Permitir arrastrar de vuelta al área de números
-        const numbersArea = document.getElementById('drag-numbers-to-sort');
-        numbersArea.addEventListener('dragover', handleNumbersAreaDragOver);
-        numbersArea.addEventListener('drop', handleNumbersAreaDrop);
-    }
-
-    // Manejar drag over en el área de números
-    function handleNumbersAreaDragOver(e) {
-        e.preventDefault();
-        e.dataTransfer.dropEffect = 'move';
-    }
-
-    // Manejar drop en el área de números (devolver número)
-    function handleNumbersAreaDrop(e) {
-        e.stopPropagation();
-        
-        if (draggedElement && draggedElement.classList.contains('drag-dropped-number')) {
-            // Encontrar el número original
-            const originalNumbers = document.querySelectorAll('.drag-sortable-number');
-            const value = draggedElement.getAttribute('data-value');
-            
-            originalNumbers.forEach(num => {
-                if (num.getAttribute('data-value') === value) {
-                    num.style.display = 'block';
-                }
-            });
-            
-            // Remover de la slot
-            const slot = draggedElement.parentNode;
-            slot.classList.remove('filled');
-            draggedElement.remove();
-            
-            // Verificar completitud
-            checkDragDropComplete();
-        }
-    }
-
+    // ACTUALIZAR la función checkDragDropOrder para usar el nuevo sistema
     function checkDragDropOrder() {
-        const dropSlots = document.querySelectorAll('.drag-drop-slot');
-        const userOrder = [];
-        let hasEmptySlots = false;
-
-        dropSlots.forEach(slot => {
-            const droppedNumber = slot.querySelector('.drag-dropped-number');
-            if (droppedNumber) {
-                userOrder.push(parseInt(droppedNumber.getAttribute('data-value')));
-            } else {
-                hasEmptySlots = true;
-            }
-        });
-
-        if (hasEmptySlots) {
-            return { 
-                isCorrect: false, 
-                message: '¡Completa todos los espacios antes de verificar!' 
-            };
-        }
-
-        const isCorrect = userOrder.every((value, index) => value === correctDragOrder[index]);
-        
-        // Marcar visualmente los slots
-        dropSlots.forEach((slot, index) => {
-            const droppedNumber = slot.querySelector('.drag-dropped-number');
-            if (droppedNumber) {
-                const currentNumber = parseInt(droppedNumber.getAttribute('data-value'));
-                if (currentNumber === correctDragOrder[index]) {
-                    slot.classList.add('correct');
-                } else {
-                    slot.classList.add('incorrect');
-                }
-            }
-        });
-        
-        // Deshabilitar más interacciones después de verificar
-        const sortableNumbers = document.querySelectorAll('.drag-sortable-number');
-        const droppedNumbers = document.querySelectorAll('.drag-dropped-number');
-        
-        sortableNumbers.forEach(num => {
-            num.draggable = false;
-            num.style.cursor = 'not-allowed';
-            num.style.opacity = '0.6';
-        });
-        
-        // Remover event listeners de slots para evitar más cambios
-        dropSlots.forEach(slot => {
-            slot.removeEventListener('click', handleSlotClick);
-        });
-        
-        return {
-            isCorrect: isCorrect,
-            message: isCorrect ? 
-                '🎉 ¡Excelente! Has ordenado correctamente los números de menor a mayor.' :
-                `❌ El orden no es correcto. ¡Sigue practicando!`
-        };
+        return checkClickOrder();
     }
 
     // Función modificada para checkAnswer 
@@ -2167,6 +2675,7 @@
             }
         }, 1500);
     }
+
     // Pasar a la siguiente pregunta
     function nextQuestion() {
         if (currentQuestion >= totalQuestions) {
@@ -2484,27 +2993,173 @@
     `;
     document.head.appendChild(pulseStyle);
 
-    // Función para resetear el drag and drop
+    // ACTUALIZAR resetDragDrop para usar el nuevo sistema
     function resetDragDrop() {
-        const sortableNumbers = document.querySelectorAll('.drag-sortable-number');
-        const dropSlots = document.querySelectorAll('.drag-drop-slot');
-
-        // Limpiar slots y restaurar números
-        dropSlots.forEach(slot => {
-            const existing = slot.querySelector('.drag-dropped-number');
-            if (existing) {
-                existing.remove();
-            }
-            slot.classList.remove('filled', 'drag-over', 'correct', 'incorrect');
-        });
-
-        // Mostrar todos los números originales
-        sortableNumbers.forEach(number => {
-            number.style.display = 'flex'; // Usar flex para centrar contenido
-            number.classList.remove('dragging');
-            number.draggable = true;
-        });
+        resetClickToOrder();
     }
+
+    // AGREGAR estilos CSS para el nuevo sistema
+    const clickOrderStyles = document.createElement('style');
+    clickOrderStyles.textContent = `
+        /* Estilos para el sistema de click-to-order */
+        .drag-sortable-number {
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+        
+        .drag-sortable-number:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 16px rgba(76, 175, 80, 0.4);
+            border-color: #4CAF50;
+        }
+        
+        .drag-sortable-number.placed {
+            background: linear-gradient(45deg, #9E9E9E, #757575) !important;
+            cursor: pointer !important;
+            border-color: #666;
+        }
+        
+        .drag-sortable-number.placed:hover {
+            transform: scale(0.95);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            border-color: #f44336;
+        }
+        
+        .click-ordered-number {
+            position: relative;
+            background: linear-gradient(45deg, #2196F3, #1976D2);
+            color: white;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+            font-size: 1.2rem;
+        }
+        
+        .order-indicator {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #FF9800;
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .drag-drop-slot {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .drag-drop-slot:hover {
+            background: #f0f0f0;
+            transform: scale(1.02);
+        }
+        
+        .drag-drop-slot.filled:hover {
+            background: #ffebee;
+            border-color: #f44336;
+        }
+        
+        .correct-slot {
+            border-color: #4CAF50 !important;
+            background: #e8f5e8 !important;
+            animation: correctPulse 1s ease;
+        }
+        
+        .incorrect-slot {
+            border-color: #f44336 !important;
+            background: #ffebee !important;
+            animation: incorrectShake 0.6s ease;
+        }
+        
+        .correct-number {
+            background: linear-gradient(45deg, #4CAF50, #45a049) !important;
+        }
+        
+        .incorrect-number {
+            background: linear-gradient(45deg, #f44336, #d32f2f) !important;
+        }
+        
+        @keyframes clickPulse {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(4);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes correctPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        @keyframes incorrectShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        /* Responsive para móviles */
+        @media (max-width: 768px) {
+            .drag-sortable-number {
+                font-size: 14px;
+                padding: 10px 12px;
+            }
+            
+            .order-indicator {
+                width: 16px;
+                height: 16px;
+                font-size: 0.7rem;
+                top: -6px;
+                right: -6px;
+            }
+            
+            .click-ordered-number {
+                font-size: 1rem;
+            }
+            
+            .drag-drop-slot {
+                width: 50px;
+                height: 40px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .drag-sortable-number {
+                font-size: 12px;
+                padding: 8px 10px;
+            }
+            
+            .drag-drop-slot {
+                width: 45px;
+                height: 35px;
+            }
+            
+            .click-ordered-number {
+                font-size: 0.9rem;
+            }
+        }
+    `;
+
+    document.head.appendChild(clickOrderStyles);
+
     // Funciones de utilidad adicionales
     function playSound(type) {
         // Función para reproducir sonidos (opcional)
@@ -2593,6 +3248,17 @@
                 });
             } else {
                 console.error('La función initializeGameData no está definida');
+            }
+
+            // AGREGAR ESTAS NUEVAS LÍNEAS
+            setupTouchOptimizations();
+            isMobile = detectMobile();
+            
+            if (isMobile) {
+                const mobileInstructions = document.querySelectorAll('.mobile-instruction');
+                mobileInstructions.forEach(instruction => {
+                    instruction.style.display = 'block';
+                });
             }
             
             // Agregar atajo de teclado para responder (tecla Enter)
