@@ -1,0 +1,2846 @@
+{% extends "plantillas/MasterEstudiante.html" %}
+{% load static %}
+{% block title %}Estudiantes_Modulos{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/Modulo-1/primer-nivel.css' %}">
+<style>
+        body {
+            background: linear-gradient(-45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ffa726, #ef5350);
+            background-size: 400% 400%;
+            animation: rainbowShift 8s ease infinite;
+            min-height: 100vh;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            overflow-x: hidden;
+        }
+
+        @keyframes rainbowShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .main-container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+         .card-header {
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .card-header h2 {
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin: 0;
+        }
+
+        .header-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            animation: bounceIn 1s ease-out;
+            border: 5px solid #ff6b6b;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .header-card h1 {
+            color: #ff6b6b;
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 15px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            animation: wiggle 2s ease-in-out infinite;
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(1deg); }
+            75% { transform: rotate(-1deg); }
+        }
+
+        .header-card p {
+            color: #333;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .game-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            border: 5px solid #4ecdc4;
+            animation: slideInUp 1s ease-out;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .instruction-card {
+            background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 25px;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 800;
+            box-shadow: 0 15px 30px rgba(255, 107, 107, 0.4);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 15px 30px rgba(255, 107, 107, 0.4); }
+            to { box-shadow: 0 15px 30px rgba(255, 107, 107, 0.8); }
+        }
+
+        .numbers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .number-btn {
+            background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
+            border: none;
+            border-radius: 25px;
+            padding: 30px 20px;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 15px 30px rgba(255, 107, 107, 0.4);
+            position: relative;
+            overflow: hidden;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: numberFloat 4s ease-in-out infinite;
+        }
+
+        @keyframes numberFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-5px) rotate(1deg); }
+            75% { transform: translateY(5px) rotate(-1deg); }
+        }
+
+        .number-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.6s;
+        }
+
+        .number-btn:hover::before {
+            left: 100%;
+        }
+
+        .number-btn:hover {
+            transform: scale(1.2) translateY(-10px) rotate(5deg);
+            box-shadow: 0 25px 50px rgba(255, 107, 107, 0.6);
+            animation-play-state: paused;
+        }
+
+        .number-btn:active {
+            transform: scale(1.1) translateY(-5px);
+        }
+
+        .number-btn.selected {
+            background: linear-gradient(135deg, #ffa726 0%, #ff9800 100%);
+            box-shadow: 0 15px 30px rgba(255, 167, 38, 0.6);
+            transform: scale(1.1);
+            border: 4px solid #fff;
+        }
+
+        .number-btn.correct-answer {
+            background: linear-gradient(135deg, #96ceb4 0%, #45b7d1 100%);
+            box-shadow: 0 15px 30px rgba(150, 206, 180, 0.6);
+            animation: correctCelebration 1s ease;
+        }
+
+        .number-btn.incorrect-answer {
+            background: linear-gradient(135deg, #ef5350 0%, #ffa726 100%);
+            box-shadow: 0 15px 30px rgba(239, 83, 80, 0.6);
+            animation: incorrectShake 0.6s ease;
+        }
+
+        @keyframes correctCelebration {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.3) rotate(10deg); }
+            50% { transform: scale(1.4) rotate(-10deg); }
+            75% { transform: scale(1.3) rotate(10deg); }
+            100% { transform: scale(1.2); }
+        }
+
+        @keyframes incorrectShake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-15px) rotate(-5deg); }
+            20%, 40%, 60%, 80% { transform: translateX(15px) rotate(5deg); }
+        }
+
+        .answer-btn {
+            background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
+            color: white;
+            border: none;
+            padding: 20px 50px;
+            border-radius: 50px;
+            font-size: 1.8rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 15px 30px rgba(255, 107, 107, 0.4);
+            display: block;
+            margin: 0 auto;
+            animation: rainbow 3s ease-in-out infinite;
+        }
+
+        @keyframes rainbow {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+
+        .answer-btn:hover {
+            transform: scale(1.1) translateY(-5px);
+            box-shadow: 0 20px 40px rgba(255, 107, 107, 0.6);
+        }
+
+        .answer-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            animation: none;
+        }
+
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-element {
+            position: absolute;
+            font-size: 2rem;
+            animation: floatAround 8s infinite ease-in-out;
+            opacity: 0.7;
+        }
+
+        @keyframes floatAround {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.7; }
+            25% { transform: translateY(-30px) rotate(90deg); opacity: 1; }
+            50% { transform: translateY(-20px) rotate(180deg); opacity: 0.8; }
+            75% { transform: translateY(-40px) rotate(270deg); opacity: 1; }
+        }
+
+        .confetti {
+            position: fixed;
+            top: -10px;
+            background-color: #f0f0f0;
+            width: 10px;
+            height: 10px;
+            animation: confetti 3s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        @keyframes confetti {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        .question-counter {
+            background: linear-gradient(135deg, #45b7d1 0%, #96ceb4 100%);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 20px;
+            text-align: center;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 20px rgba(69, 183, 209, 0.3);
+        }
+
+        /* Estilo para la tabla de opciones múltiples */
+        .multiple-choice-table {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .multiple-choice-table h3 {
+            color: #ff6b6b;
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            font-weight: 800;
+        }
+
+        .choice-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 3px solid transparent;
+        }
+
+        .choice-row:hover {
+            background: rgba(255, 107, 107, 0.1);
+            transform: translateX(10px);
+        }
+
+        .choice-row.selected {
+            background: rgba(255, 167, 38, 0.2);
+            border-color: #ffa726;
+            transform: translateX(10px);
+        }
+
+        .choice-label {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #333;
+            margin-right: 20px;
+            min-width: 200px;
+        }
+
+        .choice-options {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .choice-option {
+            background: linear-gradient(135deg, #4ecdc4 0%, #45b7d1 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 15px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            min-width: 60px;
+            text-align: center;
+            border: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .choice-option:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 16px rgba(78, 205, 196, 0.4);
+        }
+
+        .choice-option.selected {
+            background: linear-gradient(135deg, #ffa726 0%, #ff9800 100%);
+            border-color: #fff;
+            transform: scale(1.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-card h1 { font-size: 2.5rem; }
+            .header-card p { font-size: 1.5rem; }
+            .numbers-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+            .number-btn { font-size: 2rem; padding: 25px 15px; }
+            .main-container { padding: 15px; }
+            .choice-row { flex-direction: column; align-items: flex-start; }
+            .choice-label { margin-bottom: 10px; min-width: auto; }
+        }
+
+        @media (max-width: 480px) {
+            .header-card h1 { font-size: 2rem; }
+            .header-card p { font-size: 1.3rem; }
+            .number-btn { font-size: 1.8rem; padding: 20px 12px; }
+            .instruction-card { font-size: 1.5rem; }
+        }
+
+        /* Estilos para drag and drop */
+        .drag-drop-question {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .drag-numbers-to-sort {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .drag-sortable-number {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            cursor: grab;
+            font-weight: bold;
+            font-size: 18px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .drag-sortable-number:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+
+        .drag-sortable-number.dragging {
+            opacity: 0.5;
+            transform: rotate(5deg);
+            cursor: grabbing;
+        }
+
+        .drag-drop-zone {
+            background: #f1f3f4;
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            min-height: 80px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .drag-drop-slot {
+            width: 80px;
+            height: 60px;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        .drag-drop-slot::before {
+            content: attr(data-position);
+            position: absolute;
+            top: -25px;
+            font-size: 12px;
+            color: #666;
+            font-weight: bold;
+        }
+
+        .drag-drop-slot.drag-over {
+            border-color: #4CAF50;
+            background: #e8f5e8;
+            transform: scale(1.05);
+        }
+
+        .drag-drop-slot.filled {
+            border-color: #4CAF50;
+            background: #e8f5e8;
+        }
+
+        .drag-dropped-number {
+            background: linear-gradient(45deg, #2196F3, #1976D2);
+            color: white;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: grab;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+        }
+
+
+        
+        /* Estilos para la pregunta de unir con líneas */
+        .matching-question {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .matching-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 40px;
+            margin-top: 30px;
+        }
+
+        .matching-left-column {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            flex: 0 0 200px;
+        }
+
+        .matching-right-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            flex: 1;
+        }
+
+        .matching-number {
+            background: white;
+            border: 4px solid #ddd;
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 2rem;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .matching-number:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .matching-number.selected {
+            border-width: 6px;
+            transform: scale(1.05);
+        }
+
+        /* Colores para cada número */
+        .matching-number[data-number="15"] {
+            color: #e74c3c;
+        }
+        .matching-number[data-number="15"].selected {
+            border-color: #e74c3c;
+            background: #ffe6e6;
+        }
+
+        .matching-number[data-number="23"] {
+            color: #3498db;
+        }
+        .matching-number[data-number="23"].selected {
+            border-color: #3498db;
+            background: #e6f3ff;
+        }
+
+        .matching-number[data-number="31"] {
+            color: #27ae60;
+        }
+        .matching-number[data-number="31"].selected {
+            border-color: #27ae60;
+            background: #e6ffe6;
+        }
+
+        .matching-number[data-number="47"] {
+            color: #f39c12;
+        }
+        .matching-number[data-number="47"].selected {
+            border-color: #f39c12;
+            background: #fff8e6;
+        }
+
+        .matching-dots {
+            background: white;
+            border: 4px solid #ddd;
+            border-radius: 15px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .matching-dots:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .matching-dots.matched-15 {
+            border-color: #e74c3c;
+            background: #ffe6e6;
+        }
+
+        .matching-dots.matched-23 {
+            border-color: #3498db;
+            background: #e6f3ff;
+        }
+
+        .matching-dots.matched-31 {
+            border-color: #27ae60;
+            background: #e6ffe6;
+        }
+
+        .matching-dots.matched-47 {
+            border-color: #f39c12;
+            background: #fff8e6;
+        }
+
+        .dots-container {
+            text-align: center;
+        }
+
+        .emoji-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 3px;
+            max-width: 200px;
+        }
+
+        .emoji {
+            font-size: 1.2rem;
+            line-height: 1;
+        }
+
+        .quantity-label {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .instruction {
+            text-align: center;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            color: #444;
+        }
+
+        .reset-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        /* Estilos para hacer el ejercicio más atractivo para niños */
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One:wght@400&family=Nunito:wght@400;600;700&display=swap');
+
+        .number-write-question {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            border-radius: 25px !important;
+            padding: 30px !important;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15) !important;
+            margin: 20px 0 !important;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .number-write-question::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: sparkle 4s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(3deg); }
+        }
+
+        .number-write-question h3 {
+            font-family: 'Fredoka One', cursive !important;
+            font-size: 2.2rem !important;
+            text-align: center !important;
+            margin-bottom: 25px !important;
+            color: white !important;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3) !important;
+            position: relative;
+            z-index: 1;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-8px); }
+            60% { transform: translateY(-4px); }
+        }
+
+        .write-row {
+            display: flex !important;
+            align-items: center !important;
+            margin-bottom: 20px !important;
+            padding: 18px !important;
+            background: white !important;
+            border-radius: 20px !important;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1) !important;
+            transition: all 0.3s ease !important;
+            position: relative;
+            z-index: 1;
+        }
+
+        .write-row:hover {
+            transform: translateY(-3px) scale(1.02) !important;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2) !important;
+        }
+
+        .write-row:nth-child(2) {
+            background: linear-gradient(135deg, #ffeaa7, #fab1a0) !important;
+        }
+
+        .write-row:nth-child(3) {
+            background: linear-gradient(135deg, #a8e6cf, #88d8a3) !important;
+        }
+
+        .write-row:nth-child(4) {
+            background: linear-gradient(135deg, #ffd3a5, #fd9853) !important;
+        }
+
+        .write-row:nth-child(5) {
+            background: linear-gradient(135deg, #d1c4e9, #b39ddb) !important;
+        }
+
+        .write-row:nth-child(6) {
+            background: linear-gradient(135deg, #ffcdd2, #f8bbd9) !important;
+        }
+
+        .emoji-display {
+            flex: 1 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            margin-right: 25px !important;
+        }
+
+        .emoji-number {
+            font-size: 3.5rem !important;
+            margin-bottom: 8px !important;
+            cursor: pointer !important;
+            transition: all 0.3s ease !important;
+            animation: gentle-bounce 3s ease-in-out infinite !important;
+        }
+
+        .emoji-number:hover {
+            transform: scale(1.2) rotate(5deg) !important;
+            animation: wiggle 0.6s ease-in-out !important;
+        }
+
+        @keyframes gentle-bounce {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-8deg) scale(1.1); }
+            75% { transform: rotate(8deg) scale(1.1); }
+        }
+
+        .emoji-label {
+            font-family: 'Nunito', sans-serif !important;
+            font-weight: 700 !important;
+            font-size: 1.1rem !important;
+            color: #333 !important;
+            text-align: center !important;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.8) !important;
+        }
+
+        .write-input {
+            width: 120px !important;
+            height: 60px !important;
+            border: 3px solid #ff6b6b !important;
+            border-radius: 15px !important;
+            font-size: 2.2rem !important;
+            font-weight: bold !important;
+            text-align: center !important;
+            background: rgba(255,255,255,0.95) !important;
+            color: #333 !important;
+            transition: all 0.3s ease !important;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.1), 0 5px 15px rgba(0,0,0,0.1) !important;
+            font-family: 'Nunito', sans-serif !important;
+        }
+
+        .write-input:focus {
+            outline: none !important;
+            border-color: #4ecdc4 !important;
+            transform: scale(1.1) !important;
+            box-shadow: 0 0 25px rgba(78, 205, 196, 0.4), inset 0 2px 5px rgba(0,0,0,0.1) !important;
+            background: white !important;
+        }
+
+        .write-input::placeholder {
+            color: #bbb !important;
+            font-size: 1.4rem !important;
+        }
+
+        /* Animaciones adicionales para hacer más dinámico */
+        .write-row:nth-child(2) .emoji-number { animation-delay: 0.2s; }
+        .write-row:nth-child(3) .emoji-number { animation-delay: 0.4s; }
+        .write-row:nth-child(4) .emoji-number { animation-delay: 0.6s; }
+        .write-row:nth-child(5) .emoji-number { animation-delay: 0.8s; }
+        .write-row:nth-child(6) .emoji-number { animation-delay: 1s; }
+
+        /* Efectos de validación */
+        .write-input:valid {
+            border-color: #00b894 !important;
+            background: #d1f2eb !important;
+        }
+
+        .write-input:invalid:not(:placeholder-shown) {
+            border-color: #e17055 !important;
+            background: #ffeaa7 !important;
+        }
+
+        /* Responsive para móviles */
+        @media (max-width: 600px) {
+            .number-write-question {
+                padding: 20px !important;
+                margin: 10px !important;
+            }
+            
+            .number-write-question h3 {
+                font-size: 1.8rem !important;
+            }
+            
+            .write-row {
+                flex-direction: column !important;
+                text-align: center !important;
+                padding: 15px !important;
+            }
+            
+            .emoji-display {
+                margin-right: 0 !important;
+                margin-bottom: 15px !important;
+            }
+            
+            .emoji-number {
+                font-size: 3rem !important;
+            }
+            
+            .write-input {
+                width: 100px !important;
+                height: 50px !important;
+                font-size: 2rem !important;
+            }
+        }
+
+        .option-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .option-btn.selected {
+            background: #ffeaa7 !important;
+            color: #2d3436 !important;
+            transform: scale(1.1);
+        }
+
+        .sequence-box.empty:hover {
+            transform: scale(1.05);
+            background: rgba(255,255,255,0.5) !important;
+        }
+
+        .sequence-box.correct {
+            background: #00b894 !important;
+            color: white !important;
+            animation: bounce 0.6s ease-in-out;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        @media (max-width: 768px) {
+            .sequence-boxes {
+                gap: 5px !important;
+            }
+            
+            .sequence-box {
+                width: 50px !important;
+                height: 50px !important;
+                font-size: 1.2rem !important;
+            }
+            
+            .sequence-options {
+                gap: 5px !important;
+            }
+            
+            .option-btn {
+                padding: 8px 12px !important;
+                font-size: 1rem !important;
+            }
+        }
+</style>
+{% endblock %}
+
+
+{% block content %}
+    <div class="container-fluid">
+        <nav class="breadcrumb">
+            <a style="color: #000;" href="{% url 'core_estudiante' %}">🏠 Inicio</a> &nbsp;/&nbsp;
+            <a style="color: #000;" href="{% url 'estudiante_modulo' %}">📚 Módulos</a> &nbsp;/&nbsp;
+            <a style="color: #000;" href="{% url 'ver_niveles_modulo' modulo.mod_id %}"> 🎯 Niveles</a> &nbsp;/&nbsp;
+            <span style="color: #2632df;">🎮 Juego</span>
+        </nav>
+
+        <div class="card loading">
+            <div class="card-header">
+                <h2>🌟 {{nivel.niv_nombre}} -{{nivel.niv_descripcion}} </h2>
+            </div>
+            <div class="card-body">
+
+                <div class="main-container">
+                    <div class="floating-elements" id="floating-elements"></div>
+
+                    <!-- Header Card -->
+                    <div class="header-card">
+                        <h1>🎨 ¡Números Divertidos! 🎨</h1>
+                        <p id="main-instruction">🚀 ¡Vamos a jugar con números del 10 al 59! 🚀</p>
+                    </div>
+
+                    <!-- Game Card -->
+                    <div class="game-card">
+                        <!-- Question Counter -->
+                        <div class="question-counter" id="question-counter">
+                            <i class="fas fa-star mr-2"></i>
+                            Pregunta 1 de 4
+                            <i class="fas fa-star ml-2"></i>
+                        </div>
+
+                        <!-- PREGUNTA 1: Pintar solo los números que terminan en 7 -->
+                        <div class="instruction-card" id="instruction-card">
+                            <i class="fas fa-paint-brush mr-2"></i>
+                            ¡Pinta SOLO los números que TERMINAN en 7!
+                            <i class="fas fa-paint-brush ml-2"></i>
+                        </div>
+                        <div class="numbers-grid" id="numbers-container">
+                            <!-- Números generados por JS -->
+                        </div>
+
+                        <!-- PREGUNTA 2: Escribe el número según imagen con emojis -->
+                        <div class="number-write-question" id="write-number-container" style="display: none;">
+                            <h3>✏️ Escribe el número que representa cada imagen:</h3>
+                            
+                            <div class="write-row">
+                                <div class="emoji-display">
+                                    <span class="emoji-number">✋</span>
+                                    <span class="emoji-label">5 dedos</span>
+                                </div>
+                                <input type="number" class="form-control write-input" data-correct="5" placeholder="Escribe aquí" min="0" max="99">
+                            </div>
+                            
+                            <div class="write-row">
+                                <div class="emoji-display">
+                                    <span class="emoji-number">🎲</span>
+                                    <span class="emoji-label">Dado con 3 puntos</span>
+                                </div>
+                                <input type="number" class="form-control write-input" data-correct="3" placeholder="Escribe aquí" min="0" max="99">
+                            </div>
+                            
+                            <div class="write-row">
+                                <div class="emoji-display">
+                                    <span class="emoji-number">🙌</span>
+                                    <span class="emoji-label">10 dedos</span>
+                                </div>
+                                <input type="number" class="form-control write-input" data-correct="10" placeholder="Escribe aquí" min="0" max="99">
+                            </div>
+                            
+                            <div class="write-row">
+                                <div class="emoji-display">
+                                    <span class="emoji-number">👁️👁️</span>
+                                    <span class="emoji-label">2 ojos</span>
+                                </div>
+                                <input type="number" class="form-control write-input" data-correct="2" placeholder="Escribe aquí" min="0" max="99">
+                            </div>
+                            
+                            <div class="write-row">
+                                <div class="emoji-display">
+                                    <span class="emoji-number">🌟🌟🌟🌟🌟🌟🌟</span>
+                                    <span class="emoji-label">7 estrellas</span>
+                                </div>
+                                <input type="number" class="form-control write-input" data-correct="7" placeholder="Escribe aquí" min="0" max="99">
+                            </div>
+                        </div>
+
+                        <!-- PREGUNTA 3: Ordenar de menor a mayor -->
+                        <div class="drag-drop-question" id="drag-drop-container" style="display: none;">
+                            <h3 style="color: #74b9ff; text-align: center; font-size: 1.8rem; margin-bottom: 20px; font-weight: 800;">
+                                🔢 ¡Ordena los números de MENOR a MAYOR! 🔢
+                            </h3>
+                            <div class="drag-numbers-to-sort" id="drag-numbers-to-sort">
+                                <div class="drag-sortable-number" data-value="32" draggable="true">32</div>
+                                <div class="drag-sortable-number" data-value="11" draggable="true">11</div>
+                                <div class="drag-sortable-number" data-value="28" draggable="true">28</div>
+                                <div class="drag-sortable-number" data-value="46" draggable="true">46</div>
+                                <div class="drag-sortable-number" data-value="18" draggable="true">18</div>
+                            </div>
+                            <div class="drag-drop-zone" id="drag-drop-zone">
+                                <div class="drag-drop-slot" data-position="1°"></div>
+                                <div class="drag-drop-slot" data-position="2°"></div>
+                                <div class="drag-drop-slot" data-position="3°"></div>
+                                <div class="drag-drop-slot" data-position="4°"></div>
+                                <div class="drag-drop-slot" data-position="5°"></div>
+                            </div>
+                        </div>
+
+                        <!-- PREGUNTA 4: Completar secuencias -->
+                        <div class="sequence-question" style="display: none;" id="sequence-container">
+                            <h3 style="color: #fd79a8; text-align: center; font-size: 2rem; margin-bottom: 20px; font-weight: 800;">
+                                🔢 ¡Completa las secuencias! 🔢
+                            </h3>
+                            
+                            <div class="sequence-grid" style="display: grid; grid-template-columns: 1fr; gap: 25px; max-width: 800px; margin: 0 auto;">
+                                
+                                <!-- Secuencia 1: Contar de 2 en 2 -->
+                                <div class="sequence-item" style="background: linear-gradient(135deg, #74b9ff, #0984e3); padding: 20px; border-radius: 15px; box-shadow: 0 8px 16px rgba(0,0,0,0.2);">
+                                    <div class="sequence-label" style="color: white; font-size: 1.3rem; font-weight: bold; margin-bottom: 15px; text-align: center;">
+                                        🐰 Cuenta de 2 en 2:
+                                    </div>
+                                    <div class="sequence-boxes" style="display: flex; justify-content: center; align-items: center; gap: 10px; flex-wrap: wrap;">
+                                        <div class="sequence-box filled" style="background: white; color: #0984e3; font-size: 1.5rem; font-weight: bold; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 10px;">2</div>
+                                        <div class="sequence-box filled" style="background: white; color: #0984e3; font-size: 1.5rem; font-weight: bold; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 10px;">4</div>
+                                        <div class="sequence-box filled" style="background: white; color: #0984e3; font-size: 1.5rem; font-weight: bold; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 10px;">6</div>
+                                        <div class="sequence-box empty" data-answer="8" style="background: rgba(255,255,255,0.3); border: 3px dashed white; color: white; font-size: 2rem; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 10px; cursor: pointer; transition: all 0.3s ease;">?</div>
+                                        <div class="sequence-box filled" style="background: white; color: #0984e3; font-size: 1.5rem; font-weight: bold; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 10px;">10</div>
+                                    </div>
+                                    <div class="sequence-options" style="display: flex; justify-content: center; gap: 10px; margin-top: 15px;">
+                                        <button class="option-btn" data-value="7" style="background: white; color: #0984e3; border: none; font-size: 1.2rem; font-weight: bold; padding: 10px 15px; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">7</button>
+                                        <button class="option-btn" data-value="8" style="background: white; color: #0984e3; border: none; font-size: 1.2rem; font-weight: bold; padding: 10px 15px; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">8</button>
+                                        <button class="option-btn" data-value="9" style="background: white; color: #0984e3; border: none; font-size: 1.2rem; font-weight: bold; padding: 10px 15px; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">9</button>
+                                    </div>
+                                </div>
+
+                                <!-- Secuencia 2: Contar de 5 en 5 -->
+                                <div class="sequence-item" style="background: linear-gradient(135deg, #fd79a8, #e84393); padding: 20px; border-radius: 15px; box-shadow: 0 8px 16px rgba(0,0,0,0.2);">
+                                    <div class="sequence-label" style="color: white; font-size: 1.3rem; font-weight: bold; margin-bottom: 15px; text-align: center;">
+                                        🌸 Cuenta de 5 en 5:
+                                    </div>
+                                    <div class="sequence-boxes" style="display: flex; justify-content: center; align-items: center; gap: 10px; flex-wrap: wrap;">
+                                        <div class="sequence-box filled" style="background: white; color: #e84393; font-size: 1.5rem; font-weight: bold; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 10px;">5</div>
+                                        <div class="sequence-box filled" style="background: white; color: #e84393; font-size: 1.5rem; font-weight: bold; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 10px;">10</div>
+                                        <div class="sequence-box empty" data-answer="15" style="background: rgba(255,255,255,0.3); border: 3px dashed white; color: white; font-size: 2rem; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 10px; cursor: pointer; transition: all 0.3s ease;">?</div>
+                                        <div class="sequence-box filled" style="background: white; color: #e84393; font-size: 1.5rem; font-weight: bold; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 10px;">20</div>
+                                        <div class="sequence-box filled" style="background: white; color: #e84393; font-size: 1.5rem; font-weight: bold; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 10px;">25</div>
+                                    </div>
+                                    <div class="sequence-options" style="display: flex; justify-content: center; gap: 10px; margin-top: 15px;">
+                                        <button class="option-btn" data-value="12" style="background: white; color: #e84393; border: none; font-size: 1.2rem; font-weight: bold; padding: 10px 15px; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">12</button>
+                                        <button class="option-btn" data-value="15" style="background: white; color: #e84393; border: none; font-size: 1.2rem; font-weight: bold; padding: 10px 15px; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">15</button>
+                                        <button class="option-btn" data-value="18" style="background: white; color: #e84393; border: none; font-size: 1.2rem; font-weight: bold; padding: 10px 15px; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">18</button>
+                                    </div>
+                                </div>
+
+                                <!-- Secuencia 3: Contar de 10 en 10 -->
+                                <div class="sequence-item" style="background: linear-gradient(135deg, #00b894, #00a085); padding: 20px; border-radius: 15px; box-shadow: 0 8px 16px rgba(0,0,0,0.2);">
+                                    <div class="sequence-label" style="color: white; font-size: 1.3rem; font-weight: bold; margin-bottom: 15px; text-align: center;">
+                                        🌟 Cuenta de 10 en 10:
+                                    </div>
+                                    <div class="sequence-boxes" style="display: flex; justify-content: center; align-items: center; gap: 10px; flex-wrap: wrap;">
+                                        <div class="sequence-box filled" style="background: white; color: #00a085; font-size: 1.5rem; font-weight: bold; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 10px;">10</div>
+                                        <div class="sequence-box filled" style="background: white; color: #00a085; font-size: 1.5rem; font-weight: bold; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 10px;">20</div>
+                                        <div class="sequence-box filled" style="background: white; color: #00a085; font-size: 1.5rem; font-weight: bold; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 10px;">30</div>
+                                        <div class="sequence-box filled" style="background: white; color: #00a085; font-size: 1.5rem; font-weight: bold; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 10px;">40</div>
+                                        <div class="sequence-box empty" data-answer="50" style="background: rgba(255,255,255,0.3); border: 3px dashed white; color: white; font-size: 2rem; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 10px; cursor: pointer; transition: all 0.3s ease;">?</div>
+                                    </div>
+                                    <div class="sequence-options" style="display: flex; justify-content: center; gap: 10px; margin-top: 15px;">
+                                        <button class="option-btn" data-value="45" style="background: white; color: #00a085; border: none; font-size: 1.2rem; font-weight: bold; padding: 10px 15px; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">45</button>
+                                        <button class="option-btn" data-value="50" style="background: white; color: #00a085; border: none; font-size: 1.2rem; font-weight: bold; padding: 10px 15px; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">50</button>
+                                        <button class="option-btn" data-value="55" style="background: white; color: #00a085; border: none; font-size: 1.2rem; font-weight: bold; padding: 10px 15px; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;">55</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <br>
+
+
+                        <!-- Answer Button -->
+                        <button class="answer-btn" id="answer-btn" onclick="checkAnswer()" disabled>
+                            <i class="fas fa-check mr-2"></i>
+                            ¡RESPONDER!
+                        </button>
+                    </div>
+
+                    
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+{% endblock %}
+
+
+{% block js %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+   
+    // Variables globales para el juego
+    window.studentId = {{ matricula_id}};
+    window.levelId   = {{ level_id }};
+    const moduloId = {{ modulo_id }};
+    
+</script>
+
+<script>
+    let selectedNumbers = [];
+    let currentNumbers = [];
+    let currentQuestion = 1;
+    let totalQuestions = 4 ;// Ahora son 11 preguntas
+    let usedQuestions = new Set();
+    let gameFinished = false;
+    let multipleChoiceAnswers = {}; // Para almacenar las respuestas de opción múltiple
+    // NUEVAS VARIABLES PARA EL SISTEMA DE CALIFICACIONES
+    let questionScores = []; // Array para guardar puntajes de cada pregunta
+    let currentScore = 0;
+    let maxScorePerQuestion = 10/4; // Aproximadamente 3.33 puntos por pregunta
+    let totalPossibleScore = 10; // 10 puntos TOTAL
+   // VARIABLES PARA EL SISTEMA DE VIDAS (ACTUALIZADAS)
+    let studentId = null;
+    let levelId = null;
+    let vidasRestantes = 0;
+    let vidasTotales = 0;
+    let vidasOriginalesNivel = 0;  // ✅ Esta línea FALTABA
+    let puedeIntentar = false;
+
+    // Variables para controlar recargas
+    let gameSessionId = null;
+    let hasGameStarted = false;
+    let pageLoadTime = Date.now();
+
+    let correctAnswers = 0;
+    const totalSequences = 3;
+
+    // Colores para cada número
+    const numberColors = {
+        '15': '#e74c3c',
+        '23': '#3498db', 
+        '31': '#27ae60',
+        '47': '#f39c12'
+    };
+
+    // Generar ID único de sesión
+    function generateSessionId() {
+        return 'game_' + studentId + '_' + levelId + '_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    }
+    // Verificar si es una recarga no autorizada
+    function isUnauthorizedReload() {
+        const sessionKey = `game_session_${studentId}_${levelId}`;
+        const storedSession = sessionStorage.getItem(sessionKey);
+        
+        if (storedSession) {
+            const sessionData = JSON.parse(storedSession);
+            const timeDiff = Date.now() - sessionData.timestamp;
+            
+            // Si la sesión existe y han pasado menos de 30 segundos, es una recarga
+            if (timeDiff < 30000) {
+                console.log('Recarga detectada dentro de', timeDiff, 'ms');
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
+    // Registrar sesión actual
+    function registerGameSession() {
+        const sessionKey = `game_session_${studentId}_${levelId}`;
+        gameSessionId = generateSessionId();
+        
+        const sessionData = {
+            sessionId: gameSessionId,
+            timestamp: Date.now(),
+            questionNumber: currentQuestion,
+            hasStarted: hasGameStarted
+        };
+        
+        sessionStorage.setItem(sessionKey, JSON.stringify(sessionData));
+        console.log('Sesión registrada:', sessionData);
+    }
+
+    // Limpiar sesión al salir
+    function clearGameSession() {
+        const sessionKey = `game_session_${studentId}_${levelId}`;
+        sessionStorage.removeItem(sessionKey);
+        console.log('Sesión limpiada');
+    }
+
+    // FUNCIÓN MODIFICADA: initializeGameData
+    async function initializeGameData() {
+        studentId = window.studentId || 1;
+        levelId = window.levelId || 1;
+        
+        console.log('Student ID:', studentId, 'Level ID:', levelId);
+        
+        // Verificar si es una recarga no autorizada
+        const isReload = isUnauthorizedReload();
+        
+        if (isReload) {
+            console.log('⚠️ RECARGA DETECTADA - Penalizando con una vida');
+            
+            // Mostrar advertencia de recarga
+            Swal.fire({
+                icon: 'warning',
+                title: '⚠️ Recarga Detectada',
+                html: `
+                    <div>
+                        <p><strong>Se ha detectado una recarga de página.</strong></p>
+                        <p>Como penalización, se restará <span style="color: #f44336; font-weight: bold;">1 vida</span>.</p>
+                        <br>
+                        <p style="color: #666; font-size: 0.9em;">
+                            💡 <strong>Consejo:</strong> Evita recargar la página durante el juego.
+                        </p>
+                    </div>
+                `,
+                confirmButtonText: 'Continuar',
+                allowOutsideClick: false,
+                timer: 4000,
+                timerProgressBar: true
+            });
+            
+            // Penalizar con una vida
+            const penaltyResult = await penalizeReload();
+            if (!penaltyResult.success) {
+                console.error('Error al penalizar recarga:', penaltyResult.error);
+            }
+        }
+        
+        // Registrar nueva sesión
+        registerGameSession();
+        
+        // Obtener información del juego
+        const gameInfo = await getGameInfo();
+        return gameInfo;
+    }
+
+
+    // NUEVA FUNCIÓN: Obtener información del juego
+    async function getGameInfo() {
+        try {
+            const response = await fetch('/get_game_info/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    estudiante_id: studentId,
+                    nivel_id: levelId
+                })
+            });
+            
+            const data = await response.json();
+            if (data.success) {
+                vidasRestantes = data.vidas_restantes;
+                vidasTotales = data.vidas_originales_nivel;
+                puedeIntentar = data.puede_intentar;
+                
+                console.log(`Vidas: ${vidasRestantes}/${vidasTotales}, Puede intentar: ${puedeIntentar}`);
+                
+                // Actualizar UI con información de vidas
+                updateLivesDisplay();
+                
+                // Verificar si puede jugar
+                if (!puedeIntentar) {
+                    showNoLivesMessage();
+                    return false;
+                }
+                
+                // Mostrar mensaje de vidas restauradas si aplica
+                if (data.vidas_restauradas > 0) {
+                    Swal.fire({
+                        icon: 'info',
+                        title: '¡Vidas restauradas!',
+                        text: `Se han agregado ${data.vidas_restauradas} vidas adicionales a este nivel.`,
+                        confirmButtonText: '¡Genial!'
+                    });
+                }
+                
+                return true;
+            } else {
+                console.error('Error al obtener info del juego:', data.error);
+                return false;
+            }
+        } catch (error) {
+            console.error('Error de red al obtener info del juego:', error);
+            return false;
+        }
+    }
+
+    // FUNCIÓN MODIFICADA: Actualizar display de vidas con indicador de estado
+    function updateLivesDisplay() {
+        let livesIndicator = document.getElementById('lives-indicator');
+        if (!livesIndicator) {
+            livesIndicator = document.createElement('div');
+            livesIndicator.id = 'lives-indicator';
+            livesIndicator.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
+                color: white;
+                padding: 15px 20px;
+                border-radius: 25px;
+                font-weight: bold;
+                font-size: 1.1em;
+                box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+                z-index: 1000;
+                font-family: 'Comic Sans MS', cursive, sans-serif;
+                transition: all 0.3s ease;
+            `;
+            document.body.appendChild(livesIndicator);
+        }
+        
+        // Crear corazones para representar vidas
+        let heartsHTML = '';
+        for (let i = 0; i < vidasTotales; i++) {
+            if (i < vidasRestantes) {
+                heartsHTML += '❤️'; // Vida disponible
+            } else {
+                heartsHTML += '🖤'; // Vida usada
+            }
+        }
+        
+        // Cambiar color según vidas restantes
+        let bgColor = 'linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%)';
+        if (vidasRestantes <= 1) {
+            bgColor = 'linear-gradient(135deg, #f44336 0%, #ff9800 100%)';
+            livesIndicator.style.animation = 'pulse 1s infinite';
+        } else if (vidasRestantes <= 2) {
+            bgColor = 'linear-gradient(135deg, #ff9800 0%, #ffc107 100%)';
+        }
+        
+        livesIndicator.style.background = bgColor;
+        
+        livesIndicator.innerHTML = `
+            <div style="text-align: center;">
+                <div style="font-size: 1.2em; margin-bottom: 5px;">${heartsHTML}</div>
+                <div>Vidas: ${vidasRestantes}/${vidasTotales}</div>
+                ${vidasRestantes <= 1 ? '<div style="font-size: 0.8em; color: #ffeb3b;">¡Cuidado!</div>' : ''}
+            </div>
+        `;
+    }
+
+    // Event listeners para detectar intentos de salida
+    window.addEventListener('beforeunload', function(e) {
+        if (hasGameStarted && currentQuestion > 1 && !gameFinished) {
+            // Advertir al usuario antes de salir
+            const message = '¿Estás seguro de que quieres salir? Perderás el progreso actual.';
+            e.returnValue = message;
+            return message;
+        }
+        
+        // Limpiar sesión al salir
+        clearGameSession();
+    });
+
+    // Limpiar sesión cuando se va a otra página
+    window.addEventListener('pagehide', function() {
+        clearGameSession();
+    });
+
+    // NUEVA FUNCIÓN: Mostrar mensaje sin vidas
+    function showNoLivesMessage() {
+        Swal.fire({
+            icon: 'warning',
+            title: '¡Sin vidas restantes! 💔',
+            html: `
+                <div>
+                    <p>Has agotado todas las vidas para este nivel.</p>
+                    <p><strong>Vidas utilizadas: ${vidasTotales}</p>
+                    <br>
+                    <p style="color: #666;">Contacta a tu profesor para obtener más intentos.</p>
+                </div>
+            `,
+            confirmButtonText: 'Volver al menú',
+            allowOutsideClick: false,
+            customClass: {
+                popup: 'animated shake'
+            }
+        }).then(() => {
+            window.location.href = `/modulo/${moduloId}/niveles/`;
+        });
+    }
+   
+    // Función para calcular puntaje de cada pregunta
+    function calculateQuestionScore(isCorrect, questionType) {
+        let score = 0;
+        
+        if (questionType === 'normal' || questionType === 'drag-drop') {
+            // Preguntas normales y drag-drop: todo o nada
+            score = isCorrect ? maxScorePerQuestion : 0;
+        } else if (questionType === 'write-number') {
+            // Pregunta 2: escribir números - puntaje proporcional
+            let correctAnswers = 0;
+            const totalItems = 5; // 5 items en la pregunta 2
+            
+            // Revisar cada input de la pregunta 2
+            const writeInputs = document.querySelectorAll('.write-input');
+            writeInputs.forEach(input => {
+                const userAnswer = parseInt(input.value);
+                const correctAnswer = parseInt(input.dataset.correct);
+                
+                if (userAnswer === correctAnswer) {
+                    correctAnswers++;
+                }
+            });
+            
+            // Calcular puntaje proporcional
+            score = (correctAnswers / totalItems) * maxScorePerQuestion;
+        } else if (questionType === 'sequence') {
+            // Pregunta 4: completar secuencias - puntaje proporcional
+            let correctSequences = 0;
+            const totalSequences = 3; // 3 secuencias en la pregunta 4
+            
+            // Revisar cada secuencia completada correctamente
+            const sequenceBoxes = document.querySelectorAll('.sequence-box.correct');
+            correctSequences = sequenceBoxes.length;
+            
+            // Calcular puntaje proporcional
+            score = (correctSequences / totalSequences) * maxScorePerQuestion;
+        }
+        
+        return Math.round(score * 100) / 100; // Redondear a 2 decimales
+    }
+
+    // Crear elementos flotantes
+    function createFloatingElements() {
+        const container = document.getElementById('floating-elements');
+        const elements = ['🌟', '⭐', '✨', '🎈', '🎉', '🎊', '🌈', '💫', '🦄', '🎯'];
+        
+        for (let i = 0; i < 20; i++) {
+            const element = document.createElement('div');
+            element.className = 'floating-element';
+            element.innerHTML = elements[Math.floor(Math.random() * elements.length)];
+            element.style.left = Math.random() * 100 + '%';
+            element.style.top = Math.random() * 100 + '%';
+            element.style.animationDelay = Math.random() * 8 + 's';
+            element.style.animationDuration = (Math.random() * 4 + 6) + 's';
+            container.appendChild(element);
+        }
+    }
+
+      // Generar los números únicos
+    function generateUniqueNumbers() {
+        let attempts = 0;
+        let questionSet;
+
+        do {
+            questionSet = generateNumbers();
+            attempts++;
+        } while (usedQuestions.has(JSON.stringify(questionSet)) && attempts < 50);
+
+        if (attempts < 50) {
+            usedQuestions.add(JSON.stringify(questionSet));
+        }
+
+        return questionSet;
+    }
+
+    // Generar los números (correctos = terminan en 7)
+    function generateNumbers() {
+        const correctOptions = [];
+        const incorrectOptions = [];
+
+        for (let i = 10; i <= 59; i++) {
+            if (i % 10 === 7) {
+                correctOptions.push(i);
+            } else {
+                incorrectOptions.push(i);
+            }
+        }
+
+        const selectedCorrect = correctOptions.sort(() => Math.random() - 0.5).slice(0, 3);
+        const selectedIncorrect = incorrectOptions.sort(() => Math.random() - 0.5).slice(0, 3);
+
+        return [...selectedCorrect, ...selectedIncorrect].sort(() => Math.random() - 0.5);
+    }
+
+    // Mostrar los números en pantalla
+    function mostrarNumeros() {
+        const container = document.getElementById("numbers-container");
+        container.innerHTML = "";
+
+        const numeros = generateUniqueNumbers();
+
+        numeros.forEach(num => {
+            const btn = document.createElement("button");
+            btn.className = "number-button";
+            btn.textContent = num;
+            btn.addEventListener("click", function () {
+                if (num % 10 === 7) {
+                    btn.classList.add("correcto");  // Pintar correcto
+                } else {
+                    btn.classList.add("incorrecto");  // Pintar incorrecto
+                }
+                btn.disabled = true;
+            });
+            container.appendChild(btn);
+        });
+    }
+
+    // Función corregida para mostrar números en la pantalla
+    function displayNumbers() {
+        // Marcar que el juego ha iniciado cuando se muestra la primera pregunta
+        if (currentQuestion === 1 && !hasGameStarted) {
+            hasGameStarted = true;
+            registerGameSession(); // Actualizar sesión
+        }
+        
+        // Primero, ocultar TODOS los contenedores
+        document.getElementById('numbers-container').style.display = 'none';
+        
+        document.getElementById('drag-drop-container').style.display = 'none';
+        // AGREGAR: Ocultar el contenedor de la pregunta 2
+        const writeNumberContainer = document.getElementById('write-number-container');
+        if (writeNumberContainer) {
+            writeNumberContainer.style.display = 'none';
+        }
+        
+        
+        // NUEVO: Ocultar el contenedor de secuencias
+        const sequenceContainer = document.getElementById('sequence-container');
+        if (sequenceContainer) {
+            sequenceContainer.style.display = 'none';
+        }
+        
+        // Pregunta 1: números con 2,4
+        if (currentQuestion === 1) {
+            document.getElementById('numbers-container').style.display = 'grid';
+            
+            const container = document.getElementById('numbers-container');
+            container.innerHTML = '';
+            selectedNumbers = [];
+            
+            currentNumbers = generateUniqueNumbers();
+            
+            currentNumbers.forEach((number, index) => {
+                const button = document.createElement('button');
+                button.className = 'number-btn';
+                button.textContent = number;
+                // CORREGIR: Usar función anónima para evitar problemas de contexto
+                button.onclick = function() {
+                    selectNumber(number, this);
+                };
+                button.style.animationDelay = (index * 0.2) + 's';
+                button.dataset.number = number;
+                container.appendChild(button);
+            });
+            
+            // Resetear botón de respuesta
+            document.getElementById('answer-btn').disabled = true;
+        }
+        // Pregunta 2: Escribir el número según imagen
+        else if (currentQuestion === 2) {
+            document.getElementById('numbers-container').style.display = 'none';
+            document.getElementById('write-number-container').style.display = 'block';
+            document.getElementById('drag-drop-container').style.display = 'none';
+            document.getElementById('sequence-container').style.display = 'none';
+
+            document.getElementById('main-instruction').innerHTML = '✏️ Escribe el número que representa cada imagen';
+            document.getElementById('instruction-card').innerHTML = `
+                <i class="fas fa-pencil-alt mr-2"></i>
+                Observa y escribe el número correcto
+                <i class="fas fa-pencil-alt ml-2"></i>
+            `;
+
+            document.getElementById('question-counter').innerHTML = `
+                <i class="fas fa-star mr-2"></i>
+                Pregunta ${currentQuestion} de ${totalQuestions}
+                <i class="fas fa-star ml-2"></i>
+            `;
+
+            const inputs = document.querySelectorAll('.write-input');
+            inputs.forEach(input => {
+                input.value = ''; // Limpiar
+            });
+
+            document.getElementById('answer-btn').disabled = true;
+
+            // Habilitar botón solo si todos los inputs están llenos
+            inputs.forEach(input => {
+                input.addEventListener('input', () => {
+                    const allFilled = Array.from(inputs).every(inp => inp.value.trim() !== '');
+                    document.getElementById('answer-btn').disabled = !allFilled;
+                });
+            });
+        }
+        // Pregunta 3: drag and drop
+        else if (currentQuestion === 3) {
+            showDragDropQuestion();
+            return;
+        }
+        // Pregunta 4: completar secuencias
+        else if (currentQuestion === 4) {
+            // Mostrar el contenedor de secuencias
+            const sequenceContainer = document.getElementById('sequence-container');
+            if (sequenceContainer) {
+                sequenceContainer.style.display = 'block';
+                
+                // Actualizar instrucciones
+                document.getElementById('main-instruction').innerHTML = '🔢 ¡Completa las secuencias!';
+                document.getElementById('instruction-card').innerHTML = `
+                    <i class="fas fa-brain mr-2"></i>
+                    Encuentra el patrón y completa cada secuencia
+                    <i class="fas fa-brain ml-2"></i>
+                `;
+
+                document.getElementById('question-counter').innerHTML = `
+                    <i class="fas fa-star mr-2"></i>
+                    Pregunta ${currentQuestion} de ${totalQuestions}
+                    <i class="fas fa-star ml-2"></i>
+                `;
+
+                // Resetear la pregunta de secuencias
+                initSequenceQuestion();
+            } else {
+                console.error('No se encontró el contenedor sequence-container');
+            }
+            return;
+        }
+        
+        // Actualizar contador de preguntas
+        document.getElementById('question-counter').innerHTML = `
+            Pregunta ${currentQuestion} de ${totalQuestions}
+        `;
+        
+        // Resetear botón de respuesta (solo para pregunta 1)
+        if (currentQuestion === 1) {
+            document.getElementById('answer-btn').disabled = true;
+        }
+    }
+
+    // Seleccionar/deseleccionar número
+    function selectNumber(number, button) {
+        if (gameFinished) return;
+
+        const index = selectedNumbers.indexOf(number);
+        
+        if (index > -1) {
+            // Deseleccionar
+            selectedNumbers.splice(index, 1);
+            button.classList.remove('selected');
+        } else {
+            // Seleccionar
+            selectedNumbers.push(number);
+            button.classList.add('selected');
+        }
+
+        // Habilitar/deshabilitar botón de respuesta
+        document.getElementById('answer-btn').disabled = selectedNumbers.length === 0;
+    }
+
+    // Crear confeti
+    function createConfetti() {
+        const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffa726', '#ef5350'];
+        
+        for (let i = 0; i < 50; i++) {
+            setTimeout(() => {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 3000);
+            }, i * 100);
+        }
+    }
+
+    // Mostrar la pregunta de drag and drop
+    function showDragDropQuestion() {
+        // Las otras preguntas se ocultan en showQuestion(), así que esto no es necesario
+        // pero está bien dejarlo para asegurar
+        document.getElementById('numbers-container').style.display = 'none';
+        
+        // MOSTRAR el contenedor de drag and drop (estaba oculto)
+        document.getElementById('drag-drop-container').style.display = 'block';
+        
+        // Cambiar las instrucciones
+        document.getElementById('main-instruction').innerHTML = '🔢 ¡Ordena los números del más pequeño al más grande!';
+        document.getElementById('instruction-card').innerHTML = `
+            <i class="fas fa-sort-numeric-up mr-2"></i>
+            ¡Arrastra los números y colócalos en orden de MENOR a MAYOR!
+            <i class="fas fa-sort-numeric-up ml-2"></i>
+        `;
+
+        // Actualizar contador de preguntas
+        document.getElementById('question-counter').innerHTML = `
+            <i class="fas fa-star mr-2"></i>
+            Pregunta ${currentQuestion} de ${totalQuestions}
+            <i class="fas fa-star ml-2"></i>
+        `;
+
+        // Resetear drag and drop
+        resetDragDrop();
+        
+        // Inicializar drag and drop
+        initDragDrop();
+        
+        // Deshabilitar botón hasta que se complete el ordenamiento
+        document.getElementById('answer-btn').disabled = true;
+        document.getElementById('answer-btn').textContent = 'Completa el ordenamiento';
+    }
+
+    // Variables para drag and drop
+    let draggedElement = null;
+    const correctDragOrder = [11, 18, 28, 32, 46]; // Orden de menor a mayor
+
+
+    // Inicializar drag and drop
+    function initDragDrop() {
+        const sortableNumbers = document.querySelectorAll('.drag-sortable-number');
+        const dropSlots = document.querySelectorAll('.drag-drop-slot');
+
+        // Event listeners para números arrastrables
+        sortableNumbers.forEach(number => {
+            // Remover listeners previos para evitar duplicados
+            number.removeEventListener('dragstart', handleDragStart);
+            number.removeEventListener('dragend', handleDragEnd);
+            
+            // Agregar listeners
+            number.addEventListener('dragstart', handleDragStart);
+            number.addEventListener('dragend', handleDragEnd);
+        });
+
+        // Event listeners para slots
+        dropSlots.forEach(slot => {
+            // Remover listeners previos
+            slot.removeEventListener('dragover', handleDragOver);
+            slot.removeEventListener('drop', handleDrop);
+            slot.removeEventListener('dragenter', handleDragEnter);
+            slot.removeEventListener('dragleave', handleDragLeave);
+            slot.removeEventListener('click', handleSlotClick);
+            
+            // Agregar listeners
+            slot.addEventListener('dragover', handleDragOver);
+            slot.addEventListener('drop', handleDrop);
+            slot.addEventListener('dragenter', handleDragEnter);
+            slot.addEventListener('dragleave', handleDragLeave);
+            slot.addEventListener('click', handleSlotClick); // Para devolver números al hacer clic
+        });
+    }
+
+    // Funciones de drag and drop
+    function handleDragStart(e) {
+        draggedElement = this;
+        this.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+    }
+
+    function handleDragEnd(e) {
+        this.classList.remove('dragging');
+        // No resetear draggedElement aquí, se hace en handleDrop
+    }
+
+    function handleDragOver(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        return false;
+    }
+
+    function handleDragEnter(e) {
+        e.preventDefault();
+        // Solo agregar efecto visual si el slot está vacío
+        if (!this.querySelector('.drag-dropped-number')) {
+            this.classList.add('drag-over');
+        }
+    }
+
+    function handleDragLeave(e) {
+        this.classList.remove('drag-over');
+    }
+
+    // Función para verificar si el drag and drop está completo
+    function checkDragDropComplete() {
+        const dropSlots = document.querySelectorAll('.drag-drop-slot');
+        let filledSlots = 0;
+        
+        dropSlots.forEach(slot => {
+            if (slot.querySelector('.drag-dropped-number')) {
+                filledSlots++;
+            }
+        });
+        
+        const answerBtn = document.getElementById('answer-btn');
+        
+        // Habilitar botón solo cuando todos los slots estén llenos
+        if (filledSlots === dropSlots.length) {
+            answerBtn.disabled = false;
+            answerBtn.textContent = '✓ Responder';
+        } else {
+            answerBtn.disabled = true;
+            answerBtn.textContent = `Faltan ${dropSlots.length - filledSlots} números`;
+        }
+    }
+    function handleDrop(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        this.classList.remove('drag-over');
+
+        // Si el slot ya tiene un número, intercambiar
+        const existingNumber = this.querySelector('.drag-dropped-number');
+        
+        if (draggedElement) {
+            if (existingNumber) {
+                // Intercambiar: devolver el número existente al área de números
+                const numbersContainer = document.getElementById('drag-numbers-to-sort');
+                const originalNumbers = document.querySelectorAll('.drag-sortable-number');
+                
+                // Encontrar y mostrar el número original correspondiente
+                originalNumbers.forEach(num => {
+                    if (num.getAttribute('data-value') === existingNumber.getAttribute('data-value')) {
+                        num.style.display = 'flex';
+                    }
+                });
+                
+                existingNumber.remove();
+            }
+
+            // Crear el número en el slot
+            const droppedNumber = document.createElement('div');
+            droppedNumber.className = 'drag-dropped-number';
+            droppedNumber.textContent = draggedElement.textContent;
+            droppedNumber.setAttribute('data-value', draggedElement.getAttribute('data-value'));
+            
+            this.appendChild(droppedNumber);
+            this.classList.add('filled');
+            
+            // Ocultar el número original
+            draggedElement.style.display = 'none';
+            
+            // Resetear elemento arrastrado
+            draggedElement = null;
+            
+            // Verificar si el drag and drop está completo
+            checkDragDropComplete();
+        }
+        
+        return false;
+    }
+
+    // Manejar clic en slot para devolver números
+    function handleSlotClick(e) {
+        const droppedNumber = this.querySelector('.drag-dropped-number');
+        if (droppedNumber) {
+            // Encontrar el número original y mostrarlo
+            const numbersContainer = document.getElementById('drag-numbers-to-sort');
+            const originalNumbers = document.querySelectorAll('.drag-sortable-number');
+            
+            originalNumbers.forEach(num => {
+                if (num.getAttribute('data-value') === droppedNumber.getAttribute('data-value')) {
+                    num.style.display = 'flex';
+                }
+            });
+            
+            // Remover del slot
+            droppedNumber.remove();
+            this.classList.remove('filled');
+            
+            // Verificar completitud
+            checkDragDropComplete();
+        }
+    }
+
+    function handleDroppedDragStart(e) {
+        draggedElement = this;
+        this.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+        
+        // Permitir arrastrar de vuelta al área de números
+        const numbersArea = document.getElementById('drag-numbers-to-sort');
+        numbersArea.addEventListener('dragover', handleNumbersAreaDragOver);
+        numbersArea.addEventListener('drop', handleNumbersAreaDrop);
+    }
+
+    // Manejar drag over en el área de números
+    function handleNumbersAreaDragOver(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+    }
+
+    // Manejar drop en el área de números (devolver número)
+    function handleNumbersAreaDrop(e) {
+        e.stopPropagation();
+        
+        if (draggedElement && draggedElement.classList.contains('drag-dropped-number')) {
+            // Encontrar el número original
+            const originalNumbers = document.querySelectorAll('.drag-sortable-number');
+            const value = draggedElement.getAttribute('data-value');
+            
+            originalNumbers.forEach(num => {
+                if (num.getAttribute('data-value') === value) {
+                    num.style.display = 'block';
+                }
+            });
+            
+            // Remover de la slot
+            const slot = draggedElement.parentNode;
+            slot.classList.remove('filled');
+            draggedElement.remove();
+            
+            // Verificar completitud
+            checkDragDropComplete();
+        }
+    }
+
+    function checkDragDropOrder() {
+        const dropSlots = document.querySelectorAll('.drag-drop-slot');
+        const userOrder = [];
+        let hasEmptySlots = false;
+
+        dropSlots.forEach(slot => {
+            const droppedNumber = slot.querySelector('.drag-dropped-number');
+            if (droppedNumber) {
+                userOrder.push(parseInt(droppedNumber.getAttribute('data-value')));
+            } else {
+                hasEmptySlots = true;
+            }
+        });
+
+        if (hasEmptySlots) {
+            return { 
+                isCorrect: false, 
+                message: '¡Completa todos los espacios antes de verificar!' 
+            };
+        }
+
+        const isCorrect = userOrder.every((value, index) => value === correctDragOrder[index]);
+        
+        // Marcar visualmente los slots
+        dropSlots.forEach((slot, index) => {
+            const droppedNumber = slot.querySelector('.drag-dropped-number');
+            if (droppedNumber) {
+                const currentNumber = parseInt(droppedNumber.getAttribute('data-value'));
+                if (currentNumber === correctDragOrder[index]) {
+                    slot.classList.add('correct');
+                } else {
+                    slot.classList.add('incorrect');
+                }
+            }
+        });
+        
+        // Deshabilitar más interacciones después de verificar
+        const sortableNumbers = document.querySelectorAll('.drag-sortable-number');
+        const droppedNumbers = document.querySelectorAll('.drag-dropped-number');
+        
+        sortableNumbers.forEach(num => {
+            num.draggable = false;
+            num.style.cursor = 'not-allowed';
+            num.style.opacity = '0.6';
+        });
+        
+        // Remover event listeners de slots para evitar más cambios
+        dropSlots.forEach(slot => {
+            slot.removeEventListener('click', handleSlotClick);
+        });
+        
+        return {
+            isCorrect: isCorrect,
+            message: isCorrect ? 
+                '🎉 ¡Excelente! Has ordenado correctamente los números de menor a mayor.' :
+                `❌ El orden no es correcto. ¡Sigue practicando!`
+        };
+    }
+
+    // Función modificada para checkAnswer 
+    function checkAnswer() {
+        if (gameFinished) return;
+
+        gameFinished = true;
+        
+        let isCorrect = false;
+        let feedback = '';
+        let questionType = '';
+        let score = 0;
+
+        // Si es la pregunta de completar secuencias (ahora es la pregunta 4 - última)
+        if (currentQuestion === 4) {
+            questionType = 'sequence';
+            const sequenceResult = checkSequenceAnswers();
+            isCorrect = sequenceResult.isCorrect;
+            feedback = sequenceResult.message;
+        }
+        // Si es la pregunta de drag and drop (ahora es la pregunta 3)
+        else if (currentQuestion === 3) {
+            questionType = 'drag-drop';
+            const dragResult = checkDragDropOrder();
+            isCorrect = dragResult.isCorrect;
+            feedback = dragResult.message;
+        }
+        else if (currentQuestion === 2) {
+            questionType = 'write-number'; // Cambiar de 'normal' a 'write-number'
+            const inputs = document.querySelectorAll('.write-input');
+            let correct = 0;
+            const totalInputs = inputs.length; // 5 items
+
+            inputs.forEach(input => {
+                const correctVal = parseInt(input.dataset.correct);
+                const entered = parseInt(input.value.trim());
+                
+                if (entered === correctVal) {
+                    correct++;
+                    input.style.border = '3px solid #4CAF50'; // Verde si correcto
+                    input.style.backgroundColor = '#e8f5e8'; // Fondo verde claro
+                } else {
+                    input.style.border = '3px solid #f44336'; // Rojo si incorrecto
+                    input.style.backgroundColor = '#ffe8e8'; // Fondo rojo claro
+                }
+            });
+
+            // Para efectos visuales, consideramos "correcto" si tiene al menos 3 de 5
+            // pero el puntaje será proporcional
+            isCorrect = correct >= Math.ceil(totalInputs * 0.6); // 60% o más para "éxito"
+            
+            // Feedback detallado
+            const percentage = (correct / totalInputs) * 100;
+            
+            if (correct === totalInputs) {
+                feedback = '🎉 ¡Perfecto! Todos los números están correctos.';
+            } else if (correct >= Math.ceil(totalInputs * 0.8)) {
+                feedback = `🌟 ¡Muy bien! Acertaste ${correct} de ${totalInputs} números.`;
+            } else if (correct >= Math.ceil(totalInputs * 0.6)) {
+                feedback = `👍 ¡Buen trabajo! Acertaste ${correct} de ${totalInputs} números.`;
+            } else if (correct > 0) {
+                feedback = `💪 ¡Sigue intentando! Acertaste ${correct} de ${totalInputs} números.`;
+            } else {
+                feedback = `🔁 Inténtalo otra vez. Revisa cada imagen y cuenta con cuidado.`;
+            }
+        }
+        else if (currentQuestion === 1) {
+            questionType = 'normal';
+            const correctNumbers = currentNumbers.filter(num => num % 10 === 7);
+
+            const selectedCorrect = selectedNumbers.filter(num => num % 10 === 7);
+            const selectedIncorrect = selectedNumbers.filter(num => num % 10 !== 7);
+
+            isCorrect = selectedCorrect.length === correctNumbers.length &&
+                        selectedIncorrect.length === 0 &&
+                        correctNumbers.every(num => selectedNumbers.includes(num));
+
+            // Marcar visualmente los números
+            const buttons = document.querySelectorAll('.number-btn');
+            buttons.forEach(button => {
+                const number = parseInt(button.dataset.number);
+                const wasSelected = selectedNumbers.includes(number);
+                const shouldBeSelected = number % 10 === 7;
+
+                if (shouldBeSelected && wasSelected) {
+                    button.classList.add('correct-answer');
+                } else if (shouldBeSelected && !wasSelected) {
+                    button.classList.add('correct-answer');
+                    button.style.border = '4px solid #96ceb4';
+                } else if (!shouldBeSelected && wasSelected) {
+                    button.classList.add('incorrect-answer');
+                }
+            });
+
+            feedback = isCorrect ?
+                `🎉 ¡Correcto! Has seleccionado todos los que terminan en 7.` :
+                `❌ Recuerda: solo los que TERMINAN en 7 `;
+        }
+
+        // Calcular puntaje de la pregunta
+        score = calculateQuestionScore(isCorrect, questionType);
+        questionScores.push({
+            question: currentQuestion,
+            score: score,
+            maxScore: maxScorePerQuestion,
+            isCorrect: isCorrect,
+            type: questionType
+        });
+
+        // Mostrar resultado
+        setTimeout(() => {
+            if (isCorrect) {
+                createConfetti();
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡CORRECTO! 🌟',
+                    html: `
+                        <div>
+                            <p>${feedback}</p>
+                            <div style="font-size: 1.2em; margin: 15px 0; color: #4CAF50;">
+                                <strong>Puntaje: ${score.toFixed(2)}/${maxScorePerQuestion.toFixed(2)} puntos</strong>
+                            </div>
+                        </div>
+                    `,
+                    confirmButtonText: currentQuestion < totalQuestions ? '¡Siguiente pregunta!' : '¡Ver resultados!',
+                    allowOutsideClick: false,
+                    customClass: {
+                        popup: 'animated bounceIn',
+                        confirmButton: 'btn btn-success'
+                    }
+                }).then(() => {
+                    nextQuestion();
+                });
+            } else {
+                Swal.fire({
+                    icon: 'info',
+                    title: '¡Sigue intentando! 💪',
+                    html: `
+                        <div>
+                            <p>${feedback}</p>
+                            <div style="font-size: 1.2em; margin: 15px 0; color: #ff9800;">
+                                <strong>Puntaje: ${score.toFixed(2)}/${maxScorePerQuestion.toFixed(2)} puntos</strong>
+                            </div>
+                        </div>
+                    `,
+                    confirmButtonText: 'Continuar',
+                    allowOutsideClick: false,
+                    customClass: {
+                        popup: 'animated shake',
+                        confirmButton: 'btn btn-primary'
+                    }
+                }).then(() => {
+                    nextQuestion();
+                });
+            }
+        }, 1500);
+    }
+    // Pasar a la siguiente pregunta
+    function nextQuestion() {
+        if (currentQuestion >= totalQuestions) {
+            // Juego terminado
+            showFinalResults();
+        } else {
+            // Siguiente pregunta
+            currentQuestion++;
+            gameFinished = false;
+            displayNumbers();
+        }
+    }
+
+    // FUNCIÓN CORREGIDA: showFinalResults con cálculo correcto de vidas
+    function showFinalResults() {
+        const totalScore = questionScores.reduce((sum, q) => sum + q.score, 0);
+        const finalScore = Math.round(totalScore * 100) / 100;
+
+        let questionsHTML = '';
+        questionScores.forEach((q, index) => {
+            const icon = q.isCorrect ? '✅' : '❌';
+            const color = q.isCorrect ? '#4CAF50' : '#f44336';
+            questionsHTML += `
+                <div style="margin: 10px 0; padding: 10px; border-left: 4px solid ${color}; background: #f9f9f9;">
+                    <strong>Pregunta ${q.question}:</strong> ${icon} ${q.score.toFixed(2)}/${q.maxScore.toFixed(2)} puntos
+                </div>
+            `;
+        });
+
+        const isPassed = finalScore >= 7;
+        const statusColor = isPassed ? '#4CAF50' : '#ff9800';
+        const statusText = isPassed ? '¡APROBADO!' : 'Necesitas mejorar';
+
+        // ✅ Cálculo correcto de vidas antes y después
+        const vidasAntes = vidasRestantes;
+        const vidasDespues = Math.max(0, vidasRestantes - 1);
+        const puedeIntentarMas = vidasDespues > 0;
+
+        Swal.fire({
+            icon: isPassed ? 'success' : 'info',
+            title: '¡JUEGO COMPLETADO! 🏆',
+            html: `
+                <div style="font-size: 1.1em;">
+                    <div style="margin: 20px 0; padding: 15px; background: ${statusColor}; color: white; border-radius: 10px;">
+                        <h3 style="margin: 0; color: white;">${statusText}</h3>
+                        <div style="font-size: 1.5em; margin: 10px 0;">
+                            <strong>NOTA FINAL: ${finalScore.toFixed(2)}/10</strong>
+                        </div>
+                    </div>
+
+                    <div style="text-align: left; margin: 20px 0;">
+                        <h4>📊 Resumen por pregunta:</h4>
+                        ${questionsHTML}
+                    </div>
+
+                    <div style="margin: 15px 0; padding: 15px; background: #f0f0f0; border-radius: 10px;">
+                        <h4 style="margin: 0 0 10px 0; color: #333;">💖 Estado de vidas:</h4>
+                        <p style="margin: 5px 0;"><strong>Vidas antes:</strong> ${vidasAntes}/${vidasTotales}</p>
+                        <p style="margin: 5px 0;"><strong>Vidas después:</strong> ${vidasDespues}/${vidasTotales}</p>
+                        ${puedeIntentarMas ? 
+                            `<p style="color: #4CAF50; font-weight: bold;">¡Puedes intentar ${vidasDespues} vez${vidasDespues !== 1 ? 'es' : ''} más!</p>` : 
+                            '<p style="color: #f44336; font-weight: bold;">¡Se han agotado todas las vidas!</p>'
+                        }
+                    </div>
+                </div>
+            `,
+            confirmButtonText: puedeIntentarMas ? '🔄 Volver a intentar' : '🏠 Volver al menú',
+            cancelButtonText: '🏠 Volver al menú',
+            showCancelButton: puedeIntentarMas,
+            allowOutsideClick: false,
+            customClass: {
+                popup: 'animated tada',
+                confirmButton: 'btn btn-success',
+                cancelButton: 'btn btn-secondary'
+            }
+        }).then((result) => {
+            saveAttempt(finalScore).then((saveResult) => {
+                if (saveResult.success) {
+                    vidasRestantes = saveResult.vidasRestantes;
+                    puedeIntentar = saveResult.puedeIntentar;
+
+                    if (result.isConfirmed && puedeIntentar) {
+                        resetGame();
+                    } else {
+                        updateBestScore().then(() => {
+                            window.location.href = `/modulo/${moduloId}/niveles/`;
+                        });
+                    }
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Hubo un problema al guardar tu intento. Por favor, contacta al administrador.',
+                        confirmButtonText: 'Entendido'
+                    });
+                }
+            });
+        });
+    }
+
+
+    // Función para obtener CSRF token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+   
+    // FUNCIÓN MODIFICADA: saveAttempt actualizada
+    async function saveAttempt(finalScore) {
+        try {
+            console.log('Enviando datos:', {
+                estudiante_id: studentId,
+                nivel_id: levelId,
+                puntaje_total: finalScore
+            });
+
+            const response = await fetch('/save_attempt/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    estudiante_id: studentId,
+                    nivel_id: levelId,
+                    puntaje_total: finalScore
+                })
+            });
+            
+            const data = await response.json();
+            console.log('Respuesta del servidor:', data);
+            
+            if (data.success) {
+                // Actualizar variables locales
+                vidasRestantes = data.vidas_restantes;
+                puedeIntentar = data.puede_continuar;
+                
+                // Actualizar display de vidas
+                updateLivesDisplay();
+                
+                console.log('Intento guardado correctamente con nota:', data.nota);
+                return { 
+                    success: true, 
+                    data: data,
+                    vidasRestantes: vidasRestantes,
+                    puedeIntentar: puedeIntentar
+                };
+            } else {
+                console.error('Error del servidor:', data.error);
+                return { success: false, error: data.error };
+            }
+        } catch (error) {
+            console.error('Error de red al guardar intento:', error);
+            return { success: false, error: 'Error de conexión: ' + error.message };
+        }
+    }
+
+    // Función para actualizar mejor puntaje
+    async function updateBestScore() {
+        try {
+            const response = await fetch('/update_best_score/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    estudiante_id: studentId,
+                    nivel_id: levelId
+                })
+            });
+            
+            const data = await response.json();
+            if (data.success) {
+                console.log('Mejor puntaje actualizado:', data.best_score);
+            } else {
+                console.error('Error al actualizar mejor puntaje:', data.error);
+            }
+        } catch (error) {
+            console.error('Error al actualizar mejor puntaje:', error);
+        }
+    }
+
+    // MODIFICAR LA FUNCIÓN resetGame para reiniciar puntajes
+    function resetGame() {
+        currentQuestion = 1;
+        selectedNumbers = [];
+        currentNumbers = [];
+        usedQuestions.clear();
+        gameFinished = false;
+        multipleChoiceAnswers = {};
+        hasGameStarted = false; // Resetear estado de juego iniciado
+        
+        // REINICIAR VARIABLES DE PUNTAJE
+        questionScores = [];
+        currentScore = 0;
+        
+        // Limpiar y registrar nueva sesión
+        clearGameSession();
+        registerGameSession();
+        
+        // OCULTAR TODOS LOS CONTENEDORES DE PREGUNTAS POSIBLES
+        const containersToHide = [
+            'multiple-choice-container',
+            'drag-drop-container', 
+            'sequence-container',
+            'write-number-container', // Pregunta 2: Escribir números
+            
+            'results-container', // Agregar contenedor de resultados
+            'game-over-container', // Agregar contenedor de game over
+            'final-results-container' // Agregar contenedor de resultados finales
+        ];
+        
+        containersToHide.forEach(containerId => {
+            const container = document.getElementById(containerId);
+            if (container) {
+                container.style.display = 'none';
+            }
+        });
+        
+        // MOSTRAR el contenedor inicial
+        const numbersContainer = document.getElementById('numbers-container');
+        if (numbersContainer) {
+            numbersContainer.style.display = 'grid';
+        }
+        
+        // Restaurar instrucciones originales
+        const mainInstruction = document.getElementById('main-instruction');
+        const instructionCard = document.getElementById('instruction-card');
+        
+        if (mainInstruction) {
+            mainInstruction.innerHTML = '¡Pinta SOLO los números que TERMINAN en 7!';
+        }
+        
+        if (instructionCard) {
+            instructionCard.innerHTML = `
+                ¡Pinta SOLO los números que TERMINAN en 7!
+            `;
+        }
+        
+        // Limpiar TODAS las selecciones posibles
+        document.querySelectorAll('.choice-option').forEach(option => {
+            option.classList.remove('selected');
+            option.style.background = '';
+            option.style.boxShadow = '';
+        });
+        
+        document.querySelectorAll('.choice-row').forEach(row => {
+            row.classList.remove('selected');
+        });
+        
+        // Limpiar elementos de número seleccionados
+        document.querySelectorAll('.number-item').forEach(item => {
+            item.classList.remove('selected');
+            item.style.background = '';
+            item.style.boxShadow = '';
+        });
+        
+        // Limpiar elementos de drag and drop
+        resetDragDrop();
+        
+        // Limpiar elementos de secuencia si existen
+        document.querySelectorAll('.sequence-item').forEach(item => {
+            item.classList.remove('selected');
+            item.style.background = '';
+        });
+        
+        // Limpiar inputs de escritura (pregunta 2)
+        document.querySelectorAll('.write-input').forEach(input => {
+            input.value = '';
+            input.classList.remove('correct', 'incorrect');
+        });
+        
+        // Limpiar elementos de drag and drop completamente
+        const dragItems = document.querySelectorAll('.drag-item');
+        const dropZones = document.querySelectorAll('.drop-zone');
+        
+        dragItems.forEach(item => {
+            item.classList.remove('dragging', 'correct', 'incorrect');
+            item.style.display = 'block'; // Restaurar visibilidad
+        });
+        
+        dropZones.forEach(zone => {
+            zone.classList.remove('drag-over', 'filled');
+            zone.innerHTML = zone.dataset.originalContent || 'Suelta aquí';
+        });
+        
+        // Regenerar números iniciales
+        displayNumbers();
+        
+        // Limpiar cualquier mensaje de error o éxito
+        const messageElements = document.querySelectorAll('.error-message, .success-message, .feedback-message');
+        messageElements.forEach(msg => msg.remove());
+    }
+
+    // Agregar animación de pulso para vidas bajas (CSS)
+    const pulseStyle = document.createElement('style');
+    pulseStyle.textContent = `
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    `;
+    document.head.appendChild(pulseStyle);
+
+    // Función para resetear el drag and drop
+    function resetDragDrop() {
+        const sortableNumbers = document.querySelectorAll('.drag-sortable-number');
+        const dropSlots = document.querySelectorAll('.drag-drop-slot');
+
+        // Limpiar slots y restaurar números
+        dropSlots.forEach(slot => {
+            const existing = slot.querySelector('.drag-dropped-number');
+            if (existing) {
+                existing.remove();
+            }
+            slot.classList.remove('filled', 'drag-over', 'correct', 'incorrect');
+        });
+
+        // Mostrar todos los números originales
+        sortableNumbers.forEach(number => {
+            number.style.display = 'flex'; // Usar flex para centrar contenido
+            number.classList.remove('dragging');
+            number.draggable = true;
+        });
+    }
+    // Funciones de utilidad adicionales
+    function playSound(type) {
+        // Función para reproducir sonidos (opcional)
+        // Puedes implementar sonidos usando Web Audio API si lo deseas
+        try {
+            if (type === 'correct') {
+                // Sonido de éxito
+                const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmYfCzef0fPNeyYELIjN8NSLORsP...');
+                audio.play();
+            } else if (type === 'incorrect') {
+                // Sonido de error
+            }
+        } catch (e) {
+            // Ignorar errores de audio
+        }
+    }
+
+   // También corregir la función de efectos de clic para ser más robusta
+    function addClickEffects() {
+        document.addEventListener('click', function(e) {
+            // Verificar que el target existe y tiene las clases esperadas
+            if (!e.target) return;
+            
+            if (e.target.classList.contains('number-btn') || 
+                e.target.classList.contains('choice-option')) {
+                
+                // Crear efecto visual de clic
+                const ripple = document.createElement('div');
+                ripple.style.cssText = `
+                    position: absolute;
+                    border-radius: 50%;
+                    background: rgba(255, 255, 255, 0.6);
+                    animation: ripple 0.6s linear;
+                    pointer-events: none;
+                    z-index: 1000;
+                `;
+                
+                const rect = e.target.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = (rect.left + rect.width / 2 - size / 2) + 'px';
+                ripple.style.top = (rect.top + rect.height / 2 - size / 2) + 'px';
+                
+                document.body.appendChild(ripple);
+                
+                setTimeout(() => {
+                    if (ripple.parentNode) {
+                        ripple.remove();
+                    }
+                }, 600);
+            }
+        });
+    }
+
+    // Agregar animación de ripple en CSS
+    const rippleStyle = document.createElement('style');
+    rippleStyle.textContent = `
+        @keyframes ripple {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+    `;
+
+    document.head.appendChild(rippleStyle);
+
+    // Inicializar el juego cuando la página carga
+    document.addEventListener('DOMContentLoaded', function() {
+            // Verificar que la función initializeGameData existe
+            if (typeof initializeGameData === 'function') {
+                // Inicializar datos del juego
+                initializeGameData().then((canPlay) => {
+                    if (canPlay) {
+                        createFloatingElements();
+                        addClickEffects();
+                        displayNumbers();
+                    }
+                    // Si canPlay es false, ya se mostró el mensaje de sin vidas
+                }).catch((error) => {
+                    console.error('Error al inicializar el juego:', error);
+                });
+            } else {
+                console.error('La función initializeGameData no está definida');
+            }
+            
+            // Agregar atajo de teclado para responder (tecla Enter)
+            document.addEventListener('keydown', function(e) {
+                const answerBtn = document.getElementById('answer-btn');
+                if (e.key === 'Enter' && answerBtn && !answerBtn.disabled) {
+                    if (typeof checkAnswer === 'function') {
+                        checkAnswer();
+                    }
+                }
+            });
+        
+        // Configurar SweetAlert2 con estilos personalizados
+        const swalStyle = document.createElement('style');
+        swalStyle.textContent = `
+            .swal2-popup {
+                font-family: 'Comic Sans MS', cursive, sans-serif !important;
+                border-radius: 20px !important;
+            }
+            .swal2-title {
+                color: #ff6b6b !important;
+                font-weight: 900 !important;
+            }
+            .swal2-confirm {
+                background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%) !important;
+                border: none !important;
+                border-radius: 25px !important;
+                font-weight: 700 !important;
+                padding: 12px 30px !important;
+            }
+            .swal2-cancel {
+                background: linear-gradient(135deg, #96ceb4 0%, #45b7d1 100%) !important;
+                border: none !important;
+                border-radius: 25px !important;
+                font-weight: 700 !important;
+                padding: 12px 30px !important;
+            }
+        `;
+        document.head.appendChild(swalStyle);
+    });
+
+    // Función para detectar si es un dispositivo móvil
+    function isMobileDevice() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    }
+
+    // Ajustar el juego para dispositivos móviles
+    if (isMobileDevice()) {
+        document.addEventListener('DOMContentLoaded', function() {
+            // Ajustar tamaños para móviles
+            const style = document.createElement('style');
+            style.textContent = `
+                @media (max-width: 768px) {
+                    .number-btn:hover {
+                        transform: scale(1.1) !important;
+                    }
+                    .choice-option:hover {
+                        transform: scale(1.05) !important;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        let correctAnswers = 0;
+        const totalSequences = 3;
+        
+        // Manejar clicks en las opciones - PERMITIR CAMBIO DE SELECCIÓN
+        document.querySelectorAll('.option-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const sequenceItem = this.closest('.sequence-item');
+                // CAMBIO IMPORTANTE: Buscar específicamente la caja vacía (que tiene "?" o está vacía)
+                const emptyBox = sequenceItem.querySelector('.sequence-box.empty, .sequence-box[data-answer]');
+                const selectedValue = this.dataset.value;
+                
+                console.log('Caja vacía encontrada:', emptyBox); // Debug
+                
+                // Verificar si los botones están deshabilitados (ya se verificó la respuesta)
+                if (this.disabled) {
+                    return; // No permitir cambios después de verificar
+                }
+                
+                // Verificar que encontramos la caja vacía
+                if (!emptyBox) {
+                    console.error('No se encontró la caja vacía en esta secuencia');
+                    return;
+                }
+                
+                // Remover selección previa en esta secuencia
+                sequenceItem.querySelectorAll('.option-btn').forEach(b => {
+                    b.classList.remove('selected');
+                });
+                
+                // Marcar como seleccionado el botón actual
+                this.classList.add('selected');
+                
+                // Actualizar la caja vacía con la nueva selección
+                emptyBox.textContent = selectedValue;
+                emptyBox.classList.add('selected');
+                emptyBox.classList.remove('empty');
+                
+                // Limpiar estados previos de la caja (por si había una selección anterior)
+                emptyBox.classList.remove('correct', 'incorrect');
+                
+                console.log('Valor actualizado en la caja:', selectedValue); // Debug
+            });
+        });
+    });
+
+    // Función para verificar las respuestas de las secuencias
+    function checkSequenceAnswers() {
+        // Primero evaluamos las respuestas seleccionadas
+        let correctAnswers = 0;
+        
+        // Verificar cada secuencia cuando se llama desde checkAnswer()
+        document.querySelectorAll('.sequence-item').forEach(sequenceItem => {
+            // CAMBIO IMPORTANTE: Buscar la caja que tiene data-answer (la caja vacía)
+            const emptyBox = sequenceItem.querySelector('.sequence-box[data-answer]');
+            
+            if (emptyBox && emptyBox.classList.contains('selected')) {
+                const correctAnswer = emptyBox.dataset.answer;
+                const selectedValue = emptyBox.textContent;
+                
+                console.log(`Secuencia: Correcto=${correctAnswer}, Seleccionado=${selectedValue}`); // Debug
+                
+                if (selectedValue === correctAnswer) {
+                    // Respuesta correcta
+                    emptyBox.classList.add('correct');
+                    emptyBox.classList.remove('selected');
+                    correctAnswers++;
+                } else {
+                    // Respuesta incorrecta
+                    emptyBox.classList.add('incorrect');
+                    emptyBox.classList.remove('selected');
+                    
+                    // Resaltar la respuesta correcta
+                    sequenceItem.querySelectorAll('.option-btn').forEach(b => {
+                        if (b.dataset.value === correctAnswer) {
+                            b.classList.add('correct-answer');
+                            b.style.backgroundColor = '#00b894';
+                            b.style.color = 'white';
+                        }
+                    });
+                }
+                
+                // Deshabilitar botones de esta secuencia DESPUÉS de verificar
+                sequenceItem.querySelectorAll('.option-btn').forEach(b => {
+                    b.disabled = true;
+                    b.style.opacity = '0.5';
+                    b.style.cursor = 'not-allowed';
+                });
+            }
+        });
+        
+        // Ahora contar los resultados finales
+        const correctBoxes = document.querySelectorAll('.sequence-box.correct');
+        const incorrectBoxes = document.querySelectorAll('.sequence-box.incorrect');
+        const totalSequences = 3;
+        const correctCount = correctBoxes.length;
+        const totalCompleted = correctBoxes.length + incorrectBoxes.length;
+        
+        let isCorrect = false;
+        let message = '';
+        
+        // Solo evaluar si todas las secuencias están completadas
+        if (totalCompleted >= totalSequences) {
+            // Consideramos "correcto" si completó al menos 2 de 3 secuencias para efectos visuales
+            isCorrect = correctCount >= 2;
+            
+            // Generar mensaje de feedback basado en el rendimiento
+            if (correctCount === 3) {
+                message = '🎉 ¡Excelente! Completaste todas las secuencias correctamente. ¡Eres un genio de los patrones!';
+            } else if (correctCount === 2) {
+                message = '🌟 ¡Muy bien! Completaste 2 de 3 secuencias. ¡Tienes buen ojo para los patrones!';
+            } else if (correctCount === 1) {
+                message = '👍 ¡Buen intento! Completaste 1 secuencia correctamente. ¡Sigue practicando los patrones!';
+            } else {
+                message = '💪 ¡No te rindas! Los patrones necesitan práctica. ¡Inténtalo otra vez!';
+            }
+        }
+        
+        return {
+            isCorrect: isCorrect,
+            message: message,
+            correctCount: correctCount,
+            totalSequences: totalSequences,
+            totalCompleted: totalCompleted
+        };
+    }
+
+    // Función adicional para reiniciar el ejercicio (opcional)
+    function resetSequenceExercise() {
+        // Limpiar todas las selecciones y estados
+        document.querySelectorAll('.sequence-item').forEach(sequenceItem => {
+            // Rehabilitar botones
+            sequenceItem.querySelectorAll('.option-btn').forEach(b => {
+                b.disabled = false;
+                b.style.opacity = '1';
+                b.style.cursor = 'pointer';
+                b.classList.remove('selected', 'correct-answer');
+                b.style.backgroundColor = '';
+                b.style.color = '';
+            });
+            
+            // Limpiar caja de respuesta - SOLO la caja vacía
+            const emptyBox = sequenceItem.querySelector('.sequence-box[data-answer]');
+            if (emptyBox) {
+                emptyBox.textContent = '?';
+                emptyBox.classList.remove('selected', 'correct', 'incorrect');
+                emptyBox.classList.add('empty');
+            }
+        });
+    }
+    // Función para inicializar/resetear la pregunta de secuencias
+    function initSequenceQuestion() {
+        // Resetear todos los botones de opciones
+        const optionButtons = document.querySelectorAll('.option-btn');
+        optionButtons.forEach(btn => {
+            btn.classList.remove('selected');
+            btn.disabled = false;
+            btn.style.opacity = '1';
+        });
+        
+        // Resetear las cajas de secuencia
+        const emptyBoxes = document.querySelectorAll('.sequence-box.empty, .sequence-box.correct');
+        emptyBoxes.forEach(box => {
+            if (box.classList.contains('correct')) {
+                box.classList.remove('correct');
+                box.classList.add('empty');
+                box.textContent = '?';
+            }
+        });
+        
+        // Limpiar el feedback
+        const feedback = document.querySelector('.sequence-feedback');
+        if (feedback) {
+            feedback.innerHTML = '';
+        }
+        
+        // Habilitar el botón de respuesta (si se maneja desde aquí)
+        const answerBtn = document.getElementById('answer-btn');
+        if (answerBtn) {
+            answerBtn.disabled = false;
+        }
+    }
+
+</script>
+
+{% endblock %}

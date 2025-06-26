@@ -1,0 +1,2061 @@
+
+{% extends 'plantillas/MasterEstudiante.html' %}
+{% load static %}
+{% block title %}
+  Estudiantes_Modulos
+{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{% static 'css/Modulo-1/primer-nivel.css' %}" />
+  <style>
+    body {
+      background: linear-gradient(-45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ffa726, #ef5350);
+      background-size: 400% 400%;
+      animation: rainbowShift 8s ease infinite;
+      min-height: 100vh;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      overflow-x: hidden;
+    }
+    
+    @keyframes rainbowShift {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+    
+    .main-container {
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .card-header {
+      background: linear-gradient(45deg, #ff6b6b, #feca57);
+      color: white;
+      padding: 25px;
+      text-align: center;
+    }
+    
+    .card-header h2 {
+      font-size: 2.5rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      margin: 0;
+    }
+    
+    .header-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 30px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      animation: bounceIn 1s ease-out;
+      border: 5px solid #ff6b6b;
+    }
+    
+    @keyframes bounceIn {
+      0% {
+        transform: scale(0.3);
+        opacity: 0;
+      }
+      50% {
+        transform: scale(1.05);
+      }
+      70% {
+        transform: scale(0.9);
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+    
+    .header-card h1 {
+      color: #ff6b6b;
+      font-size: 3rem;
+      font-weight: 900;
+      margin-bottom: 15px;
+      text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+      animation: wiggle 2s ease-in-out infinite;
+    }
+    
+    @keyframes wiggle {
+      0%,
+      100% {
+        transform: rotate(0deg);
+      }
+      25% {
+        transform: rotate(1deg);
+      }
+      75% {
+        transform: rotate(-1deg);
+      }
+    }
+    
+    .header-card p {
+      color: #333;
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 0;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%,
+      100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+    }
+    
+    .game-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 30px;
+      padding: 30px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      border: 5px solid #4ecdc4;
+      animation: slideInUp 1s ease-out;
+    }
+    
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(100px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .instruction-card {
+      background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
+      color: white;
+      padding: 25px;
+      border-radius: 25px;
+      margin-bottom: 30px;
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: 800;
+      box-shadow: 0 15px 30px rgba(255, 107, 107, 0.4);
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+    
+    @keyframes glow {
+      from {
+        box-shadow: 0 15px 30px rgba(255, 107, 107, 0.4);
+      }
+      to {
+        box-shadow: 0 15px 30px rgba(255, 107, 107, 0.8);
+      }
+    }
+
+    /* PREGUNTA 1: Ábacos de 2 cifras (DU) */
+    .abacus-container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      display: grid;
+    }
+
+    .abacus-question {
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 20px;
+      text-align: center;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .abacus-visual {
+      background: #8B4513;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 15px 0;
+      position: relative;
+      min-height: 120px;
+      border: 3px solid #654321;
+    }
+
+    .abacus-row {
+      display: flex;
+      align-items: center;
+      margin: 15px 0;
+      position: relative;
+    }
+
+    .abacus-wire {
+      width: 100%;
+      height: 3px;
+      background: #333;
+      position: relative;
+      border-radius: 2px;
+    }
+
+    .abacus-bead {
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      position: absolute;
+      top: -11px;
+      border: 2px solid #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .bead-red { background: #ff4757; }
+    .bead-blue { background: #3742fa; }
+
+    .abacus-label {
+      position: absolute;
+      left: -60px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-weight: bold;
+      color: white;
+      background: rgba(0,0,0,0.7);
+      padding: 5px 10px;
+      border-radius: 15px;
+      font-size: 0.9rem;
+    }
+
+    .number-options {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .number-option {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      border-radius: 15px;
+      padding: 15px 25px;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .number-option:hover {
+      transform: scale(1.1) translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .number-option.selected {
+      background: linear-gradient(135deg, #ffa726 0%, #ff9800 100%);
+      border: 3px solid #fff;
+      transform: scale(1.1);
+    }
+
+    /* PREGUNTA 2: Sumas de 2 cifras */
+    .suma-container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      display: none;
+    }
+
+    .suma-exercise {
+      background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 20px;
+      text-align: center;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .suma-display {
+      font-size: 3rem;
+      font-weight: 900;
+      color: #ff6b6b;
+      margin: 20px 0;
+      background: white;
+      border-radius: 15px;
+      padding: 20px;
+      border: 4px solid #ff6b6b;
+      display: inline-block;
+    }
+
+    /* PREGUNTA 3: Restas de 2 cifras */
+    .resta-container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      display: none;
+    }
+
+    .resta-exercise {
+      background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 20px;
+      text-align: center;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .resta-display {
+      font-size: 3rem;
+      font-weight: 900;
+      color: #4ecdc4;
+      margin: 20px 0;
+      background: white;
+      border-radius: 15px;
+      padding: 20px;
+      border: 4px solid #4ecdc4;
+      display: inline-block;
+    }
+
+    /* PREGUNTA 4: Unidades y Decenas */
+    .unidades-decenas-container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      display: none;
+    }
+
+    .ud-exercise {
+      background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 20px;
+      text-align: center;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .number-display {
+      font-size: 4rem;
+      font-weight: 900;
+      color: #ff6b6b;
+      text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+      margin: 20px 0;
+      background: white;
+      border-radius: 15px;
+      padding: 20px;
+      border: 4px solid #ff6b6b;
+      display: inline-block;
+    }
+
+    .ud-question {
+      font-size: 1.4rem;
+      color: #333;
+      margin: 15px 0;
+      font-weight: 600;
+    }
+
+    .ud-options {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .answer-btn {
+      background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
+      color: white;
+      border: none;
+      padding: 20px 50px;
+      border-radius: 50px;
+      font-size: 1.8rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 15px 30px rgba(255, 107, 107, 0.4);
+      display: block;
+      margin: 0 auto;
+      animation: rainbow 3s ease-in-out infinite;
+    }
+    
+    @keyframes rainbow {
+      0% {
+        filter: hue-rotate(0deg);
+      }
+      100% {
+        filter: hue-rotate(360deg);
+      }
+    }
+    
+    .answer-btn:hover {
+      transform: scale(1.1) translateY(-5px);
+      box-shadow: 0 20px 40px rgba(255, 107, 107, 0.6);
+    }
+    
+    .answer-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      animation: none;
+    }
+    
+    .floating-elements {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    .floating-element {
+      position: absolute;
+      font-size: 2rem;
+      animation: floatAround 8s infinite ease-in-out;
+      opacity: 0.7;
+    }
+    
+    @keyframes floatAround {
+      0%,
+      100% {
+        transform: translateY(0px) rotate(0deg);
+        opacity: 0.7;
+      }
+      25% {
+        transform: translateY(-30px) rotate(90deg);
+        opacity: 1;
+      }
+      50% {
+        transform: translateY(-20px) rotate(180deg);
+        opacity: 0.8;
+      }
+      75% {
+        transform: translateY(-40px) rotate(270deg);
+        opacity: 1;
+      }
+    }
+    
+    .confetti {
+      position: fixed;
+      top: -10px;
+      background-color: #f0f0f0;
+      width: 10px;
+      height: 10px;
+      animation: confetti 3s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 1000;
+    }
+    
+    @keyframes confetti {
+      0% {
+        transform: translateY(-100vh) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+    
+    .question-counter {
+      background: linear-gradient(135deg, #45b7d1 0%, #96ceb4 100%);
+      color: white;
+      padding: 15px 30px;
+      border-radius: 20px;
+      text-align: center;
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 20px rgba(69, 183, 209, 0.3);
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .header-card h1 {
+        font-size: 2.5rem;
+      }
+      .header-card p {
+        font-size: 1.5rem;
+      }
+      .number-option {
+        font-size: 1.5rem;
+        padding: 12px 20px;
+      }
+      .main-container {
+        padding: 15px;
+      }
+      .suma-display, .resta-display, .number-display {
+        font-size: 2.5rem;
+        padding: 15px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .header-card h1 {
+        font-size: 2rem;
+      }
+      .header-card p {
+        font-size: 1.3rem;
+      }
+      .number-option {
+        font-size: 1.3rem;
+        padding: 10px 15px;
+      }
+      .instruction-card {
+        font-size: 1.5rem;
+      }
+      .suma-display, .resta-display, .number-display {
+        font-size: 2rem;
+        padding: 10px;
+      }
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="container-fluid">
+    <nav class="breadcrumb">
+      <a style="color: #000;" href="{% url 'core_estudiante' %}">🏠 Inicio</a> &nbsp;/&nbsp;
+      <a style="color: #000;" href="{% url 'estudiante_modulo' %}">📚 Módulos</a> &nbsp;/&nbsp;
+      <a style="color: #000;" href="{% url 'ver_niveles_modulo' modulo.mod_id %}">🎯 Niveles</a> &nbsp;/&nbsp;
+      <span style="color: #2632df;">🎮 Juego</span>
+    </nav>
+
+    <div class="card loading">
+      <div class="card-header">
+        <h2>🌟 {{ nivel.niv_nombre }} - {{ nivel.niv_descripcion }}</h2>
+      </div>
+      <div class="card-body">
+        <div class="main-container">
+          <div class="floating-elements" id="floating-elements"></div>
+
+          <!-- Header Card -->
+          <div class="header-card">
+            <h1>🧮 ¡Matemáticas Divertidas! 🧮</h1>
+            <p id="main-instruction">🚀 ¡Vamos a aprender matemáticas! 🚀</p>
+          </div>
+
+          <!-- Game Card -->
+          <div class="game-card">
+            <!-- Question Counter -->
+            <div class="question-counter" id="question-counter">
+              <i class="fas fa-star mr-2"></i>
+              Pregunta 1 de 4
+              <i class="fas fa-star ml-2"></i>
+            </div>
+
+            <!-- PREGUNTA 1: Ábacos de 2 cifras (DU) - 4 ejercicios -->
+            <div class="instruction-card" id="instruction-card">
+              🧮 ¡Observa el ábaco y elige el número que representa!
+            </div>
+
+            <div class="abacus-container" id="abacus-container">
+              <!-- Ábaco 1: 43 (4D + 3U) -->
+              <div class="abacus-question" data-correct="43">
+                <h4 style="color: #ff6b6b; margin-bottom: 15px;">¿Qué número representa este ábaco?</h4>
+                <div class="abacus-visual">
+                  <div class="abacus-row">
+                    <div class="abacus-label">D</div>
+                    <div class="abacus-wire">
+                      <div class="abacus-bead bead-red" style="left: 15px;"></div>
+                      <div class="abacus-bead bead-red" style="left: 40px;"></div>
+                      <div class="abacus-bead bead-red" style="left: 65px;"></div>
+                      <div class="abacus-bead bead-red" style="left: 90px;"></div>
+                    </div>
+                  </div>
+                  <div class="abacus-row">
+                    <div class="abacus-label">U</div>
+                    <div class="abacus-wire">
+                      <div class="abacus-bead bead-blue" style="left: 20px;"></div>
+                      <div class="abacus-bead bead-blue" style="left: 45px;"></div>
+                      <div class="abacus-bead bead-blue" style="left: 70px;"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="43">43</button>
+                  <button class="number-option" data-value="34">34</button>
+                  <button class="number-option" data-value="37">37</button>
+                </div>
+              </div>
+
+              <!-- Ábaco 2: 52 (5D + 2U) -->
+              <div class="abacus-question" data-correct="52">
+                <h4 style="color: #4ecdc4; margin-bottom: 15px;">¿Qué número representa este ábaco?</h4>
+                <div class="abacus-visual">
+                  <div class="abacus-row">
+                    <div class="abacus-label">D</div>
+                    <div class="abacus-wire">
+                      <div class="abacus-bead bead-red" style="left: 10px;"></div>
+                      <div class="abacus-bead bead-red" style="left: 30px;"></div>
+                      <div class="abacus-bead bead-red" style="left: 50px;"></div>
+                      <div class="abacus-bead bead-red" style="left: 70px;"></div>
+                      <div class="abacus-bead bead-red" style="left: 90px;"></div>
+                    </div>
+                  </div>
+                  <div class="abacus-row">
+                    <div class="abacus-label">U</div>
+                    <div class="abacus-wire">
+                      <div class="abacus-bead bead-blue" style="left: 25px;"></div>
+                      <div class="abacus-bead bead-blue" style="left: 55px;"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="25">25</button>
+                  <button class="number-option" data-value="52">52</button>
+                  <button class="number-option" data-value="57">57</button>
+                </div>
+              </div>
+
+              <!-- Ábaco 3: 61 (6D + 1U) -->
+              <div class="abacus-question" data-correct="61">
+                <h4 style="color: #45b7d1; margin-bottom: 15px;">¿Qué número representa este ábaco?</h4>
+                <div class="abacus-visual">
+                  <div class="abacus-row">
+                    <div class="abacus-label">D</div>
+                    <div class="abacus-wire">
+                      <div class="abacus-bead bead-red" style="left: 5px;"></div>
+                      <div class="abacus-bead bead-red" style="left: 25px;"></div>
+                      <div class="abacus-bead bead-red" style="left: 45px;"></div>
+                      <div class="abacus-bead bead-red" style="left: 65px;"></div>
+                      <div class="abacus-bead bead-red" style="left: 85px;"></div>
+                      <div class="abacus-bead bead-red" style="left: 105px;"></div>
+                    </div>
+                  </div>
+                  <div class="abacus-row">
+                    <div class="abacus-label">U</div>
+                    <div class="abacus-wire">
+                      <div class="abacus-bead bead-blue" style="left: 30px;"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="16">16</button>
+                  <button class="number-option" data-value="61">61</button>
+                  <button class="number-option" data-value="67">67</button>
+                </div>
+              </div>
+
+              <!-- Ábaco 4: 84 (8D + 4U) -->
+              <div class="abacus-question" data-correct="84">
+                <h4 style="color: #96ceb4; margin-bottom: 15px;">¿Qué número representa este ábaco?</h4>
+                <div class="abacus-visual">
+                  <div class="abacus-row">
+                    <div class="abacus-label">D</div>
+                    <div class="abacus-wire">
+                      <div class="abacus-bead bead-red" style="left: 5px;"></div>
+                      <div class="abacus-bead bead-red" style="left: 18px;"></div>
+                      <div class="abacus-bead bead-red" style="left: 31px;"></div>
+                      <div class="abacus-bead bead-red" style="left: 44px;"></div>
+                      <div class="abacus-bead bead-red" style="left: 57px;"></div>
+                      <div class="abacus-bead bead-red" style="left: 70px;"></div>
+                      <div class="abacus-bead bead-red" style="left: 83px;"></div>
+                      <div class="abacus-bead bead-red" style="left: 96px;"></div>
+                    </div>
+                  </div>
+                  <div class="abacus-row">
+                    <div class="abacus-label">U</div>
+                    <div class="abacus-wire">
+                      <div class="abacus-bead bead-blue" style="left: 15px;"></div>
+                      <div class="abacus-bead bead-blue" style="left: 35px;"></div>
+                      <div class="abacus-bead bead-blue" style="left: 55px;"></div>
+                      <div class="abacus-bead bead-blue" style="left: 75px;"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="48">48</button>
+                  <button class="number-option" data-value="84">84</button>
+                  <button class="number-option" data-value="88">88</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- PREGUNTA 2: Sumas de 2 cifras - 4 ejercicios -->
+            <div class="suma-container" id="suma-container">
+              <h3 style="color: #667eea; text-align: center; font-size: 2.2rem; margin-bottom: 20px; font-weight: 800;">
+                ➕ ¡Vamos a sumar números de 2 cifras!
+              </h3>
+              
+              <!-- Suma 1: 23 + 14 = ? -->
+              <div class="suma-exercise" data-correct="37">
+                <div style="font-size: 1.3rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  Resuelve esta suma:
+                </div>
+                <div class="suma-display">23 + 14 = ?</div>
+                <div class="number-options">
+                  <button class="number-option" data-value="37">37</button>
+                  <button class="number-option" data-value="39">39</button>
+                  <button class="number-option" data-value="35">35</button>
+                </div>
+              </div>
+
+              <!-- Suma 2: 45 + 32 = ? -->
+              <div class="suma-exercise" data-correct="77">
+                <div style="font-size: 1.3rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  Resuelve esta suma:
+                </div>
+                <div class="suma-display">45 + 32 = ?</div>
+                <div class="number-options">
+                  <button class="number-option" data-value="77">77</button>
+                  <button class="number-option" data-value="73">73</button>
+                  <button class="number-option" data-value="79">79</button>
+                </div>
+              </div>
+
+              <!-- Suma 3: 16 + 21 = ? -->
+              <div class="suma-exercise" data-correct="37">
+                <div style="font-size: 1.3rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  Resuelve esta suma:
+                </div>
+                <div class="suma-display">16 + 21 = ?</div>
+                <div class="number-options">
+                  <button class="number-option" data-value="35">35</button>
+                  <button class="number-option" data-value="37">37</button>
+                  <button class="number-option" data-value="39">39</button>
+                </div>
+              </div>
+
+              <!-- Suma 4: 54 + 25 = ? -->
+              <div class="suma-exercise" data-correct="79">
+                <div style="font-size: 1.3rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  Resuelve esta suma:
+                </div>
+                <div class="suma-display">54 + 25 = ?</div>
+                <div class="number-options">
+                  <button class="number-option" data-value="79">79</button>
+                  <button class="number-option" data-value="81">81</button>
+                  <button class="number-option" data-value="77">77</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- PREGUNTA 3: Restas de 2 cifras - 4 ejercicios -->
+            <div class="resta-container" id="resta-container">
+              <h3 style="color: #ff6b6b; text-align: center; font-size: 2.2rem; margin-bottom: 25px; font-weight: 800;">
+                ➖ ¡Vamos a restar números de 2 cifras!
+              </h3>
+              
+              <!-- Resta 1: 67 - 23 = ? -->
+              <div class="resta-exercise" data-correct="44">
+                <div style="font-size: 1.3rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  Resuelve esta resta:
+                </div>
+                <div class="resta-display">67 - 23 = ?</div>
+                <div class="number-options">
+                  <button class="number-option" data-value="44">44</button>
+                  <button class="number-option" data-value="46">46</button>
+                  <button class="number-option" data-value="42">42</button>
+                </div>
+              </div>
+
+              <!-- Resta 2: 85 - 32 = ? -->
+              <div class="resta-exercise" data-correct="53">
+                <div style="font-size: 1.3rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  Resuelve esta resta:
+                </div>
+                <div class="resta-display">85 - 32 = ?</div>
+                <div class="number-options">
+                  <button class="number-option" data-value="51">51</button>
+                  <button class="number-option" data-value="53">53</button>
+                  <button class="number-option" data-value="55">55</button>
+                </div>
+              </div>
+
+              <!-- Resta 3: 76 - 24 = ? -->
+              <div class="resta-exercise" data-correct="52">
+                <div style="font-size: 1.3rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  Resuelve esta resta:
+                </div>
+                <div class="resta-display">76 - 24 = ?</div>
+                <div class="number-options">
+                  <button class="number-option" data-value="50">50</button>
+                  <button class="number-option" data-value="52">52</button>
+                  <button class="number-option" data-value="54">54</button>
+                </div>
+              </div>
+
+              <!-- Resta 4: 94 - 41 = ? -->
+              <div class="resta-exercise" data-correct="53">
+                <div style="font-size: 1.3rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  Resuelve esta resta:
+                </div>
+                <div class="resta-display">94 - 41 = ?</div>
+                <div class="number-options">
+                  <button class="number-option" data-value="53">53</button>
+                  <button class="number-option" data-value="55">55</button>
+                  <button class="number-option" data-value="51">51</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- PREGUNTA 4: Identificar unidades y decenas - 4 ejercicios -->
+            <div class="unidades-decenas-container" id="unidades-decenas-container">
+              <h3 style="color: #667eea; text-align: center; font-size: 2.2rem; margin-bottom: 25px; font-weight: 800;">
+                🔢 ¡Identifica unidades y decenas!
+              </h3>
+              
+              <!-- Número 1: 47 -->
+              <div class="ud-exercise" data-correct-d="4" data-correct-u="7">
+                <div class="number-display">47</div>
+                <div class="ud-question">¿Cuántas DECENAS tiene este número?</div>
+                <div class="ud-options">
+                  <button class="number-option decenas-option" data-type="decenas" data-value="4">4</button>
+                  <button class="number-option decenas-option" data-type="decenas" data-value="7">7</button>
+                  <button class="number-option decenas-option" data-type="decenas" data-value="3">3</button>
+                </div>
+                <div class="ud-question">¿Cuántas UNIDADES tiene este número?</div>
+                <div class="ud-options">
+                  <button class="number-option unidades-option" data-type="unidades" data-value="4">4</button>
+                  <button class="number-option unidades-option" data-type="unidades" data-value="7">7</button>
+                  <button class="number-option unidades-option" data-type="unidades" data-value="6">6</button>
+                </div>
+              </div>
+
+              <!-- Número 2: 83 -->
+              <div class="ud-exercise" data-correct-d="8" data-correct-u="3">
+                <div class="number-display">83</div>
+                <div class="ud-question">¿Cuántas DECENAS tiene este número?</div>
+                <div class="ud-options">
+                  <button class="number-option decenas-option" data-type="decenas" data-value="8">8</button>
+                  <button class="number-option decenas-option" data-type="decenas" data-value="3">3</button>
+                  <button class="number-option decenas-option" data-type="decenas" data-value="5">5</button>
+                </div>
+                <div class="ud-question">¿Cuántas UNIDADES tiene este número?</div>
+                <div class="ud-options">
+                  <button class="number-option unidades-option" data-type="unidades" data-value="8">8</button>
+                  <button class="number-option unidades-option" data-type="unidades" data-value="3">3</button>
+                  <button class="number-option unidades-option" data-type="unidades" data-value="0">0</button>
+                </div>
+              </div>
+
+              <!-- Número 3: 56 -->
+              <div class="ud-exercise" data-correct-d="5" data-correct-u="6">
+                <div class="number-display">56</div>
+                <div class="ud-question">¿Cuántas DECENAS tiene este número?</div>
+                <div class="ud-options">
+                  <button class="number-option decenas-option" data-type="decenas" data-value="5">5</button>
+                  <button class="number-option decenas-option" data-type="decenas" data-value="6">6</button>
+                  <button class="number-option decenas-option" data-type="decenas" data-value="4">4</button>
+                </div>
+                <div class="ud-question">¿Cuántas UNIDADES tiene este número?</div>
+                <div class="ud-options">
+                  <button class="number-option unidades-option" data-type="unidades" data-value="5">5</button>
+                  <button class="number-option unidades-option" data-type="unidades" data-value="6">6</button>
+                  <button class="number-option unidades-option" data-type="unidades" data-value="7">7</button>
+                </div>
+              </div>
+
+              <!-- Número 4: 29 -->
+              <div class="ud-exercise" data-correct-d="2" data-correct-u="9">
+                <div class="number-display">29</div>
+                <div class="ud-question">¿Cuántas DECENAS tiene este número?</div>
+                <div class="ud-options">
+                  <button class="number-option decenas-option" data-type="decenas" data-value="2">2</button>
+                  <button class="number-option decenas-option" data-type="decenas" data-value="9">9</button>
+                  <button class="number-option decenas-option" data-type="decenas" data-value="1">1</button>
+                </div>
+                <div class="ud-question">¿Cuántas UNIDADES tiene este número?</div>
+                <div class="ud-options">
+                  <button class="number-option unidades-option" data-type="unidades" data-value="2">2</button>
+                  <button class="number-option unidades-option" data-type="unidades" data-value="9">9</button>
+                  <button class="number-option unidades-option" data-type="unidades" data-value="8">8</button>
+                </div>
+              </div>
+            </div>
+
+            <br />
+
+            <!-- Answer Button -->
+            <button class="answer-btn" id="answer-btn" onclick="checkAnswer()" disabled>
+              <i class="fas fa-check mr-2"></i>
+              ¡RESPONDER!
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block js %}
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+   
+    // Variables globales para el juego
+    window.studentId = {{ matricula_id}};
+    window.levelId   = {{ level_id }};
+    const moduloId = {{ modulo_id }};
+    
+</script>
+
+<script>
+    let selectedNumbers = [];
+    let currentNumbers = [];
+    let currentQuestion = 1;
+    let totalQuestions = 4;
+    let usedQuestions = new Set();
+    let gameFinished = false;
+    
+    // NUEVAS VARIABLES PARA EL SISTEMA DE CALIFICACIONES
+    let questionScores = [];
+    let currentScore = 0;
+    let maxScorePerQuestion = 10/4;
+    let totalPossibleScore = 10;
+    
+    // VARIABLES PARA EL SISTEMA DE VIDAS
+    let studentId = null;
+    let levelId = null;
+    let vidasRestantes = 0;
+    let vidasTotales = 0;
+    let vidasOriginalesNivel = 0;
+    let puedeIntentar = false;
+
+    // Variables para controlar recargas
+    let gameSessionId = null;
+    let hasGameStarted = false;
+    let pageLoadTime = Date.now();
+
+    // Variables para preguntas específicas
+    let abacusSelections = {}; // Para pregunta 1
+    let sumaSelections = {}; // Para pregunta 2
+    let restaSelections = {}; // Para pregunta 3
+    let udSelections = {}; // Para pregunta 4
+
+    // Generar ID único de sesión
+    function generateSessionId() {
+        return 'game_' + studentId + '_' + levelId + '_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    }
+
+    // Verificar si es una recarga no autorizada
+    function isUnauthorizedReload() {
+        const sessionKey = `game_session_${studentId}_${levelId}`;
+        const storedSession = sessionStorage.getItem(sessionKey);
+        
+        if (storedSession) {
+            const sessionData = JSON.parse(storedSession);
+            const timeDiff = Date.now() - sessionData.timestamp;
+            
+            if (timeDiff < 30000) {
+                console.log('Recarga detectada dentro de', timeDiff, 'ms');
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
+    // Registrar sesión actual
+    function registerGameSession() {
+        const sessionKey = `game_session_${studentId}_${levelId}`;
+        gameSessionId = generateSessionId();
+        
+        const sessionData = {
+            sessionId: gameSessionId,
+            timestamp: Date.now(),
+            questionNumber: currentQuestion,
+            hasStarted: hasGameStarted
+        };
+        
+        sessionStorage.setItem(sessionKey, JSON.stringify(sessionData));
+        console.log('Sesión registrada:', sessionData);
+    }
+
+    // Limpiar sesión al salir
+    function clearGameSession() {
+        const sessionKey = `game_session_${studentId}_${levelId}`;
+        sessionStorage.removeItem(sessionKey);
+        console.log('Sesión limpiada');
+    }
+
+    async function initializeGameData() {
+        studentId = window.studentId || 1;
+        levelId = window.levelId || 1;
+        
+        console.log('Student ID:', studentId, 'Level ID:', levelId);
+        
+        const isReload = isUnauthorizedReload();
+        
+        if (isReload) {
+            console.log('⚠️ RECARGA DETECTADA - Penalizando con una vida');
+            
+            Swal.fire({
+                icon: 'warning',
+                title: '⚠️ Recarga Detectada',
+                html: `
+                    <div>
+                        <p><strong>Se ha detectado una recarga de página.</strong></p>
+                        <p>Como penalización, se restará <span style="color: #f44336; font-weight: bold;">1 vida</span>.</p>
+                        <br>
+                        <p style="color: #666; font-size: 0.9em;">
+                            💡 <strong>Consejo:</strong> Evita recargar la página durante el juego.
+                        </p>
+                    </div>
+                `,
+                confirmButtonText: 'Continuar',
+                allowOutsideClick: false,
+                timer: 4000,
+                timerProgressBar: true
+            });
+            
+            const penaltyResult = await penalizeReload();
+            if (!penaltyResult.success) {
+                console.error('Error al penalizar recarga:', penaltyResult.error);
+            }
+        }
+        
+        registerGameSession();
+        
+        const gameInfo = await getGameInfo();
+        return gameInfo;
+    }
+
+    async function getGameInfo() {
+        try {
+            const response = await fetch('/get_game_info/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    estudiante_id: studentId,
+                    nivel_id: levelId
+                })
+            });
+            
+            const data = await response.json();
+            if (data.success) {
+                vidasRestantes = data.vidas_restantes;
+                vidasTotales = data.vidas_originales_nivel;
+                puedeIntentar = data.puede_intentar;
+                
+                console.log(`Vidas: ${vidasRestantes}/${vidasTotales}, Puede intentar: ${puedeIntentar}`);
+                
+                updateLivesDisplay();
+                
+                if (!puedeIntentar) {
+                    showNoLivesMessage();
+                    return false;
+                }
+                
+                if (data.vidas_restauradas > 0) {
+                    Swal.fire({
+                        icon: 'info',
+                        title: '¡Vidas restauradas!',
+                        text: `Se han agregado ${data.vidas_restauradas} vidas adicionales a este nivel.`,
+                        confirmButtonText: '¡Genial!'
+                    });
+                }
+                
+                return true;
+            } else {
+                console.error('Error al obtener info del juego:', data.error);
+                return false;
+            }
+        } catch (error) {
+            console.error('Error de red al obtener info del juego:', error);
+            return false;
+        }
+    }
+
+    // FUNCIÓN MODIFICADA: Actualizar display de vidas con indicador de estado
+    function updateLivesDisplay() {
+        let livesIndicator = document.getElementById('lives-indicator');
+        if (!livesIndicator) {
+            livesIndicator = document.createElement('div');
+            livesIndicator.id = 'lives-indicator';
+            livesIndicator.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
+                color: white;
+                padding: 15px 20px;
+                border-radius: 25px;
+                font-weight: bold;
+                font-size: 1.1em;
+                box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+                z-index: 1000;
+                font-family: 'Comic Sans MS', cursive, sans-serif;
+                transition: all 0.3s ease;
+            `;
+            document.body.appendChild(livesIndicator);
+        }
+        
+        // Crear corazones para representar vidas
+        let heartsHTML = '';
+        for (let i = 0; i < vidasTotales; i++) {
+            if (i < vidasRestantes) {
+                heartsHTML += '❤️'; // Vida disponible
+            } else {
+                heartsHTML += '🖤'; // Vida usada
+            }
+        }
+        
+        // Cambiar color según vidas restantes
+        let bgColor = 'linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%)';
+        if (vidasRestantes <= 1) {
+            bgColor = 'linear-gradient(135deg, #f44336 0%, #ff9800 100%)';
+            livesIndicator.style.animation = 'pulse 1s infinite';
+        } else if (vidasRestantes <= 2) {
+            bgColor = 'linear-gradient(135deg, #ff9800 0%, #ffc107 100%)';
+        }
+        
+        livesIndicator.style.background = bgColor;
+        
+        livesIndicator.innerHTML = `
+            <div style="text-align: center;">
+                <div style="font-size: 1.2em; margin-bottom: 5px;">${heartsHTML}</div>
+                <div>Vidas: ${vidasRestantes}/${vidasTotales}</div>
+                ${vidasRestantes <= 1 ? '<div style="font-size: 0.8em; color: #ffeb3b;">¡Cuidado!</div>' : ''}
+            </div>
+        `;
+    }
+
+    // NUEVA FUNCIÓN: Mostrar mensaje sin vidas
+    function showNoLivesMessage() {
+        Swal.fire({
+            icon: 'warning',
+            title: '¡Sin vidas restantes! 💔',
+            html: `
+                <div>
+                    <p>Has agotado todas las vidas para este nivel.</p>
+                    <p><strong>Vidas utilizadas: ${vidasTotales}</strong></p>
+                    <br>
+                    <p style="color: #666;">Contacta a tu profesor para obtener más intentos.</p>
+                </div>
+            `,
+            confirmButtonText: 'Volver al menú',
+            allowOutsideClick: false,
+            customClass: {
+                popup: 'animated shake'
+            }
+        }).then(() => {
+            window.location.href = `/modulo/${moduloId}/niveles/`;
+        });
+    }
+
+    // Event listeners para detectar intentos de salida
+    window.addEventListener('beforeunload', function(e) {
+        if (hasGameStarted && currentQuestion > 1 && !gameFinished) {
+            const message = '¿Estás seguro de que quieres salir? Perderás el progreso actual.';
+            e.returnValue = message;
+            return message;
+        }
+        
+        clearGameSession();
+    });
+
+    window.addEventListener('pagehide', function() {
+        clearGameSession();
+    });
+   
+    // Crear elementos flotantes
+    function createFloatingElements() {
+        const container = document.getElementById('floating-elements');
+        const elements = ['🧮', '🔢', '➕', '➖', '✨', '🌟', '💫', '⭐', '📚', '🎯'];
+        
+        for (let i = 0; i < 20; i++) {
+            const element = document.createElement('div');
+            element.className = 'floating-element';
+            element.innerHTML = elements[Math.floor(Math.random() * elements.length)];
+            element.style.left = Math.random() * 100 + '%';
+            element.style.top = Math.random() * 100 + '%';
+            element.style.animationDelay = Math.random() * 8 + 's';
+            element.style.animationDuration = (Math.random() * 4 + 6) + 's';
+            container.appendChild(element);
+        }
+    }
+
+    // Crear confeti
+    function createConfetti() {
+        const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffa726', '#ef5350'];
+        
+        for (let i = 0; i < 50; i++) {
+            setTimeout(() => {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 3000);
+            }, i * 100);
+        }
+    }
+
+    // Función para calcular puntaje de cada pregunta
+    function calculateQuestionScore(isCorrect, questionType, details = {}) {
+        let score = 0;
+        
+        if (questionType === 'abacus') {
+            // Pregunta 1: Ábacos
+            const totalQuestions = 4; // 4 ábacos
+            score = (details.correctCount / totalQuestions) * maxScorePerQuestion;
+        } 
+        else if (questionType === 'suma') {
+            // Pregunta 2: Sumas
+            const totalSums = 4; // 4 sumas
+            score = (details.correctCount / totalSums) * maxScorePerQuestion;
+        }
+        else if (questionType === 'resta') {
+            // Pregunta 3: Restas
+            const totalRests = 4; // 4 restas
+            score = (details.correctCount / totalRests) * maxScorePerQuestion;
+        }
+        else if (questionType === 'unidades-decenas') {
+            // Pregunta 4: Unidades y decenas
+            const totalParts = 8; // 4 números x 2 partes cada uno (unidades y decenas)
+            score = (details.correctCount / totalParts) * maxScorePerQuestion;
+        }
+        else {
+            // Otros tipos: todo o nada
+            score = isCorrect ? maxScorePerQuestion : 0;
+        }
+        
+        return Math.round(score * 100) / 100;
+    }
+
+    // Función principal para mostrar preguntas
+    function displayNumbers() {
+        if (currentQuestion === 1 && !hasGameStarted) {
+            hasGameStarted = true;
+            registerGameSession();
+        }
+
+        // Ocultar TODOS los contenedores
+        document.getElementById('abacus-container').style.display = 'none';
+        document.getElementById('suma-container').style.display = 'none';
+        document.getElementById('resta-container').style.display = 'none';
+        document.getElementById('unidades-decenas-container').style.display = 'none';
+
+        // PREGUNTA 1: Ábacos
+        if (currentQuestion === 1) {
+            document.getElementById('abacus-container').style.display = 'block';
+            setupAbacusQuestion();
+            
+            document.getElementById('main-instruction').innerHTML = '🧮 ¡Observa los ábacos y encuentra el número!';
+            document.getElementById('instruction-card').innerHTML = `
+                🧮 Cuenta las bolitas: D = Decenas, U = Unidades
+            `;
+        }
+        
+        // PREGUNTA 2: Sumas
+        else if (currentQuestion === 2) {
+            document.getElementById('suma-container').style.display = 'block';
+            setupSumaQuestion();
+            
+            document.getElementById('main-instruction').innerHTML = '➕ ¡Vamos a sumar números de 2 cifras!';
+            document.getElementById('instruction-card').innerHTML = `
+                ➕ Resuelve las sumas con números de 2 cifras
+            `;
+        }
+        
+        // PREGUNTA 3: Restas
+        else if (currentQuestion === 3) {
+            document.getElementById('resta-container').style.display = 'block';
+            setupRestaQuestion();
+            
+            document.getElementById('main-instruction').innerHTML = '➖ ¡Vamos a restar números de 2 cifras!';
+            document.getElementById('instruction-card').innerHTML = `
+                ➖ Resuelve las restas con números de 2 cifras
+            `;
+        }
+        
+        // PREGUNTA 4: Unidades y decenas
+        else if (currentQuestion === 4) {
+            document.getElementById('unidades-decenas-container').style.display = 'block';
+            setupUnidadesDecenasQuestion();
+            
+            document.getElementById('main-instruction').innerHTML = '🔢 ¡Identifica unidades y decenas!';
+            document.getElementById('instruction-card').innerHTML = `
+                🔢 En cada número de 2 cifras: la primera son decenas, la segunda son unidades
+            `;
+        }
+
+        // Actualizar contador
+        document.getElementById('question-counter').innerHTML = `
+            <i class="fas fa-star mr-2"></i>
+            Pregunta ${currentQuestion} de ${totalQuestions}
+            <i class="fas fa-star ml-2"></i>
+        `;
+    }
+
+    // Configurar pregunta 1: Ábacos
+    function setupAbacusQuestion() {
+        abacusSelections = {};
+        
+        document.querySelectorAll('.number-option').forEach(btn => {
+            btn.classList.remove('selected');
+            
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode.replaceChild(newBtn, btn);
+        });
+        
+        document.querySelectorAll('.abacus-question .number-option').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const abacusQuestion = this.closest('.abacus-question');
+                const questionIndex = Array.from(document.querySelectorAll('.abacus-question')).indexOf(abacusQuestion);
+                
+                // Limpiar selección previa en esta pregunta
+                abacusQuestion.querySelectorAll('.number-option').forEach(b => {
+                    b.classList.remove('selected');
+                });
+                
+                // Marcar como seleccionado
+                this.classList.add('selected');
+                
+                // Guardar selección
+                abacusSelections[questionIndex] = parseInt(this.dataset.value);
+                
+                // Verificar si hay al menos una selección para habilitar botón
+                const hasSelections = Object.keys(abacusSelections).length > 0;
+                document.getElementById('answer-btn').disabled = !hasSelections;
+                
+                // Efecto visual
+                this.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            });
+        });
+        
+        document.getElementById('answer-btn').disabled = true;
+    }
+
+    // Configurar pregunta 2: Sumas
+    function setupSumaQuestion() {
+        sumaSelections = {};
+        
+        document.querySelectorAll('.suma-exercise .number-option').forEach(btn => {
+            btn.classList.remove('selected');
+            
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode.replaceChild(newBtn, btn);
+        });
+        
+        document.querySelectorAll('.suma-exercise .number-option').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const sumaExercise = this.closest('.suma-exercise');
+                const exerciseIndex = Array.from(document.querySelectorAll('.suma-exercise')).indexOf(sumaExercise);
+                
+                // Limpiar selección previa en este ejercicio
+                sumaExercise.querySelectorAll('.number-option').forEach(b => {
+                    b.classList.remove('selected');
+                });
+                
+                // Marcar como seleccionado
+                this.classList.add('selected');
+                
+                // Guardar selección
+                sumaSelections[exerciseIndex] = parseInt(this.dataset.value);
+                
+                // Verificar si hay al menos una selección para habilitar botón
+                const hasSelections = Object.keys(sumaSelections).length > 0;
+                document.getElementById('answer-btn').disabled = !hasSelections;
+                
+                // Efecto visual
+                this.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            });
+        });
+        
+        document.getElementById('answer-btn').disabled = true;
+    }
+
+    // Configurar pregunta 3: Restas
+    function setupRestaQuestion() {
+        restaSelections = {};
+        
+        document.querySelectorAll('.resta-exercise .number-option').forEach(btn => {
+            btn.classList.remove('selected');
+            
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode.replaceChild(newBtn, btn);
+        });
+        
+        document.querySelectorAll('.resta-exercise .number-option').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const restaExercise = this.closest('.resta-exercise');
+                const exerciseIndex = Array.from(document.querySelectorAll('.resta-exercise')).indexOf(restaExercise);
+                
+                // Limpiar selección previa en este ejercicio
+                restaExercise.querySelectorAll('.number-option').forEach(b => {
+                    b.classList.remove('selected');
+                });
+                
+                // Marcar como seleccionado
+                this.classList.add('selected');
+                
+                // Guardar selección
+                restaSelections[exerciseIndex] = parseInt(this.dataset.value);
+                
+                // Verificar si hay al menos una selección para habilitar botón
+                const hasSelections = Object.keys(restaSelections).length > 0;
+                document.getElementById('answer-btn').disabled = !hasSelections;
+                
+                // Efecto visual
+                this.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            });
+        });
+        
+        document.getElementById('answer-btn').disabled = true;
+    }
+
+    // Configurar pregunta 4: Unidades y decenas
+    function setupUnidadesDecenasQuestion() {
+        udSelections = { decenas: {}, unidades: {} };
+        
+        document.querySelectorAll('.ud-exercise .number-option').forEach(btn => {
+            btn.classList.remove('selected');
+            
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode.replaceChild(newBtn, btn);
+        });
+        
+        document.querySelectorAll('.ud-exercise .number-option').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const udExercise = this.closest('.ud-exercise');
+                const exerciseIndex = Array.from(document.querySelectorAll('.ud-exercise')).indexOf(udExercise);
+                const type = this.dataset.type;
+                
+                // Limpiar selección previa en este ejercicio y tipo
+                udExercise.querySelectorAll(`.number-option[data-type="${type}"]`).forEach(b => {
+                    b.classList.remove('selected');
+                });
+                
+                // Marcar como seleccionado
+                this.classList.add('selected');
+                
+                // Guardar selección
+                if (!udSelections[type]) udSelections[type] = {};
+                udSelections[type][exerciseIndex] = parseInt(this.dataset.value);
+                
+                // Verificar si hay al menos una selección de cada tipo para habilitar botón
+                const hasDecenasSelections = Object.keys(udSelections.decenas || {}).length > 0;
+                const hasUnidadesSelections = Object.keys(udSelections.unidades || {}).length > 0;
+                document.getElementById('answer-btn').disabled = !(hasDecenasSelections || hasUnidadesSelections);
+                
+                // Efecto visual
+                this.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            });
+        });
+        
+        document.getElementById('answer-btn').disabled = true;
+    }
+
+    // Función principal para verificar respuestas
+    function checkAnswer() {
+        if (gameFinished) return;
+
+        gameFinished = true;
+        
+        let isCorrect = false;
+        let feedback = '';
+        let questionType = '';
+        let score = 0;
+        let details = {};
+
+        if (currentQuestion === 1) {
+            // Pregunta 1: Ábacos
+            questionType = 'abacus';
+            const abacusQuestions = document.querySelectorAll('.abacus-question');
+            let correct = 0;
+
+            abacusQuestions.forEach((question, index) => {
+                const correctAnswer = parseInt(question.dataset.correct);
+                const userAnswer = abacusSelections[index];
+                
+                if (userAnswer === correctAnswer) {
+                    correct++;
+                }
+            });
+
+            const total = abacusQuestions.length;
+            details = { correctCount: correct, totalCount: total };
+            isCorrect = correct === total;
+
+            if (correct === total) {
+                feedback = '🎉 ¡Excelente! Leíste todos los ábacos correctamente.';
+            } else if (correct >= 3) {
+                feedback = `🌟 ¡Muy bien! Acertaste ${correct} de ${total} ábacos.`;
+            } else if (correct >= 2) {
+                feedback = `👍 ¡Bien! Acertaste ${correct} de ${total} ábacos.`;
+            } else {
+                feedback = `💡 Recuerda: Cuenta las bolitas de cada fila. D=Decenas, U=Unidades.`;
+            }
+        }
+        else if (currentQuestion === 2) {
+            // Pregunta 2: Sumas
+            questionType = 'suma';
+            const sumaExercises = document.querySelectorAll('.suma-exercise');
+            let correct = 0;
+
+            sumaExercises.forEach((exercise, index) => {
+                const correctAnswer = parseInt(exercise.dataset.correct);
+                const userAnswer = sumaSelections[index];
+                
+                if (userAnswer === correctAnswer) {
+                    correct++;
+                }
+            });
+
+            const total = sumaExercises.length;
+            details = { correctCount: correct, totalCount: total };
+            isCorrect = correct === total;
+
+            if (correct === total) {
+                feedback = '🎉 ¡Perfecto! Resolviste todas las sumas correctamente.';
+            } else if (correct >= 3) {
+                feedback = `🌟 ¡Muy bien! Acertaste ${correct} de ${total} sumas.`;
+            } else if (correct >= 2) {
+                feedback = `👍 ¡Bien! Acertaste ${correct} de ${total} sumas.`;
+            } else {
+                feedback = `💡 Recuerda: Para sumar números de 2 cifras, suma las unidades y las decenas por separado.`;
+            }
+        }
+        else if (currentQuestion === 3) {
+            // Pregunta 3: Restas
+            questionType = 'resta';
+            const restaExercises = document.querySelectorAll('.resta-exercise');
+            let correct = 0;
+
+            restaExercises.forEach((exercise, index) => {
+                const correctAnswer = parseInt(exercise.dataset.correct);
+                const userAnswer = restaSelections[index];
+                
+                if (userAnswer === correctAnswer) {
+                    correct++;
+                }
+            });
+
+            const total = restaExercises.length;
+            details = { correctCount: correct, totalCount: total };
+            isCorrect = correct === total;
+
+            if (correct === total) {
+                feedback = '🎉 ¡Excelente! Resolviste todas las restas correctamente.';
+            } else if (correct >= 3) {
+                feedback = `🌟 ¡Muy bien! Acertaste ${correct} de ${total} restas.`;
+            } else if (correct >= 2) {
+                feedback = `👍 ¡Bien! Acertaste ${correct} de ${total} restas.`;
+            } else {
+                feedback = `💡 Recuerda: Para restar números de 2 cifras, resta las unidades y las decenas por separado.`;
+            }
+        }
+        else if (currentQuestion === 4) {
+            // Pregunta 4: Unidades y decenas
+            questionType = 'unidades-decenas';
+            const udExercises = document.querySelectorAll('.ud-exercise');
+            let correct = 0;
+            let totalParts = 0;
+
+            udExercises.forEach((exercise, index) => {
+                const correctDecenas = parseInt(exercise.dataset.correctD);
+                const correctUnidades = parseInt(exercise.dataset.correctU);
+                
+                const userDecenas = udSelections.decenas ? udSelections.decenas[index] : undefined;
+                const userUnidades = udSelections.unidades ? udSelections.unidades[index] : undefined;
+                
+                if (userDecenas === correctDecenas) {
+                    correct++;
+                }
+                if (userUnidades === correctUnidades) {
+                    correct++;
+                }
+                totalParts += 2; // 2 partes por ejercicio (decenas y unidades)
+            });
+
+            details = { correctCount: correct, totalCount: totalParts };
+            isCorrect = correct === totalParts;
+
+            if (correct === totalParts) {
+                feedback = '🎉 ¡Perfecto! Identificaste todas las unidades y decenas correctamente.';
+            } else if (correct >= totalParts * 0.8) {
+                feedback = `🌟 ¡Muy bien! Acertaste ${correct} de ${totalParts} partes.`;
+            } else if (correct >= totalParts * 0.6) {
+                feedback = `👍 ¡Bien! Acertaste ${correct} de ${totalParts} partes.`;
+            } else if (correct >= totalParts * 0.4) {
+                feedback = `💪 ¡Sigue practicando! Acertaste ${correct} de ${totalParts} partes.`;
+            } else {
+                feedback = `💡 Recuerda: En un número de 2 cifras, la primera cifra son las decenas y la segunda son las unidades.`;
+            }
+        }
+
+        // Calcular puntaje
+        score = calculateQuestionScore(isCorrect, questionType, details);
+        questionScores.push({
+            question: currentQuestion,
+            score: score,
+            maxScore: maxScorePerQuestion,
+            isCorrect: isCorrect,
+            type: questionType
+        });
+
+        // Mostrar resultado
+        setTimeout(() => {
+            if (isCorrect) {
+                createConfetti();
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡CORRECTO! 🌟',
+                    html: `
+                        <div>
+                            <p>${feedback}</p>
+                            <div style="font-size: 1.2em; margin: 15px 0; color: #4CAF50;">
+                                <strong>Puntaje: ${score.toFixed(2)}/${maxScorePerQuestion.toFixed(2)} puntos</strong>
+                            </div>
+                        </div>
+                    `,
+                    confirmButtonText: currentQuestion < totalQuestions ? '¡Siguiente pregunta!' : '¡Ver resultados!',
+                    allowOutsideClick: false,
+                    customClass: {
+                        popup: 'animated bounceIn',
+                        confirmButton: 'btn btn-success'
+                    }
+                }).then(() => {
+                    nextQuestion();
+                });
+            } else {
+                Swal.fire({
+                    icon: 'info',
+                    title: '¡Sigue intentando! 💪',
+                    html: `
+                        <div>
+                            <p>${feedback}</p>
+                            <div style="font-size: 1.2em; margin: 15px 0; color: #ff9800;">
+                                <strong>Puntaje: ${score.toFixed(2)}/${maxScorePerQuestion.toFixed(2)} puntos</strong>
+                            </div>
+                        </div>
+                    `,
+                    confirmButtonText: 'Continuar',
+                    allowOutsideClick: false,
+                    customClass: {
+                        popup: 'animated shake',
+                        confirmButton: 'btn btn-primary'
+                    }
+                }).then(() => {
+                    nextQuestion();
+                });
+            }
+        }, 1500);
+    }
+
+    // Pasar a la siguiente pregunta
+    function nextQuestion() {
+        if (currentQuestion >= totalQuestions) {
+            showFinalResults();
+        } else {
+            currentQuestion++;
+            gameFinished = false;
+            displayNumbers();
+        }
+    }
+
+    // Mostrar resultados finales (MODIFICADO para mostrar solo un botón cuando no hay vidas)
+    async function showFinalResults() {
+        // Calcular puntaje total
+        const finalScore = questionScores.reduce((total, q) => total + q.score, 0);
+        const percentage = (finalScore / totalPossibleScore) * 100;
+        
+        // Determinar mensaje de estado
+        let statusMessage, statusColor, icon;
+        if (percentage >= 90) {
+            statusMessage = "¡SOBRESALIENTE!";
+            statusColor = "#4CAF50";
+            icon = "success";
+        } else if (percentage >= 80) {
+            statusMessage = "¡EXCELENTE!";
+            statusColor = "#4CAF50";
+            icon = "success";
+        } else if (percentage >= 70) {
+            statusMessage = "¡MUY BIEN!";
+            statusColor = "#2196F3";
+            icon = "success";
+        } else if (percentage >= 60) {
+            statusMessage = "¡BIEN!";
+            statusColor = "#FF9800";
+            icon = "info";
+        } else {
+            statusMessage = "Necesitas mejorar";
+            statusColor = "#FF9800";
+            icon = "warning";
+        }
+
+        // Crear resumen de preguntas
+        const questionNames = [
+            '🧮 Leer ábacos DU',
+            '➕ Resolver sumas', 
+            '➖ Resolver restas',
+            '🔢 Unidades y decenas'
+        ];
+        
+        let questionSummaryHTML = '';
+        questionScores.forEach((q, index) => {
+            const emoji = q.isCorrect ? '✅' : '❌';
+            questionSummaryHTML += `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin: 8px 0; padding: 8px 0; border-bottom: 1px solid #eee;">
+                    <span style="font-weight: 500;">Pregunta ${q.question}: ${emoji}</span>
+                    <span style="font-weight: 600; color: ${q.isCorrect ? '#4CAF50' : '#f44336'};">${q.score.toFixed(2)}/${q.maxScore.toFixed(2)} puntos</span>
+                </div>
+            `;
+        });
+
+        // Guardar intento
+        const saveResult = await saveAttempt(finalScore);
+        
+        // Crear HTML del resultado final
+        const resultHTML = `
+            <div style="text-align: center; font-family: 'Comic Sans MS', cursive;">
+                <!-- Título principal -->
+                <div style="background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%); color: white; padding: 20px; border-radius: 15px; margin-bottom: 20px;">
+                    <h2 style="margin: 0; font-size: 1.8rem; font-weight: 900;">
+                        ¡JUEGO COMPLETADO! 🏆
+                    </h2>
+                </div>
+
+                <!-- Estado y nota -->
+                <div style="background: ${statusColor}; color: white; padding: 15px; border-radius: 12px; margin-bottom: 20px;">
+                    <div style="font-size: 1.4rem; font-weight: 700; margin-bottom: 8px;">
+                        ${statusMessage}
+                    </div>
+                    <div style="font-size: 1.6rem; font-weight: 900;">
+                        NOTA FINAL: ${finalScore.toFixed(2)}/10
+                    </div>
+                </div>
+
+                <!-- Resumen por pregunta -->
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; margin-bottom: 20px; text-align: left;">
+                    <h4 style="margin: 0 0 15px 0; color: #333; font-size: 1.3rem; font-weight: 700; text-align: center;">
+                        📊 Resumen por pregunta:
+                    </h4>
+                    ${questionSummaryHTML}
+                </div>
+
+                <!-- Estado de vidas -->
+                <div style="background: #f0f0f0; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+                    <h4 style="margin: 0 0 15px 0; color: #666; font-size: 1.3rem; font-weight: 700;">
+                        💗 Estado de vidas:
+                    </h4>
+                    <div style="font-size: 1.1rem; line-height: 1.6;">
+                        <div><strong>Vidas antes:</strong> ${vidasTotales}/${vidasTotales}</div>
+                        <div><strong>Vidas después:</strong> ${saveResult.vidasRestantes}/${vidasTotales}</div>
+                        <div style="color: #4CAF50; font-weight: 600; margin-top: 10px;">
+                            ${saveResult.puedeIntentar ? '¡Puedes intentar 1 vez más!' : '¡Sin vidas restantes!'}
+                        </div>
+                    </div>
+                </div>
+
+                ${saveResult.success && saveResult.data.is_best_score ? 
+                    '<div style="background: #fff3cd; color: #856404; padding: 15px; border-radius: 10px; margin-bottom: 15px;"><strong>🏆 ¡Nuevo mejor puntaje!</strong></div>' : ''
+                }
+                
+                ${saveResult.success && saveResult.data.nivel_completado ? 
+                    '<div style="background: #d1ecf1; color: #0c5460; padding: 15px; border-radius: 10px; margin-bottom: 15px;"><strong>🎉 ¡Nivel completado!</strong></div>' : ''
+                }
+            </div>
+        `;
+
+        // CAMBIO PRINCIPAL: Determinar qué botones mostrar según las vidas restantes
+        let buttonsConfig = {};
+        
+        if (saveResult.puedeIntentar) {
+            // Tiene vidas: mostrar ambos botones
+            buttonsConfig = {
+                showCancelButton: true,
+                confirmButtonText: '🏠 Volver al menú',
+                cancelButtonText: '🔄 Jugar de nuevo'
+            };
+        } else {
+            // Sin vidas: solo mostrar botón de volver al menú
+            buttonsConfig = {
+                showCancelButton: false,
+                confirmButtonText: '🏠 Volver al menú'
+            };
+        }
+
+        // Mostrar resultados
+        Swal.fire({
+            icon: icon,
+            title: false, // No mostrar título por defecto
+            html: resultHTML,
+            ...buttonsConfig,
+            allowOutsideClick: false,
+            width: '600px',
+            customClass: {
+                popup: 'animated bounceIn',
+                confirmButton: 'btn btn-primary',
+                cancelButton: 'btn btn-success'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Volver al menú
+                window.location.href = `/modulo/${moduloId}/niveles/`;
+            } else {
+                // Reiniciar juego (solo disponible si tiene vidas)
+                if (saveResult.puedeIntentar) {
+                    resetGame();
+                } else {
+                    showNoLivesMessage();
+                }
+            }
+        });
+
+        // Actualizar mejor puntaje
+        await updateBestScore();
+    }
+
+    // Función para obtener CSRF token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // FUNCIÓN MODIFICADA: saveAttempt actualizada
+    async function saveAttempt(finalScore) {
+        try {
+            console.log('Enviando datos:', {
+                estudiante_id: studentId,
+                nivel_id: levelId,
+                puntaje_total: finalScore
+            });
+
+            const response = await fetch('/save_attempt/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    estudiante_id: studentId,
+                    nivel_id: levelId,
+                    puntaje_total: finalScore
+                })
+            });
+            
+            const data = await response.json();
+            console.log('Respuesta del servidor:', data);
+            
+            if (data.success) {
+                // Actualizar variables locales
+                vidasRestantes = data.vidas_restantes;
+                puedeIntentar = data.puede_continuar;
+                
+                // Actualizar display de vidas
+                updateLivesDisplay();
+                
+                console.log('Intento guardado correctamente con nota:', data.nota);
+                return { 
+                    success: true, 
+                    data: data,
+                    vidasRestantes: vidasRestantes,
+                    puedeIntentar: puedeIntentar
+                };
+            } else {
+                console.error('Error del servidor:', data.error);
+                return { success: false, error: data.error };
+            }
+        } catch (error) {
+            console.error('Error de red al guardar intento:', error);
+            return { success: false, error: 'Error de conexión: ' + error.message };
+        }
+    }
+
+    // Actualizar mejor puntaje
+    async function updateBestScore() {
+        try {
+            const response = await fetch('/update_best_score/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    estudiante_id: studentId,
+                    nivel_id: levelId
+                })
+            });
+            
+            const data = await response.json();
+            if (data.success) {
+                console.log('Mejor puntaje actualizado:', data.best_score);
+            } else {
+                console.error('Error al actualizar mejor puntaje:', data.error);
+            }
+        } catch (error) {
+            console.error('Error al actualizar mejor puntaje:', error);
+        }
+    }
+
+    // Función para penalizar recarga
+    async function penalizeReload() {
+        try {
+            const response = await fetch('/penalize_reload/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    estudiante_id: studentId,
+                    nivel_id: levelId
+                })
+            });
+            
+            const data = await response.json();
+            if (data.success) {
+                vidasRestantes = data.vidas_restantes;
+                updateLivesDisplay();
+                return { success: true };
+            } else {
+                return { success: false, error: data.error };
+            }
+        } catch (error) {
+            return { success: false, error: error.message };
+        }
+    }
+
+    // Reiniciar juego
+    function resetGame() {
+        currentQuestion = 1;
+        selectedNumbers = [];
+        currentNumbers = [];
+        usedQuestions.clear();
+        gameFinished = false;
+        hasGameStarted = false;
+        
+        // Reiniciar variables de puntaje
+        questionScores = [];
+        currentScore = 0;
+        
+        // Reiniciar variables de preguntas específicas
+        abacusSelections = {};
+        sumaSelections = {};
+        restaSelections = {};
+        udSelections = {};
+        
+        clearGameSession();
+        registerGameSession();
+        
+        // Ocultar contenedores
+        const containers = [
+            'suma-container',
+            'resta-container', 
+            'unidades-decenas-container'
+        ];
+        
+        containers.forEach(containerId => {
+            const container = document.getElementById(containerId);
+            if (container) {
+                container.style.display = 'none';
+            }
+        });
+        
+        // Limpiar selecciones
+        document.querySelectorAll('.number-option').forEach(btn => {
+            btn.classList.remove('selected');
+        });
+        
+        displayNumbers();
+    }
+
+    // Agregar animación de pulso para vidas bajas
+    const pulseStyle = document.createElement('style');
+    pulseStyle.textContent = `
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    `;
+    document.head.appendChild(pulseStyle);
+
+    // Inicializar el juego cuando la página carga
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof initializeGameData === 'function') {
+            initializeGameData().then((canPlay) => {
+                if (canPlay) {
+                    createFloatingElements();
+                    displayNumbers();
+                }
+            }).catch((error) => {
+                console.error('Error al inicializar el juego:', error);
+            });
+        } else {
+            console.error('La función initializeGameData no está definida');
+        }
+        
+        // Atajo de teclado para responder
+        document.addEventListener('keydown', function(e) {
+            const answerBtn = document.getElementById('answer-btn');
+            if (e.key === 'Enter' && answerBtn && !answerBtn.disabled) {
+                if (typeof checkAnswer === 'function') {
+                    checkAnswer();
+                }
+            }
+        });
+    
+        // Configurar SweetAlert2 con estilos personalizados
+        const swalStyle = document.createElement('style');
+        swalStyle.textContent = `
+            .swal2-popup {
+                font-family: 'Comic Sans MS', cursive, sans-serif !important;
+                border-radius: 20px !important;
+            }
+            .swal2-title {
+                color: #ff6b6b !important;
+                font-weight: 900 !important;
+            }
+            .swal2-confirm {
+                background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%) !important;
+                border: none !important;
+                border-radius: 25px !important;
+                font-weight: 700 !important;
+                padding: 12px 30px !important;
+            }
+            .swal2-cancel {
+                background: linear-gradient(135deg, #96ceb4 0%, #45b7d1 100%) !important;
+                border: none !important;
+                border-radius: 25px !important;
+                font-weight: 700 !important;
+                padding: 12px 30px !important;
+            }
+        `;
+        document.head.appendChild(swalStyle);
+    });
+</script>
+{% endblock %}
