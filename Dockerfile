@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Instalar dependencias del sistema necesarias para PDF, Pillow, PostgreSQL
 RUN apt-get update && apt-get install -y \
-   build-essential \
+    build-essential \
     libffi-dev \
     libssl-dev \
     libxml2-dev \
