@@ -28,6 +28,7 @@ COPY . /app/
 # Instalar dependencias de Python
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
+RUN python manage.py collectstatic --noinput
 
 # Expone el puerto (si usas gunicorn)
 EXPOSE 8000
