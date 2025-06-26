@@ -26,6 +26,8 @@ from .views.master_docente import reportes_docente
 # VISTA ESTUDIANTE
 from .views.master_estudiante import core_estudiante_views
 from .views.master_estudiante import estudiante_modulo_views
+#REPORTE-HISTORIAL
+from .views.reportehistorial import historial_views
 
 
 
@@ -160,13 +162,7 @@ urlpatterns = [
     ########################################Juego del Modulo 1 ##################################
     path('nivel/<int:nivel_id>/jugar/', estudiante_modulo_views.jugar_nivel, name='jugar_nivel'),
 
-    
-    
-    
-    
-    
-    
-    
+
 
     ########################################LOGUIN########################################
     # Vista de Formulario de Inicio de Sesión
@@ -186,6 +182,11 @@ urlpatterns = [
     path('save_attempt/', save_attempt, name='save_attempt'),
     path('update_best_score/', update_best_score, name='update_best_score'),
     path('check_lives_status/', check_lives_status, name='check_lives_status'),
+    
+    
+    
+    ######################################## REPORTE HISTORIAL DE INTENTOS ####################################
+    path('reporte-intento/<int:matricula_id>/<int:nivel_id>/', historial_views.generar_reporte_intento_individual_pdf, name='reporte_intento_individual'),
 
 
 
