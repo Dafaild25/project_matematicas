@@ -35,8 +35,10 @@ COPY . /app/
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
+
 # Recopilar archivos estáticos de Django
 RUN python manage.py collectstatic --noinput
+RUN python manage.py migrate --noinput
 
 # Exponer el puerto en Railway
 EXPOSE 8000
