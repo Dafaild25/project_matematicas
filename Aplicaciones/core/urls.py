@@ -21,6 +21,8 @@ from .views import crud_avance_views
 from .views.master_docente import core_docente_views
 from .views.master_docente import clases_asignadas_docente
 from .views.master_docente import avance_matriculados_docente
+# VISTA REPORTES DOCENTE
+from .views.master_docente import reportes_docente
 # VISTA ESTUDIANTE
 from .views.master_estudiante import core_estudiante_views
 from .views.master_estudiante import estudiante_modulo_views
@@ -138,6 +140,10 @@ urlpatterns = [
     path('historial-intentos/', avance_matriculados_docente.historial_intentos, name='historial_intentos'),
     path('asignar-vidas/', avance_matriculados_docente.asignar_vidas, name='asignar_vidas_docente'),
 
+    #VISTA DE REPORTES DE AVANCES DE LOS ESTUDIANTES PARA EL DOCENTE
+    path('pdf/nivel/<int:clase_id>/<int:nivel_id>/', reportes_docente.generar_pdf_nivel, name='pdf_nivel'),
+    path('pdf/general/<int:clase_id>/', reportes_docente.generar_pdf_general, name='pdf_general'),
+  
 
 
 
