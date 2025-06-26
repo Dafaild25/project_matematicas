@@ -17,3 +17,17 @@ DATABASES = {
 # Archivos estáticos (usa el mismo BASE_DIR importado desde base.py)
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+
+LOGGING = {
+    'version': 1,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+}
