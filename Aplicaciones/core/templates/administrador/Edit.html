@@ -127,11 +127,22 @@ Crear Administrador
                         <label for="fotografia" class="form-label">
                                 <b>Fotografía (Opcional):</b>
                             </label>
+                        <!-- Mostrar la foto actual -->
+                        <div class="d-flex justify-content-center">
+                            {% if admin.adm_fotografia %}
+                                <img id="foto-actual" src="{{ admin.adm_fotografia.url }}" alt="Fotografía Actual" class="img-thumbnail mb-2" style="max-width: 150px;">
+                            {% endif %}
+                        </div>
+                        <!-- Campo para subir una nueva foto -->
                         <div class="input-group mb-4">
                             <span class="input-group-text">
                                 <i class="fa-solid fa-camera" aria-hidden="true"></i>
                             </span>
-                            <input type="file" name="fotografia" id="fotografia" accept="image/*" class="form-control" value="{{admin.adm_fotografia}}">
+                            <input type="file" name="fotografia" id="fotografia" accept="image/*" class="form-control">
+                        </div>
+                        <!-- Imagen para previsualización -->
+                        <div class="d-flex justify-content-center">
+                            <img id="preview" src="#" alt="Previsualización" class="img-thumbnail" style="max-width: 150px; display: none;">
                         </div>
                         <label for="username" class="form-label">
                             <b>Nombre de Usuario: *</b>
@@ -143,15 +154,23 @@ Crear Administrador
                             <input type="text" name="username" id="username" class="form-control" 
                             placeholder="Ingresar nombre de usuario" value="{{usuario.username}}">
                         </div>
-                        <label for="estado" class="form-label">
-                            <b>Estado: *</b>
+                        <label for="password" class="form-label">
+                            <b>Contraseña (Opcional):</b>
                         </label>
                         <div class="input-group mb-4">
                             <span class="input-group-text">
-                                <i class="fa-solid fa-circle-user" aria-hidden="true"></i>
+                                <i class="fa-solid fa-lock" aria-hidden="true"></i>
                             </span>
-                            <input type="text" name="estado" id="estado" class="form-control" 
-                            placeholder="Ingresar estado" value="{{admin.adm_estado}}">
+                            <input type="password" name="password" id="password" class="form-control" placeholder="Nueva contraseña (opcional)">
+                        </div>
+                        <label for="estado" class="form-label">
+                            <b>Estado: *</b>
+                        </label>
+                       <div class="input-group mb-4">
+                            <div class="ms-4">
+                                <input class="form-check-input" type="checkbox" name="estado" id="estado" value="True" {% if admin.adm_estado %}checked{% endif %}>
+                                <label class="form-check-label ms-2" for="estado">{% if admin.adm_estado %}Activo{% else %}Inactivo{% endif %}</label>
+                            </div>
                         </div>
                     </div>
                 </div>       
@@ -162,6 +181,28 @@ Crear Administrador
         </div>
     </div>
 </div>
+
+<script>
+    const inputFoto = document.getElementById('fotografia');
+    const preview = document.getElementById('preview');
+
+    inputFoto.addEventListener('change', function(){
+        const file = this.files[0];
+        if(file){
+            const reader = new FileReader();
+            reader.onload = function(e){
+                preview.setAttribute('src', e.target.result);
+                preview.style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+        } else {
+            preview.setAttribute('src', '#');
+            preview.style.display = 'none';
+        }
+    });
+</script>
+
+
 {% endblock %}
 
 

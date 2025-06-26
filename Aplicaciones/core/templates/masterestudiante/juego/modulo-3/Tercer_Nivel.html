@@ -1,0 +1,2178 @@
+{% extends 'plantillas/MasterEstudiante.html' %}
+{% load static %}
+{% block title %}
+  Estudiantes_Modulos
+{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{% static 'css/Modulo-1/primer-nivel.css' %}" />
+  <style>
+    body {
+      background: linear-gradient(-45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ffa726, #ef5350);
+      background-size: 400% 400%;
+      animation: rainbowShift 8s ease infinite;
+      min-height: 100vh;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      overflow-x: hidden;
+    }
+    
+    @keyframes rainbowShift {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+    
+    .main-container {
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .card-header {
+      background: linear-gradient(45deg, #ff6b6b, #feca57);
+      color: white;
+      padding: 25px;
+      text-align: center;
+    }
+    
+    .card-header h2 {
+      font-size: 2.5rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      margin: 0;
+    }
+    
+    .header-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 30px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      animation: bounceIn 1s ease-out;
+      border: 5px solid #ff6b6b;
+    }
+    
+    @keyframes bounceIn {
+      0% {
+        transform: scale(0.3);
+        opacity: 0;
+      }
+      50% {
+        transform: scale(1.05);
+      }
+      70% {
+        transform: scale(0.9);
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+    
+    .header-card h1 {
+      color: #ff6b6b;
+      font-size: 3rem;
+      font-weight: 900;
+      margin-bottom: 15px;
+      text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+      animation: wiggle 2s ease-in-out infinite;
+    }
+    
+    @keyframes wiggle {
+      0%,
+      100% {
+        transform: rotate(0deg);
+      }
+      25% {
+        transform: rotate(1deg);
+      }
+      75% {
+        transform: rotate(-1deg);
+      }
+    }
+    
+    .header-card p {
+      color: #333;
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 0;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%,
+      100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+    }
+    
+    .game-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 30px;
+      padding: 30px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      border: 5px solid #4ecdc4;
+      animation: slideInUp 1s ease-out;
+    }
+    
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(100px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .instruction-card {
+      background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
+      color: white;
+      padding: 25px;
+      border-radius: 25px;
+      margin-bottom: 30px;
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: 800;
+      box-shadow: 0 15px 30px rgba(255, 107, 107, 0.4);
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+    
+    @keyframes glow {
+      from {
+        box-shadow: 0 15px 30px rgba(255, 107, 107, 0.4);
+      }
+      to {
+        box-shadow: 0 15px 30px rgba(255, 107, 107, 0.8);
+      }
+    }
+
+    /* PREGUNTA 1: Ábacos (ACTUALIZADO PARA 3 CIFRAS) */
+    .abacus-visual {
+      background: #8B4513;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 15px 0;
+      position: relative;
+      min-height: 160px;
+      border: 3px solid #654321;
+    }
+
+    .abacus-row {
+      display: flex;
+      align-items: center;
+      margin: 12px 0;
+      position: relative;
+    }
+
+    .abacus-wire {
+      width: 100%;
+      height: 3px;
+      background: #333;
+      position: relative;
+      border-radius: 2px;
+    }
+
+    .abacus-bead {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      position: absolute;
+      top: -7px;
+      border: 2px solid #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .bead-red { background: #ff4757; }
+    .bead-blue { background: #3742fa; }
+    .bead-green { background: #2ed573; }
+
+    .abacus-label {
+      position: absolute;
+      left: -50px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-weight: bold;
+      color: white;
+      background: rgba(0,0,0,0.7);
+      padding: 5px 10px;
+      border-radius: 15px;
+      font-size: 0.9rem;
+    }
+
+    /* PREGUNTA 1: Línea Numérica (reutilizada para ábacos) */
+    .linea-numerica-container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      display: grid;
+    }
+
+    .linea-exercise {
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 20px;
+      text-align: center;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    /* PREGUNTA 2: Operaciones Básicas (ACTUALIZADO PARA 3 CIFRAS) */
+    .operaciones-container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      display: none;
+    }
+
+    .operation-exercise {
+      background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 20px;
+      text-align: center;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .operation-display {
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: #ff6b6b;
+      margin: 20px 0;
+      background: white;
+      border-radius: 15px;
+      padding: 20px;
+      border: 4px solid #ff6b6b;
+      display: inline-block;
+    }
+
+    /* PREGUNTA 3: Comparación de Números (MEJORADO PARA VERTICAL) */
+    .comparacion-container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      display: none;
+    }
+
+    .comparison-exercise {
+      background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 20px;
+      text-align: center;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    /* MEJORADO: Estilo para las tablas en vertical */
+    .operation-table {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      justify-content: center;
+      align-items: center;
+      margin: 20px auto;
+      max-width: 400px;
+      font-family: monospace;
+      font-weight: bold;
+    }
+
+    .table-cell {
+      width: 50px;
+      height: 50px;
+      border: 3px solid #4ecdc4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      background: white;
+      border-radius: 8px;
+      font-weight: 900;
+      transition: all 0.3s ease;
+    }
+
+    .table-header {
+      background: #4ecdc4;
+      color: white;
+      font-weight: bold;
+      border-color: #4ecdc4;
+    }
+
+    .table-missing {
+      background: #ffe082;
+      border: 3px dashed #ff9800;
+      color: #ff9800;
+      animation: pulse 2s infinite;
+    }
+
+    .table-operator {
+      background: #ff6b6b;
+      color: white;
+      font-size: 1.6rem;
+      font-weight: 900;
+      border-color: #ff6b6b;
+    }
+
+    /* PREGUNTA 4: Secuencias Numéricas */
+    .secuencia-container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      display: none;
+    }
+
+    .sequence-exercise {
+      background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 20px;
+      text-align: center;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .sequence-display {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+
+    .sequence-number {
+      background: white;
+      border: 4px solid #45b7d1;
+      border-radius: 15px;
+      padding: 15px 20px;
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: #45b7d1;
+      min-width: 70px;
+    }
+
+    .missing-number {
+      background: #ffe082;
+      border: 4px dashed #ff9800;
+      color: #ff9800;
+    }
+
+    /* CDU Boxes */
+    .cdu-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 20px 0;
+    }
+    .cdu-operation {
+      font-size: 1.8rem;
+      font-weight: bold;
+      margin-bottom: 15px;
+      color: #333;
+      background: #f0f0f0;
+      padding: 10px 20px;
+      border-radius: 10px;
+    }
+    .cdu-boxes {
+      display: grid;
+      grid-template-columns: 60px 60px 60px;
+      gap: 5px;
+      margin-bottom: 10px;
+    }
+    .cdu-box {
+      width: 60px;
+      height: 60px;
+      border: 3px solid #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      font-weight: bold;
+      border-radius: 8px;
+    }
+    .cdu-centenas { background: #ff6b6b; color: white; }
+    .cdu-decenas { background: #4ecdc4; color: white; }
+    .cdu-unidades { background: #45b7d1; color: white; }
+    .cdu-labels {
+      display: grid;
+      grid-template-columns: 60px 60px 60px;
+      gap: 5px;
+      margin-bottom: 15px;
+    }
+    .cdu-label {
+      text-align: center;
+      font-weight: bold;
+      color: #333;
+      font-size: 1.2rem;
+    }
+    .cdu-result {
+      border: 3px dashed #ff9800;
+      background: #ffe082;
+      color: #333;
+    }
+
+    /* Opciones de respuesta */
+    .number-options {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .number-option {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      border-radius: 15px;
+      padding: 15px 25px;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .number-option:hover {
+      transform: scale(1.1) translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .number-option.selected {
+      background: linear-gradient(135deg, #ffa726 0%, #ff9800 100%);
+      border: 3px solid #fff;
+      transform: scale(1.1);
+    }
+
+    .answer-btn {
+      background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
+      color: white;
+      border: none;
+      padding: 20px 50px;
+      border-radius: 50px;
+      font-size: 1.8rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 15px 30px rgba(255, 107, 107, 0.4);
+      display: block;
+      margin: 0 auto;
+      animation: rainbow 3s ease-in-out infinite;
+    }
+    
+    @keyframes rainbow {
+      0% {
+        filter: hue-rotate(0deg);
+      }
+      100% {
+        filter: hue-rotate(360deg);
+      }
+    }
+    
+    .answer-btn:hover {
+      transform: scale(1.1) translateY(-5px);
+      box-shadow: 0 20px 40px rgba(255, 107, 107, 0.6);
+    }
+    
+    .answer-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      animation: none;
+    }
+    
+    .floating-elements {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    .floating-element {
+      position: absolute;
+      font-size: 2rem;
+      animation: floatAround 8s infinite ease-in-out;
+      opacity: 0.7;
+    }
+    
+    @keyframes floatAround {
+      0%,
+      100% {
+        transform: translateY(0px) rotate(0deg);
+        opacity: 0.7;
+      }
+      25% {
+        transform: translateY(-30px) rotate(90deg);
+        opacity: 1;
+      }
+      50% {
+        transform: translateY(-20px) rotate(180deg);
+        opacity: 0.8;
+      }
+      75% {
+        transform: translateY(-40px) rotate(270deg);
+        opacity: 1;
+      }
+    }
+    
+    .confetti {
+      position: fixed;
+      top: -10px;
+      background-color: #f0f0f0;
+      width: 10px;
+      height: 10px;
+      animation: confetti 3s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 1000;
+    }
+    
+    @keyframes confetti {
+      0% {
+        transform: translateY(-100vh) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+    
+    .question-counter {
+      background: linear-gradient(135deg, #45b7d1 0%, #96ceb4 100%);
+      color: white;
+      padding: 15px 30px;
+      border-radius: 20px;
+      text-align: center;
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 20px rgba(69, 183, 209, 0.3);
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .header-card h1 {
+        font-size: 2.5rem;
+      }
+      .header-card p {
+        font-size: 1.5rem;
+      }
+      .number-option {
+        font-size: 1.5rem;
+        padding: 12px 20px;
+      }
+      .main-container {
+        padding: 15px;
+      }
+      .operation-display, .number-box {
+        font-size: 2rem;
+      }
+      .sequence-number {
+        font-size: 2rem;
+        padding: 12px 15px;
+      }
+      .table-cell {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+      }
+      .operation-table {
+        max-width: 300px;
+        gap: 5px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .header-card h1 {
+        font-size: 2rem;
+      }
+      .header-card p {
+        font-size: 1.3rem;
+      }
+      .number-option {
+        font-size: 1.3rem;
+        padding: 10px 15px;
+      }
+      .instruction-card {
+        font-size: 1.5rem;
+      }
+      .operation-display {
+        font-size: 1.8rem;
+        padding: 15px;
+      }
+      .sequence-number {
+        font-size: 1.8rem;
+        padding: 10px 12px;
+      }
+      .table-cell {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+      }
+      .operation-table {
+        max-width: 250px;
+      }
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="container-fluid">
+    <nav class="breadcrumb">
+      <a style="color: #000;" href="{% url 'core_estudiante' %}">🏠 Inicio</a> &nbsp;/&nbsp;
+      <a style="color: #000;" href="{% url 'estudiante_modulo' %}">📚 Módulos</a> &nbsp;/&nbsp;
+      <a style="color: #000;" href="{% url 'ver_niveles_modulo' modulo.mod_id %}">🎯 Niveles</a> &nbsp;/&nbsp;
+      <span style="color: #2632df;">🎮 Juego</span>
+    </nav>
+
+    <div class="card loading">
+      <div class="card-header">
+        <h2>🌟 {{ nivel.niv_nombre }} - {{ nivel.niv_descripcion }}</h2>
+      </div>
+      <div class="card-body">
+        <div class="main-container">
+          <div class="floating-elements" id="floating-elements"></div>
+
+          <!-- Header Card -->
+          <div class="header-card">
+            <h1>🧮 ¡Matemáticas Divertidas! 🧮</h1>
+            <p id="main-instruction">🚀 ¡Vamos a aprender matemáticas! 🚀</p>
+          </div>
+
+          <!-- Game Card -->
+          <div class="game-card">
+            <!-- Question Counter -->
+            <div class="question-counter" id="question-counter">
+              <i class="fas fa-star mr-2"></i>
+              Pregunta 1 de 4
+              <i class="fas fa-star ml-2"></i>
+            </div>
+
+            <!-- PREGUNTA 1: Ábacos CDU - Leer representación visual de 3 cifras -->
+            <div class="instruction-card" id="instruction-card">
+              🧮 ¡Lee los ábacos y encuentra el número que representan!
+            </div>
+
+            <div class="linea-numerica-container" id="linea-numerica-container">
+              <!-- Ábaco 1: 234 (2C + 3D + 4U) -->
+              <div class="linea-exercise" data-correct="234">
+                <h4 style="color: #ff6b6b; margin-bottom: 15px;">¿Qué número representa este ábaco?</h4>
+                <div class="abacus-visual">
+                  <div class="abacus-row">
+                    <div class="abacus-label">C</div>
+                    <div class="abacus-wire">
+                      <div class="abacus-bead bead-red" style="left: 20px;"></div>
+                      <div class="abacus-bead bead-red" style="left: 45px;"></div>
+                    </div>
+                  </div>
+                  <div class="abacus-row">
+                    <div class="abacus-label">D</div>
+                    <div class="abacus-wire">
+                      <div class="abacus-bead bead-blue" style="left: 15px;"></div>
+                      <div class="abacus-bead bead-blue" style="left: 35px;"></div>
+                      <div class="abacus-bead bead-blue" style="left: 55px;"></div>
+                    </div>
+                  </div>
+                  <div class="abacus-row">
+                    <div class="abacus-label">U</div>
+                    <div class="abacus-wire">
+                      <div class="abacus-bead bead-green" style="left: 10px;"></div>
+                      <div class="abacus-bead bead-green" style="left: 25px;"></div>
+                      <div class="abacus-bead bead-green" style="left: 40px;"></div>
+                      <div class="abacus-bead bead-green" style="left: 55px;"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="234">234</button>
+                  <button class="number-option" data-value="324">324</button>
+                  <button class="number-option" data-value="243">243</button>
+                </div>
+              </div>
+
+              <!-- Ábaco 2: 152 (1C + 5D + 2U) -->
+              <div class="linea-exercise" data-correct="152">
+                <h4 style="color: #4ecdc4; margin-bottom: 15px;">¿Qué número representa este ábaco?</h4>
+                <div class="abacus-visual">
+                  <div class="abacus-row">
+                    <div class="abacus-label">C</div>
+                    <div class="abacus-wire">
+                      <div class="abacus-bead bead-red" style="left: 30px;"></div>
+                    </div>
+                  </div>
+                  <div class="abacus-row">
+                    <div class="abacus-label">D</div>
+                    <div class="abacus-wire">
+                      <div class="abacus-bead bead-blue" style="left: 10px;"></div>
+                      <div class="abacus-bead bead-blue" style="left: 25px;"></div>
+                      <div class="abacus-bead bead-blue" style="left: 40px;"></div>
+                      <div class="abacus-bead bead-blue" style="left: 55px;"></div>
+                      <div class="abacus-bead bead-blue" style="left: 70px;"></div>
+                    </div>
+                  </div>
+                  <div class="abacus-row">
+                    <div class="abacus-label">U</div>
+                    <div class="abacus-wire">
+                      <div class="abacus-bead bead-green" style="left: 25px;"></div>
+                      <div class="abacus-bead bead-green" style="left: 45px;"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="125">125</button>
+                  <button class="number-option" data-value="152">152</button>
+                  <button class="number-option" data-value="521">521</button>
+                </div>
+              </div>
+
+              <!-- Ábaco 3: 307 (3C + 0D + 7U) -->
+              <div class="linea-exercise" data-correct="307">
+                <h4 style="color: #45b7d1; margin-bottom: 15px;">¿Qué número representa este ábaco?</h4>
+                <div class="abacus-visual">
+                  <div class="abacus-row">
+                    <div class="abacus-label">C</div>
+                    <div class="abacus-wire">
+                      <div class="abacus-bead bead-red" style="left: 15px;"></div>
+                      <div class="abacus-bead bead-red" style="left: 35px;"></div>
+                      <div class="abacus-bead bead-red" style="left: 55px;"></div>
+                    </div>
+                  </div>
+                  <div class="abacus-row">
+                    <div class="abacus-label">D</div>
+                    <div class="abacus-wire">
+                      <!-- Sin bolitas = 0 decenas -->
+                    </div>
+                  </div>
+                  <div class="abacus-row">
+                    <div class="abacus-label">U</div>
+                    <div class="abacus-wire">
+                      <div class="abacus-bead bead-green" style="left: 5px;"></div>
+                      <div class="abacus-bead bead-green" style="left: 18px;"></div>
+                      <div class="abacus-bead bead-green" style="left: 31px;"></div>
+                      <div class="abacus-bead bead-green" style="left: 44px;"></div>
+                      <div class="abacus-bead bead-green" style="left: 57px;"></div>
+                      <div class="abacus-bead bead-green" style="left: 70px;"></div>
+                      <div class="abacus-bead bead-green" style="left: 83px;"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="370">370</button>
+                  <button class="number-option" data-value="307">307</button>
+                  <button class="number-option" data-value="703">703</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- PREGUNTA 2: Descomposición CDU -->
+            <div class="operaciones-container" id="operaciones-container">
+              <h3 style="color: #667eea; text-align: center; font-size: 2.2rem; margin-bottom: 20px; font-weight: 800;">
+                🔢 ¡Descompón en Centenas + Decenas + Unidades!
+              </h3>
+              
+              <!-- Descomposición 1: 2C + 3D + 7U = ? -->
+              <div class="operation-exercise" data-correct="237">
+                <div style="font-size: 1.3rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  2 Centenas + 3 Decenas + 7 Unidades = ?
+                </div>
+                <div class="operation-display">2C + 3D + 7U = ?</div>
+                <div class="number-options">
+                  <button class="number-option" data-value="237">237</button>
+                  <button class="number-option" data-value="327">327</button>
+                  <button class="number-option" data-value="273">273</button>
+                </div>
+              </div>
+
+              <!-- Descomposición 2: 4C + 1D + 6U = ? -->
+              <div class="operation-exercise" data-correct="416">
+                <div style="font-size: 1.3rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  4 Centenas + 1 Decena + 6 Unidades = ?
+                </div>
+                <div class="operation-display">4C + 1D + 6U = ?</div>
+                <div class="number-options">
+                  <button class="number-option" data-value="461">461</button>
+                  <button class="number-option" data-value="416">416</button>
+                  <button class="number-option" data-value="614">614</button>
+                </div>
+              </div>
+
+              <!-- Descomposición 3: 1C + 8D + 2U = ? -->
+              <div class="operation-exercise" data-correct="182">
+                <div style="font-size: 1.3rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  1 Centena + 8 Decenas + 2 Unidades = ?
+                </div>
+                <div class="operation-display">1C + 8D + 2U = ?</div>
+                <div class="number-options">
+                  <button class="number-option" data-value="821">821</button>
+                  <button class="number-option" data-value="281">281</button>
+                  <button class="number-option" data-value="182">182</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- PREGUNTA 3: Tabla de Operaciones (MEJORADA PARA VERTICAL) -->
+            <div class="comparacion-container" id="comparacion-container">
+              <h3 style="color: #ff6b6b; text-align: center; font-size: 2.2rem; margin-bottom: 25px; font-weight: 800;">
+                📊 ¡Completa la tabla de operaciones!
+              </h3>
+              
+              <!-- Tabla 1: 125 + 234 = ? -->
+              <div class="comparison-exercise" data-correct="359">
+                <div style="font-size: 1.3rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  Completa la suma: 125 + 234 = ?
+                </div>
+                <div class="operation-table">
+                  <div class="table-cell table-header">C</div>
+                  <div class="table-cell table-header">D</div>
+                  <div class="table-cell table-header">U</div>
+                  <div class="table-cell table-operator">+</div>
+                  <div class="table-cell table-operator">=</div>
+                  
+                  <div class="table-cell">1</div>
+                  <div class="table-cell">2</div>
+                  <div class="table-cell">5</div>
+                  <div class="table-cell table-missing">?</div>
+                  <div class="table-cell table-missing">?</div>
+                  
+                  <div class="table-cell">2</div>
+                  <div class="table-cell">3</div>
+                  <div class="table-cell">4</div>
+                  <div class="table-cell table-missing">?</div>
+                  <div class="table-cell table-missing">?</div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="359">359</button>
+                  <button class="number-option" data-value="369">369</button>
+                  <button class="number-option" data-value="349">349</button>
+                </div>
+              </div>
+
+              <!-- Tabla 2: 478 - 123 = ? -->
+              <div class="comparison-exercise" data-correct="355">
+                <div style="font-size: 1.3rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  Completa la resta: 478 - 123 = ?
+                </div>
+                <div class="operation-table">
+                  <div class="table-cell table-header">C</div>
+                  <div class="table-cell table-header">D</div>
+                  <div class="table-cell table-header">U</div>
+                  <div class="table-cell table-operator">-</div>
+                  <div class="table-cell table-operator">=</div>
+                  
+                  <div class="table-cell">4</div>
+                  <div class="table-cell">7</div>
+                  <div class="table-cell">8</div>
+                  <div class="table-cell table-missing">?</div>
+                  <div class="table-cell table-missing">?</div>
+                  
+                  <div class="table-cell">1</div>
+                  <div class="table-cell">2</div>
+                  <div class="table-cell">3</div>
+                  <div class="table-cell table-missing">?</div>
+                  <div class="table-cell table-missing">?</div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="355">355</button>
+                  <button class="number-option" data-value="365">365</button>
+                  <button class="number-option" data-value="345">345</button>
+                </div>
+              </div>
+
+              <!-- Tabla 3: 267 + 132 = ? -->
+              <div class="comparison-exercise" data-correct="399">
+                <div style="font-size: 1.3rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  Completa la suma: 267 + 132 = ?
+                </div>
+                <div class="operation-table">
+                  <div class="table-cell table-header">C</div>
+                  <div class="table-cell table-header">D</div>
+                  <div class="table-cell table-header">U</div>
+                  <div class="table-cell table-operator">+</div>
+                  <div class="table-cell table-operator">=</div>
+                  
+                  <div class="table-cell">2</div>
+                  <div class="table-cell">6</div>
+                  <div class="table-cell">7</div>
+                  <div class="table-cell table-missing">?</div>
+                  <div class="table-cell table-missing">?</div>
+                  
+                  <div class="table-cell">1</div>
+                  <div class="table-cell">3</div>
+                  <div class="table-cell">2</div>
+                  <div class="table-cell table-missing">?</div>
+                  <div class="table-cell table-missing">?</div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="399">399</button>
+                  <button class="number-option" data-value="389">389</button>
+                  <button class="number-option" data-value="409">409</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- PREGUNTA 4: Método CDU con Cajas -->
+            <div class="secuencia-container" id="secuencia-container">
+              <h3 style="color: #667eea; text-align: center; font-size: 2.2rem; margin-bottom: 25px; font-weight: 800;">
+                🎯 ¡Resuelve con el método CDU!
+              </h3>
+              
+              <!-- CDU 1: 234 + 152 = ? -->
+              <div class="sequence-exercise" data-correct="386">
+                <div style="font-size: 1.3rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  Resuelve usando las cajas CDU:
+                </div>
+                <div class="cdu-container">
+                  <div class="cdu-operation">234 + 152 = ?</div>
+                  <div class="cdu-labels">
+                    <div class="cdu-label">C</div>
+                    <div class="cdu-label">D</div>
+                    <div class="cdu-label">U</div>
+                  </div>
+                  <div class="cdu-boxes">
+                    <div class="cdu-box cdu-centenas">2</div>
+                    <div class="cdu-box cdu-decenas">3</div>
+                    <div class="cdu-box cdu-unidades">4</div>
+                  </div>
+                  <div style="text-align: center; font-size: 1.5rem; margin: 10px 0;">+</div>
+                  <div class="cdu-boxes">
+                    <div class="cdu-box cdu-centenas">1</div>
+                    <div class="cdu-box cdu-decenas">5</div>
+                    <div class="cdu-box cdu-unidades">2</div>
+                  </div>
+                  <div style="text-align: center; font-size: 1.5rem; margin: 10px 0;">=</div>
+                  <div class="cdu-boxes">
+                    <div class="cdu-box cdu-result">?</div>
+                    <div class="cdu-box cdu-result">?</div>
+                    <div class="cdu-box cdu-result">?</div>
+                  </div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="386">386</button>
+                  <button class="number-option" data-value="376">376</button>
+                  <button class="number-option" data-value="396">396</button>
+                </div>
+              </div>
+
+              <!-- CDU 2: 465 - 142 = ? -->
+              <div class="sequence-exercise" data-correct="323">
+                <div style="font-size: 1.3rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  Resuelve usando las cajas CDU:
+                </div>
+                <div class="cdu-container">
+                  <div class="cdu-operation">465 - 142 = ?</div>
+                  <div class="cdu-labels">
+                    <div class="cdu-label">C</div>
+                    <div class="cdu-label">D</div>
+                    <div class="cdu-label">U</div>
+                  </div>
+                  <div class="cdu-boxes">
+                    <div class="cdu-box cdu-centenas">4</div>
+                    <div class="cdu-box cdu-decenas">6</div>
+                    <div class="cdu-box cdu-unidades">5</div>
+                  </div>
+                  <div style="text-align: center; font-size: 1.5rem; margin: 10px 0;">-</div>
+                  <div class="cdu-boxes">
+                    <div class="cdu-box cdu-centenas">1</div>
+                    <div class="cdu-box cdu-decenas">4</div>
+                    <div class="cdu-box cdu-unidades">2</div>
+                  </div>
+                  <div style="text-align: center; font-size: 1.5rem; margin: 10px 0;">=</div>
+                  <div class="cdu-boxes">
+                    <div class="cdu-box cdu-result">?</div>
+                    <div class="cdu-box cdu-result">?</div>
+                    <div class="cdu-box cdu-result">?</div>
+                  </div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="323">323</button>
+                  <button class="number-option" data-value="333">333</button>
+                  <button class="number-option" data-value="313">313</button>
+                </div>
+              </div>
+            </div>
+
+            <br />
+
+            <!-- Answer Button -->
+            <button class="answer-btn" id="answer-btn" onclick="checkAnswer()" disabled>
+              <i class="fas fa-check mr-2"></i>
+              ¡RESPONDER!
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block js %}
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+   
+    // Variables globales para el juego
+    window.studentId = {{ matricula_id}};
+    window.levelId   = {{ level_id }};
+    const moduloId = {{ modulo_id }};
+    
+</script>
+
+<script>
+    let selectedNumbers = [];
+    let currentNumbers = [];
+    let currentQuestion = 1;
+    let totalQuestions = 4;
+    let usedQuestions = new Set();
+    let gameFinished = false;
+    
+    // NUEVAS VARIABLES PARA EL SISTEMA DE CALIFICACIONES
+    let questionScores = [];
+    let currentScore = 0;
+    let maxScorePerQuestion = 10/4;
+    let totalPossibleScore = 10;
+    
+    // VARIABLES PARA EL SISTEMA DE VIDAS
+    let studentId = null;
+    let levelId = null;
+    let vidasRestantes = 0;
+    let vidasTotales = 0;
+    let vidasOriginalesNivel = 0;
+    let puedeIntentar = false;
+
+    // Variables para controlar recargas
+    let gameSessionId = null;
+    let hasGameStarted = false;
+    let pageLoadTime = Date.now();
+
+    // Variables para preguntas específicas
+    let abacusSelections = {}; // Para pregunta 1
+    let descomposicionSelections = {}; // Para pregunta 2
+    let tablaSelections = {}; // Para pregunta 3
+    let cduSelections = {}; // Para pregunta 4
+
+    // Generar ID único de sesión
+    function generateSessionId() {
+        return 'game_' + studentId + '_' + levelId + '_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    }
+
+    // Verificar si es una recarga no autorizada
+    function isUnauthorizedReload() {
+        const sessionKey = `game_session_${studentId}_${levelId}`;
+        const storedSession = sessionStorage.getItem(sessionKey);
+        
+        if (storedSession) {
+            const sessionData = JSON.parse(storedSession);
+            const timeDiff = Date.now() - sessionData.timestamp;
+            
+            if (timeDiff < 30000) {
+                console.log('Recarga detectada dentro de', timeDiff, 'ms');
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
+    // Registrar sesión actual
+    function registerGameSession() {
+        const sessionKey = `game_session_${studentId}_${levelId}`;
+        gameSessionId = generateSessionId();
+        
+        const sessionData = {
+            sessionId: gameSessionId,
+            timestamp: Date.now(),
+            questionNumber: currentQuestion,
+            hasStarted: hasGameStarted
+        };
+        
+        sessionStorage.setItem(sessionKey, JSON.stringify(sessionData));
+        console.log('Sesión registrada:', sessionData);
+    }
+
+    // Limpiar sesión al salir
+    function clearGameSession() {
+        const sessionKey = `game_session_${studentId}_${levelId}`;
+        sessionStorage.removeItem(sessionKey);
+        console.log('Sesión limpiada');
+    }
+
+    async function initializeGameData() {
+        studentId = window.studentId || 1;
+        levelId = window.levelId || 1;
+        
+        console.log('Student ID:', studentId, 'Level ID:', levelId);
+        
+        const isReload = isUnauthorizedReload();
+        
+        if (isReload) {
+            console.log('⚠️ RECARGA DETECTADA - Penalizando con una vida');
+            
+            Swal.fire({
+                icon: 'warning',
+                title: '⚠️ Recarga Detectada',
+                html: `
+                    <div>
+                        <p><strong>Se ha detectado una recarga de página.</strong></p>
+                        <p>Como penalización, se restará <span style="color: #f44336; font-weight: bold;">1 vida</span>.</p>
+                        <br>
+                        <p style="color: #666; font-size: 0.9em;">
+                            💡 <strong>Consejo:</strong> Evita recargar la página durante el juego.
+                        </p>
+                    </div>
+                `,
+                confirmButtonText: 'Continuar',
+                allowOutsideClick: false,
+                timer: 4000,
+                timerProgressBar: true
+            });
+            
+            const penaltyResult = await penalizeReload();
+            if (!penaltyResult.success) {
+                console.error('Error al penalizar recarga:', penaltyResult.error);
+            }
+        }
+        
+        registerGameSession();
+        
+        const gameInfo = await getGameInfo();
+        return gameInfo;
+    }
+
+    async function getGameInfo() {
+        try {
+            const response = await fetch('/get_game_info/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    estudiante_id: studentId,
+                    nivel_id: levelId
+                })
+            });
+            
+            const data = await response.json();
+            if (data.success) {
+                vidasRestantes = data.vidas_restantes;
+                vidasTotales = data.vidas_originales_nivel;
+                puedeIntentar = data.puede_intentar;
+                
+                console.log(`Vidas: ${vidasRestantes}/${vidasTotales}, Puede intentar: ${puedeIntentar}`);
+                
+                updateLivesDisplay();
+                
+                if (!puedeIntentar) {
+                    showNoLivesMessage();
+                    return false;
+                }
+                
+                if (data.vidas_restauradas > 0) {
+                    Swal.fire({
+                        icon: 'info',
+                        title: '¡Vidas restauradas!',
+                        text: `Se han agregado ${data.vidas_restauradas} vidas adicionales a este nivel.`,
+                        confirmButtonText: '¡Genial!'
+                    });
+                }
+                
+                return true;
+            } else {
+                console.error('Error al obtener info del juego:', data.error);
+                return false;
+            }
+        } catch (error) {
+            console.error('Error de red al obtener info del juego:', error);
+            return false;
+        }
+    }
+
+    // FUNCIÓN MODIFICADA: Actualizar display de vidas con indicador de estado
+    function updateLivesDisplay() {
+        let livesIndicator = document.getElementById('lives-indicator');
+        if (!livesIndicator) {
+            livesIndicator = document.createElement('div');
+            livesIndicator.id = 'lives-indicator';
+            livesIndicator.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
+                color: white;
+                padding: 15px 20px;
+                border-radius: 25px;
+                font-weight: bold;
+                font-size: 1.1em;
+                box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+                z-index: 1000;
+                font-family: 'Comic Sans MS', cursive, sans-serif;
+                transition: all 0.3s ease;
+            `;
+            document.body.appendChild(livesIndicator);
+        }
+        
+        // Crear corazones para representar vidas
+        let heartsHTML = '';
+        for (let i = 0; i < vidasTotales; i++) {
+            if (i < vidasRestantes) {
+                heartsHTML += '❤️'; // Vida disponible
+            } else {
+                heartsHTML += '🖤'; // Vida usada
+            }
+        }
+        
+        // Cambiar color según vidas restantes
+        let bgColor = 'linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%)';
+        if (vidasRestantes <= 1) {
+            bgColor = 'linear-gradient(135deg, #f44336 0%, #ff9800 100%)';
+            livesIndicator.style.animation = 'pulse 1s infinite';
+        } else if (vidasRestantes <= 2) {
+            bgColor = 'linear-gradient(135deg, #ff9800 0%, #ffc107 100%)';
+        }
+        
+        livesIndicator.style.background = bgColor;
+        
+        livesIndicator.innerHTML = `
+            <div style="text-align: center;">
+                <div style="font-size: 1.2em; margin-bottom: 5px;">${heartsHTML}</div>
+                <div>Vidas: ${vidasRestantes}/${vidasTotales}</div>
+                ${vidasRestantes <= 1 ? '<div style="font-size: 0.8em; color: #ffeb3b;">¡Cuidado!</div>' : ''}
+            </div>
+        `;
+    }
+
+    // NUEVA FUNCIÓN: Mostrar mensaje sin vidas
+    function showNoLivesMessage() {
+        Swal.fire({
+            icon: 'warning',
+            title: '¡Sin vidas restantes! 💔',
+            html: `
+                <div>
+                    <p>Has agotado todas las vidas para este nivel.</p>
+                    <p><strong>Vidas utilizadas: ${vidasTotales}</strong></p>
+                    <br>
+                    <p style="color: #666;">Contacta a tu profesor para obtener más intentos.</p>
+                </div>
+            `,
+            confirmButtonText: 'Volver al menú',
+            allowOutsideClick: false,
+            customClass: {
+                popup: 'animated shake'
+            }
+        }).then(() => {
+            window.location.href = `/modulo/${moduloId}/niveles/`;
+        });
+    }
+
+    // Event listeners para detectar intentos de salida
+    window.addEventListener('beforeunload', function(e) {
+        if (hasGameStarted && currentQuestion > 1 && !gameFinished) {
+            const message = '¿Estás seguro de que quieres salir? Perderás el progreso actual.';
+            e.returnValue = message;
+            return message;
+        }
+        
+        clearGameSession();
+    });
+
+    window.addEventListener('pagehide', function() {
+        clearGameSession();
+    });
+   
+    // Crear elementos flotantes
+    function createFloatingElements() {
+        const container = document.getElementById('floating-elements');
+        const elements = ['🧮', '🔢', '➕', '➖', '✨', '🌟', '💫', '⭐', '📚', '🎯'];
+        
+        for (let i = 0; i < 20; i++) {
+            const element = document.createElement('div');
+            element.className = 'floating-element';
+            element.innerHTML = elements[Math.floor(Math.random() * elements.length)];
+            element.style.left = Math.random() * 100 + '%';
+            element.style.top = Math.random() * 100 + '%';
+            element.style.animationDelay = Math.random() * 8 + 's';
+            element.style.animationDuration = (Math.random() * 4 + 6) + 's';
+            container.appendChild(element);
+        }
+    }
+
+    // Crear confeti
+    function createConfetti() {
+        const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffa726', '#ef5350'];
+        
+        for (let i = 0; i < 50; i++) {
+            setTimeout(() => {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 3000);
+            }, i * 100);
+        }
+    }
+
+    // Función para calcular puntaje de cada pregunta
+    function calculateQuestionScore(isCorrect, questionType, details = {}) {
+        let score = 0;
+        
+        if (questionType === 'abacus') {
+            // Pregunta 1: Ábacos
+            const totalQuestions = 3; // 3 ábacos
+            score = (details.correctCount / totalQuestions) * maxScorePerQuestion;
+        } 
+        else if (questionType === 'descomposicion-cdu') {
+            // Pregunta 2: Descomposición CDU
+            const totalOperations = 3; // 3 descomposiciones
+            score = (details.correctCount / totalOperations) * maxScorePerQuestion;
+        }
+        else if (questionType === 'tabla') {
+            // Pregunta 3: Tabla de operaciones
+            const totalTables = 3; // 3 tablas
+            score = (details.correctCount / totalTables) * maxScorePerQuestion;
+        }
+        else if (questionType === 'cdu') {
+            // Pregunta 4: Método CDU
+            const totalCDU = 2; // 2 operaciones CDU
+            score = (details.correctCount / totalCDU) * maxScorePerQuestion;
+        }
+        else {
+            // Otros tipos: todo o nada
+            score = isCorrect ? maxScorePerQuestion : 0;
+        }
+        
+        return Math.round(score * 100) / 100;
+    }
+
+    // Función principal para mostrar preguntas
+    function displayNumbers() {
+        if (currentQuestion === 1 && !hasGameStarted) {
+            hasGameStarted = true;
+            registerGameSession();
+        }
+
+        // Ocultar TODOS los contenedores
+        document.getElementById('linea-numerica-container').style.display = 'none';
+        document.getElementById('operaciones-container').style.display = 'none';
+        document.getElementById('comparacion-container').style.display = 'none';
+        document.getElementById('secuencia-container').style.display = 'none';
+
+        // PREGUNTA 1: Ábacos CDU
+        if (currentQuestion === 1) {
+            document.getElementById('linea-numerica-container').style.display = 'block';
+            setupAbacusQuestion();
+            
+            document.getElementById('main-instruction').innerHTML = '🧮 ¡Lee los ábacos y encuentra el número!';
+            document.getElementById('instruction-card').innerHTML = `
+                🧮 Cuenta las bolitas: C = Centenas, D = Decenas, U = Unidades
+            `;
+        }
+        
+        // PREGUNTA 2: Descomposición CDU
+        else if (currentQuestion === 2) {
+            document.getElementById('operaciones-container').style.display = 'block';
+            setupDescomposicionQuestion();
+            
+            document.getElementById('main-instruction').innerHTML = '🔢 ¡Descompón en Centenas + Decenas + Unidades!';
+            document.getElementById('instruction-card').innerHTML = `
+                🔢 Combina centenas, decenas y unidades para formar números
+            `;
+        }
+        
+        // PREGUNTA 3: Tabla de Operaciones
+        else if (currentQuestion === 3) {
+            document.getElementById('comparacion-container').style.display = 'block';
+            setupTablaQuestion();
+            
+            document.getElementById('main-instruction').innerHTML = '📊 ¡Completa la tabla de operaciones!';
+            document.getElementById('instruction-card').innerHTML = `
+                📊 Usa las tablas para resolver las operaciones CDU
+            `;
+        }
+        
+        // PREGUNTA 4: Método CDU
+        else if (currentQuestion === 4) {
+            document.getElementById('secuencia-container').style.display = 'block';
+            setupCDUQuestion();
+            
+            document.getElementById('main-instruction').innerHTML = '🎯 ¡Resuelve con el método CDU!';
+            document.getElementById('instruction-card').innerHTML = `
+                🎯 Usa las cajas de colores para organizar las operaciones
+            `;
+        }
+
+        // Actualizar contador
+        document.getElementById('question-counter').innerHTML = `
+            <i class="fas fa-star mr-2"></i>
+            Pregunta ${currentQuestion} de ${totalQuestions}
+            <i class="fas fa-star ml-2"></i>
+        `;
+    }
+
+    // Configurar pregunta 1: Ábacos
+    function setupAbacusQuestion() {
+        abacusSelections = {};
+        
+        document.querySelectorAll('.linea-exercise .number-option').forEach(btn => {
+            btn.classList.remove('selected');
+            
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode.replaceChild(newBtn, btn);
+        });
+        
+        document.querySelectorAll('.linea-exercise .number-option').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const exercise = this.closest('.linea-exercise');
+                const exerciseIndex = Array.from(document.querySelectorAll('.linea-exercise')).indexOf(exercise);
+                
+                // Limpiar selección previa en este ejercicio
+                exercise.querySelectorAll('.number-option').forEach(b => {
+                    b.classList.remove('selected');
+                });
+                
+                // Marcar como seleccionado
+                this.classList.add('selected');
+                
+                // Guardar selección
+                abacusSelections[exerciseIndex] = parseInt(this.dataset.value);
+                
+                // Verificar si hay al menos una selección para habilitar botón
+                const hasSelections = Object.keys(abacusSelections).length > 0;
+                document.getElementById('answer-btn').disabled = !hasSelections;
+                
+                // Efecto visual
+                this.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            });
+        });
+        
+        document.getElementById('answer-btn').disabled = true;
+    }
+
+    // Configurar pregunta 2: Descomposición CDU
+    function setupDescomposicionQuestion() {
+        descomposicionSelections = {};
+        
+        document.querySelectorAll('.operation-exercise .number-option').forEach(btn => {
+            btn.classList.remove('selected');
+            
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode.replaceChild(newBtn, btn);
+        });
+        
+        document.querySelectorAll('.operation-exercise .number-option').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const exercise = this.closest('.operation-exercise');
+                const exerciseIndex = Array.from(document.querySelectorAll('.operation-exercise')).indexOf(exercise);
+                
+                // Limpiar selección previa en este ejercicio
+                exercise.querySelectorAll('.number-option').forEach(b => {
+                    b.classList.remove('selected');
+                });
+                
+                // Marcar como seleccionado
+                this.classList.add('selected');
+                
+                // Guardar selección
+                descomposicionSelections[exerciseIndex] = parseInt(this.dataset.value);
+                
+                // Verificar si hay al menos una selección para habilitar botón
+                const hasSelections = Object.keys(descomposicionSelections).length > 0;
+                document.getElementById('answer-btn').disabled = !hasSelections;
+                
+                // Efecto visual
+                this.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            });
+        });
+        
+        document.getElementById('answer-btn').disabled = true;
+    }
+
+    // Configurar pregunta 3: Tabla de Operaciones
+    function setupTablaQuestion() {
+        tablaSelections = {};
+        
+        document.querySelectorAll('.comparison-exercise .number-option').forEach(btn => {
+            btn.classList.remove('selected');
+            
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode.replaceChild(newBtn, btn);
+        });
+        
+        document.querySelectorAll('.comparison-exercise .number-option').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const exercise = this.closest('.comparison-exercise');
+                const exerciseIndex = Array.from(document.querySelectorAll('.comparison-exercise')).indexOf(exercise);
+                
+                // Limpiar selección previa en este ejercicio
+                exercise.querySelectorAll('.number-option').forEach(b => {
+                    b.classList.remove('selected');
+                });
+                
+                // Marcar como seleccionado
+                this.classList.add('selected');
+                
+                // Guardar selección
+                tablaSelections[exerciseIndex] = parseInt(this.dataset.value);
+                
+                // Verificar si hay al menos una selección para habilitar botón
+                const hasSelections = Object.keys(tablaSelections).length > 0;
+                document.getElementById('answer-btn').disabled = !hasSelections;
+                
+                // Efecto visual
+                this.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            });
+        });
+        
+        document.getElementById('answer-btn').disabled = true;
+    }
+
+    // Configurar pregunta 4: Método CDU
+    function setupCDUQuestion() {
+        cduSelections = {};
+        
+        document.querySelectorAll('.sequence-exercise .number-option').forEach(btn => {
+            btn.classList.remove('selected');
+            
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode.replaceChild(newBtn, btn);
+        });
+        
+        document.querySelectorAll('.sequence-exercise .number-option').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const exercise = this.closest('.sequence-exercise');
+                const exerciseIndex = Array.from(document.querySelectorAll('.sequence-exercise')).indexOf(exercise);
+                
+                // Limpiar selección previa en este ejercicio
+                exercise.querySelectorAll('.number-option').forEach(b => {
+                    b.classList.remove('selected');
+                });
+                
+                // Marcar como seleccionado
+                this.classList.add('selected');
+                
+                // Guardar selección
+                cduSelections[exerciseIndex] = parseInt(this.dataset.value);
+                
+                // Verificar si hay al menos una selección para habilitar botón
+                const hasSelections = Object.keys(cduSelections).length > 0;
+                document.getElementById('answer-btn').disabled = !hasSelections;
+                
+                // Efecto visual
+                this.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            });
+        });
+        
+        document.getElementById('answer-btn').disabled = true;
+    }
+
+    // Función principal para verificar respuestas
+    function checkAnswer() {
+        if (gameFinished) return;
+
+        gameFinished = true;
+        
+        let isCorrect = false;
+        let feedback = '';
+        let questionType = '';
+        let score = 0;
+        let details = {};
+
+        if (currentQuestion === 1) {
+            // Pregunta 1: Ábacos CDU
+            questionType = 'abacus';
+            const exercises = document.querySelectorAll('.linea-exercise');
+            let correct = 0;
+
+            exercises.forEach((exercise, index) => {
+                const correctAnswer = parseInt(exercise.dataset.correct);
+                const userAnswer = abacusSelections[index];
+                
+                if (userAnswer === correctAnswer) {
+                    correct++;
+                }
+            });
+
+            const total = exercises.length;
+            details = { correctCount: correct, totalCount: total };
+            isCorrect = correct === total;
+
+            if (correct === total) {
+                feedback = '🎉 ¡Excelente! Leíste todos los ábacos correctamente.';
+            } else if (correct >= 2) {
+                feedback = `🌟 ¡Muy bien! Acertaste ${correct} de ${total} ábacos.`;
+            } else {
+                feedback = `💡 Recuerda: C = Centenas (×100), D = Decenas (×10), U = Unidades (×1).`;
+            }
+        }
+        else if (currentQuestion === 2) {
+            // Pregunta 2: Descomposición CDU
+            questionType = 'descomposicion-cdu';
+            const exercises = document.querySelectorAll('.operation-exercise');
+            let correct = 0;
+
+            exercises.forEach((exercise, index) => {
+                const correctAnswer = parseInt(exercise.dataset.correct);
+                const userAnswer = descomposicionSelections[index];
+                
+                if (userAnswer === correctAnswer) {
+                    correct++;
+                }
+            });
+
+            const total = exercises.length;
+            details = { correctCount: correct, totalCount: total };
+            isCorrect = correct === total;
+
+            if (correct === total) {
+                feedback = '🎉 ¡Perfecto! Resolviste todas las descomposiciones correctamente.';
+            } else if (correct >= 2) {
+                feedback = `🌟 ¡Muy bien! Acertaste ${correct} de ${total} descomposiciones.`;
+            } else {
+                feedback = `💡 Recuerda: C = Centenas (×100), D = Decenas (×10), U = Unidades (×1).`;
+            }
+        }
+        else if (currentQuestion === 3) {
+            // Pregunta 3: Tabla de Operaciones
+            questionType = 'tabla';
+            const exercises = document.querySelectorAll('.comparison-exercise');
+            let correct = 0;
+
+            exercises.forEach((exercise, index) => {
+                const correctAnswer = parseInt(exercise.dataset.correct);
+                const userAnswer = tablaSelections[index];
+                
+                if (userAnswer === correctAnswer) {
+                    correct++;
+                }
+            });
+
+            const total = exercises.length;
+            details = { correctCount: correct, totalCount: total };
+            isCorrect = correct === total;
+
+            if (correct === total) {
+                feedback = '🎉 ¡Excelente! Completaste todas las tablas correctamente.';
+            } else if (correct >= 2) {
+                feedback = `🌟 ¡Muy bien! Acertaste ${correct} de ${total} tablas.`;
+            } else {
+                feedback = `💡 Recuerda: Organiza los números en centenas, decenas y unidades para calcular.`;
+            }
+        }
+        else if (currentQuestion === 4) {
+            // Pregunta 4: Método CDU
+            questionType = 'cdu';
+            const exercises = document.querySelectorAll('.sequence-exercise');
+            let correct = 0;
+
+            exercises.forEach((exercise, index) => {
+                const correctAnswer = parseInt(exercise.dataset.correct);
+                const userAnswer = cduSelections[index];
+                
+                if (userAnswer === correctAnswer) {
+                    correct++;
+                }
+            });
+
+            const total = exercises.length;
+            details = { correctCount: correct, totalCount: total };
+            isCorrect = correct === total;
+
+            if (correct === total) {
+                feedback = '🎉 ¡Perfecto! Resolviste todas las operaciones CDU correctamente.';
+            } else if (correct >= 1) {
+                feedback = `🌟 ¡Muy bien! Acertaste ${correct} de ${total} operaciones.`;
+            } else {
+                feedback = `💡 Recuerda: Usa las cajas C=Centenas, D=Decenas, U=Unidades.`;
+            }
+        }
+
+        // Calcular puntaje
+        score = calculateQuestionScore(isCorrect, questionType, details);
+        questionScores.push({
+            question: currentQuestion,
+            score: score,
+            maxScore: maxScorePerQuestion,
+            isCorrect: isCorrect,
+            type: questionType
+        });
+
+        // Mostrar resultado
+        setTimeout(() => {
+            if (isCorrect) {
+                createConfetti();
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡CORRECTO! 🌟',
+                    html: `
+                        <div>
+                            <p>${feedback}</p>
+                            <div style="font-size: 1.2em; margin: 15px 0; color: #4CAF50;">
+                                <strong>Puntaje: ${score.toFixed(2)}/${maxScorePerQuestion.toFixed(2)} puntos</strong>
+                            </div>
+                        </div>
+                    `,
+                    confirmButtonText: currentQuestion < totalQuestions ? '¡Siguiente pregunta!' : '¡Ver resultados!',
+                    allowOutsideClick: false,
+                    customClass: {
+                        popup: 'animated bounceIn',
+                        confirmButton: 'btn btn-success'
+                    }
+                }).then(() => {
+                    nextQuestion();
+                });
+            } else {
+                Swal.fire({
+                    icon: 'info',
+                    title: '¡Sigue intentando! 💪',
+                    html: `
+                        <div>
+                            <p>${feedback}</p>
+                            <div style="font-size: 1.2em; margin: 15px 0; color: #ff9800;">
+                                <strong>Puntaje: ${score.toFixed(2)}/${maxScorePerQuestion.toFixed(2)} puntos</strong>
+                            </div>
+                        </div>
+                    `,
+                    confirmButtonText: 'Continuar',
+                    allowOutsideClick: false,
+                    customClass: {
+                        popup: 'animated shake',
+                        confirmButton: 'btn btn-primary'
+                    }
+                }).then(() => {
+                    nextQuestion();
+                });
+            }
+        }, 1500);
+    }
+
+    // Pasar a la siguiente pregunta
+    function nextQuestion() {
+        if (currentQuestion >= totalQuestions) {
+            showFinalResults();
+        } else {
+            currentQuestion++;
+            gameFinished = false;
+            displayNumbers();
+        }
+    }
+
+    // Mostrar resultados finales (MODIFICADO para mostrar solo un botón cuando no hay vidas)
+    async function showFinalResults() {
+        // Calcular puntaje total
+        const finalScore = questionScores.reduce((total, q) => total + q.score, 0);
+        const percentage = (finalScore / totalPossibleScore) * 100;
+        
+        // Determinar mensaje de estado
+        let statusMessage, statusColor, icon;
+        if (percentage >= 90) {
+            statusMessage = "¡SOBRESALIENTE!";
+            statusColor = "#4CAF50";
+            icon = "success";
+        } else if (percentage >= 80) {
+            statusMessage = "¡EXCELENTE!";
+            statusColor = "#4CAF50";
+            icon = "success";
+        } else if (percentage >= 70) {
+            statusMessage = "¡MUY BIEN!";
+            statusColor = "#2196F3";
+            icon = "success";
+        } else if (percentage >= 60) {
+            statusMessage = "¡BIEN!";
+            statusColor = "#FF9800";
+            icon = "info";
+        } else {
+            statusMessage = "Necesitas mejorar";
+            statusColor = "#FF9800";
+            icon = "warning";
+        }
+
+        // Crear resumen de preguntas
+        const questionNames = [
+            '🧮 Ábacos CDU',
+            '🔢 Descomposición CDU', 
+            '📊 Tabla de operaciones',
+            '🎯 Método CDU'
+        ];
+        
+        let questionSummaryHTML = '';
+        questionScores.forEach((q, index) => {
+            const emoji = q.isCorrect ? '✅' : '❌';
+            questionSummaryHTML += `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin: 8px 0; padding: 8px 0; border-bottom: 1px solid #eee;">
+                    <span style="font-weight: 500;">Pregunta ${q.question}: ${emoji}</span>
+                    <span style="font-weight: 600; color: ${q.isCorrect ? '#4CAF50' : '#f44336'};">${q.score.toFixed(2)}/${q.maxScore.toFixed(2)} puntos</span>
+                </div>
+            `;
+        });
+
+        // Guardar intento
+        const saveResult = await saveAttempt(finalScore);
+        
+        // Crear HTML del resultado final
+        const resultHTML = `
+            <div style="text-align: center; font-family: 'Comic Sans MS', cursive;">
+                <!-- Título principal -->
+                <div style="background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%); color: white; padding: 20px; border-radius: 15px; margin-bottom: 20px;">
+                    <h2 style="margin: 0; font-size: 1.8rem; font-weight: 900;">
+                        ¡JUEGO COMPLETADO! 🏆
+                    </h2>
+                </div>
+
+                <!-- Estado y nota -->
+                <div style="background: ${statusColor}; color: white; padding: 15px; border-radius: 12px; margin-bottom: 20px;">
+                    <div style="font-size: 1.4rem; font-weight: 700; margin-bottom: 8px;">
+                        ${statusMessage}
+                    </div>
+                    <div style="font-size: 1.6rem; font-weight: 900;">
+                        NOTA FINAL: ${finalScore.toFixed(2)}/10
+                    </div>
+                </div>
+
+                <!-- Resumen por pregunta -->
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; margin-bottom: 20px; text-align: left;">
+                    <h4 style="margin: 0 0 15px 0; color: #333; font-size: 1.3rem; font-weight: 700; text-align: center;">
+                        📊 Resumen por pregunta:
+                    </h4>
+                    ${questionSummaryHTML}
+                </div>
+
+                <!-- Estado de vidas -->
+                <div style="background: #f0f0f0; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+                    <h4 style="margin: 0 0 15px 0; color: #666; font-size: 1.3rem; font-weight: 700;">
+                        💗 Estado de vidas:
+                    </h4>
+                    <div style="font-size: 1.1rem; line-height: 1.6;">
+                        <div><strong>Vidas antes:</strong> ${vidasTotales}/${vidasTotales}</div>
+                        <div><strong>Vidas después:</strong> ${saveResult.vidasRestantes}/${vidasTotales}</div>
+                        <div style="color: #4CAF50; font-weight: 600; margin-top: 10px;">
+                            ${saveResult.puedeIntentar ? '¡Puedes intentar 1 vez más!' : '¡Sin vidas restantes!'}
+                        </div>
+                    </div>
+                </div>
+
+                ${saveResult.success && saveResult.data.is_best_score ? 
+                    '<div style="background: #fff3cd; color: #856404; padding: 15px; border-radius: 10px; margin-bottom: 15px;"><strong>🏆 ¡Nuevo mejor puntaje!</strong></div>' : ''
+                }
+                
+                ${saveResult.success && saveResult.data.nivel_completado ? 
+                    '<div style="background: #d1ecf1; color: #0c5460; padding: 15px; border-radius: 10px; margin-bottom: 15px;"><strong>🎉 ¡Nivel completado!</strong></div>' : ''
+                }
+            </div>
+        `;
+
+        // CAMBIO PRINCIPAL: Determinar qué botones mostrar según las vidas restantes
+        let buttonsConfig = {};
+        
+        if (saveResult.puedeIntentar) {
+            // Tiene vidas: mostrar ambos botones
+            buttonsConfig = {
+                showCancelButton: true,
+                confirmButtonText: '🏠 Volver al menú',
+                cancelButtonText: '🔄 Jugar de nuevo'
+            };
+        } else {
+            // Sin vidas: solo mostrar botón de volver al menú
+            buttonsConfig = {
+                showCancelButton: false,
+                confirmButtonText: '🏠 Volver al menú'
+            };
+        }
+
+        // Mostrar resultados
+        Swal.fire({
+            icon: icon,
+            title: false, // No mostrar título por defecto
+            html: resultHTML,
+            ...buttonsConfig,
+            allowOutsideClick: false,
+            width: '600px',
+            customClass: {
+                popup: 'animated bounceIn',
+                confirmButton: 'btn btn-primary',
+                cancelButton: 'btn btn-success'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Volver al menú
+                window.location.href = `/modulo/${moduloId}/niveles/`;
+            } else {
+                // Reiniciar juego (solo disponible si tiene vidas)
+                if (saveResult.puedeIntentar) {
+                    resetGame();
+                } else {
+                    showNoLivesMessage();
+                }
+            }
+        });
+
+        // Actualizar mejor puntaje
+        await updateBestScore();
+    }
+
+    // Función para obtener CSRF token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // FUNCIÓN MODIFICADA: saveAttempt actualizada
+    async function saveAttempt(finalScore) {
+        try {
+            console.log('Enviando datos:', {
+                estudiante_id: studentId,
+                nivel_id: levelId,
+                puntaje_total: finalScore
+            });
+
+            const response = await fetch('/save_attempt/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    estudiante_id: studentId,
+                    nivel_id: levelId,
+                    puntaje_total: finalScore
+                })
+            });
+            
+            const data = await response.json();
+            console.log('Respuesta del servidor:', data);
+            
+            if (data.success) {
+                // Actualizar variables locales
+                vidasRestantes = data.vidas_restantes;
+                puedeIntentar = data.puede_continuar;
+                
+                // Actualizar display de vidas
+                updateLivesDisplay();
+                
+                console.log('Intento guardado correctamente con nota:', data.nota);
+                return { 
+                    success: true, 
+                    data: data,
+                    vidasRestantes: vidasRestantes,
+                    puedeIntentar: puedeIntentar
+                };
+            } else {
+                console.error('Error del servidor:', data.error);
+                return { success: false, error: data.error };
+            }
+        } catch (error) {
+            console.error('Error de red al guardar intento:', error);
+            return { success: false, error: 'Error de conexión: ' + error.message };
+        }
+    }
+
+    // Actualizar mejor puntaje
+    async function updateBestScore() {
+        try {
+            const response = await fetch('/update_best_score/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    estudiante_id: studentId,
+                    nivel_id: levelId
+                })
+            });
+            
+            const data = await response.json();
+            if (data.success) {
+                console.log('Mejor puntaje actualizado:', data.best_score);
+            } else {
+                console.error('Error al actualizar mejor puntaje:', data.error);
+            }
+        } catch (error) {
+            console.error('Error al actualizar mejor puntaje:', error);
+        }
+    }
+
+    // Función para penalizar recarga (necesitas agregarla si no existe)
+    async function penalizeReload() {
+        try {
+            const response = await fetch('/penalize_reload/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    estudiante_id: studentId,
+                    nivel_id: levelId
+                })
+            });
+            
+            const data = await response.json();
+            if (data.success) {
+                vidasRestantes = data.vidas_restantes;
+                updateLivesDisplay();
+                return { success: true };
+            } else {
+                return { success: false, error: data.error };
+            }
+        } catch (error) {
+            return { success: false, error: error.message };
+        }
+    }
+
+    // Reiniciar juego
+    function resetGame() {
+        currentQuestion = 1;
+        selectedNumbers = [];
+        currentNumbers = [];
+        usedQuestions.clear();
+        gameFinished = false;
+        hasGameStarted = false;
+        
+        // Reiniciar variables de puntaje
+        questionScores = [];
+        currentScore = 0;
+        
+        // Reiniciar variables de preguntas específicas
+        abacusSelections = {};
+        descomposicionSelections = {};
+        tablaSelections = {};
+        cduSelections = {};
+        
+        clearGameSession();
+        registerGameSession();
+        
+        // Ocultar contenedores
+        const containers = [
+            'operaciones-container',
+            'comparacion-container', 
+            'secuencia-container'
+        ];
+        
+        containers.forEach(containerId => {
+            const container = document.getElementById(containerId);
+            if (container) {
+                container.style.display = 'none';
+            }
+        });
+        
+        // Limpiar selecciones
+        document.querySelectorAll('.number-option').forEach(btn => {
+            btn.classList.remove('selected');
+        });
+        
+        displayNumbers();
+    }
+
+    // Agregar animación de pulso para vidas bajas
+    const pulseStyle = document.createElement('style');
+    pulseStyle.textContent = `
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    `;
+    document.head.appendChild(pulseStyle);
+
+    // Inicializar el juego cuando la página carga
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof initializeGameData === 'function') {
+            initializeGameData().then((canPlay) => {
+                if (canPlay) {
+                    createFloatingElements();
+                    displayNumbers();
+                }
+            }).catch((error) => {
+                console.error('Error al inicializar el juego:', error);
+            });
+        } else {
+            console.error('La función initializeGameData no está definida');
+        }
+        
+        // Atajo de teclado para responder
+        document.addEventListener('keydown', function(e) {
+            const answerBtn = document.getElementById('answer-btn');
+            if (e.key === 'Enter' && answerBtn && !answerBtn.disabled) {
+                if (typeof checkAnswer === 'function') {
+                    checkAnswer();
+                }
+            }
+        });
+    
+        // Configurar SweetAlert2 con estilos personalizados
+        const swalStyle = document.createElement('style');
+        swalStyle.textContent = `
+            .swal2-popup {
+                font-family: 'Comic Sans MS', cursive, sans-serif !important;
+                border-radius: 20px !important;
+            }
+            .swal2-title {
+                color: #ff6b6b !important;
+                font-weight: 900 !important;
+            }
+            .swal2-confirm {
+                background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%) !important;
+                border: none !important;
+                border-radius: 25px !important;
+                font-weight: 700 !important;
+                padding: 12px 30px !important;
+            }
+            .swal2-cancel {
+                background: linear-gradient(135deg, #96ceb4 0%, #45b7d1 100%) !important;
+                border: none !important;
+                border-radius: 25px !important;
+                font-weight: 700 !important;
+                padding: 12px 30px !important;
+            }
+        `;
+        document.head.appendChild(swalStyle);
+    });
+</script>
+{% endblock %}

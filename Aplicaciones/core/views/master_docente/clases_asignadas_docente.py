@@ -1,7 +1,6 @@
 from django.shortcuts import render, get_object_or_404,redirect
 from django.db.models import Count
 from ...models import Clases, Estudiantes, Docentes, Matriculas, Personas,Niveles,User,Avance_Matriculados
-from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden, JsonResponse
 from ...forms.docente_estudiante_form import CrearEstudianteForm
 from django.db import transaction
@@ -11,10 +10,9 @@ from django.contrib.auth.models import Group
 from django.views.decorators.http import require_GET, require_POST
 import pandas as pd
 from django.views.decorators.csrf import csrf_exempt
+from Aplicaciones.core.decorators import rol_required # Importar decorador para requerir docente
 
-
-
-@login_required
+@rol_required('docente')
 def clases_asignadas_docente(request):
     # Obtener la persona vinculada al usuario logueado
     persona = get_object_or_404(Personas, fk_id_usuario=request.user)
@@ -32,7 +30,7 @@ def clases_asignadas_docente(request):
     
     
     
-@login_required    
+@rol_required('docente')
 def matriculados_asignados_docente(request, clase_id):
     # Obtener la persona vinculada al usuario logueado
     persona = get_object_or_404(Personas, fk_id_usuario=request.user)
@@ -59,7 +57,7 @@ def matriculados_asignados_docente(request, clase_id):
         
     })
     
-    
+@rol_required('docente') 
 def vista_tabla_matriculados_docente(request, cla_id):
     matriculas = Matriculas.objects.filter(fk_clase=cla_id).order_by(
         'fk_estudiante__fk_id_persona__fk_id_usuario__last_name',
@@ -69,7 +67,7 @@ def vista_tabla_matriculados_docente(request, cla_id):
 
 
 
-@login_required
+@rol_required('docente')
 def crear_estudiante_docente(request):
     if request.method == 'POST':
         form = CrearEstudianteForm(request.POST)
@@ -148,6 +146,7 @@ def crear_estudiante_docente(request):
 
 
 @require_GET
+@rol_required('docente')
 def obtener_datos_estudiante(request, matricula_id):
     try:
         matricula = Matriculas.objects.select_related('fk_estudiante__fk_id_persona', 'fk_estudiante__fk_id_persona__fk_id_usuario').get(pk=matricula_id)
@@ -172,6 +171,7 @@ def obtener_datos_estudiante(request, matricula_id):
         return JsonResponse({'success': False, 'error': 'Matrícula no encontrada'})
     
 @require_POST
+@rol_required('docente')
 def editar_estudiante_docente(request):
     form = CrearEstudianteForm(request.POST)
     matricula_id = request.POST.get('matricula_id')
@@ -220,7 +220,7 @@ def editar_estudiante_docente(request):
     return redirect('matriculados_asignados', clase_id=clase_id)
 
 @require_POST
-@login_required
+@rol_required('docente')
 def eliminar_matricula(request):
     matricula_id = request.POST.get('matricula_id')
     clase_id = request.POST.get('clase_id')
@@ -237,7 +237,7 @@ def eliminar_matricula(request):
 
 #para que el docente pueda crear  masivamente matriculas
 @csrf_exempt
-@login_required
+@rol_required('docente')
 def importar_estudiantes_excel_docente(request):
     if request.method == 'POST' and request.FILES.get('archivo'):
         archivo_excel = request.FILES['archivo']
@@ -316,7 +316,7 @@ def importar_estudiantes_excel_docente(request):
     return JsonResponse({'success': False, 'message': 'Solicitud inválida'})
 
 
-@login_required
+@rol_required('docente')
 def ver_notas_estudiantes(request, cla_id):
     persona = get_object_or_404(Personas, fk_id_usuario=request.user)
     docente = get_object_or_404(Docentes, fk_id_persona=persona)

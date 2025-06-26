@@ -32,7 +32,7 @@ class Administradores(models.Model):
     adm_id = models.AutoField(primary_key=True)
     # Clave foranea Persona
     fk_id_persona = models.ForeignKey(Personas,verbose_name='Persona',on_delete=models.CASCADE)
-    adm_fotografia = models.ImageField(default='Sin Foto',null=True,blank=True,verbose_name="Fotografía:")
+    adm_fotografia = models.ImageField(upload_to='administradores/' ,default=None,null=True,blank=True,verbose_name="Fotografía:")
     adm_estado = models.BooleanField(default=True,verbose_name='Estado:')
     
     def __str__(self):
@@ -44,7 +44,7 @@ class Docentes(models.Model):
     # Clave foranea Persona
     fk_id_persona = models.ForeignKey(Personas,verbose_name='Persona',on_delete=models.CASCADE)
     doc_cargo = models.CharField(max_length=100,default="Null",null=False,verbose_name="Cargo:")
-    doc_fotografia = models.ImageField(upload_to='docentes/',default='Sin Foto',verbose_name="Fotografía:")
+    doc_fotografia = models.ImageField(upload_to='docentes/',default=None,verbose_name="Fotografía:")
     doc_estado = models.BooleanField(default=True,verbose_name='Estado:')
     
     def __str__(self):
@@ -57,7 +57,7 @@ class Estudiantes(models.Model):
     fk_id_persona = models.ForeignKey(Personas,verbose_name='Persona',on_delete=models.CASCADE)
     est_contacto_emergencia = models.CharField(max_length=50,default="Null",null=True,verbose_name="Contacto de emergencia:")
     est_telefono_emergencia = models.CharField(max_length=15,default="Null",null=True,verbose_name="Teléfono de emergencia:")
-    est_fotografia = models.ImageField(upload_to='estudiantes/',default='Sin Foto',null=True,blank=True,verbose_name="Fotografía:")
+    est_fotografia = models.ImageField(upload_to='estudiantes/',default=None,null=True,blank=True,verbose_name="Fotografía:")
     est_estado = models.BooleanField(default=True,verbose_name='Estado:')
     def __str__(self):
         return f"{self.est_id}: {self.fk_id_persona.fk_id_usuario.first_name} {self.fk_id_persona.fk_id_usuario.last_name}"

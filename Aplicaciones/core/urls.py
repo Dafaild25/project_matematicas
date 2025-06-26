@@ -1,5 +1,5 @@
 from django.urls import path
-
+from django.contrib.auth.views import PasswordChangeView # Importar vista de cambio de contraseña propia de Django
 
 # views del core
 from .views import core_views
@@ -31,6 +31,10 @@ urlpatterns = [
     
     path('', core_views.dashboard_admin, name='core_admin'),
     path('admin/dashboard/data/', core_views.obtener_datos_admin, name='obtener_datos_admin'),
+
+    ########################################CAMBIO DE CONTRASEÑA################################
+    # Vista para Cambiar la Contraseña del Usuario
+    path('cambiar_contrasena/', PasswordChangeView.as_view(template_name='usuarios/cambiar_contrasena.html'), name='cambiar_contrasena'),
     
     #######################################CRUD ADMINISTRADOR################################
     # Vista Inicial del Administrador
