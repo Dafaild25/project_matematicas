@@ -40,7 +40,7 @@
                                     <div class="text-center">
                                         <h1 class="h3 text-gray-900 mb-4">¡Bienvenido Campeón!</h1>
                                     </div>
-                                    <form class="user" method="post" action="{% url 'iniciar_sesion' %}">
+                                    <form class="user" id="formLogin">
                                         {% csrf_token %}
                                         <div class="form-group">
                                             <input type="text" class="form-control form-control-user" name="identificador"
@@ -80,7 +80,70 @@
     <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
     <script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </body>
 
 </html>
+
+<script>
+    $(document).ready(function () {
+        $('#formLogin').on('submit', function (e) {
+            e.preventDefault();
+
+            let formData = {
+                'identificador': $('#identificador').val().trim(),
+                'password': $('#password').val().trim(),
+                'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
+            };
+
+            $('#btnLogin').prop('disabled', true).text('Verificando...');
+
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'iniciar_sesion' %}",
+                data: formData,
+                success: function (response) {
+                    if (response.estado) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: `¡Bienvenido, ${response.nombre}!`,
+                            text: 'Redirigiendo...',
+                            timer: 2000,
+                            showConfirmButton: false
+                        }).then(() => {
+                            window.location.href = response.url;
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error de autenticación',
+                            text: response.mensaje || 'Error desconocido'
+                        });
+                        $('#btnLogin').prop('disabled', false).text('Iniciar sesión');
+                    }
+                },
+                error: function (xhr) {
+                    // Intentar extraer mensaje del backend si viene en JSON
+                    let mensaje = 'Ocurrió un error inesperado. Intenta nuevamente.';
+                    if (xhr.responseJSON && xhr.responseJSON.mensaje) {
+                        mensaje = xhr.responseJSON.mensaje;
+                    } else if (xhr.status === 0) {
+                        mensaje = 'No se pudo conectar con el servidor.';
+                    } else if (xhr.status === 404) {
+                        mensaje = 'Recurso no encontrado.';
+                    } else if (xhr.status === 500) {
+                        mensaje = 'Error interno del servidor.';
+                    }
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: mensaje
+                    });
+                    $('#btnLogin').prop('disabled', false).text('Iniciar sesión');
+                }
+            });
+        });
+    });
+</script>
