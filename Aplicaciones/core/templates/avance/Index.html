@@ -7,23 +7,45 @@
 {% block content %}
 <div class="container-fluid ">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Matriculas</h1>
+        <h1 class="h3 mb-0 text-gray-800">{{ clase.cla_nombre }}</h1>
 
 
     </div>
 
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{% url 'core_admin' %}">Inicio</a></li>
-        <li class="breadcrumb-item active"><a href="{% url 'matricula_index' %}">Matriculas</a></li>
-        <li class="breadcrumb-item active">Avances de los estudiantes</li>
+        <li class="breadcrumb-item active"><a href="{% url 'matricula_index' %}">Cursos</a></li>
+        <li class="breadcrumb-item active">Avances </li>
 
     </ol>
 
     <div class="card mb-4">
-        <div class="card-header">
-            <i class="fas fa-table me-1"></i>
-            Tabla Avances de los estudiantes del <strong>{{ clase.fk_modulo.mod_nombre }}</strong>
-        </div>
+         <div class="card-header d-flex justify-content-between align-items-center">
+          <div>
+              <i class="fas fa-table me-1"></i>
+              <strong>{{ clase.fk_modulo.mod_nombre }}</strong>
+          </div>
+          <div class="btn-group">
+              <button type="button" class="btn btn-sm btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                  📄 PDF
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end">
+                  {% for nivel in niveles %}
+                  <li>
+                      <a class="dropdown-item" href="#" target="_blank">
+                          Nivel {{ nivel.niv_nombre }}
+                      </a>
+                  </li>
+                  {% endfor %}
+                  <li><hr class="dropdown-divider"></li>
+                  <li>
+                      <a class="dropdown-item text-primary fw-bold" href="#" target="_blank">
+                          📘 Todos los niveles
+                      </a>
+                  </li>
+              </ul>
+          </div>
+      </div>
         <div class="card-body">
             <div class="table-responsive">
               {% load custom_filters %}

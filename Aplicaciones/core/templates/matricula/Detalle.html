@@ -7,52 +7,55 @@
 {% block content %}
 <div class="container-fluid ">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Matriculas</h1>
+        <h1 class="h3 mb-0 text-gray-800">{{clase.cla_nombre}}</h1>
         <a href="{% url 'descargar_plantilla_estudiantes' %}" class="btn btn-primary">
-    <i class="fas fa-download"></i> Descargar Plantilla Excel
+    <i class="fas fa-download"></i> Plantilla Excel
 </a>
 
     </div>
 
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{% url 'core_admin' %}">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'matricula_index' %}">Matriculas</a></li>
-        <li class="breadcrumb-item active">Detalle Matricula</li>
+        <li class="breadcrumb-item"><a href="{% url 'matricula_index' %}">Cursos</a></li>
+        <li class="breadcrumb-item active">Matricular</li>
     </ol>
 
     <!-- Formulario para matricular manualmente -->
     <div class="card mb-4">
-        <div class="card-header bg-info text-white">
-            <i class="fas fa-user-plus me-1"></i> Matricular Estudiante
-        </div>
-        <div class="card-body">
-            <form method="POST" action="#">
-                {% csrf_token %}
-                <div class="row g-3">
-                    <div class="col-md-10">
-                        <input type="hidden" value="{{ clase.cla_id }}" name="cla_id" id="cla_id">
-                        <select name="estudiante" id="estudiante" data-live-search="true" class="form-select form-control selectpicker" title="Seleccione un Estudiante">
-                            {% for estudiante in estudiantes %}
-                            <option value="{{ estudiante.est_id }}">{{ estudiante.fk_id_persona.fk_id_usuario.first_name }} {{ estudiante.fk_id_persona.per_segundo_nombre }} {{ estudiante.fk_id_persona.fk_id_usuario.last_name }}  {{ estudiante.fk_id_persona.per_segundo_apellido }}</option>
-                            {% endfor %}
-                        </select>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card-header bg-info text-white">
+                        <i class="fas fa-user-plus me-1"></i> Matricular Estudiante
                     </div>
-                    <div class="col-md-2">                        
-                            <button type="button" onclick="matricularEstudiante()" class="btn btn-success">Matricular</button>                        
+                    <div class="card-body">
+                        <form method="POST" action="#">
+                            {% csrf_token %}
+                            <div class="row g-3">
+                                <div class="col-md-10">
+                                    <input type="hidden" value="{{ clase.cla_id }}" name="cla_id" id="cla_id">
+                                    <select name="estudiante" id="estudiante" data-live-search="true" class="form-select form-control selectpicker" title="Seleccione un Estudiante">
+                                        {% for estudiante in estudiantes %}
+                                        <option value="{{ estudiante.est_id }}">{{ estudiante.fk_id_persona.fk_id_usuario.first_name }} {{ estudiante.fk_id_persona.per_segundo_nombre }} {{ estudiante.fk_id_persona.fk_id_usuario.last_name }}  {{ estudiante.fk_id_persona.per_segundo_apellido }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-2">                        
+                                        <button type="button" onclick="matricularEstudiante()" class="btn btn-success">Matricular</button>                        
+                                </div>
+                                
+                            </div>
+                            
+                        </form>
                     </div>
-                    
-                </div>
-                
-            </form>
-        </div>
-    </div>
 
-    <!-- Formulario para importación masiva -->
-    <div class="card mb-4">
-        <div class="card-header bg-secondary text-white">
-            <i class="fas fa-file-upload me-1"></i> Importar Estudiantes Masivamente
+                
+            </div>
+            <div class="col-md-6">
+                <div class="card-header bg-secondary text-white">
+            <i class="fas fa-file-upload me-1"></i> Matricular Estudiantes Masivamente
         </div>
         <div class="card-body">
+
             <form id="form-importar-excel">
                 {% csrf_token %}
                 <div class="row">
@@ -68,7 +71,14 @@
                 
             </form>
         </div>
+                
+            </div>
+        </div>
+
+        
     </div>
+
+    
     
     <div class="card mb-4">
         <div class="card-header">
