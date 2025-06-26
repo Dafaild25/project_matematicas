@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Instalar dependencias del sistema necesarias para PDF, Pillow, PostgreSQL
 RUN apt-get update && apt-get install -y \
-    build-essential \
+   build-essential \
     libffi-dev \
     libssl-dev \
     libxml2-dev \
@@ -19,6 +19,12 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     python3-cairocffi \
     fonts-liberation \
+    fonts-dejavu \
+    libfreetype6 \
+    libharfbuzz-dev \
+    libfribidi-dev \
+    cairo \
+    pango \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
