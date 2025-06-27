@@ -1,2 +1,1 @@
-web: gunicorn matematicas.wsgi:application --log-file -
-
+web: python manage.py collectstatic --noinput && gunicorn matematicas.wsgi:application --bind 0.0.0.0:$PORT --workers 3
