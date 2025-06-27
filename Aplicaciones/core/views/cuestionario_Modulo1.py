@@ -26,7 +26,7 @@ def get_game_info(request):
         # SOLUCIÓN: Manejar múltiples matrículas
         try:
             # Primero intentar obtener una matrícula activa específica
-            matricula = Matriculas.objects.get(fk_estudiante_id=estudiante_id)
+            matricula = Matriculas.objects.get(mat_id=estudiante_id)
         except Matriculas.MultipleObjectsReturned:
             # Si hay múltiples, usar criterios para elegir la correcta
             # Opción 1: La más reciente
@@ -237,7 +237,7 @@ def save_attempt(request):
         nivel = get_object_or_404(Niveles, niv_id=nivel_id)
         # Obtener avance (con acceso indirecto a la matrícula)
         avance = get_object_or_404(Avance_Matriculados,
-                                   fk_matricula__fk_estudiante_id=estudiante_id,
+                                   fk_matricula_id=estudiante_id,
                                    fk_nivel=nivel)
         matricula = avance.fk_matricula
         
@@ -354,7 +354,7 @@ def update_best_score(request):
          # Obtener avance único relacionado al estudiante y al nivel
         avance = get_object_or_404(
             Avance_Matriculados,
-            fk_matricula__fk_estudiante_id=estudiante_id,
+            fk_matricula_id=estudiante_id,
             fk_nivel=nivel
         )
 
