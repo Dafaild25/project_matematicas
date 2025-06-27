@@ -4,22 +4,22 @@ from django.contrib.auth.models import Group # Importar grupos
 from Aplicaciones.core.forms.user_form import UserForm # Importar clase de registro
 from ..models import * # Importar modelos
 from Aplicaciones.core.validaciones.validar_cedula import * # Importar funciones de validaciones
-from Aplicaciones.core.decorators import rol_required # Importar decorador para requerir administrador
+from ..decorators import admin_required  
 
 # VISTA PRINCIPAL PARA LISTAR ADMINISTRADORES
-@rol_required('administrador')
+@admin_required  # ← AGREGAR ESTE DECORADOR
 def index(request):
     # Obtener todos los administradores excluyendo al usuario logueado
     administradores = Administradores.objects.exclude(fk_id_persona__fk_id_usuario=request.user) 
     return render(request, 'administrador/index.html', {'administradores': administradores})
 
 # VISTA PARA FORMULARIO ADMINISTRADORES
-@rol_required('administrador')
+@admin_required  # ← AGREGAR ESTE DECORADOR
 def create_administrador(request):
     return render(request, 'administrador/Create.html')
 
 # METODO CREAR UN NUEVO ADMINISTRADOR
-@rol_required('administrador')
+@admin_required  # ← AGREGAR ESTE DECORADOR
 def nuevo_administrador(request):
     if(request.method == 'POST'):
         try:
@@ -56,7 +56,7 @@ def nuevo_administrador(request):
     return redirect('administrador_index')
 
 # VISTA PARA EDITAR UN ADMINISTRADOR
-@rol_required('administrador')
+@admin_required  # ← AGREGAR ESTE DECORADOR
 def edit_administrador(request, id_admin):
     administrador = get_object_or_404(Administradores,pk=id_admin)  # Obtener el administrador por su ID
     persona = administrador.fk_id_persona  # Obtener la persona asociada al administrador
@@ -69,7 +69,7 @@ def edit_administrador(request, id_admin):
     return render(request, 'administrador/Edit.html', contexto)  # Renderizar la plantilla de edición
 
 # METODO PARA ACTUALIZAR UN ADMINISTRADOR
-@rol_required('administrador')
+@admin_required  # ← AGREGAR ESTE DECORADOR
 def actualizar_administrador(request):
     if request.method == 'POST':
         try:
@@ -108,8 +108,8 @@ def actualizar_administrador(request):
         finally:
             return redirect('administrador_index')
 
-# METODO PARA ELIMINAR UN ADMINISTRADOR
-@rol_required('administrador')
+
+@admin_required  
 def eliminar_administardor(request, id_admin):
     admin = get_object_or_404(Administradores, pk=id_admin)  # Obtener el administrador por su ID
     try:

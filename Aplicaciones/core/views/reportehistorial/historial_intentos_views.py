@@ -7,7 +7,7 @@ import unicodedata
 import re
 from weasyprint import HTML
 from ...models import IntentoNivel, Matriculas, Niveles
-
+from ...decorators import docente_required
 
 # Limpiar nombre de archivo
 def clean_filename(text):
@@ -15,7 +15,7 @@ def clean_filename(text):
     return re.sub(r'[^\w\s-]', '', text).replace(' ', '_')
 
 
-@login_required
+@docente_required
 def generar_reporte_intento_individual_pdf(request, matricula_id, nivel_id):
     intentos = IntentoNivel.objects.select_related(
         'fk_matricula__fk_estudiante',

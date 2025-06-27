@@ -3,7 +3,9 @@ from django.contrib import messages
 from ..models import Niveles,Modulos
 from ..forms.niveles_form import NivelesForm
 from ..utils.nivel_utils import tiene_dependencias_nivel
+from ..decorators import admin_required
 
+@admin_required
 def index(request):
     niveles = Niveles.objects.filter(niv_estado=True)
     form = NivelesForm()

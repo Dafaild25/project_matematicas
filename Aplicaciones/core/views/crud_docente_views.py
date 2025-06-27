@@ -4,22 +4,24 @@ from django.contrib.auth.models import Group # Importar grupos
 from Aplicaciones.core.forms.user_form import UserForm # Importar clase de registro
 from ..models import * # Importar modelos
 from Aplicaciones.core.validaciones.validar_cedula import * # Importar funciones de validaciones
-from Aplicaciones.core.decorators import rol_required # Importar decorador para requerir administrador
+from ..decorators import admin_required
 
 # VISTA PRINCIPAL PARA LISTAR DOCENTES
-@rol_required('administrador')
+
+@admin_required
 def index(request):
     # Obtener todos los docentes excluyendo al usuario logueado
     docentes = Docentes.objects.exclude(fk_id_persona__fk_id_usuario=request.user) 
     return render(request, 'docente/index.html', {'docentes': docentes})
 
 # VISTA PARA FORMULARIO DOCENTES
-@rol_required('administrador')
+
+@admin_required
 def create_docente(request):
     return render(request, 'docente/Create.html')
 
 # METODO CREAR UN NUEVO DOCENTE
-@rol_required('administrador')
+@admin_required
 def nuevo_docente(request):
     if(request.method == 'POST'):
         try:
@@ -56,7 +58,7 @@ def nuevo_docente(request):
     return redirect('docente_index')
 
 # VISTA PARA EDITAR UN DOCENTE
-@rol_required('administrador')
+@admin_required
 def edit_docente(request, id_docen):
     docente = get_object_or_404(Docentes,pk=id_docen) # Obtener el docente por su ID
     persona = docente.fk_id_persona # Obtener la persona asociada al docente
@@ -69,7 +71,7 @@ def edit_docente(request, id_docen):
     return render(request,'docente/Edit.html', contexto) # Renderizar la plantilla de edición
 
 # METODO PARA ACTUALIZAR UN DOCENTE
-@rol_required('administrador')
+@admin_required
 def actualizar_docente(request):
     if request.method == 'POST':
         try:
@@ -109,7 +111,7 @@ def actualizar_docente(request):
             return redirect('docente_index')
         
 # METODO PARA ELIMINAR UN DOCENTE
-@rol_required('administrador')
+@admin_required
 def eliminar_docente(request, id_docen):
     docente = get_object_or_404(Docentes, pk=id_docen)  # Obtener el docente por su ID
     try:

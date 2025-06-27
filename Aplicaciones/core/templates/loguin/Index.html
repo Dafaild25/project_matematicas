@@ -11,11 +11,45 @@
 
     <title>Sistema Matemáticas</title>
     <link rel="stylesheet" href="{% static 'css/Loguin/loguin-estilo.css' %}">
-
-   
     
-
-    
+    <!-- Agregar estilos para los mensajes -->
+    <style>
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        .alert-error {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+        
+        .alert-success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+        
+        .alert-info {
+            color: #0c5460;
+            background-color: #d1ecf1;
+            border-color: #bee5eb;
+        }
+        
+        .alert-warning {
+            color: #856404;
+            background-color: #fff3cd;
+            border-color: #ffeaa7;
+        }
+        
+        .message-container {
+            margin-bottom: 1rem;
+        }
+    </style>
 </head>
 
 <body class="bg-gradient-success">
@@ -26,6 +60,18 @@
         <div class="login-header">
             <h1 class="login-title">Bienvenido</h1>
             <p class="login-subtitle">Inicia sesión en tu cuenta</p>
+            
+        </div>
+
+        <!-- Contenedor para mensajes -->
+        <div class="message-container">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}" id="message-alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
         </div>
 
         <form class="user" method="post" action="{% url 'iniciar_sesion' %}">
@@ -33,7 +79,8 @@
             
             <div class="form-group">
                 <input type="text" class="form-control form-control-user" name="identificador"
-                       id="identificador" placeholder="Ingresa tu usuario " required>
+                    id="identificador" placeholder="Ingresa tu usuario" 
+                    value="{{ request.POST.identificador|default:'' }}" required>
             </div>
             
             <div class="form-group">
@@ -41,7 +88,7 @@
                        id="password" placeholder="Contraseña" required>
             </div>
             
-            <div class="checkbox-container ">
+            <div class="checkbox-container">
                 <label class="custom-checkbox">
                     <input type="checkbox" id="customCheck">
                     <span class="checkmark"></span>
@@ -52,12 +99,24 @@
             <button type="submit" class="btn-login">
                 Iniciar sesión
             </button>
-            
-            
         </form>
     </div>
 
     <script>
+        // Auto-ocultar mensajes después de 5 segundos
+        document.addEventListener('DOMContentLoaded', () => {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    alert.style.opacity = '0';
+                    alert.style.transition = 'opacity 0.3s';
+                    setTimeout(() => {
+                        alert.style.display = 'none';
+                    }, 500);
+                }, 5000); // 5 segundos
+            });
+        });
+
         // Crear partículas de fondo animadas
         function createParticles() {
             const particlesContainer = document.getElementById('particles');
@@ -150,8 +209,6 @@
             addButtonEffects();
             addValidationEffects();
         });
-
-        
     </script>
 </body>
 </html>
