@@ -48,7 +48,7 @@ def index(request):
 
             return redirect('nivel_index')
 
-    return render(request, 'nivel/index.html', {
+    return render(request, 'nivel/Index.html', {
         'niveles': niveles,
         'form': form,
         'form_editar': form_editar,

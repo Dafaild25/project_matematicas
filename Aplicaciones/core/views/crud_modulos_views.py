@@ -48,7 +48,7 @@ def index(request):
 
             return redirect('modulo_index')
 
-    return render(request, 'modulo/index.html', {
+    return render(request, 'modulo/Index.html', {
         'modulos': modulos,
         'form': form,
         'form_editar': form_editar,
