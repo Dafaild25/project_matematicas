@@ -377,7 +377,7 @@ def ver_notas_estudiantes(request, cla_id):
 
         
 
-    return render(request, 'masterdocente/avance/Index.html', {
+    return render(request, 'masterdocente/Avance/Index.html', {
         'clase': clase,
         'niveles': niveles,
         'avance_data': data,
