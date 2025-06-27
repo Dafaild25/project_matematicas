@@ -18,6 +18,11 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://projectmatematicas-production.up.railway.app',
+    'https://*.railway.app',
+]
+
 # Database configuration for Railway
 if 'DATABASE_URL' in os.environ:
     DATABASES = {
