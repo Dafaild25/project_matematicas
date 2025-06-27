@@ -27,20 +27,14 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-kg5lwvu9%k18^wnf3a=
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # Automático: DEBUG=True en desarrollo, False en producción
-DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
+DEBUG = os.getenv('DEBUG', '') == 'True'
 
 # Hosts permitidos - automático para dev y prod
-ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-    '.railway.app',
-    'projectmatematicas-production.up.railway.app',
-]
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
-# Para Railway (evitar errores CSRF)
+# CSRF_TRUSTED_ORIGINS
 CSRF_TRUSTED_ORIGINS = [
-    'https://projectmatematicas-production.up.railway.app',
-    'https://*.railway.app',
+    f'https://{host}' for host in ALLOWED_HOSTS if host != 'localhost'
 ]
 
 # Application definition
@@ -89,7 +83,6 @@ WSGI_APPLICATION = 'matematicas.wsgi.application'
 
 # Database - Automático: PostgreSQL en Railway, SQLite en desarrollo
 if 'DATABASE_URL' in os.environ:
-    # Producción (Railway con PostgreSQL)
     DATABASES = {
         'default': dj_database_url.config(
             default=os.getenv('DATABASE_URL'),
@@ -98,7 +91,6 @@ if 'DATABASE_URL' in os.environ:
         )
     }
 else:
-    # Desarrollo (SQLite)
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
