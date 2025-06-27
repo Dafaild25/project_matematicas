@@ -2,7 +2,9 @@ from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from ..models import Matriculas, Matriculas, Clases,Niveles,Avance_Matriculados
 from django.db.models import Avg
+from ..decorators import admin_required
 
+@admin_required
 def index(request, cla_id):
     clase = get_object_or_404(Clases, pk=cla_id)
     niveles = Niveles.objects.filter(fk_modulo=clase.fk_modulo).order_by('orden')

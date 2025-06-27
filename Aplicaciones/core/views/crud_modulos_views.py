@@ -3,8 +3,10 @@ from ..models import Modulos
 from ..forms.modulos_form import ModulosForm
 from ..utils.Modulo_Utils import tiene_dependencias
 from django.contrib import messages
+from ..decorators import admin_required
 
 
+@admin_required
 def index(request):
     modulos = Modulos.objects.all()
     form = ModulosForm()

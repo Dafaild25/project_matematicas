@@ -1,10 +1,10 @@
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET, require_POST
 from ...models import IntentoNivel, Matriculas, Niveles,Avance_Matriculados, Vidas_Extras
-from Aplicaciones.core.decorators import rol_required # Importar decorador para requerir docente
+from ...decorators import docente_required
 
 @require_GET
-
+@docente_required
 def historial_intentos(request):
     matricula_id = request.GET.get('matricula_id')
     nivel_id = request.GET.get('nivel_id')
@@ -26,7 +26,7 @@ def historial_intentos(request):
 
 
 @require_POST
-@rol_required('docente')
+@docente_required
 def asignar_vidas(request):
     try:
         matricula_id = request.POST.get('matricula_id')
