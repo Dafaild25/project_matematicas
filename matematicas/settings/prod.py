@@ -1,6 +1,12 @@
-from .base import *
-import dj_database_url
 import os
+import dj_database_url
+import logging
+
+try:
+    from .base import *
+except Exception as e:
+    logging.error(f"Error al importar base.py en settings.prod: {e}")
+    raise
 
 DEBUG = False
 
@@ -17,7 +23,6 @@ DATABASES = {
 # Archivos estáticos (usa el mismo BASE_DIR importado desde base.py)
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-
 
 LOGGING = {
     'version': 1,
