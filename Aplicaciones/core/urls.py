@@ -6,6 +6,7 @@ from .views import core_views
 from .views import crud_administrador_views
 
 from .views.cuestionario_Modulo1 import  get_game_info, save_attempt, update_best_score, check_lives_status
+from .views.master_docente.demos_docente import  docente_ver_niveles_modulo, docente_probar_nivel
 
 
 from .views import loguin_views 
@@ -160,6 +161,11 @@ urlpatterns = [
     ########################################Juego del Modulo 1 ##################################
     path('nivel/<int:nivel_id>/jugar/', estudiante_modulo_views.jugar_nivel, name='jugar_nivel'),
 
+    # URLs para docentes
+    
+    path('docente/modulo/<int:modulo_id>/niveles/', docente_ver_niveles_modulo, name='docente_ver_niveles_modulo'),
+    path('docente/nivel/<int:nivel_id>/probar/', docente_probar_nivel, name='docente_probar_nivel'),
+    
     
     
     

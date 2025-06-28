@@ -255,7 +255,7 @@ Clases Docente
                                 </div>
                                 <div class="stat-item">
                                     <span class="stat-number">{{ clase.fk_modulo.niveles.count|default:0 }}</span>
-                                    <a href="#" class="btn-matriculados">
+                                    <a href="{% url 'docente_ver_niveles_modulo' clase.fk_modulo.mod_id %}" class="btn-matriculados">
                                         <span class="stat-label">Niveles</span>
                                     </a>
                                 </div>
