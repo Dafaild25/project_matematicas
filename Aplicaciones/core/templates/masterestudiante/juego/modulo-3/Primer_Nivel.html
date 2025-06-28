@@ -1,0 +1,2217 @@
+{% extends 'plantillas/MasterEstudiante.html' %}
+{% load static %}
+{% block title %}
+  Estudiantes_Modulos
+{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{% static 'css/Modulo-1/primer-nivel.css' %}" />
+  <style>
+    body {
+      background: linear-gradient(-45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ffa726, #ef5350);
+      background-size: 400% 400%;
+      animation: rainbowShift 8s ease infinite;
+      min-height: 100vh;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      overflow-x: hidden;
+    }
+    
+    @keyframes rainbowShift {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+    
+    .main-container {
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .card-header {
+      background: linear-gradient(45deg, #ff6b6b, #feca57);
+      color: white;
+      padding: 25px;
+      text-align: center;
+    }
+    
+    .card-header h2 {
+      font-size: 2.5rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      margin: 0;
+    }
+    
+    .header-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 30px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      animation: bounceIn 1s ease-out;
+      border: 5px solid #ff6b6b;
+    }
+    
+    @keyframes bounceIn {
+      0% {
+        transform: scale(0.3);
+        opacity: 0;
+      }
+      50% {
+        transform: scale(1.05);
+      }
+      70% {
+        transform: scale(0.9);
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+    
+    .header-card h1 {
+      color: #ff6b6b;
+      font-size: 3rem;
+      font-weight: 900;
+      margin-bottom: 15px;
+      text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+      animation: wiggle 2s ease-in-out infinite;
+    }
+    
+    @keyframes wiggle {
+      0%,
+      100% {
+        transform: rotate(0deg);
+      }
+      25% {
+        transform: rotate(1deg);
+      }
+      75% {
+        transform: rotate(-1deg);
+      }
+    }
+    
+    .header-card p {
+      color: #333;
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 0;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%,
+      100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+    }
+    
+    .game-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 30px;
+      padding: 30px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      border: 5px solid #4ecdc4;
+      animation: slideInUp 1s ease-out;
+    }
+    
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(100px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .instruction-card {
+      background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
+      color: white;
+      padding: 25px;
+      border-radius: 25px;
+      margin-bottom: 30px;
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: 800;
+      box-shadow: 0 15px 30px rgba(255, 107, 107, 0.4);
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+    
+    @keyframes glow {
+      from {
+        box-shadow: 0 15px 30px rgba(255, 107, 107, 0.4);
+      }
+      to {
+        box-shadow: 0 15px 30px rgba(255, 107, 107, 0.8);
+      }
+    }
+
+    /* PREGUNTA 1: Línea Numérica */
+    .linea-numerica-container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      display: grid;
+    }
+
+    .linea-exercise {
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 15px;
+      text-align: center;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .number-line {
+      background: #8B4513;
+      height: 60px;
+      border-radius: 10px;
+      position: relative;
+      margin: 15px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      overflow: hidden;
+    }
+
+    .number-mark {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 2;
+    }
+
+    .mark-line {
+      width: 3px;
+      height: 30px;
+      background: #333;
+      margin-bottom: 8px;
+    }
+
+    .mark-number {
+      background: white;
+      padding: 4px 8px;
+      border-radius: 8px;
+      font-weight: bold;
+      color: #333;
+      font-size: 0.9rem;
+      border: 2px solid #333;
+    }
+
+    .character-on-line {
+      position: absolute;
+      top: -20px;
+      font-size: 2rem;
+      z-index: 3;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* PREGUNTA 2: Operaciones Verticales */
+    .operaciones-container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      display: none;
+    }
+
+    .operation-exercise {
+      background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 15px;
+      text-align: center;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .vertical-operation {
+      background: white;
+      border: 3px solid #ff6b6b;
+      border-radius: 12px;
+      padding: 15px;
+      margin: 15px auto;
+      width: fit-content;
+      font-family: 'Courier New', monospace;
+      font-size: 1.8rem;
+      font-weight: 900;
+    }
+
+    .operation-row {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      margin: 5px 0;
+      min-height: 30px;
+    }
+
+    .operation-sign {
+      margin-right: 10px;
+      color: #ff6b6b;
+    }
+
+    .operation-line {
+      border-top: 3px solid #333;
+      margin: 8px 0;
+      width: 100%;
+    }
+
+    /* PREGUNTA 3: Comparación de Números */
+    .comparacion-container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      display: none;
+    }
+
+    .comparison-exercise {
+      background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 15px;
+      text-align: center;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .comparison-display {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 30px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+
+    .number-box {
+      background: white;
+      border: 4px solid #4ecdc4;
+      border-radius: 15px;
+      padding: 15px 20px;
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: #4ecdc4;
+      min-width: 80px;
+    }
+
+    .comparison-symbol {
+      font-size: 3rem;
+      color: #ff6b6b;
+      font-weight: 900;
+    }
+
+    /* PREGUNTA 4: Problemas Matemáticos */
+    .problemas-container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      display: none;
+    }
+
+    .problem-exercise {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 20px;
+      text-align: center;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      color: white;
+    }
+
+    .problem-text {
+      background: rgba(255, 255, 255, 0.95);
+      color: #333;
+      padding: 20px;
+      border-radius: 12px;
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      line-height: 1.5;
+      border: 3px solid #fff;
+    }
+
+    .problem-character {
+      font-size: 4rem;
+      margin-bottom: 15px;
+      animation: bounce 2s infinite;
+    }
+
+    /* Opciones de respuesta */
+    .number-options {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .number-option {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      border-radius: 15px;
+      padding: 12px 20px;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      min-width: 60px;
+    }
+
+    .number-option:hover {
+      transform: scale(1.1) translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .number-option.selected {
+      background: linear-gradient(135deg, #ffa726 0%, #ff9800 100%);
+      border: 3px solid #fff;
+      transform: scale(1.1);
+    }
+
+    .answer-btn {
+      background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
+      color: white;
+      border: none;
+      padding: 20px 50px;
+      border-radius: 50px;
+      font-size: 1.8rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 15px 30px rgba(255, 107, 107, 0.4);
+      display: block;
+      margin: 0 auto;
+      animation: rainbow 3s ease-in-out infinite;
+    }
+    
+    @keyframes rainbow {
+      0% {
+        filter: hue-rotate(0deg);
+      }
+      100% {
+        filter: hue-rotate(360deg);
+      }
+    }
+    
+    .answer-btn:hover {
+      transform: scale(1.1) translateY(-5px);
+      box-shadow: 0 20px 40px rgba(255, 107, 107, 0.6);
+    }
+    
+    .answer-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      animation: none;
+    }
+    
+    .floating-elements {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    .floating-element {
+      position: absolute;
+      font-size: 2rem;
+      animation: floatAround 8s infinite ease-in-out;
+      opacity: 0.7;
+    }
+    
+    @keyframes floatAround {
+      0%,
+      100% {
+        transform: translateY(0px) rotate(0deg);
+        opacity: 0.7;
+      }
+      25% {
+        transform: translateY(-30px) rotate(90deg);
+        opacity: 1;
+      }
+      50% {
+        transform: translateY(-20px) rotate(180deg);
+        opacity: 0.8;
+      }
+      75% {
+        transform: translateY(-40px) rotate(270deg);
+        opacity: 1;
+      }
+    }
+    
+    .confetti {
+      position: fixed;
+      top: -10px;
+      background-color: #f0f0f0;
+      width: 10px;
+      height: 10px;
+      animation: confetti 3s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 1000;
+    }
+    
+    @keyframes confetti {
+      0% {
+        transform: translateY(-100vh) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+    
+    .question-counter {
+      background: linear-gradient(135deg, #45b7d1 0%, #96ceb4 100%);
+      color: white;
+      padding: 15px 30px;
+      border-radius: 20px;
+      text-align: center;
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 20px rgba(69, 183, 209, 0.3);
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .header-card h1 {
+        font-size: 2.5rem;
+      }
+      .header-card p {
+        font-size: 1.5rem;
+      }
+      .number-option {
+        font-size: 1.3rem;
+        padding: 10px 15px;
+      }
+      .main-container {
+        padding: 15px;
+      }
+      .number-line {
+        height: 50px;
+        padding: 0 10px;
+      }
+      .mark-number {
+        font-size: 0.8rem;
+      }
+      .character-on-line {
+        font-size: 1.5rem;
+      }
+      .vertical-operation {
+        font-size: 1.5rem;
+      }
+      .number-box {
+        font-size: 2rem;
+        padding: 12px 15px;
+      }
+      .problem-text {
+        font-size: 1.1rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .header-card h1 {
+        font-size: 2rem;
+      }
+      .header-card p {
+        font-size: 1.3rem;
+      }
+      .number-option {
+        font-size: 1.2rem;
+        padding: 8px 12px;
+      }
+      .instruction-card {
+        font-size: 1.5rem;
+      }
+      .vertical-operation {
+        font-size: 1.3rem;
+      }
+      .number-box {
+        font-size: 1.8rem;
+        padding: 10px 12px;
+      }
+      .problem-text {
+        font-size: 1rem;
+      }
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="container-fluid">
+    <nav class="breadcrumb">
+      <a style="color: #000;" href="{% url 'core_estudiante' %}">🏠 Inicio</a> &nbsp;/&nbsp;
+      <a style="color: #000;" href="{% url 'estudiante_modulo' %}">📚 Módulos</a> &nbsp;/&nbsp;
+      <a style="color: #000;" href="{% url 'ver_niveles_modulo' modulo.mod_id %}">🎯 Niveles</a> &nbsp;/&nbsp;
+      <span style="color: #2632df;">🎮 Juego</span>
+    </nav>
+
+    <div class="card loading">
+      <div class="card-header">
+        <h2>🌟 {{ nivel.niv_nombre }} - {{ nivel.niv_descripcion }}</h2>
+      </div>
+      <div class="card-body">
+        <div class="main-container">
+          <div class="floating-elements" id="floating-elements"></div>
+
+          <!-- Header Card -->
+          <div class="header-card">
+            <h1>🧮 ¡Matemáticas Divertidas! 🧮</h1>
+            <p id="main-instruction">🚀 ¡Vamos a aprender matemáticas! 🚀</p>
+          </div>
+
+          <!-- Game Card -->
+          <div class="game-card">
+            <!-- Question Counter -->
+            <div class="question-counter" id="question-counter">
+              <i class="fas fa-star mr-2"></i>
+              Pregunta 1 de 4
+              <i class="fas fa-star ml-2"></i>
+            </div>
+
+            <!-- PREGUNTA 1: Línea Numérica (5 ejercicios, números hasta 499) -->
+            <div class="instruction-card" id="instruction-card">
+              📍 ¡Encuentra dónde está ubicado cada personaje en la línea numérica!
+            </div>
+
+            <div class="linea-numerica-container" id="linea-numerica-container">
+              <!-- Ejercicio 1: ¿En qué número está Ana? -->
+              <div class="linea-exercise" data-correct="250">
+                <h4 style="color: #ff6b6b; margin-bottom: 10px;">¿En qué número está Ana? 👧</h4>
+                <div class="number-line">
+                  <div class="number-mark">
+                    <div class="mark-line"></div>
+                    <div class="mark-number">240</div>
+                  </div>
+                  <div class="number-mark">
+                    <div class="mark-line"></div>
+                    <div class="mark-number">245</div>
+                  </div>
+                  <div class="number-mark">
+                    <div class="mark-line"></div>
+                    <div class="mark-number">250</div>
+                  </div>
+                  <div class="number-mark">
+                    <div class="mark-line"></div>
+                    <div class="mark-number">255</div>
+                  </div>
+                  <div class="character-on-line" style="left: 40%;">👧</div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="245">245</button>
+                  <button class="number-option" data-value="250">250</button>
+                  <button class="number-option" data-value="255">255</button>
+                </div>
+              </div>
+
+              <!-- Ejercicio 2: ¿En qué número está Luis? -->
+              <div class="linea-exercise" data-correct="365">
+                <h4 style="color: #4ecdc4; margin-bottom: 10px;">¿En qué número está Luis? 👦</h4>
+                <div class="number-line">
+                  <div class="number-mark">
+                    <div class="mark-line"></div>
+                    <div class="mark-number">360</div>
+                  </div>
+                  <div class="number-mark">
+                    <div class="mark-line"></div>
+                    <div class="mark-number">365</div>
+                  </div>
+                  <div class="number-mark">
+                    <div class="mark-line"></div>
+                    <div class="mark-number">370</div>
+                  </div>
+                  <div class="number-mark">
+                    <div class="mark-line"></div>
+                    <div class="mark-number">375</div>
+                  </div>
+                  <div class="character-on-line" style="left: 25%;">👦</div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="360">360</button>
+                  <button class="number-option" data-value="365">365</button>
+                  <button class="number-option" data-value="370">370</button>
+                </div>
+              </div>
+
+              <!-- Ejercicio 3: ¿En qué número está María? -->
+              <div class="linea-exercise" data-correct="180">
+                <h4 style="color: #ff9800; margin-bottom: 10px;">¿En qué número está María? 👩</h4>
+                <div class="number-line">
+                  <div class="number-mark">
+                    <div class="mark-line"></div>
+                    <div class="mark-number">170</div>
+                  </div>
+                  <div class="number-mark">
+                    <div class="mark-line"></div>
+                    <div class="mark-number">180</div>
+                  </div>
+                  <div class="number-mark">
+                    <div class="mark-line"></div>
+                    <div class="mark-number">190</div>
+                  </div>
+                  <div class="number-mark">
+                    <div class="mark-line"></div>
+                    <div class="mark-number">200</div>
+                  </div>
+                  <div class="character-on-line" style="left: 25%;">👩</div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="170">170</button>
+                  <button class="number-option" data-value="180">180</button>
+                  <button class="number-option" data-value="190">190</button>
+                </div>
+              </div>
+
+              <!-- Ejercicio 4: ¿En qué número está Carlos? -->
+              <div class="linea-exercise" data-correct="425">
+                <h4 style="color: #9c27b0; margin-bottom: 10px;">¿En qué número está Carlos? 🧑</h4>
+                <div class="number-line">
+                  <div class="number-mark">
+                    <div class="mark-line"></div>
+                    <div class="mark-number">420</div>
+                  </div>
+                  <div class="number-mark">
+                    <div class="mark-line"></div>
+                    <div class="mark-number">425</div>
+                  </div>
+                  <div class="number-mark">
+                    <div class="mark-line"></div>
+                    <div class="mark-number">430</div>
+                  </div>
+                  <div class="number-mark">
+                    <div class="mark-line"></div>
+                    <div class="mark-number">435</div>
+                  </div>
+                  <div class="character-on-line" style="left: 25%;">🧑</div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="420">420</button>
+                  <button class="number-option" data-value="425">425</button>
+                  <button class="number-option" data-value="430">430</button>
+                </div>
+              </div>
+
+              <!-- Ejercicio 5: ¿En qué número está Sofía? -->
+              <div class="linea-exercise" data-correct="315">
+                <h4 style="color: #e91e63; margin-bottom: 10px;">¿En qué número está Sofía? 👸</h4>
+                <div class="number-line">
+                  <div class="number-mark">
+                    <div class="mark-line"></div>
+                    <div class="mark-number">310</div>
+                  </div>
+                  <div class="number-mark">
+                    <div class="mark-line"></div>
+                    <div class="mark-number">315</div>
+                  </div>
+                  <div class="number-mark">
+                    <div class="mark-line"></div>
+                    <div class="mark-number">320</div>
+                  </div>
+                  <div class="number-mark">
+                    <div class="mark-line"></div>
+                    <div class="mark-number">325</div>
+                  </div>
+                  <div class="character-on-line" style="left: 25%;">👸</div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="310">310</button>
+                  <button class="number-option" data-value="315">315</button>
+                  <button class="number-option" data-value="320">320</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- PREGUNTA 2: Operaciones Verticales (5 ejercicios) -->
+            <div class="operaciones-container" id="operaciones-container">
+              <h3 style="color: #667eea; text-align: center; font-size: 2.2rem; margin-bottom: 20px; font-weight: 800;">
+                🧮 ¡Resuelve las operaciones verticales!
+              </h3>
+              
+              <!-- Operación 1: 25 + 34 = ? -->
+              <div class="operation-exercise" data-correct="59">
+                <div class="vertical-operation">
+                  <div class="operation-row">
+                    <span>25</span>
+                  </div>
+                  <div class="operation-row">
+                    <span class="operation-sign">+</span>
+                    <span>34</span>
+                  </div>
+                  <div class="operation-line"></div>
+                  <div class="operation-row">
+                    <span>?</span>
+                  </div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="58">58</button>
+                  <button class="number-option" data-value="59">59</button>
+                  <button class="number-option" data-value="60">60</button>
+                </div>
+              </div>
+
+              <!-- Operación 2: 67 - 23 = ? -->
+              <div class="operation-exercise" data-correct="44">
+                <div class="vertical-operation">
+                  <div class="operation-row">
+                    <span>67</span>
+                  </div>
+                  <div class="operation-row">
+                    <span class="operation-sign">-</span>
+                    <span>23</span>
+                  </div>
+                  <div class="operation-line"></div>
+                  <div class="operation-row">
+                    <span>?</span>
+                  </div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="43">43</button>
+                  <button class="number-option" data-value="44">44</button>
+                  <button class="number-option" data-value="45">45</button>
+                </div>
+              </div>
+
+              <!-- Operación 3: 48 + 27 = ? -->
+              <div class="operation-exercise" data-correct="75">
+                <div class="vertical-operation">
+                  <div class="operation-row">
+                    <span>48</span>
+                  </div>
+                  <div class="operation-row">
+                    <span class="operation-sign">+</span>
+                    <span>27</span>
+                  </div>
+                  <div class="operation-line"></div>
+                  <div class="operation-row">
+                    <span>?</span>
+                  </div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="74">74</button>
+                  <button class="number-option" data-value="75">75</button>
+                  <button class="number-option" data-value="76">76</button>
+                </div>
+              </div>
+
+              <!-- Operación 4: 82 - 36 = ? -->
+              <div class="operation-exercise" data-correct="46">
+                <div class="vertical-operation">
+                  <div class="operation-row">
+                    <span>82</span>
+                  </div>
+                  <div class="operation-row">
+                    <span class="operation-sign">-</span>
+                    <span>36</span>
+                  </div>
+                  <div class="operation-line"></div>
+                  <div class="operation-row">
+                    <span>?</span>
+                  </div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="45">45</button>
+                  <button class="number-option" data-value="46">46</button>
+                  <button class="number-option" data-value="47">47</button>
+                </div>
+              </div>
+
+              <!-- Operación 5: 39 + 45 = ? -->
+              <div class="operation-exercise" data-correct="84">
+                <div class="vertical-operation">
+                  <div class="operation-row">
+                    <span>39</span>
+                  </div>
+                  <div class="operation-row">
+                    <span class="operation-sign">+</span>
+                    <span>45</span>
+                  </div>
+                  <div class="operation-line"></div>
+                  <div class="operation-row">
+                    <span>?</span>
+                  </div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="83">83</button>
+                  <button class="number-option" data-value="84">84</button>
+                  <button class="number-option" data-value="85">85</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- PREGUNTA 3: Comparación de Números de 2 y 3 cifras (5 ejercicios) -->
+            <div class="comparacion-container" id="comparacion-container">
+              <h3 style="color: #ff6b6b; text-align: center; font-size: 2.2rem; margin-bottom: 25px; font-weight: 800;">
+                📊 ¡Compara los números!
+              </h3>
+              
+              <!-- Comparación 1: 89 __ 76 -->
+              <div class="comparison-exercise" data-correct=">">
+                <div style="font-size: 1.2rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  ¿Qué símbolo va entre estos números?
+                </div>
+                <div class="comparison-display">
+                  <div class="number-box">89</div>
+                  <div class="comparison-symbol">?</div>
+                  <div class="number-box">76</div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value=">"> > </button>
+                  <button class="number-option" data-value="<"> < </button>
+                  <button class="number-option" data-value="="> = </button>
+                </div>
+              </div>
+
+              <!-- Comparación 2: 145 __ 198 -->
+              <div class="comparison-exercise" data-correct="<">
+                <div style="font-size: 1.2rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  ¿Qué símbolo va entre estos números?
+                </div>
+                <div class="comparison-display">
+                  <div class="number-box">145</div>
+                  <div class="comparison-symbol">?</div>
+                  <div class="number-box">198</div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value=">"> > </button>
+                  <button class="number-option" data-value="<"> < </button>
+                  <button class="number-option" data-value="="> = </button>
+                </div>
+              </div>
+
+              <!-- Comparación 3: 67 __ 67 -->
+              <div class="comparison-exercise" data-correct="=">
+                <div style="font-size: 1.2rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  ¿Qué símbolo va entre estos números?
+                </div>
+                <div class="comparison-display">
+                  <div class="number-box">67</div>
+                  <div class="comparison-symbol">?</div>
+                  <div class="number-box">67</div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value=">"> > </button>
+                  <button class="number-option" data-value="<"> < </button>
+                  <button class="number-option" data-value="="> = </button>
+                </div>
+              </div>
+
+              <!-- Comparación 4: 234 __ 189 -->
+              <div class="comparison-exercise" data-correct=">">
+                <div style="font-size: 1.2rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  ¿Qué símbolo va entre estos números?
+                </div>
+                <div class="comparison-display">
+                  <div class="number-box">234</div>
+                  <div class="comparison-symbol">?</div>
+                  <div class="number-box">189</div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value=">"> > </button>
+                  <button class="number-option" data-value="<"> < </button>
+                  <button class="number-option" data-value="="> = </button>
+                </div>
+              </div>
+
+              <!-- Comparación 5: 56 __ 112 -->
+              <div class="comparison-exercise" data-correct="<">
+                <div style="font-size: 1.2rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  ¿Qué símbolo va entre estos números?
+                </div>
+                <div class="comparison-display">
+                  <div class="number-box">56</div>
+                  <div class="comparison-symbol">?</div>
+                  <div class="number-box">112</div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value=">"> > </button>
+                  <button class="number-option" data-value="<"> < </button>
+                  <button class="number-option" data-value="="> = </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- PREGUNTA 4: Problemas Matemáticos (5 ejercicios) -->
+            <div class="problemas-container" id="problemas-container">
+              <h3 style="color: #667eea; text-align: center; font-size: 2.2rem; margin-bottom: 25px; font-weight: 800;">
+                📖 ¡Resuelve los problemas!
+              </h3>
+              
+              <!-- Problema 1: Amigos de Juan -->
+              <div class="problem-exercise" data-correct="18">
+                <div class="problem-character">👦</div>
+                <div class="problem-text">
+                  Juan tenía 20 amigos en la escuela. Se peleó con 2 de ellos. ¿Cuántos amigos le quedan a Juan?
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="17">17</button>
+                  <button class="number-option" data-value="18">18</button>
+                  <button class="number-option" data-value="19">19</button>
+                </div>
+              </div>
+
+              <!-- Problema 2: Dulces de Ana -->
+              <div class="problem-exercise" data-correct="27">
+                <div class="problem-character">🍬</div>
+                <div class="problem-text">
+                  Ana tenía 15 dulces. Su mamá le compró 12 dulces más. ¿Cuántos dulces tiene Ana en total?
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="26">26</button>
+                  <button class="number-option" data-value="27">27</button>
+                  <button class="number-option" data-value="28">28</button>
+                </div>
+              </div>
+
+              <!-- Problema 3: Libros de María -->
+              <div class="problem-exercise" data-correct="23">
+                <div class="problem-character">📚</div>
+                <div class="problem-text">
+                  María tenía 35 libros en su biblioteca. Prestó 12 libros a sus amigos. ¿Cuántos libros le quedan a María?
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="22">22</button>
+                  <button class="number-option" data-value="23">23</button>
+                  <button class="number-option" data-value="24">24</button>
+                </div>
+              </div>
+
+              <!-- Problema 4: Stickers de Luis -->
+              <div class="problem-exercise" data-correct="45">
+                <div class="problem-character">⭐</div>
+                <div class="problem-text">
+                  Luis tenía 28 stickers. Su papá le regaló 17 stickers más. ¿Cuántos stickers tiene Luis ahora?
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="44">44</button>
+                  <button class="number-option" data-value="45">45</button>
+                  <button class="number-option" data-value="46">46</button>
+                </div>
+              </div>
+
+              <!-- Problema 5: Carros de Carlos -->
+              <div class="problem-exercise" data-correct="16">
+                <div class="problem-character">🚗</div>
+                <div class="problem-text">
+                  Carlos tenía 24 carros de juguete. Regaló 8 carros a su hermano menor. ¿Cuántos carros le quedan a Carlos?
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="15">15</button>
+                  <button class="number-option" data-value="16">16</button>
+                  <button class="number-option" data-value="17">17</button>
+                </div>
+              </div>
+            </div>
+
+            <br />
+
+            <!-- Answer Button -->
+            <button class="answer-btn" id="answer-btn" onclick="checkAnswer()" disabled>
+              <i class="fas fa-check mr-2"></i>
+              ¡RESPONDER!
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block js %}
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+   
+    // Variables globales para el juego
+    window.studentId = {{ matricula_id}};
+    window.levelId   = {{ level_id }};
+    const moduloId = {{ modulo_id }};
+    
+</script>
+
+<script>
+    let selectedNumbers = [];
+    let currentNumbers = [];
+    let currentQuestion = 1;
+    let totalQuestions = 4;
+    let usedQuestions = new Set();
+    let gameFinished = false;
+    
+    // NUEVAS VARIABLES PARA EL SISTEMA DE CALIFICACIONES
+    let questionScores = [];
+    let currentScore = 0;
+    let maxScorePerQuestion = 10/4;
+    let totalPossibleScore = 10;
+    
+    // VARIABLES PARA EL SISTEMA DE VIDAS
+    let studentId = null;
+    let levelId = null;
+    let vidasRestantes = 0;
+    let vidasTotales = 0;
+    let vidasOriginalesNivel = 0;
+    let puedeIntentar = false;
+
+    // Variables para controlar recargas
+    let gameSessionId = null;
+    let hasGameStarted = false;
+    let pageLoadTime = Date.now();
+
+    // Variables para preguntas específicas (ahora con 5 ejercicios cada una)
+    let lineaSelections = {}; // Para pregunta 1
+    let operacionesSelections = {}; // Para pregunta 2
+    let comparacionSelections = {}; // Para pregunta 3
+    let problemasSelections = {}; // Para pregunta 4
+
+    // Generar ID único de sesión
+    function generateSessionId() {
+        return 'game_' + studentId + '_' + levelId + '_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    }
+
+    // Verificar si es una recarga no autorizada
+    function isUnauthorizedReload() {
+        const sessionKey = `game_session_${studentId}_${levelId}`;
+        const storedSession = sessionStorage.getItem(sessionKey);
+        
+        if (storedSession) {
+            const sessionData = JSON.parse(storedSession);
+            const timeDiff = Date.now() - sessionData.timestamp;
+            
+            if (timeDiff < 30000) {
+                console.log('Recarga detectada dentro de', timeDiff, 'ms');
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
+    // Registrar sesión actual
+    function registerGameSession() {
+        const sessionKey = `game_session_${studentId}_${levelId}`;
+        gameSessionId = generateSessionId();
+        
+        const sessionData = {
+            sessionId: gameSessionId,
+            timestamp: Date.now(),
+            questionNumber: currentQuestion,
+            hasStarted: hasGameStarted
+        };
+        
+        sessionStorage.setItem(sessionKey, JSON.stringify(sessionData));
+        console.log('Sesión registrada:', sessionData);
+    }
+
+    // Limpiar sesión al salir
+    function clearGameSession() {
+        const sessionKey = `game_session_${studentId}_${levelId}`;
+        sessionStorage.removeItem(sessionKey);
+        console.log('Sesión limpiada');
+    }
+
+    async function initializeGameData() {
+        studentId = window.studentId || 1;
+        levelId = window.levelId || 1;
+        
+        console.log('Student ID:', studentId, 'Level ID:', levelId);
+        
+        const isReload = isUnauthorizedReload();
+        
+        if (isReload) {
+            console.log('⚠️ RECARGA DETECTADA - Penalizando con una vida');
+            
+            Swal.fire({
+                icon: 'warning',
+                title: '⚠️ Recarga Detectada',
+                html: `
+                    <div>
+                        <p><strong>Se ha detectado una recarga de página.</strong></p>
+                        <p>Como penalización, se restará <span style="color: #f44336; font-weight: bold;">1 vida</span>.</p>
+                        <br>
+                        <p style="color: #666; font-size: 0.9em;">
+                            💡 <strong>Consejo:</strong> Evita recargar la página durante el juego.
+                        </p>
+                    </div>
+                `,
+                confirmButtonText: 'Continuar',
+                allowOutsideClick: false,
+                timer: 4000,
+                timerProgressBar: true
+            });
+            
+            const penaltyResult = await penalizeReload();
+            if (!penaltyResult.success) {
+                console.error('Error al penalizar recarga:', penaltyResult.error);
+            }
+        }
+        
+        registerGameSession();
+        
+        const gameInfo = await getGameInfo();
+        return gameInfo;
+    }
+
+    async function getGameInfo() {
+        try {
+            const response = await fetch('/get_game_info/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    estudiante_id: studentId,
+                    nivel_id: levelId
+                })
+            });
+            
+            const data = await response.json();
+            if (data.success) {
+                vidasRestantes = data.vidas_restantes;
+                vidasTotales = data.vidas_originales_nivel;
+                puedeIntentar = data.puede_intentar;
+                
+                console.log(`Vidas: ${vidasRestantes}/${vidasTotales}, Puede intentar: ${puedeIntentar}`);
+                
+                updateLivesDisplay();
+                
+                if (!puedeIntentar) {
+                    showNoLivesMessage();
+                    return false;
+                }
+                
+                if (data.vidas_restauradas > 0) {
+                    Swal.fire({
+                        icon: 'info',
+                        title: '¡Vidas restauradas!',
+                        text: `Se han agregado ${data.vidas_restauradas} vidas adicionales a este nivel.`,
+                        confirmButtonText: '¡Genial!'
+                    });
+                }
+                
+                return true;
+            } else {
+                console.error('Error al obtener info del juego:', data.error);
+                return false;
+            }
+        } catch (error) {
+            console.error('Error de red al obtener info del juego:', error);
+            return false;
+        }
+    }
+
+    // FUNCIÓN MODIFICADA: Actualizar display de vidas con indicador de estado
+    function updateLivesDisplay() {
+        let livesIndicator = document.getElementById('lives-indicator');
+        if (!livesIndicator) {
+            livesIndicator = document.createElement('div');
+            livesIndicator.id = 'lives-indicator';
+            livesIndicator.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
+                color: white;
+                padding: 15px 20px;
+                border-radius: 25px;
+                font-weight: bold;
+                font-size: 1.1em;
+                box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+                z-index: 1000;
+                font-family: 'Comic Sans MS', cursive, sans-serif;
+                transition: all 0.3s ease;
+            `;
+            document.body.appendChild(livesIndicator);
+        }
+        
+        // Crear corazones para representar vidas
+        let heartsHTML = '';
+        for (let i = 0; i < vidasTotales; i++) {
+            if (i < vidasRestantes) {
+                heartsHTML += '❤️'; // Vida disponible
+            } else {
+                heartsHTML += '🖤'; // Vida usada
+            }
+        }
+        
+        // Cambiar color según vidas restantes
+        let bgColor = 'linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%)';
+        if (vidasRestantes <= 1) {
+            bgColor = 'linear-gradient(135deg, #f44336 0%, #ff9800 100%)';
+            livesIndicator.style.animation = 'pulse 1s infinite';
+        } else if (vidasRestantes <= 2) {
+            bgColor = 'linear-gradient(135deg, #ff9800 0%, #ffc107 100%)';
+        }
+        
+        livesIndicator.style.background = bgColor;
+        
+        livesIndicator.innerHTML = `
+            <div style="text-align: center;">
+                <div style="font-size: 1.2em; margin-bottom: 5px;">${heartsHTML}</div>
+                <div>Vidas: ${vidasRestantes}/${vidasTotales}</div>
+                ${vidasRestantes <= 1 ? '<div style="font-size: 0.8em; color: #ffeb3b;">¡Cuidado!</div>' : ''}
+            </div>
+        `;
+    }
+
+    // NUEVA FUNCIÓN: Mostrar mensaje sin vidas
+    function showNoLivesMessage() {
+        Swal.fire({
+            icon: 'warning',
+            title: '¡Sin vidas restantes! 💔',
+            html: `
+                <div>
+                    <p>Has agotado todas las vidas para este nivel.</p>
+                    <p><strong>Vidas utilizadas: ${vidasTotales}</p>
+                    <br>
+                    <p style="color: #666;">Contacta a tu profesor para obtener más intentos.</p>
+                </div>
+            `,
+            confirmButtonText: 'Volver al menú',
+            allowOutsideClick: false,
+            customClass: {
+                popup: 'animated shake'
+            }
+        }).then(() => {
+            window.location.href = `/modulo/${moduloId}/niveles/`;
+        });
+    }
+
+    // Event listeners para detectar intentos de salida
+    window.addEventListener('beforeunload', function(e) {
+        if (hasGameStarted && currentQuestion > 1 && !gameFinished) {
+            const message = '¿Estás seguro de que quieres salir? Perderás el progreso actual.';
+            e.returnValue = message;
+            return message;
+        }
+        
+        clearGameSession();
+    });
+
+    window.addEventListener('pagehide', function() {
+        clearGameSession();
+    });
+   
+    // Crear elementos flotantes
+    function createFloatingElements() {
+        const container = document.getElementById('floating-elements');
+        const elements = ['🧮', '🔢', '➕', '➖', '✨', '🌟', '💫', '⭐', '📚', '🎯'];
+        
+        for (let i = 0; i < 20; i++) {
+            const element = document.createElement('div');
+            element.className = 'floating-element';
+            element.innerHTML = elements[Math.floor(Math.random() * elements.length)];
+            element.style.left = Math.random() * 100 + '%';
+            element.style.top = Math.random() * 100 + '%';
+            element.style.animationDelay = Math.random() * 8 + 's';
+            element.style.animationDuration = (Math.random() * 4 + 6) + 's';
+            container.appendChild(element);
+        }
+    }
+
+    // Crear confeti
+    function createConfetti() {
+        const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffa726', '#ef5350'];
+        
+        for (let i = 0; i < 50; i++) {
+            setTimeout(() => {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 3000);
+            }, i * 100);
+        }
+    }
+
+    // Función para calcular puntaje de cada pregunta (ahora con 5 ejercicios por pregunta)
+    function calculateQuestionScore(isCorrect, questionType, details = {}) {
+        let score = 0;
+        
+        if (questionType === 'linea-numerica') {
+            // Pregunta 1: Línea numérica (5 ejercicios)
+            const totalQuestions = 5;
+            score = (details.correctCount / totalQuestions) * maxScorePerQuestion;
+        } 
+        else if (questionType === 'operaciones') {
+            // Pregunta 2: Operaciones (5 ejercicios)
+            const totalOperations = 5;
+            score = (details.correctCount / totalOperations) * maxScorePerQuestion;
+        }
+        else if (questionType === 'comparacion') {
+            // Pregunta 3: Comparaciones (5 ejercicios)
+            const totalComparisons = 5;
+            score = (details.correctCount / totalComparisons) * maxScorePerQuestion;
+        }
+        else if (questionType === 'problemas') {
+            // Pregunta 4: Problemas (5 ejercicios)
+            const totalProblems = 5;
+            score = (details.correctCount / totalProblems) * maxScorePerQuestion;
+        }
+        else {
+            // Otros tipos: todo o nada
+            score = isCorrect ? maxScorePerQuestion : 0;
+        }
+        
+        return Math.round(score * 100) / 100;
+    }
+
+    // Función principal para mostrar preguntas
+    function displayNumbers() {
+        if (currentQuestion === 1 && !hasGameStarted) {
+            hasGameStarted = true;
+            registerGameSession();
+        }
+
+        // Ocultar TODOS los contenedores
+        document.getElementById('linea-numerica-container').style.display = 'none';
+        document.getElementById('operaciones-container').style.display = 'none';
+        document.getElementById('comparacion-container').style.display = 'none';
+        document.getElementById('problemas-container').style.display = 'none';
+
+        // PREGUNTA 1: Línea Numérica
+        if (currentQuestion === 1) {
+            document.getElementById('linea-numerica-container').style.display = 'block';
+            setupLineaNumericaQuestion();
+            
+            document.getElementById('main-instruction').innerHTML = '📍 ¡Encuentra la posición en la línea numérica!';
+            document.getElementById('instruction-card').innerHTML = `
+                📍 Observa dónde está cada personaje y escoge el número correcto
+            `;
+        }
+        
+        // PREGUNTA 2: Operaciones Verticales
+        else if (currentQuestion === 2) {
+            document.getElementById('operaciones-container').style.display = 'block';
+            setupOperacionesQuestion();
+            
+            document.getElementById('main-instruction').innerHTML = '🧮 ¡Resuelve las operaciones verticales!';
+            document.getElementById('instruction-card').innerHTML = `
+                🧮 Calcula las sumas y restas en formato vertical
+            `;
+        }
+        
+        // PREGUNTA 3: Comparación de Números
+        else if (currentQuestion === 3) {
+            document.getElementById('comparacion-container').style.display = 'block';
+            setupComparacionQuestion();
+            
+            document.getElementById('main-instruction').innerHTML = '📊 ¡Compara los números!';
+            document.getElementById('instruction-card').innerHTML = `
+                📊 Usa >, < o = para comparar números de 2 y 3 cifras
+            `;
+        }
+        
+        // PREGUNTA 4: Problemas Matemáticos
+        else if (currentQuestion === 4) {
+            document.getElementById('problemas-container').style.display = 'block';
+            setupProblemasQuestion();
+            
+            document.getElementById('main-instruction').innerHTML = '📖 ¡Resuelve los problemas!';
+            document.getElementById('instruction-card').innerHTML = `
+                📖 Lee cuidadosamente y resuelve cada problema matemático
+            `;
+        }
+
+        // Actualizar contador
+        document.getElementById('question-counter').innerHTML = `
+            <i class="fas fa-star mr-2"></i>
+            Pregunta ${currentQuestion} de ${totalQuestions}
+            <i class="fas fa-star ml-2"></i>
+        `;
+    }
+
+    // Configurar pregunta 1: Línea Numérica
+    function setupLineaNumericaQuestion() {
+        lineaSelections = {};
+        
+        document.querySelectorAll('.linea-exercise .number-option').forEach(btn => {
+            btn.classList.remove('selected');
+            
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode.replaceChild(newBtn, btn);
+        });
+        
+        document.querySelectorAll('.linea-exercise .number-option').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const exercise = this.closest('.linea-exercise');
+                const exerciseIndex = Array.from(document.querySelectorAll('.linea-exercise')).indexOf(exercise);
+                
+                // Limpiar selección previa en este ejercicio
+                exercise.querySelectorAll('.number-option').forEach(b => {
+                    b.classList.remove('selected');
+                });
+                
+                // Marcar como seleccionado
+                this.classList.add('selected');
+                
+                // Guardar selección
+                lineaSelections[exerciseIndex] = this.dataset.value;
+                
+                // Verificar si hay al menos una selección para habilitar botón
+                const hasSelections = Object.keys(lineaSelections).length > 0;
+                document.getElementById('answer-btn').disabled = !hasSelections;
+                
+                // Efecto visual
+                this.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            });
+        });
+        
+        document.getElementById('answer-btn').disabled = true;
+    }
+
+    // Configurar pregunta 2: Operaciones Verticales
+    function setupOperacionesQuestion() {
+        operacionesSelections = {};
+        
+        document.querySelectorAll('.operation-exercise .number-option').forEach(btn => {
+            btn.classList.remove('selected');
+            
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode.replaceChild(newBtn, btn);
+        });
+        
+        document.querySelectorAll('.operation-exercise .number-option').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const exercise = this.closest('.operation-exercise');
+                const exerciseIndex = Array.from(document.querySelectorAll('.operation-exercise')).indexOf(exercise);
+                
+                // Limpiar selección previa en este ejercicio
+                exercise.querySelectorAll('.number-option').forEach(b => {
+                    b.classList.remove('selected');
+                });
+                
+                // Marcar como seleccionado
+                this.classList.add('selected');
+                
+                // Guardar selección
+                operacionesSelections[exerciseIndex] = parseInt(this.dataset.value);
+                
+                // Verificar si hay al menos una selección para habilitar botón
+                const hasSelections = Object.keys(operacionesSelections).length > 0;
+                document.getElementById('answer-btn').disabled = !hasSelections;
+                
+                // Efecto visual
+                this.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            });
+        });
+        
+        document.getElementById('answer-btn').disabled = true;
+    }
+
+    // Configurar pregunta 3: Comparación
+    function setupComparacionQuestion() {
+        comparacionSelections = {};
+        
+        document.querySelectorAll('.comparison-exercise .number-option').forEach(btn => {
+            btn.classList.remove('selected');
+            
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode.replaceChild(newBtn, btn);
+        });
+        
+        document.querySelectorAll('.comparison-exercise .number-option').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const exercise = this.closest('.comparison-exercise');
+                const exerciseIndex = Array.from(document.querySelectorAll('.comparison-exercise')).indexOf(exercise);
+                
+                // Limpiar selección previa en este ejercicio
+                exercise.querySelectorAll('.number-option').forEach(b => {
+                    b.classList.remove('selected');
+                });
+                
+                // Marcar como seleccionado
+                this.classList.add('selected');
+                
+                // Guardar selección
+                comparacionSelections[exerciseIndex] = this.dataset.value;
+                
+                // Verificar si hay al menos una selección para habilitar botón
+                const hasSelections = Object.keys(comparacionSelections).length > 0;
+                document.getElementById('answer-btn').disabled = !hasSelections;
+                
+                // Efecto visual
+                this.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            });
+        });
+        
+        document.getElementById('answer-btn').disabled = true;
+    }
+
+    // Configurar pregunta 4: Problemas Matemáticos
+    function setupProblemasQuestion() {
+        problemasSelections = {};
+        
+        document.querySelectorAll('.problem-exercise .number-option').forEach(btn => {
+            btn.classList.remove('selected');
+            
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode.replaceChild(newBtn, btn);
+        });
+        
+        document.querySelectorAll('.problem-exercise .number-option').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const exercise = this.closest('.problem-exercise');
+                const exerciseIndex = Array.from(document.querySelectorAll('.problem-exercise')).indexOf(exercise);
+                
+                // Limpiar selección previa en este ejercicio
+                exercise.querySelectorAll('.number-option').forEach(b => {
+                    b.classList.remove('selected');
+                });
+                
+                // Marcar como seleccionado
+                this.classList.add('selected');
+                
+                // Guardar selección
+                problemasSelections[exerciseIndex] = parseInt(this.dataset.value);
+                
+                // Verificar si hay al menos una selección para habilitar botón
+                const hasSelections = Object.keys(problemasSelections).length > 0;
+                document.getElementById('answer-btn').disabled = !hasSelections;
+                
+                // Efecto visual
+                this.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            });
+        });
+        
+        document.getElementById('answer-btn').disabled = true;
+    }
+
+    // Función principal para verificar respuestas
+    function checkAnswer() {
+        if (gameFinished) return;
+
+        gameFinished = true;
+        
+        let isCorrect = false;
+        let feedback = '';
+        let questionType = '';
+        let score = 0;
+        let details = {};
+
+        if (currentQuestion === 1) {
+            // Pregunta 1: Línea Numérica (5 ejercicios)
+            questionType = 'linea-numerica';
+            const exercises = document.querySelectorAll('.linea-exercise');
+            let correct = 0;
+
+            exercises.forEach((exercise, index) => {
+                const correctAnswer = exercise.dataset.correct;
+                const userAnswer = lineaSelections[index];
+                
+                if (userAnswer === correctAnswer) {
+                    correct++;
+                }
+            });
+
+            const total = exercises.length;
+            details = { correctCount: correct, totalCount: total };
+            isCorrect = correct === total;
+
+            if (correct === total) {
+                feedback = '🎉 ¡Perfecto! Ubicaste correctamente a todos en la línea numérica.';
+            } else if (correct >= 4) {
+                feedback = `🌟 ¡Excelente! Acertaste ${correct} de ${total} posiciones.`;
+            } else if (correct >= 3) {
+                feedback = `👍 ¡Bien! Acertaste ${correct} de ${total} posiciones.`;
+            } else if (correct >= 1) {
+                feedback = `💪 ¡Sigue intentando! Acertaste ${correct} de ${total} posiciones.`;
+            } else {
+                feedback = `💡 Recuerda: Observa bien dónde está cada personaje en la línea.`;
+            }
+        }
+        else if (currentQuestion === 2) {
+            // Pregunta 2: Operaciones (5 ejercicios)
+            questionType = 'operaciones';
+            const exercises = document.querySelectorAll('.operation-exercise');
+            let correct = 0;
+
+            exercises.forEach((exercise, index) => {
+                const correctAnswer = parseInt(exercise.dataset.correct);
+                const userAnswer = operacionesSelections[index];
+                
+                if (userAnswer === correctAnswer) {
+                    correct++;
+                }
+            });
+
+            const total = exercises.length;
+            details = { correctCount: correct, totalCount: total };
+            isCorrect = correct === total;
+
+            if (correct === total) {
+                feedback = '🎉 ¡Perfecto! Resolviste todas las operaciones correctamente.';
+            } else if (correct >= 4) {
+                feedback = `🌟 ¡Excelente! Acertaste ${correct} de ${total} operaciones.`;
+            } else if (correct >= 3) {
+                feedback = `👍 ¡Muy bien! Acertaste ${correct} de ${total} operaciones.`;
+            } else if (correct >= 2) {
+                feedback = `💪 ¡Bien! Acertaste ${correct} de ${total} operaciones.`;
+            } else if (correct >= 1) {
+                feedback = `👏 ¡Sigue practicando! Acertaste ${correct} de ${total} operaciones.`;
+            } else {
+                feedback = `💡 Recuerda: Para sumar cuenta hacia adelante, para restar cuenta hacia atrás.`;
+            }
+        }
+        else if (currentQuestion === 3) {
+            // Pregunta 3: Comparación (5 ejercicios)
+            questionType = 'comparacion';
+            const exercises = document.querySelectorAll('.comparison-exercise');
+            let correct = 0;
+
+            exercises.forEach((exercise, index) => {
+                const correctAnswer = exercise.dataset.correct;
+                const userAnswer = comparacionSelections[index];
+                
+                if (userAnswer === correctAnswer) {
+                    correct++;
+                }
+            });
+
+            const total = exercises.length;
+            details = { correctCount: correct, totalCount: total };
+            isCorrect = correct === total;
+
+            if (correct === total) {
+                feedback = '🎉 ¡Perfecto! Comparaste todos los números correctamente.';
+            } else if (correct >= 4) {
+                feedback = `🌟 ¡Excelente! Acertaste ${correct} de ${total} comparaciones.`;
+            } else if (correct >= 3) {
+                feedback = `👍 ¡Muy bien! Acertaste ${correct} de ${total} comparaciones.`;
+            } else if (correct >= 2) {
+                feedback = `💪 ¡Bien! Acertaste ${correct} de ${total} comparaciones.`;
+            } else if (correct >= 1) {
+                feedback = `👏 ¡Sigue practicando! Acertaste ${correct} de ${total} comparaciones.`;
+            } else {
+                feedback = `💡 Recuerda: > significa mayor que, < significa menor que, = significa igual.`;
+            }
+        }
+        else if (currentQuestion === 4) {
+            // Pregunta 4: Problemas Matemáticos (5 ejercicios)
+            questionType = 'problemas';
+            const exercises = document.querySelectorAll('.problem-exercise');
+            let correct = 0;
+
+            exercises.forEach((exercise, index) => {
+                const correctAnswer = parseInt(exercise.dataset.correct);
+                const userAnswer = problemasSelections[index];
+                
+                if (userAnswer === correctAnswer) {
+                    correct++;
+                }
+            });
+
+            const total = exercises.length;
+            details = { correctCount: correct, totalCount: total };
+            isCorrect = correct === total;
+
+            if (correct === total) {
+                feedback = '🎉 ¡Perfecto! Resolviste todos los problemas correctamente.';
+            } else if (correct >= 4) {
+                feedback = `🌟 ¡Excelente! Acertaste ${correct} de ${total} problemas.`;
+            } else if (correct >= 3) {
+                feedback = `👍 ¡Muy bien! Acertaste ${correct} de ${total} problemas.`;
+            } else if (correct >= 2) {
+                feedback = `💪 ¡Bien! Acertaste ${correct} de ${total} problemas.`;
+            } else if (correct >= 1) {
+                feedback = `👏 ¡Sigue practicando! Acertaste ${correct} de ${total} problemas.`;
+            } else {
+                feedback = `💡 Recuerda: Lee cuidadosamente el problema y piensa en qué operación necesitas.`;
+            }
+        }
+
+        // Calcular puntaje
+        score = calculateQuestionScore(isCorrect, questionType, details);
+        questionScores.push({
+            question: currentQuestion,
+            score: score,
+            maxScore: maxScorePerQuestion,
+            isCorrect: isCorrect,
+            type: questionType
+        });
+
+        // Mostrar resultado
+        setTimeout(() => {
+            if (isCorrect) {
+                createConfetti();
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡CORRECTO! 🌟',
+                    html: `
+                        <div>
+                            <p>${feedback}</p>
+                            <div style="font-size: 1.2em; margin: 15px 0; color: #4CAF50;">
+                                <strong>Puntaje: ${score.toFixed(2)}/${maxScorePerQuestion.toFixed(2)} puntos</strong>
+                            </div>
+                        </div>
+                    `,
+                    confirmButtonText: currentQuestion < totalQuestions ? '¡Siguiente pregunta!' : '¡Ver resultados!',
+                    allowOutsideClick: false,
+                    customClass: {
+                        popup: 'animated bounceIn',
+                        confirmButton: 'btn btn-success'
+                    }
+                }).then(() => {
+                    nextQuestion();
+                });
+            } else {
+                Swal.fire({
+                    icon: 'info',
+                    title: '¡Sigue intentando! 💪',
+                    html: `
+                        <div>
+                            <p>${feedback}</p>
+                            <div style="font-size: 1.2em; margin: 15px 0; color: #ff9800;">
+                                <strong>Puntaje: ${score.toFixed(2)}/${maxScorePerQuestion.toFixed(2)} puntos</strong>
+                            </div>
+                        </div>
+                    `,
+                    confirmButtonText: 'Continuar',
+                    allowOutsideClick: false,
+                    customClass: {
+                        popup: 'animated shake',
+                        confirmButton: 'btn btn-primary'
+                    }
+                }).then(() => {
+                    nextQuestion();
+                });
+            }
+        }, 1500);
+    }
+
+    // Pasar a la siguiente pregunta
+    function nextQuestion() {
+        if (currentQuestion >= totalQuestions) {
+            showFinalResults();
+        } else {
+            currentQuestion++;
+            gameFinished = false;
+            displayNumbers();
+        }
+    }
+
+    // Mostrar resultados finales
+    async function showFinalResults() {
+        // Calcular puntaje total
+        const finalScore = questionScores.reduce((total, q) => total + q.score, 0);
+        const percentage = (finalScore / totalPossibleScore) * 100;
+        
+        // Determinar mensaje de estado
+        let statusMessage, statusColor, icon;
+        if (percentage >= 90) {
+            statusMessage = "¡SOBRESALIENTE!";
+            statusColor = "#4CAF50";
+            icon = "success";
+        } else if (percentage >= 80) {
+            statusMessage = "¡EXCELENTE!";
+            statusColor = "#4CAF50";
+            icon = "success";
+        } else if (percentage >= 70) {
+            statusMessage = "¡MUY BIEN!";
+            statusColor = "#2196F3";
+            icon = "success";
+        } else if (percentage >= 60) {
+            statusMessage = "¡BIEN!";
+            statusColor = "#FF9800";
+            icon = "info";
+        } else {
+            statusMessage = "Necesitas mejorar";
+            statusColor = "#FF9800";
+            icon = "warning";
+        }
+
+        // Crear resumen de preguntas
+        const questionNames = [
+            '📍 Línea numérica',
+            '🧮 Operaciones verticales', 
+            '📊 Comparar números',
+            '📖 Problemas matemáticos'
+        ];
+        
+        let questionSummaryHTML = '';
+        questionScores.forEach((q, index) => {
+            const emoji = q.isCorrect ? '✅' : '❌';
+            questionSummaryHTML += `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin: 8px 0; padding: 8px 0; border-bottom: 1px solid #eee;">
+                    <span style="font-weight: 500;">Pregunta ${q.question}: ${emoji}</span>
+                    <span style="font-weight: 600; color: ${q.isCorrect ? '#4CAF50' : '#f44336'};">${q.score.toFixed(2)}/${q.maxScore.toFixed(2)} puntos</span>
+                </div>
+            `;
+        });
+
+        // Guardar intento
+        const saveResult = await saveAttempt(finalScore);
+        
+        // Crear HTML del resultado final
+        const resultHTML = `
+            <div style="text-align: center; font-family: 'Comic Sans MS', cursive;">
+                <!-- Título principal -->
+                <div style="background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%); color: white; padding: 20px; border-radius: 15px; margin-bottom: 20px;">
+                    <h2 style="margin: 0; font-size: 1.8rem; font-weight: 900;">
+                        ¡JUEGO COMPLETADO! 🏆
+                    </h2>
+                </div>
+
+                <!-- Estado y nota -->
+                <div style="background: ${statusColor}; color: white; padding: 15px; border-radius: 12px; margin-bottom: 20px;">
+                    <div style="font-size: 1.4rem; font-weight: 700; margin-bottom: 8px;">
+                        ${statusMessage}
+                    </div>
+                    <div style="font-size: 1.6rem; font-weight: 900;">
+                        NOTA FINAL: ${finalScore.toFixed(2)}/10
+                    </div>
+                </div>
+
+                <!-- Resumen por pregunta -->
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; margin-bottom: 20px; text-align: left;">
+                    <h4 style="margin: 0 0 15px 0; color: #333; font-size: 1.3rem; font-weight: 700; text-align: center;">
+                        📊 Resumen por pregunta:
+                    </h4>
+                    ${questionSummaryHTML}
+                </div>
+
+                <!-- Estado de vidas -->
+                <div style="background: #f0f0f0; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+                    <h4 style="margin: 0 0 15px 0; color: #666; font-size: 1.3rem; font-weight: 700;">
+                        💗 Estado de vidas:
+                    </h4>
+                    <div style="font-size: 1.1rem; line-height: 1.6;">
+                        <div><strong>Vidas antes:</strong> ${vidasTotales}/${vidasTotales}</div>
+                        <div><strong>Vidas después:</strong> ${saveResult.vidasRestantes}/${vidasTotales}</div>
+                        <div style="color: #4CAF50; font-weight: 600; margin-top: 10px;">
+                            ${saveResult.puedeIntentar ? '¡Puedes intentar 1 vez más!' : '¡Sin vidas restantes!'}
+                        </div>
+                    </div>
+                </div>
+
+                ${saveResult.success && saveResult.data.is_best_score ? 
+                    '<div style="background: #fff3cd; color: #856404; padding: 15px; border-radius: 10px; margin-bottom: 15px;"><strong>🏆 ¡Nuevo mejor puntaje!</strong></div>' : ''
+                }
+                
+                ${saveResult.success && saveResult.data.nivel_completado ? 
+                    '<div style="background: #d1ecf1; color: #0c5460; padding: 15px; border-radius: 10px; margin-bottom: 15px;"><strong>🎉 ¡Nivel completado!</strong></div>' : ''
+                }
+            </div>
+        `;
+
+        // Configurar botones según vidas restantes
+        const swalConfig = {
+            icon: icon,
+            title: false, // No mostrar título por defecto
+            html: resultHTML,
+            allowOutsideClick: false,
+            width: '600px',
+            customClass: {
+                popup: 'animated bounceIn',
+                confirmButton: 'btn btn-primary'
+            }
+        };
+
+        // Si no quedan vidas, solo mostrar opción de volver al menú
+        if (saveResult.vidasRestantes === 0 || !saveResult.puedeIntentar) {
+            swalConfig.confirmButtonText = '🏠 Volver al menú';
+            swalConfig.showCancelButton = false;
+        } else {
+            // Si quedan vidas, mostrar ambas opciones
+            swalConfig.confirmButtonText = '🏠 Volver al menú';
+            swalConfig.cancelButtonText = '🔄 Jugar de nuevo';
+            swalConfig.showCancelButton = true;
+            swalConfig.customClass.cancelButton = 'btn btn-success';
+        }
+
+        // Mostrar resultados
+        Swal.fire(swalConfig).then((result) => {
+            if (result.isConfirmed) {
+                // Volver al menú
+                window.location.href = `/modulo/${moduloId}/niveles/`;
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                // Reiniciar juego (solo si quedan vidas)
+                if (saveResult.puedeIntentar) {
+                    resetGame();
+                } else {
+                    showNoLivesMessage();
+                }
+            }
+        });
+
+        // Actualizar mejor puntaje
+        await updateBestScore();
+    }
+
+    // Función para obtener CSRF token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // FUNCIÓN MODIFICADA: saveAttempt actualizada
+    async function saveAttempt(finalScore) {
+        try {
+            console.log('Enviando datos:', {
+                estudiante_id: studentId,
+                nivel_id: levelId,
+                puntaje_total: finalScore
+            });
+
+            const response = await fetch('/save_attempt/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    estudiante_id: studentId,
+                    nivel_id: levelId,
+                    puntaje_total: finalScore
+                })
+            });
+            
+            const data = await response.json();
+            console.log('Respuesta del servidor:', data);
+            
+            if (data.success) {
+                // Actualizar variables locales
+                vidasRestantes = data.vidas_restantes;
+                puedeIntentar = data.puede_continuar;
+                
+                // Actualizar display de vidas
+                updateLivesDisplay();
+                
+                console.log('Intento guardado correctamente con nota:', data.nota);
+                return { 
+                    success: true, 
+                    data: data,
+                    vidasRestantes: vidasRestantes,
+                    puedeIntentar: puedeIntentar
+                };
+            } else {
+                console.error('Error del servidor:', data.error);
+                return { success: false, error: data.error };
+            }
+        } catch (error) {
+            console.error('Error de red al guardar intento:', error);
+            return { success: false, error: 'Error de conexión: ' + error.message };
+        }
+    }
+
+    // Actualizar mejor puntaje
+    async function updateBestScore() {
+        try {
+            const response = await fetch('/update_best_score/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    estudiante_id: studentId,
+                    nivel_id: levelId
+                })
+            });
+            
+            const data = await response.json();
+            if (data.success) {
+                console.log('Mejor puntaje actualizado:', data.best_score);
+            } else {
+                console.error('Error al actualizar mejor puntaje:', data.error);
+            }
+        } catch (error) {
+            console.error('Error al actualizar mejor puntaje:', error);
+        }
+    }
+
+    // Función para penalizar recarga (necesitas agregarla si no existe)
+    async function penalizeReload() {
+        try {
+            const response = await fetch('/penalize_reload/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    estudiante_id: studentId,
+                    nivel_id: levelId
+                })
+            });
+            
+            const data = await response.json();
+            if (data.success) {
+                vidasRestantes = data.vidas_restantes;
+                updateLivesDisplay();
+                return { success: true };
+            } else {
+                return { success: false, error: data.error };
+            }
+        } catch (error) {
+            return { success: false, error: error.message };
+        }
+    }
+
+    // Reiniciar juego
+    function resetGame() {
+        currentQuestion = 1;
+        selectedNumbers = [];
+        currentNumbers = [];
+        usedQuestions.clear();
+        gameFinished = false;
+        hasGameStarted = false;
+        
+        // Reiniciar variables de puntaje
+        questionScores = [];
+        currentScore = 0;
+        
+        // Reiniciar variables de preguntas específicas
+        lineaSelections = {};
+        operacionesSelections = {};
+        comparacionSelections = {};
+        problemasSelections = {};
+        
+        clearGameSession();
+        registerGameSession();
+        
+        // Ocultar contenedores
+        const containers = [
+            'operaciones-container',
+            'comparacion-container', 
+            'problemas-container'
+        ];
+        
+        containers.forEach(containerId => {
+            const container = document.getElementById(containerId);
+            if (container) {
+                container.style.display = 'none';
+            }
+        });
+        
+        // Limpiar selecciones
+        document.querySelectorAll('.number-option').forEach(btn => {
+            btn.classList.remove('selected');
+        });
+        
+        displayNumbers();
+    }
+
+    // Agregar animación de pulso para vidas bajas
+    const pulseStyle = document.createElement('style');
+    pulseStyle.textContent = `
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    `;
+    document.head.appendChild(pulseStyle);
+
+    // Inicializar el juego cuando la página carga
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof initializeGameData === 'function') {
+            initializeGameData().then((canPlay) => {
+                if (canPlay) {
+                    createFloatingElements();
+                    displayNumbers();
+                }
+            }).catch((error) => {
+                console.error('Error al inicializar el juego:', error);
+            });
+        } else {
+            console.error('La función initializeGameData no está definida');
+        }
+        
+        // Atajo de teclado para responder
+        document.addEventListener('keydown', function(e) {
+            const answerBtn = document.getElementById('answer-btn');
+            if (e.key === 'Enter' && answerBtn && !answerBtn.disabled) {
+                if (typeof checkAnswer === 'function') {
+                    checkAnswer();
+                }
+            }
+        });
+    
+        // Configurar SweetAlert2 con estilos personalizados
+        const swalStyle = document.createElement('style');
+        swalStyle.textContent = `
+            .swal2-popup {
+                font-family: 'Comic Sans MS', cursive, sans-serif !important;
+                border-radius: 20px !important;
+            }
+            .swal2-title {
+                color: #ff6b6b !important;
+                font-weight: 900 !important;
+            }
+            .swal2-confirm {
+                background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%) !important;
+                border: none !important;
+                border-radius: 25px !important;
+                font-weight: 700 !important;
+                padding: 12px 30px !important;
+            }
+            .swal2-cancel {
+                background: linear-gradient(135deg, #96ceb4 0%, #45b7d1 100%) !important;
+                border: none !important;
+                border-radius: 25px !important;
+                font-weight: 700 !important;
+                padding: 12px 30px !important;
+            }
+        `;
+        document.head.appendChild(swalStyle);
+    });
+</script>
+{% endblock %}

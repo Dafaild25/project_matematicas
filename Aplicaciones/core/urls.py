@@ -11,7 +11,7 @@ from .views.cuestionario_Modulo1 import  get_game_info, save_attempt, update_bes
 from .views import loguin_views 
 from .views import crud_modulos_views
 from .views import crud_niveles_views
-from .views import crud_enunciado_views
+
 from .views import crud_clase_views
 from .views import crud_docente_views
 from .views import crud_estudiante_views
@@ -19,20 +19,35 @@ from .views import crud_matricula_views
 from .views import crud_avance_views
 # VISTA DOCENTE
 from .views.master_docente import core_docente_views
-from .views.master_docente import clases_asignadas_docente
-from .views.master_docente import avance_matriculados_docente
+from .views.master_docente import clases_asignadas_docente_views
+from .views.master_docente import avance_matriculados_docente_views
+# VISTA REPORTES DOCENTE
+from .views.master_docente import reportes_docente
 # VISTA ESTUDIANTE
 from .views.master_estudiante import core_estudiante_views
 from .views.master_estudiante import estudiante_modulo_views
+#REPORTE-HISTORIAL
+from .views.reportehistorial import historial_intentos_views
 
 
 
 urlpatterns = [
     
-    path('', core_views.dashboard_admin, name='core_admin'),
+    # ===== URLS DE AUTENTICACIÓN =====
+    # Página de inicio/login - esta debe ser la raíz
+    path('', loguin_views.index, name='loguin_index'),
+    path('loguin/', loguin_views.index, name='loguin_index_alt'),  # URL alternativa
+    
+    # Métodos de autenticación
+    path('iniciar_sesion/', loguin_views.iniciar_sesion, name='iniciar_sesion'),
+    path('cerrar_sesion/', loguin_views.cerrar_sesion, name='cerrar_sesion'),
+    
+    
+    # urrl del core  administrador
+    path('core/admin/', core_views.dashboard_admin, name='core_admin'),
     path('admin/dashboard/data/', core_views.obtener_datos_admin, name='obtener_datos_admin'),
 
-    ########################################CAMBIO DE CONTRASEÑA################################
+    ########################################CAMBIO DE CONTRASEÑA################################ no  toque
     # Vista para Cambiar la Contraseña del Usuario
     path('cambiar_contrasena/', PasswordChangeView.as_view(template_name='usuarios/cambiar_contrasena.html'), name='cambiar_contrasena'),
     
@@ -88,12 +103,7 @@ urlpatterns = [
     #######################################CRUD NIVEL###################################
     path('nivel/', crud_niveles_views.index, name='nivel_index'),
     
-     #######################################CRUD ENUNCIADOS###################################
-    path('enunciado/', crud_enunciado_views.index, name='enunciado_index'),
-    path('ajax/niveles/', crud_enunciado_views.cargar_niveles, name='ajax_cargar_niveles'),
-    path('enunciado/create', crud_enunciado_views.create, name='enunciado_create'),
-    path('enunciado/editar/<int:enun_id>', crud_enunciado_views.editar, name='enunciado_editar'),
-    path('enunciado/eliminar/<int:enun_id>', crud_enunciado_views.eliminar, name='enunciado_eliminar'),
+   
     
     
     
@@ -111,33 +121,34 @@ urlpatterns = [
     path('matricula/listado/<int:cla_id>/',crud_matricula_views.vista_tabla_matriculados, name='matricula_listado'),
     path('matriculas/eliminar/<int:matricula_id>/', crud_matricula_views.eliminar_matricula, name='eliminar_matricula'),
     path('matricula/importar', crud_matricula_views.importar_estudiantes_excel, name='importar_matricula_excel'),
-    path('matricula/descargar-plantilla/',crud_matricula_views.descargar_plantilla_estudiantes, name='descargar_plantilla_estudiantes'),
+    path('matricula/descargar-plantilla/',crud_matricula_views.descargar_plantilla_estudiantes, name='descargar_plantilla_estudiantes'),  #Usado por admin y docente
     
     #######################################CONSULTA DE AVANCE###################################
     path('avance/<int:cla_id>/', crud_avance_views.index, name='avance_index'),
 
     
     
-    #path('matricula/importar', crud_matricula_views.importar, name='matricula_importar'),
-    
-    
     ########################################VISTA DOCENTE###################################
     # Vista Inicial del Docente
     path('core/docente/', core_docente_views.dashboard_docente, name='core_docente'),
     path('dashboard/obtener_datos/', core_docente_views.obtener_datos_dashboard, name='obtener_datos_dashboard'),
-    path('docente/clase/', clases_asignadas_docente.clases_asignadas_docente, name='clase_asignada'),
-    path('docente/matriculados/<int:clase_id>/', clases_asignadas_docente.matriculados_asignados_docente, name='matriculados_asignados'),
-    path('docente/clase/<int:cla_id>/tabla-matriculados/', clases_asignadas_docente.vista_tabla_matriculados_docente, name='tabla_matriculados_docente'),
-    path('docente/crear-estudiante/', clases_asignadas_docente.crear_estudiante_docente, name='crear_estudiante_docente'),
-    path('ajax/estudiante/<int:matricula_id>/', clases_asignadas_docente.obtener_datos_estudiante, name='ajax_datos_estudiante'),
-    path('editar-estudiante/', clases_asignadas_docente.editar_estudiante_docente, name='editar_estudiante_docente'),
-    path('eliminar-matricula/', clases_asignadas_docente.eliminar_matricula, name='eliminar_matricula'),
-    path('docente/importar-estudiantes/', clases_asignadas_docente.importar_estudiantes_excel_docente, name='importar_estudiantes_excel_docente'),
+    path('docente/clase/', clases_asignadas_docente_views.clases_asignadas_docente, name='clase_asignada'),
+    path('docente/matriculados/<int:clase_id>/', clases_asignadas_docente_views.matriculados_asignados_docente, name='matriculados_asignados'),
+    path('docente/clase/<int:cla_id>/tabla-matriculados/', clases_asignadas_docente_views.vista_tabla_matriculados_docente, name='tabla_matriculados_docente'),
+    path('docente/crear-estudiante/', clases_asignadas_docente_views.crear_estudiante_docente, name='crear_estudiante_docente'),
+    path('ajax/estudiante/<int:matricula_id>/', clases_asignadas_docente_views.obtener_datos_estudiante, name='ajax_datos_estudiante'),
+    path('editar-estudiante/', clases_asignadas_docente_views.editar_estudiante_docente, name='editar_estudiante_docente'),
+    path('eliminar-matricula/', clases_asignadas_docente_views.eliminar_matricula, name='eliminar_matricula'),
+    path('docente/importar-estudiantes/', clases_asignadas_docente_views.importar_estudiantes_excel_docente, name='importar_estudiantes_excel_docente'),
     #vista para ver el avance los  estudiantes a su cargo 
-    path('docente/clase/<int:cla_id>/notas/', clases_asignadas_docente.ver_notas_estudiantes, name='ver_notas_estudiantes'),
-    path('historial-intentos/', avance_matriculados_docente.historial_intentos, name='historial_intentos'),
-    path('asignar-vidas/', avance_matriculados_docente.asignar_vidas, name='asignar_vidas_docente'),
+    path('docente/clase/<int:cla_id>/notas/', clases_asignadas_docente_views.ver_notas_estudiantes, name='ver_notas_estudiantes'),
+    path('historial-intentos/', avance_matriculados_docente_views.historial_intentos, name='historial_intentos'),
+    path('asignar-vidas/', avance_matriculados_docente_views.asignar_vidas, name='asignar_vidas_docente'),
 
+    #VISTA DE REPORTES DE AVANCES DE LOS ESTUDIANTES PARA EL DOCENTE
+    path('pdf/nivel/<int:clase_id>/<int:nivel_id>/', reportes_docente.generar_pdf_nivel, name='pdf_nivel'),
+    path('pdf/general/<int:clase_id>/', reportes_docente.generar_pdf_general, name='pdf_general'),
+  
 
 
 
@@ -151,26 +162,12 @@ urlpatterns = [
     path('modulo/<int:modulo_id>/niveles/', estudiante_modulo_views.ver_niveles_modulo, name='ver_niveles_modulo'),
     
     
-    ########################################Juego del Modulo 1 ##################################
+    ########################################Juego del Modulo  ##################################
     path('nivel/<int:nivel_id>/jugar/', estudiante_modulo_views.jugar_nivel, name='jugar_nivel'),
 
-    
-    
-    
-    
-    
-    
-    
 
-    ########################################LOGUIN########################################
-    # Vista de Formulario de Inicio de Sesión
-    path('loguin/', loguin_views.index, name='loguin_index'),
-    # Metodo para Iniciar Sesión
-    path('iniciar_sesion/', loguin_views.iniciar_sesion, name='iniciar_sesion'),
 
-    ########################################LOGOUT#######################################
-    # Metodo para Cerrar Sesión
-    path('cerrar_sesion/',loguin_views.cerrar_sesion, name='cerrar_sesion'),
+  
     
 
     # Cuestionario Modulo 1
@@ -180,6 +177,11 @@ urlpatterns = [
     path('save_attempt/', save_attempt, name='save_attempt'),
     path('update_best_score/', update_best_score, name='update_best_score'),
     path('check_lives_status/', check_lives_status, name='check_lives_status'),
+    
+    
+    
+    ######################################## REPORTE HISTORIAL DE INTENTOS ####################################
+    path('reporte-intento/<int:matricula_id>/<int:nivel_id>/', historial_intentos_views.generar_reporte_intento_individual_pdf, name='reporte_intento_individual'),
 
 
 

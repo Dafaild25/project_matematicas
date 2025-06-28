@@ -11,7 +11,6 @@ from django.db.models import Max
 from django.utils import timezone
 
 
-@login_required
 @csrf_exempt
 def get_game_info(request):
     """Obtener información del juego incluyendo vidas restantes"""
@@ -24,9 +23,41 @@ def get_game_info(request):
         nivel = get_object_or_404(Niveles, niv_id=nivel_id)
         
 
-        # Obtener la matrícula del estudiante
-
-        matricula = get_object_or_404(Matriculas, fk_estudiante_id=estudiante_id)
+        # SOLUCIÓN: Manejar múltiples matrículas
+        try:
+            # Primero intentar obtener una matrícula activa específica
+            matricula = Matriculas.objects.get(fk_estudiante_id=estudiante_id)
+        except Matriculas.MultipleObjectsReturned:
+            # Si hay múltiples, usar criterios para elegir la correcta
+            # Opción 1: La más reciente
+            matricula = Matriculas.objects.filter(
+                fk_estudiante_id=estudiante_id
+            ).order_by('-mat_fecha_creacion').first()  # Ajusta el campo de fecha según tu modelo
+            
+            # Opción 2: Si tienes un campo de estado "activo"
+            # matricula = Matriculas.objects.filter(
+            #     fk_estudiante_id=estudiante_id,
+            #     activo=True  # Si tienes este campo
+            # ).first()
+            
+            # Opción 3: Si las matrículas están relacionadas con módulos específicos
+            # nivel_modulo = nivel.fk_modulo  # Asumiendo que el nivel tiene módulo
+            # matricula = Matriculas.objects.filter(
+            #     fk_estudiante_id=estudiante_id,
+            #     fk_modulo=nivel_modulo  # Si la matrícula está asociada a un módulo
+            # ).first()
+            
+            if not matricula:
+                return JsonResponse({
+                    'success': False,
+                    'error': 'No se encontró una matrícula válida para este estudiante'
+                })
+                
+        except Matriculas.DoesNotExist:
+            return JsonResponse({
+                'success': False,
+                'error': 'No se encontró matrícula para este estudiante'
+            })
         
         # Obtener o crear el avance del estudiante
         avance, created = Avance_Matriculados.objects.get_or_create(
@@ -95,7 +126,8 @@ def get_game_info(request):
             'vidas_aplicadas_ahora': vidas_aplicadas,
             'tiene_vidas_extras': vidas_extras_info['tiene_vidas_extras'],
             'vidas_extras_info': vidas_extras_info,
-            'mensaje': mensaje_vidas
+            'mensaje': mensaje_vidas,
+            'matricula_id': matricula.mat_id  # Agregar para debug
         })
         
     except Exception as e:
@@ -108,7 +140,7 @@ def get_game_info(request):
 
 # FUNCIÓN AUXILIAR PARA ASIGNAR VIDAS EXTRAS (para usar en admin o vista específica)
 
-@login_required
+
 @csrf_exempt
 def asignar_vidas_extras(request):
     """Vista para que el admin asigne vidas extras a un estudiante específico"""
@@ -191,7 +223,7 @@ def asignar_vidas_extras(request):
     })
 
 
-@login_required
+
 @csrf_exempt
 def save_attempt(request):
     """Guardar intento y reducir una vida"""
@@ -203,12 +235,11 @@ def save_attempt(request):
         
         # Obtener el nivel y matrícula
         nivel = get_object_or_404(Niveles, niv_id=nivel_id)
-        matricula = get_object_or_404(Matriculas, fk_estudiante_id=estudiante_id)
-        
-        # Obtener el avance
-        avance = get_object_or_404(Avance_Matriculados, 
-                                 fk_matricula=matricula, 
-                                 fk_nivel=nivel)
+        # Obtener avance (con acceso indirecto a la matrícula)
+        avance = get_object_or_404(Avance_Matriculados,
+                                   fk_matricula__fk_estudiante_id=estudiante_id,
+                                   fk_nivel=nivel)
+        matricula = avance.fk_matricula
         
         # Verificar si puede hacer el intento
         if not avance.puede_intentar():
@@ -266,7 +297,7 @@ def save_attempt(request):
             'error': str(e)
         })
 
-@login_required
+
 @csrf_exempt
 def check_lives_status(request):
     """Verificar estado de vidas de un estudiante en un nivel"""
@@ -308,7 +339,7 @@ def check_lives_status(request):
             'error': str(e)
         })
 
-@login_required
+
 @csrf_exempt
 def update_best_score(request):
     """Actualizar el mejor puntaje del estudiante"""
@@ -317,9 +348,17 @@ def update_best_score(request):
         estudiante_id = data.get('estudiante_id')
         nivel_id = data.get('nivel_id')
         
-        # Obtener matrícula
-        matricula = get_object_or_404(Matriculas, fk_estudiante_id=estudiante_id)
+     
         nivel = get_object_or_404(Niveles, niv_id=nivel_id)
+
+         # Obtener avance único relacionado al estudiante y al nivel
+        avance = get_object_or_404(
+            Avance_Matriculados,
+            fk_matricula__fk_estudiante_id=estudiante_id,
+            fk_nivel=nivel
+        )
+
+        matricula = avance.fk_matricula
         
         # Obtener el mejor intento
         mejor_intento = IntentoNivel.objects.filter(

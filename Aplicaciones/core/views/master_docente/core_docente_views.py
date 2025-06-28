@@ -2,10 +2,11 @@ from django.shortcuts import render
 from django.db.models import Count, Avg
 from django.http import JsonResponse
 from ...models import *
-from Aplicaciones.core.decorators import rol_required # Importar decorador para requerir docente
+from ...decorators import docente_required
+
 
 # Vista para obtener los datos dinámicos del dashboard (llamada por AJAX)
-@rol_required('docente')
+@docente_required
 def obtener_datos_dashboard(request):
     docente = Docentes.objects.get(fk_id_persona__fk_id_usuario=request.user)
     modulo_id = request.GET.get('modulo_id')
@@ -46,7 +47,8 @@ def obtener_datos_dashboard(request):
 
 
 # Dashboard Docente Principal
-@rol_required('docente')
+
+@docente_required
 def dashboard_docente(request):
     docente = Docentes.objects.get(fk_id_persona__fk_id_usuario=request.user)
 

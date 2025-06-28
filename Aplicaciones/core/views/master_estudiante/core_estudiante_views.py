@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User # Importar modelo User de Django
 from ...models import *
-from Aplicaciones.core.decorators import rol_required # Importar decorador para requerir estudiante
+from ...decorators import estudiante_required
+
 
 # Create your views here.
-@rol_required('estudiante')
+@estudiante_required
 def core_estudiante(request):
     estudiante = Estudiantes.objects.get(fk_id_persona__fk_id_usuario=request.user)
 

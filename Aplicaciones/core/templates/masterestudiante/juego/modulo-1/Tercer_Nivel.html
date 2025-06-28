@@ -1,0 +1,2280 @@
+{% extends 'plantillas/MasterEstudiante.html' %}
+{% load static %}
+{% block title %}
+  Estudiantes_Modulos
+{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{% static 'css/Modulo-1/primer-nivel.css' %}" />
+  <style>
+    body {
+      background: linear-gradient(-45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ffa726, #ef5350);
+      background-size: 400% 400%;
+      animation: rainbowShift 8s ease infinite;
+      min-height: 100vh;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      overflow-x: hidden;
+    }
+    
+    @keyframes rainbowShift {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+    
+    .main-container {
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .card-header {
+      background: linear-gradient(45deg, #ff6b6b, #feca57);
+      color: white;
+      padding: 25px;
+      text-align: center;
+    }
+    
+    .card-header h2 {
+      font-size: 2.5rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      margin: 0;
+    }
+    
+    .header-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 30px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      animation: bounceIn 1s ease-out;
+      border: 5px solid #ff6b6b;
+    }
+    
+    @keyframes bounceIn {
+      0% {
+        transform: scale(0.3);
+        opacity: 0;
+      }
+      50% {
+        transform: scale(1.05);
+      }
+      70% {
+        transform: scale(0.9);
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+    
+    .header-card h1 {
+      color: #ff6b6b;
+      font-size: 3rem;
+      font-weight: 900;
+      margin-bottom: 15px;
+      text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+      animation: wiggle 2s ease-in-out infinite;
+    }
+    
+    @keyframes wiggle {
+      0%,
+      100% {
+        transform: rotate(0deg);
+      }
+      25% {
+        transform: rotate(1deg);
+      }
+      75% {
+        transform: rotate(-1deg);
+      }
+    }
+    
+    .header-card p {
+      color: #333;
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 0;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%,
+      100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+    }
+    
+    .game-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 30px;
+      padding: 30px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      border: 5px solid #4ecdc4;
+      animation: slideInUp 1s ease-out;
+    }
+    
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(100px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    //ESRTILOS PREGUNTA 1
+    .clock-box {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    
+    .clock-number {
+      font-size: 1.5rem;
+      font-weight: bold;
+      border: 2px solid #ccc;
+      padding: 10px 16px;
+      border-radius: 8px;
+      background-color: #fff;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    
+    /* Colorear en azul cuando se selecciona la hora */
+    .clock-number.selected-hora {
+      background-color: blue;
+      color: white;
+      border-color: blue;
+    }
+    
+    /* Colorear en verde cuando se selecciona el minuto */
+    .clock-number.selected-minuto {
+      background-color: green;
+      color: white;
+      border-color: green;
+    }
+    
+    .instruction-card {
+      background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
+      color: white;
+      padding: 25px;
+      border-radius: 25px;
+      margin-bottom: 30px;
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: 800;
+      box-shadow: 0 15px 30px rgba(255, 107, 107, 0.4);
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+    
+    @keyframes glow {
+      from {
+        box-shadow: 0 15px 30px rgba(255, 107, 107, 0.4);
+      }
+      to {
+        box-shadow: 0 15px 30px rgba(255, 107, 107, 0.8);
+      }
+    }
+    
+    .numbers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 25px;
+      margin-bottom: 30px;
+    }
+    
+    .number-btn {
+      background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
+      border: none;
+      border-radius: 25px;
+      padding: 30px 20px;
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 15px 30px rgba(255, 107, 107, 0.4);
+      position: relative;
+      overflow: hidden;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      animation: numberFloat 4s ease-in-out infinite;
+    }
+    
+    @keyframes numberFloat {
+      0%,
+      100% {
+        transform: translateY(0px) rotate(0deg);
+      }
+      25% {
+        transform: translateY(-5px) rotate(1deg);
+      }
+      75% {
+        transform: translateY(5px) rotate(-1deg);
+      }
+    }
+    
+    .number-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      transition: left 0.6s;
+    }
+    
+    .number-btn:hover::before {
+      left: 100%;
+    }
+    
+    .number-btn:hover {
+      transform: scale(1.2) translateY(-10px) rotate(5deg);
+      box-shadow: 0 25px 50px rgba(255, 107, 107, 0.6);
+      animation-play-state: paused;
+    }
+    
+    .number-btn:active {
+      transform: scale(1.1) translateY(-5px);
+    }
+    
+    .number-btn.selected {
+      background: linear-gradient(135deg, #ffa726 0%, #ff9800 100%);
+      box-shadow: 0 15px 30px rgba(255, 167, 38, 0.6);
+      transform: scale(1.1);
+      border: 4px solid #fff;
+    }
+    
+    /* NUEVOS ESTILOS PARA PREGUNTA 2: PARES E IMPARES */
+    .even-odd-container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      display: none;
+    }
+    
+    .even-odd-numbers {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .even-odd-number {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      border-radius: 20px;
+      padding: 25px 15px;
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      animation: gentleBounce 3s ease-in-out infinite;
+    }
+    
+    @keyframes gentleBounce {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-3px); }
+    }
+    
+    .even-odd-number:hover {
+      transform: scale(1.15) translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    }
+    
+    .even-odd-number.selected-even {
+      background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+      border: 4px solid #fff;
+      transform: scale(1.1);
+    }
+    
+    .even-odd-number.selected-odd {
+      background: linear-gradient(135deg, #dc3545 0%, #a71e2a 100%);
+      border: 4px solid #fff;
+      transform: scale(1.1);
+    }
+    
+    /* NUEVOS ESTILOS PARA PREGUNTA 3: MAYOR O MENOR */
+    .comparison-container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      display: none;
+    }
+    
+    .comparison-item {
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 20px;
+      text-align: center;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+    
+    .comparison-numbers {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      margin-bottom: 20px;
+    }
+    
+    .comparison-number {
+      background: white;
+      border: 4px solid #ff6b6b;
+      border-radius: 20px;
+      padding: 20px 30px;
+      font-size: 3rem;
+      font-weight: 900;
+      color: #ff6b6b;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .comparison-options {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+    
+    .comparison-btn {
+      background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+      border: none;
+      border-radius: 15px;
+      padding: 15px 25px;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+    
+    .comparison-btn:hover {
+      transform: scale(1.1) translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    }
+    
+    .comparison-btn.selected {
+      background: linear-gradient(135deg, #ffa726 0%, #ff9800 100%);
+      border: 3px solid #fff;
+      transform: scale(1.1);
+    }
+    
+    /* NUEVOS ESTILOS PARA PREGUNTA 4: CONTAR HACIA ATRÁS */
+    .countdown-container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      display: none;
+    }
+    
+    .countdown-sequence {
+      background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 20px;
+      text-align: center;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+    
+    .sequence-boxes {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    
+    .sequence-box {
+      background: white;
+      border: 4px solid #ff6b6b;
+      border-radius: 15px;
+      width: 80px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: #ff6b6b;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .sequence-box.empty {
+      background: rgba(255, 255, 255, 0.3);
+      border: 4px dashed #ff6b6b;
+      color: #ff6b6b;
+      cursor: pointer;
+      font-size: 3rem;
+    }
+    
+    .sequence-box.empty:hover {
+      transform: scale(1.1);
+      background: rgba(255, 107, 107, 0.1);
+    }
+    
+    .sequence-box.correct {
+      background: #4CAF50;
+      color: white;
+      border-color: #4CAF50;
+      animation: correctBounce 0.6s ease-in-out;
+    }
+    
+    @keyframes correctBounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-10px); }
+      60% { transform: translateY(-5px); }
+    }
+    
+    .countdown-options {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    
+    .countdown-btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      border-radius: 15px;
+      padding: 15px 25px;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    
+    .countdown-btn:hover {
+      transform: scale(1.1) translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    }
+    
+    .countdown-btn.selected {
+      background: linear-gradient(135deg, #ffa726 0%, #ff9800 100%);
+      border: 3px solid #fff;
+      transform: scale(1.1);
+    }
+    
+    .answer-btn {
+      background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
+      color: white;
+      border: none;
+      padding: 20px 50px;
+      border-radius: 50px;
+      font-size: 1.8rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 15px 30px rgba(255, 107, 107, 0.4);
+      display: block;
+      margin: 0 auto;
+      animation: rainbow 3s ease-in-out infinite;
+    }
+    
+    @keyframes rainbow {
+      0% {
+        filter: hue-rotate(0deg);
+      }
+      100% {
+        filter: hue-rotate(360deg);
+      }
+    }
+    
+    .answer-btn:hover {
+      transform: scale(1.1) translateY(-5px);
+      box-shadow: 0 20px 40px rgba(255, 107, 107, 0.6);
+    }
+    
+    .answer-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      animation: none;
+    }
+    
+    .floating-elements {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    .floating-element {
+      position: absolute;
+      font-size: 2rem;
+      animation: floatAround 8s infinite ease-in-out;
+      opacity: 0.7;
+    }
+    
+    @keyframes floatAround {
+      0%,
+      100% {
+        transform: translateY(0px) rotate(0deg);
+        opacity: 0.7;
+      }
+      25% {
+        transform: translateY(-30px) rotate(90deg);
+        opacity: 1;
+      }
+      50% {
+        transform: translateY(-20px) rotate(180deg);
+        opacity: 0.8;
+      }
+      75% {
+        transform: translateY(-40px) rotate(270deg);
+        opacity: 1;
+      }
+    }
+    
+    .confetti {
+      position: fixed;
+      top: -10px;
+      background-color: #f0f0f0;
+      width: 10px;
+      height: 10px;
+      animation: confetti 3s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 1000;
+    }
+    
+    @keyframes confetti {
+      0% {
+        transform: translateY(-100vh) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+    
+    .question-counter {
+      background: linear-gradient(135deg, #45b7d1 0%, #96ceb4 100%);
+      color: white;
+      padding: 15px 30px;
+      border-radius: 20px;
+      text-align: center;
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 20px rgba(69, 183, 209, 0.3);
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .header-card h1 {
+        font-size: 2.5rem;
+      }
+      .header-card p {
+        font-size: 1.5rem;
+      }
+      .numbers-grid, .even-odd-numbers {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+      }
+      .number-btn, .even-odd-number {
+        font-size: 2rem;
+        padding: 25px 15px;
+      }
+      .main-container {
+        padding: 15px;
+      }
+      .comparison-numbers {
+        gap: 15px;
+      }
+      .comparison-number {
+        font-size: 2.5rem;
+        padding: 15px 20px;
+      }
+      .sequence-boxes {
+        gap: 8px;
+      }
+      .sequence-box {
+        width: 60px;
+        height: 60px;
+        font-size: 1.8rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .header-card h1 {
+        font-size: 2rem;
+      }
+      .header-card p {
+        font-size: 1.3rem;
+      }
+      .number-btn, .even-odd-number {
+        font-size: 1.8rem;
+        padding: 20px 12px;
+      }
+      .instruction-card {
+        font-size: 1.5rem;
+      }
+      .comparison-number {
+        font-size: 2rem;
+        padding: 10px 15px;
+      }
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="container-fluid">
+    <nav class="breadcrumb">
+      <a style="color: #000;" href="{% url 'core_estudiante' %}">🏠 Inicio</a> &nbsp;/&nbsp;
+      <a style="color: #000;" href="{% url 'estudiante_modulo' %}">📚 Módulos</a> &nbsp;/&nbsp;
+      <a style="color: #000;" href="{% url 'ver_niveles_modulo' modulo.mod_id %}">🎯 Niveles</a> &nbsp;/&nbsp;
+      <span style="color: #2632df;">🎮 Juego</span>
+    </nav>
+
+    <div class="card loading">
+      <div class="card-header">
+        <h2>🌟 {{ nivel.niv_nombre }} -{{ nivel.niv_descripcion }}</h2>
+      </div>
+      <div class="card-body">
+        <div class="main-container">
+          <div class="floating-elements" id="floating-elements"></div>
+
+          <!-- Header Card -->
+          <div class="header-card">
+            <h1>🎨 ¡Números Divertidos! 🎨</h1>
+            <p id="main-instruction">🚀 ¡Vamos a aprender un poco más! 🚀</p>
+          </div>
+
+          <!-- Game Card -->
+          <div class="game-card">
+            <!-- Question Counter -->
+            <div class="question-counter" id="question-counter">
+              <i class="fas fa-star mr-2"></i>
+              Pregunta 1 de 4
+              <i class="fas fa-star ml-2"></i>
+            </div>
+
+            <!-- PREGUNTA 1: Colorear las HORAS de azul y MINUTOS de verde -->
+            <div class="instruction-card" id="instruction-card">
+              🕒 ¡Colorea las HORAS en <span style="color:blue">azul</span> y los MINUTOS en <span style="color:green">verde</span> haciendo clic!
+            </div>
+
+            <div class="numbers-grid" id="numbers-container">
+              <!-- Reloj 1 -->
+              <div class="clock-box" data-correct-hour="3" data-correct-minute="15">
+                <button class="clock-number" data-type="hora">3</button>
+                <span style="font-size: 1.5rem;">:</span>
+                <button class="clock-number" data-type="minuto">15</button>
+              </div>
+
+              <!-- Reloj 2 -->
+              <div class="clock-box" data-correct-hour="4" data-correct-minute="45">
+                <button class="clock-number" data-type="hora">4</button>
+                <span style="font-size: 1.5rem;">:</span>
+                <button class="clock-number" data-type="minuto">45</button>
+              </div>
+
+              <!-- Reloj 3 -->
+              <div class="clock-box" data-correct-hour="6" data-correct-minute="30">
+                <button class="clock-number" data-type="hora">6</button>
+                <span style="font-size: 1.5rem;">:</span>
+                <button class="clock-number" data-type="minuto">30</button>
+              </div>
+
+              <!-- Reloj 4 -->
+              <div class="clock-box" data-correct-hour="9" data-correct-minute="00">
+                <button class="clock-number" data-type="hora">9</button>
+                <span style="font-size: 1.5rem;">:</span>
+                <button class="clock-number" data-type="minuto">00</button>
+              </div>
+
+              <!-- Reloj 5 -->
+              <div class="clock-box" data-correct-hour="12" data-correct-minute="10">
+                <button class="clock-number" data-type="hora">12</button>
+                <span style="font-size: 1.5rem;">:</span>
+                <button class="clock-number" data-type="minuto">10</button>
+              </div>
+            </div>
+
+            <!-- PREGUNTA 2: Colorear números pares e impares -->
+            <div class="even-odd-container" id="even-odd-container">
+              <h3 style="color: #667eea; text-align: center; font-size: 2.2rem; margin-bottom: 20px; font-weight: 800;">
+                🎨 ¡Colorea los números!
+              </h3>
+              <div style="text-align: center; margin-bottom: 25px; font-size: 1.4rem; color: #333; font-weight: 600;">
+                Números PARES en <span style="color: #007bff; font-weight: bold;">AZUL</span> 
+                y números IMPARES en <span style="color: #dc3545; font-weight: bold;">ROJO</span>
+              </div>
+              
+              <div class="even-odd-numbers" id="even-odd-numbers">
+                <button class="even-odd-number" data-number="2">2</button>
+                <button class="even-odd-number" data-number="7">7</button>
+                <button class="even-odd-number" data-number="4">4</button>
+                <button class="even-odd-number" data-number="9">9</button>
+                <button class="even-odd-number" data-number="6">6</button>
+                <button class="even-odd-number" data-number="3">3</button>
+                <button class="even-odd-number" data-number="8">8</button>
+                <button class="even-odd-number" data-number="5">5</button>
+              </div>
+            </div>
+
+            <!-- PREGUNTA 3: Comparar números (mayor o menor) -->
+            <div class="comparison-container" id="comparison-container">
+              <h3 style="color: #ff6b6b; text-align: center; font-size: 2.2rem; margin-bottom: 25px; font-weight: 800;">
+                🔢 ¿Cuál número es MAYOR?
+              </h3>
+              
+              <div class="comparison-item" data-correct="8">
+                <div class="comparison-numbers">
+                  <div class="comparison-number">3</div>
+                  <div style="font-size: 2rem; color: #666;">VS</div>
+                  <div class="comparison-number">8</div>
+                </div>
+                <div class="comparison-options">
+                  <button class="comparison-btn" data-value="3">3 es mayor</button>
+                  <button class="comparison-btn" data-value="8">8 es mayor</button>
+                </div>
+              </div>
+
+              <div class="comparison-item" data-correct="7">
+                <div class="comparison-numbers">
+                  <div class="comparison-number">7</div>
+                  <div style="font-size: 2rem; color: #666;">VS</div>
+                  <div class="comparison-number">2</div>
+                </div>
+                <div class="comparison-options">
+                  <button class="comparison-btn" data-value="7">7 es mayor</button>
+                  <button class="comparison-btn" data-value="2">2 es mayor</button>
+                </div>
+              </div>
+
+              <div class="comparison-item" data-correct="9">
+                <div class="comparison-numbers">
+                  <div class="comparison-number">5</div>
+                  <div style="font-size: 2rem; color: #666;">VS</div>
+                  <div class="comparison-number">9</div>
+                </div>
+                <div class="comparison-options">
+                  <button class="comparison-btn" data-value="5">5 es mayor</button>
+                  <button class="comparison-btn" data-value="9">9 es mayor</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- PREGUNTA 4: Contar hacia atrás -->
+            <div class="countdown-container" id="countdown-container">
+              <h3 style="color: #667eea; text-align: center; font-size: 2.2rem; margin-bottom: 25px; font-weight: 800;">
+                🚀 ¡Cuenta hacia atrás!
+              </h3>
+              
+              <div class="countdown-sequence" data-answer="3">
+                <div style="font-size: 1.4rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  Desde el 5 hacia atrás:
+                </div>
+                <div class="sequence-boxes">
+                  <div class="sequence-box">5</div>
+                  <div class="sequence-box">4</div>
+                  <div class="sequence-box empty" data-answer="3">?</div>
+                  <div class="sequence-box">2</div>
+                  <div class="sequence-box">1</div>
+                </div>
+                <div class="countdown-options">
+                  <button class="countdown-btn" data-value="3">3</button>
+                  <button class="countdown-btn" data-value="6">6</button>
+                  <button class="countdown-btn" data-value="4">4</button>
+                </div>
+              </div>
+
+              <div class="countdown-sequence" data-answer="7">
+                <div style="font-size: 1.4rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  Desde el 10 hacia atrás:
+                </div>
+                <div class="sequence-boxes">
+                  <div class="sequence-box">10</div>
+                  <div class="sequence-box">9</div>
+                  <div class="sequence-box">8</div>
+                  <div class="sequence-box empty" data-answer="7">?</div>
+                  <div class="sequence-box">6</div>
+                </div>
+                <div class="countdown-options">
+                  <button class="countdown-btn" data-value="7">7</button>
+                  <button class="countdown-btn" data-value="5">5</button>
+                  <button class="countdown-btn" data-value="9">9</button>
+                </div>
+              </div>
+            </div>
+
+            <br />
+
+            <!-- Answer Button -->
+            <button class="answer-btn" id="answer-btn" onclick="checkAnswer()" disabled>
+              <i class="fas fa-check mr-2"></i>
+              ¡RESPONDER!
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block js %}
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+   
+    // Variables globales para el juego
+    window.studentId = {{ matricula_id}};
+    window.levelId   = {{ level_id }};
+    const moduloId = {{ modulo_id }};
+    
+</script>
+
+<script>
+    let selectedNumbers = [];
+    let currentNumbers = [];
+    let currentQuestion = 1;
+    let totalQuestions = 4;
+    let usedQuestions = new Set();
+    let gameFinished = false;
+    
+    // NUEVAS VARIABLES PARA EL SISTEMA DE CALIFICACIONES
+    let questionScores = [];
+    let currentScore = 0;
+    let maxScorePerQuestion = 10/4;
+    let totalPossibleScore = 10;
+    
+    // VARIABLES PARA EL SISTEMA DE VIDAS
+    let studentId = null;
+    let levelId = null;
+    let vidasRestantes = 0;
+    let vidasTotales = 0;
+    let vidasOriginalesNivel = 0;
+    let puedeIntentar = false;
+
+    // Variables para controlar recargas
+    let gameSessionId = null;
+    let hasGameStarted = false;
+    let pageLoadTime = Date.now();
+
+    // Variables para preguntas específicas
+    let selectedColor = null; // Para pregunta 1
+    let evenOddSelections = {}; // Para pregunta 2
+    let comparisonSelections = {}; // Para pregunta 3
+    let countdownSelections = {}; // Para pregunta 4
+
+    // Generar ID único de sesión
+    function generateSessionId() {
+        return 'game_' + studentId + '_' + levelId + '_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    }
+
+    // Verificar si es una recarga no autorizada
+    function isUnauthorizedReload() {
+        const sessionKey = `game_session_${studentId}_${levelId}`;
+        const storedSession = sessionStorage.getItem(sessionKey);
+        
+        if (storedSession) {
+            const sessionData = JSON.parse(storedSession);
+            const timeDiff = Date.now() - sessionData.timestamp;
+            
+            if (timeDiff < 30000) {
+                console.log('Recarga detectada dentro de', timeDiff, 'ms');
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
+    // Registrar sesión actual
+    function registerGameSession() {
+        const sessionKey = `game_session_${studentId}_${levelId}`;
+        gameSessionId = generateSessionId();
+        
+        const sessionData = {
+            sessionId: gameSessionId,
+            timestamp: Date.now(),
+            questionNumber: currentQuestion,
+            hasStarted: hasGameStarted
+        };
+        
+        sessionStorage.setItem(sessionKey, JSON.stringify(sessionData));
+        console.log('Sesión registrada:', sessionData);
+    }
+
+    // Limpiar sesión al salir
+    function clearGameSession() {
+        const sessionKey = `game_session_${studentId}_${levelId}`;
+        sessionStorage.removeItem(sessionKey);
+        console.log('Sesión limpiada');
+    }
+
+    async function initializeGameData() {
+        studentId = window.studentId || 1;
+        levelId = window.levelId || 1;
+        
+        console.log('Student ID:', studentId, 'Level ID:', levelId);
+        
+        const isReload = isUnauthorizedReload();
+        
+        if (isReload) {
+            console.log('⚠️ RECARGA DETECTADA - Penalizando con una vida');
+            
+            Swal.fire({
+                icon: 'warning',
+                title: '⚠️ Recarga Detectada',
+                html: `
+                    <div>
+                        <p><strong>Se ha detectado una recarga de página.</strong></p>
+                        <p>Como penalización, se restará <span style="color: #f44336; font-weight: bold;">1 vida</span>.</p>
+                        <br>
+                        <p style="color: #666; font-size: 0.9em;">
+                            💡 <strong>Consejo:</strong> Evita recargar la página durante el juego.
+                        </p>
+                    </div>
+                `,
+                confirmButtonText: 'Continuar',
+                allowOutsideClick: false,
+                timer: 4000,
+                timerProgressBar: true
+            });
+            
+            const penaltyResult = await penalizeReload();
+            if (!penaltyResult.success) {
+                console.error('Error al penalizar recarga:', penaltyResult.error);
+            }
+        }
+        
+        registerGameSession();
+        
+        const gameInfo = await getGameInfo();
+        return gameInfo;
+    }
+
+    // Penalizar recarga
+    async function penalizeReload() {
+        try {
+            const response = await fetch('/penalize_reload/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    estudiante_id: studentId,
+                    nivel_id: levelId
+                })
+            });
+            
+            const data = await response.json();
+            if (data.success) {
+                vidasRestantes = data.vidas_restantes;
+                puedeIntentar = data.puede_continuar;
+                updateLivesDisplay();
+                
+                if (!puedeIntentar) {
+                    showNoLivesMessage();
+                    return { success: true, canContinue: false };
+                }
+                
+                return { success: true, canContinue: true };
+            } else {
+                return { success: false, error: data.error };
+            }
+        } catch (error) {
+            console.error('Error al penalizar recarga:', error);
+            return { success: false, error: error.message };
+        }
+    }
+
+    async function getGameInfo() {
+        try {
+            const response = await fetch('/get_game_info/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    estudiante_id: studentId,
+                    nivel_id: levelId
+                })
+            });
+            
+            const data = await response.json();
+            if (data.success) {
+                vidasRestantes = data.vidas_restantes;
+                vidasTotales = data.vidas_originales_nivel;
+                puedeIntentar = data.puede_intentar;
+                
+                console.log(`Vidas: ${vidasRestantes}/${vidasTotales}, Puede intentar: ${puedeIntentar}`);
+                
+                updateLivesDisplay();
+                
+                if (!puedeIntentar) {
+                    showNoLivesMessage();
+                    return false;
+                }
+                
+                if (data.vidas_restauradas > 0) {
+                    Swal.fire({
+                        icon: 'info',
+                        title: '¡Vidas restauradas!',
+                        text: `Se han agregado ${data.vidas_restauradas} vidas adicionales a este nivel.`,
+                        confirmButtonText: '¡Genial!'
+                    });
+                }
+                
+                return true;
+            } else {
+                console.error('Error al obtener info del juego:', data.error);
+                return false;
+            }
+        } catch (error) {
+            console.error('Error de red al obtener info del juego:', error);
+            return false;
+        }
+    }
+
+    function updateLivesDisplay() {
+        let livesIndicator = document.getElementById('lives-indicator');
+        if (!livesIndicator) {
+            livesIndicator = document.createElement('div');
+            livesIndicator.id = 'lives-indicator';
+            livesIndicator.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
+                color: white;
+                padding: 15px 20px;
+                border-radius: 25px;
+                font-weight: bold;
+                font-size: 1.1em;
+                box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+                z-index: 1000;
+                font-family: 'Comic Sans MS', cursive, sans-serif;
+                transition: all 0.3s ease;
+            `;
+            document.body.appendChild(livesIndicator);
+        }
+        
+        let heartsHTML = '';
+        for (let i = 0; i < vidasTotales; i++) {
+            if (i < vidasRestantes) {
+                heartsHTML += '❤️';
+            } else {
+                heartsHTML += '🖤';
+            }
+        }
+        
+        let bgColor = 'linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%)';
+        if (vidasRestantes <= 1) {
+            bgColor = 'linear-gradient(135deg, #f44336 0%, #ff9800 100%)';
+            livesIndicator.style.animation = 'pulse 1s infinite';
+        } else if (vidasRestantes <= 2) {
+            bgColor = 'linear-gradient(135deg, #ff9800 0%, #ffc107 100%)';
+        }
+        
+        livesIndicator.style.background = bgColor;
+        
+        livesIndicator.innerHTML = `
+            <div style="text-align: center;">
+                <div style="font-size: 1.2em; margin-bottom: 5px;">${heartsHTML}</div>
+                <div>Vidas: ${vidasRestantes}/${vidasTotales}</div>
+                ${vidasRestantes <= 1 ? '<div style="font-size: 0.8em; color: #ffeb3b;">¡Cuidado!</div>' : ''}
+            </div>
+        `;
+    }
+
+    function showNoLivesMessage() {
+        Swal.fire({
+            icon: 'warning',
+            title: '¡Sin vidas restantes! 💔',
+            html: `
+                <div>
+                    <p>Has agotado todas las vidas para este nivel.</p>
+                    <p><strong>Vidas utilizadas: ${vidasTotales}</p>
+                    <br>
+                    <p style="color: #666;">Contacta a tu profesor para obtener más intentos.</p>
+                </div>
+            `,
+            confirmButtonText: 'Volver al menú',
+            allowOutsideClick: false,
+            customClass: {
+                popup: 'animated shake'
+            }
+        }).then(() => {
+            window.location.href = `/modulo/${moduloId}/niveles/`;
+        });
+    }
+
+    // Event listeners para detectar intentos de salida
+    window.addEventListener('beforeunload', function(e) {
+        if (hasGameStarted && currentQuestion > 1 && !gameFinished) {
+            const message = '¿Estás seguro de que quieres salir? Perderás el progreso actual.';
+            e.returnValue = message;
+            return message;
+        }
+        
+        clearGameSession();
+    });
+
+    window.addEventListener('pagehide', function() {
+        clearGameSession();
+    });
+   
+    // Crear elementos flotantes
+    function createFloatingElements() {
+        const container = document.getElementById('floating-elements');
+        const elements = ['🌟', '⭐', '✨', '🎈', '🎉', '🎊', '🌈', '💫', '🦄', '🎯'];
+        
+        for (let i = 0; i < 20; i++) {
+            const element = document.createElement('div');
+            element.className = 'floating-element';
+            element.innerHTML = elements[Math.floor(Math.random() * elements.length)];
+            element.style.left = Math.random() * 100 + '%';
+            element.style.top = Math.random() * 100 + '%';
+            element.style.animationDelay = Math.random() * 8 + 's';
+            element.style.animationDuration = (Math.random() * 4 + 6) + 's';
+            container.appendChild(element);
+        }
+    }
+
+    // Crear confeti
+    function createConfetti() {
+        const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffa726', '#ef5350'];
+        
+        for (let i = 0; i < 50; i++) {
+            setTimeout(() => {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 3000);
+            }, i * 100);
+        }
+    }
+
+    // Función para calcular puntaje de cada pregunta
+    function calculateQuestionScore(isCorrect, questionType, details = {}) {
+        let score = 0;
+        
+        if (questionType === 'color-clock') {
+            // Pregunta 1: Colorear relojes
+            const clocks = document.querySelectorAll('.clock-box');
+            let correct = 0;
+
+            clocks.forEach(clock => {
+                const correctHour = clock.dataset.correctHour;
+                const correctMinute = clock.dataset.correctMinute;
+
+                const hourBtn = clock.querySelector('button[data-type="hora"]');
+                const minBtn = clock.querySelector('button[data-type="minuto"]');
+
+                const isHourCorrect = hourBtn.classList.contains('selected-hora') && hourBtn.textContent == correctHour;
+                const isMinCorrect = minBtn.classList.contains('selected-minuto') && minBtn.textContent == correctMinute;
+
+                if (isHourCorrect && isMinCorrect) {
+                    correct++;
+                }
+            });
+
+            const totalClocks = 5;
+            score = (correct / totalClocks) * maxScorePerQuestion;
+        } 
+        else if (questionType === 'even-odd') {
+            // Pregunta 2: Pares e impares - evaluar sobre los 8 números totales
+            const totalNumbers = 8; // Siempre 8 números en la pregunta
+            score = (details.correctCount / totalNumbers) * maxScorePerQuestion;
+        }
+        else if (questionType === 'comparison') {
+            // Pregunta 3: Comparaciones
+            score = details.correctCount / details.totalCount * maxScorePerQuestion;
+        }
+        else if (questionType === 'countdown') {
+            // Pregunta 4: Contar hacia atrás
+            score = details.correctCount / details.totalCount * maxScorePerQuestion;
+        }
+        else {
+            // Otros tipos: todo o nada
+            score = isCorrect ? maxScorePerQuestion : 0;
+        }
+        
+        return Math.round(score * 100) / 100;
+    }
+
+    // Función principal para mostrar preguntas
+    function displayNumbers() {
+        if (currentQuestion === 1 && !hasGameStarted) {
+            hasGameStarted = true;
+            registerGameSession();
+        }
+
+        // Ocultar TODOS los contenedores
+        document.getElementById('numbers-container').style.display = 'none';
+        document.getElementById('even-odd-container').style.display = 'none';
+        document.getElementById('comparison-container').style.display = 'none';
+        document.getElementById('countdown-container').style.display = 'none';
+
+        // Ocultar selector de colores por defecto
+        const colorSelector = document.getElementById('color-selector');
+        if (colorSelector) {
+            colorSelector.style.display = 'none';
+        }
+
+        // PREGUNTA 1: Colorear partes del reloj
+        if (currentQuestion === 1) {
+            document.getElementById('numbers-container').style.display = 'grid';
+            
+            // Verificar si ya existe el selector para evitar duplicados
+            if (!document.getElementById('color-selector')) {
+                setupColorSelection();
+            }
+            document.getElementById('color-selector').style.display = 'block';
+            
+            selectedColor = null;
+            updateColorSelection();
+
+            const clockButtons = document.querySelectorAll('.clock-number');
+            clockButtons.forEach(btn => {
+                btn.classList.remove('selected-hora', 'selected-minuto');
+                const newBtn = btn.cloneNode(true);
+                btn.parentNode.replaceChild(newBtn, btn);
+            });
+
+            document.querySelectorAll('.clock-number').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    if (!selectedColor) {
+                        Swal.fire({
+                            icon: 'info',
+                            title: '🎨 ¡Primero elige tu pincel!',
+                            text: 'Selecciona el pincel azul o verde antes de pintar los números',
+                            confirmButtonText: 'Entendido',
+                            timer: 2000,
+                            timerProgressBar: true
+                        });
+                        return;
+                    }
+
+                    if (selectedColor === 'hora') {
+                        this.classList.remove('selected-minuto');
+                        this.classList.toggle('selected-hora');
+                    } else if (selectedColor === 'minuto') {
+                        this.classList.remove('selected-hora');
+                        this.classList.toggle('selected-minuto');
+                    }
+
+                    const anySelected = Array.from(document.querySelectorAll('.clock-number')).some(b =>
+                        b.classList.contains('selected-hora') || b.classList.contains('selected-minuto')
+                    );
+                    document.getElementById('answer-btn').disabled = !anySelected;
+
+                    this.style.transform = 'scale(1.1)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1)';
+                    }, 200);
+                });
+            });
+
+            document.getElementById('main-instruction').innerHTML = '🎨 ¡Elige tu pincel y colorea los números!';
+            document.getElementById('instruction-card').innerHTML = `
+                🎨 ¡Haz clic en los números para pintarlos!
+            `;
+            document.getElementById('answer-btn').disabled = true;
+        }
+        
+        // PREGUNTA 2: Colorear pares e impares
+        else if (currentQuestion === 2) {
+            document.getElementById('even-odd-container').style.display = 'block';
+            setupEvenOddQuestion();
+            
+            document.getElementById('main-instruction').innerHTML = '🎨 ¡Colorea los números pares e impares!';
+            document.getElementById('instruction-card').innerHTML = `
+                🎨 Números PARES en AZUL y números IMPARES en ROJO
+            `;
+        }
+        
+        // PREGUNTA 3: Comparar números
+        else if (currentQuestion === 3) {
+            document.getElementById('comparison-container').style.display = 'block';
+            setupComparisonQuestion();
+            
+            document.getElementById('main-instruction').innerHTML = '🔢 ¡Encuentra el número mayor!';
+            document.getElementById('instruction-card').innerHTML = `
+                🔢 Elige cuál número es MAYOR en cada comparación
+            `;
+        }
+        
+        // PREGUNTA 4: Contar hacia atrás
+        else if (currentQuestion === 4) {
+            document.getElementById('countdown-container').style.display = 'block';
+            setupCountdownQuestion();
+            
+            document.getElementById('main-instruction').innerHTML = '🚀 ¡Cuenta hacia atrás!';
+            document.getElementById('instruction-card').innerHTML = `
+                🚀 Completa las secuencias contando hacia atrás
+            `;
+        }
+
+        // Actualizar contador
+        document.getElementById('question-counter').innerHTML = `
+            <i class="fas fa-star mr-2"></i>
+            Pregunta ${currentQuestion} de ${totalQuestions}
+            <i class="fas fa-star ml-2"></i>
+        `;
+    }
+
+    // Configurar pregunta 2: Pares e impares
+    function setupEvenOddQuestion() {
+        evenOddSelections = {};
+        
+        // Eliminar selector existente si existe para evitar duplicados
+        const existingSelector = document.getElementById('even-odd-color-selector');
+        if (existingSelector) {
+            existingSelector.remove();
+        }
+        
+        const colorSelector = createEvenOddColorSelector();
+        const container = document.getElementById('even-odd-container');
+        container.insertBefore(colorSelector, container.firstChild.nextSibling);
+        
+        let selectedEvenOddColor = null;
+        
+        // Event listeners para selección de color
+        document.getElementById('select-even').addEventListener('click', function() {
+            selectedEvenOddColor = 'even';
+            updateEvenOddColorSelection(selectedEvenOddColor);
+        });
+        
+        document.getElementById('select-odd').addEventListener('click', function() {
+            selectedEvenOddColor = 'odd';
+            updateEvenOddColorSelection(selectedEvenOddColor);
+        });
+        
+        // Event listeners para números
+        document.querySelectorAll('.even-odd-number').forEach(btn => {
+            btn.classList.remove('selected-even', 'selected-odd');
+            
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode.replaceChild(newBtn, btn);
+        });
+        
+        document.querySelectorAll('.even-odd-number').forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (!selectedEvenOddColor) {
+                    Swal.fire({
+                        icon: 'info',
+                        title: '🎨 ¡Primero elige tu color!',
+                        text: 'Selecciona AZUL (pares) o ROJO (impares) antes de colorear',
+                        confirmButtonText: 'Entendido',
+                        timer: 2000,
+                        timerProgressBar: true
+                    });
+                    return;
+                }
+                
+                const number = parseInt(this.dataset.number);
+                
+                if (selectedEvenOddColor === 'even') {
+                    this.classList.remove('selected-odd');
+                    this.classList.toggle('selected-even');
+                } else {
+                    this.classList.remove('selected-even');
+                    this.classList.toggle('selected-odd');
+                }
+                
+                // Guardar selección
+                if (this.classList.contains('selected-even')) {
+                    evenOddSelections[number] = 'even';
+                } else if (this.classList.contains('selected-odd')) {
+                    evenOddSelections[number] = 'odd';
+                } else {
+                    delete evenOddSelections[number];
+                }
+                
+                // Verificar si hay selecciones para habilitar botón
+                const hasSelections = Object.keys(evenOddSelections).length > 0;
+                document.getElementById('answer-btn').disabled = !hasSelections;
+                
+                // Efecto visual
+                this.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            });
+        });
+        
+        document.getElementById('answer-btn').disabled = true;
+    }
+
+    function createEvenOddColorSelector() {
+        const selector = document.createElement('div');
+        selector.id = 'even-odd-color-selector';
+        selector.innerHTML = `
+            <div class="color-selection-container" style="text-align: center; margin: 20px 0; padding: 20px; background: #f8f9fa; border-radius: 15px; border: 3px solid #e9ecef;">
+                <h4 style="margin-bottom: 15px; color: #333;">🎨 Elige tu color:</h4>
+                <div class="color-buttons" style="display: flex; justify-content: center; gap: 20px;">
+                    <button id="select-even" class="color-btn" style="
+                        padding: 15px 25px; 
+                        font-size: 1.1em; 
+                        border: 3px solid #007bff; 
+                        background: #007bff; 
+                        color: white; 
+                        border-radius: 10px; 
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        font-weight: bold;
+                    ">
+                        🔵 AZUL<br><small>(Para PARES)</small>
+                    </button>
+                    <button id="select-odd" class="color-btn" style="
+                        padding: 15px 25px; 
+                        font-size: 1.1em; 
+                        border: 3px solid #dc3545; 
+                        background: #dc3545; 
+                        color: white; 
+                        border-radius: 10px; 
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        font-weight: bold;
+                    ">
+                        🔴 ROJO<br><small>(Para IMPARES)</small>
+                    </button>
+                </div>
+                <div id="selected-even-odd-color-indicator" style="margin-top: 15px; font-size: 1.2em; font-weight: bold; min-height: 30px;">
+                    👆 Selecciona un color para empezar a pintar
+                </div>
+            </div>
+        `;
+        return selector;
+    }
+
+    function updateEvenOddColorSelection(selectedColor) {
+        const evenBtn = document.getElementById('select-even');
+        const oddBtn = document.getElementById('select-odd');
+        const indicator = document.getElementById('selected-even-odd-color-indicator');
+
+        evenBtn.style.transform = 'scale(1)';
+        evenBtn.style.boxShadow = 'none';
+        oddBtn.style.transform = 'scale(1)';
+        oddBtn.style.boxShadow = 'none';
+
+        if (selectedColor === 'even') {
+            evenBtn.style.transform = 'scale(1.1)';
+            evenBtn.style.boxShadow = '0 0 20px rgba(0,123,255,0.5)';
+            indicator.innerHTML = '🎨 Color AZUL seleccionado - Haz clic en los números PARES';
+            indicator.style.color = '#007bff';
+        } else if (selectedColor === 'odd') {
+            oddBtn.style.transform = 'scale(1.1)';
+            oddBtn.style.boxShadow = '0 0 20px rgba(220,53,69,0.5)';
+            indicator.innerHTML = '🎨 Color ROJO seleccionado - Haz clic en los números IMPARES';
+            indicator.style.color = '#dc3545';
+        }
+    }
+
+    // Configurar pregunta 3: Comparaciones
+    function setupComparisonQuestion() {
+        comparisonSelections = {};
+        
+        document.querySelectorAll('.comparison-btn').forEach(btn => {
+            btn.classList.remove('selected');
+            
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode.replaceChild(newBtn, btn);
+        });
+        
+        document.querySelectorAll('.comparison-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const comparisonItem = this.closest('.comparison-item');
+                const itemIndex = Array.from(document.querySelectorAll('.comparison-item')).indexOf(comparisonItem);
+                
+                // Limpiar selección previa en este item
+                comparisonItem.querySelectorAll('.comparison-btn').forEach(b => {
+                    b.classList.remove('selected');
+                });
+                
+                // Marcar como seleccionado
+                this.classList.add('selected');
+                
+                // Guardar selección
+                comparisonSelections[itemIndex] = parseInt(this.dataset.value);
+                
+                // Verificar si todas las comparaciones están respondidas
+                const totalComparisons = document.querySelectorAll('.comparison-item').length;
+                const hasAllSelections = Object.keys(comparisonSelections).length === totalComparisons;
+                document.getElementById('answer-btn').disabled = !hasAllSelections;
+                
+                // Efecto visual
+                this.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            });
+        });
+        
+        document.getElementById('answer-btn').disabled = true;
+    }
+
+    // Configurar pregunta 4: Contar hacia atrás
+    function setupCountdownQuestion() {
+        countdownSelections = {};
+        
+        document.querySelectorAll('.countdown-btn').forEach(btn => {
+            btn.classList.remove('selected');
+            
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode.replaceChild(newBtn, btn);
+        });
+        
+        // Resetear cajas vacías
+        document.querySelectorAll('.countdown-sequence').forEach(sequence => {
+            const emptyBox = sequence.querySelector('.sequence-box:not(.empty)');
+            if (emptyBox && emptyBox.dataset.answer) {
+                emptyBox.textContent = '?';
+                emptyBox.classList.add('empty');
+                emptyBox.classList.remove('correct');
+            }
+        });
+        
+        document.querySelectorAll('.countdown-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const sequenceItem = this.closest('.countdown-sequence');
+                const sequenceIndex = Array.from(document.querySelectorAll('.countdown-sequence')).indexOf(sequenceItem);
+                const emptyBox = sequenceItem.querySelector('.sequence-box.empty, .sequence-box[data-answer]');
+                
+                if (!emptyBox) return;
+                
+                // PERMITIR CAMBIAR SELECCIÓN: Limpiar selección previa en esta secuencia
+                sequenceItem.querySelectorAll('.countdown-btn').forEach(b => {
+                    b.classList.remove('selected');
+                });
+                
+                // Marcar como seleccionado
+                this.classList.add('selected');
+                
+                // Actualizar la caja vacía
+                emptyBox.textContent = this.dataset.value;
+                emptyBox.classList.remove('empty');
+                emptyBox.classList.add('filled'); // Agregar clase para identificar que ya no está vacía
+                
+                // Guardar selección (permite sobrescribir)
+                countdownSelections[sequenceIndex] = parseInt(this.dataset.value);
+                
+                // Verificar si todas las secuencias están completadas
+                const totalSequences = document.querySelectorAll('.countdown-sequence').length;
+                const hasAllSelections = Object.keys(countdownSelections).length === totalSequences;
+                document.getElementById('answer-btn').disabled = !hasAllSelections;
+                
+                // Efecto visual
+                this.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            });
+        });
+        
+        document.getElementById('answer-btn').disabled = true;
+    }
+
+    // Configurar selector de colores para pregunta 1
+    function setupColorSelection() {
+        let colorSelector = document.getElementById('color-selector');
+        
+        if (!colorSelector) {
+            colorSelector = document.createElement('div');
+            colorSelector.id = 'color-selector';
+            colorSelector.innerHTML = `
+                <div class="color-selection-container" style="text-align: center; margin: 20px 0; padding: 20px; background: #f8f9fa; border-radius: 15px; border: 3px solid #e9ecef;">
+                    <h4 style="margin-bottom: 15px; color: #333;">🎨 Primero elige tu pincel:</h4>
+                    <div class="color-buttons" style="display: flex; justify-content: center; gap: 20px;">
+                        <button id="select-hora" class="color-btn" style="
+                            padding: 15px 25px; 
+                            font-size: 1.1em; 
+                            border: 3px solid #007bff; 
+                            background: #007bff; 
+                            color: white; 
+                            border-radius: 10px; 
+                            cursor: pointer;
+                            transition: all 0.3s ease;
+                            font-weight: bold;
+                        ">
+                            🕐 Pincel AZUL<br><small>(Para HORAS)</small>
+                        </button>
+                        <button id="select-minuto" class="color-btn" style="
+                            padding: 15px 25px; 
+                            font-size: 1.1em; 
+                            border: 3px solid #28a745; 
+                            background: #28a745; 
+                            color: white; 
+                            border-radius: 10px; 
+                            cursor: pointer;
+                            transition: all 0.3s ease;
+                            font-weight: bold;
+                        ">
+                            ⏰ Pincel VERDE<br><small>(Para MINUTOS)</small>
+                        </button>
+                    </div>
+                    <div id="selected-color-indicator" style="margin-top: 15px; font-size: 1.2em; font-weight: bold; min-height: 30px;">
+                        👆 Selecciona un pincel para empezar a pintar
+                    </div>
+                </div>
+            `;
+            
+            const numbersContainer = document.getElementById('numbers-container');
+            numbersContainer.parentNode.insertBefore(colorSelector, numbersContainer);
+        }
+
+        document.getElementById('select-hora').addEventListener('click', function() {
+            selectedColor = 'hora';
+            updateColorSelection();
+        });
+
+        document.getElementById('select-minuto').addEventListener('click', function() {
+            selectedColor = 'minuto';
+            updateColorSelection();
+        });
+    }
+
+    function updateColorSelection() {
+        const horaBtn = document.getElementById('select-hora');
+        const minutoBtn = document.getElementById('select-minuto');
+        const indicator = document.getElementById('selected-color-indicator');
+
+        horaBtn.style.transform = 'scale(1)';
+        horaBtn.style.boxShadow = 'none';
+        minutoBtn.style.transform = 'scale(1)';
+        minutoBtn.style.boxShadow = 'none';
+
+        if (selectedColor === 'hora') {
+            horaBtn.style.transform = 'scale(1.1)';
+            horaBtn.style.boxShadow = '0 0 20px rgba(0,123,255,0.5)';
+            indicator.innerHTML = '🎨 Pincel AZUL seleccionado - Haz clic en las HORAS';
+            indicator.style.color = '#007bff';
+        } else if (selectedColor === 'minuto') {
+            minutoBtn.style.transform = 'scale(1.1)';
+            minutoBtn.style.boxShadow = '0 0 20px rgba(40,167,69,0.5)';
+            indicator.innerHTML = '🎨 Pincel VERDE seleccionado - Haz clic en los MINUTOS';
+            indicator.style.color = '#28a745';
+        }
+
+        const clockNumbers = document.querySelectorAll('.clock-number');
+        clockNumbers.forEach(btn => {
+            btn.style.cursor = selectedColor ? 'pointer' : 'not-allowed';
+            btn.style.opacity = selectedColor ? '1' : '0.6';
+        });
+    }
+
+    // Función principal para verificar respuestas
+    function checkAnswer() {
+        if (gameFinished) return;
+
+        gameFinished = true;
+        
+        let isCorrect = false;
+        let feedback = '';
+        let questionType = '';
+        let score = 0;
+        let details = {};
+
+        if (currentQuestion === 1) {
+            // Pregunta 1: Colorear relojes
+            questionType = 'color-clock';
+            const clocks = document.querySelectorAll('.clock-box');
+            let correct = 0;
+
+            clocks.forEach(clock => {
+                const hour = clock.dataset.correctHour;
+                const minute = clock.dataset.correctMinute;
+
+                const hourBtn = clock.querySelector('button[data-type="hora"]');
+                const minBtn = clock.querySelector('button[data-type="minuto"]');
+
+                const isHourCorrect = hourBtn.classList.contains('selected-hora') && hourBtn.textContent == hour;
+                const isMinCorrect = minBtn.classList.contains('selected-minuto') && minBtn.textContent == minute;
+
+                if (isHourCorrect && isMinCorrect) {
+                    correct++;
+                }
+            });
+
+            const totalClocks = clocks.length;
+            isCorrect = correct === totalClocks;
+
+            if (correct === totalClocks) {
+                feedback = '🎉 ¡Excelente! Coloreaste todos los relojes correctamente.';
+            } else if (correct >= 4) {
+                feedback = `🌟 Muy bien, acertaste ${correct} de ${totalClocks} relojes.`;
+            } else if (correct >= 3) {
+                feedback = `👍 Buen intento, acertaste ${correct} de ${totalClocks}.`;
+            } else {
+                feedback = `🔁 ¡Intenta recordar! Las horas van en azul y los minutos en verde.`;
+            }
+        }
+        else if (currentQuestion === 2) {
+            // Pregunta 2: Pares e impares
+            questionType = 'even-odd';
+            let correct = 0;
+            const allNumbers = [2, 7, 4, 9, 6, 3, 8, 5]; // Los 8 números de la pregunta
+            let totalAnswered = 0;
+
+            // Evaluar todos los números, no solo los seleccionados
+            allNumbers.forEach(number => {
+                if (evenOddSelections.hasOwnProperty(number)) {
+                    totalAnswered++;
+                    const isEven = number % 2 === 0;
+                    const selection = evenOddSelections[number];
+                    const shouldBeEven = selection === 'even';
+                    
+                    if (isEven === shouldBeEven) {
+                        correct++;
+                    }
+                }
+            });
+
+            details = { correctCount: correct, totalCount: allNumbers.length, answered: totalAnswered };
+            
+            // Para ser correcto debe haber respondido al menos 6 números Y todos correctos
+            isCorrect = correct === totalAnswered && totalAnswered >= 6;
+
+            if (correct === allNumbers.length) {
+                feedback = '🎉 ¡Perfecto! Identificaste todos los 8 números correctamente.';
+            } else if (correct >= 7) {
+                feedback = `🌟 ¡Muy bien! Acertaste ${correct} de ${allNumbers.length} números. ${totalAnswered < allNumbers.length ? `Pintaste ${totalAnswered} números.` : ''}`;
+            } else if (correct >= 6) {
+                feedback = `👍 Buen trabajo, acertaste ${correct} de ${allNumbers.length}. ${totalAnswered < allNumbers.length ? `Pintaste ${totalAnswered} números.` : ''}`;
+            } else if (correct >= 4) {
+                feedback = `💪 Sigue practicando, acertaste ${correct} de ${allNumbers.length}. ${totalAnswered < allNumbers.length ? `Pintaste ${totalAnswered} números.` : ''}`;
+            } else {
+                feedback = `💡 Recuerda: Los números pares se pueden dividir por 2 (2,4,6,8...) y van en azul. Los impares no (1,3,5,7,9...) y van en rojo.`;
+            }
+        }
+        else if (currentQuestion === 3) {
+            // Pregunta 3: Comparaciones
+            questionType = 'comparison';
+            let correct = 0;
+            const comparisons = document.querySelectorAll('.comparison-item');
+            
+            comparisons.forEach((item, index) => {
+                const correctAnswer = parseInt(item.dataset.correct);
+                const userAnswer = comparisonSelections[index];
+                
+                if (userAnswer === correctAnswer) {
+                    correct++;
+                }
+            });
+
+            const total = comparisons.length;
+            details = { correctCount: correct, totalCount: total };
+            isCorrect = correct === total;
+
+            if (correct === total) {
+                feedback = '🎉 ¡Excelente! Identificaste todos los números mayores correctamente.';
+            } else if (correct >= 2) {
+                feedback = `🌟 ¡Bien! Acertaste ${correct} de ${total} comparaciones.`;
+            } else {
+                feedback = `💡 Recuerda: El número mayor es el que vale más. Por ejemplo, 8 es mayor que 3.`;
+            }
+        }
+        else if (currentQuestion === 4) {
+            // Pregunta 4: Contar hacia atrás
+            questionType = 'countdown';
+            let correct = 0;
+            const sequences = document.querySelectorAll('.countdown-sequence');
+            
+            sequences.forEach((sequence, index) => {
+                const correctAnswer = parseInt(sequence.dataset.answer);
+                const userAnswer = countdownSelections[index];
+                
+                if (userAnswer === correctAnswer) {
+                    correct++;
+                    // SOLO marcar como correcto la caja que estaba vacía (tenía la clase empty o filled)
+                    const targetBox = sequence.querySelector('.sequence-box.filled, .sequence-box[data-answer]:not(.empty)');
+                    if (targetBox && targetBox.dataset.answer) {
+                        targetBox.classList.add('correct');
+                    }
+                }
+            });
+
+            const total = sequences.length;
+            details = { correctCount: correct, totalCount: total };
+            isCorrect = correct === total;
+
+            if (correct === total) {
+                feedback = '🎉 ¡Perfecto! Completaste todas las secuencias hacia atrás correctamente.';
+            } else if (correct >= 1) {
+                feedback = `🌟 ¡Bien! Completaste ${correct} de ${total} secuencias.`;
+            } else {
+                feedback = `💡 Recuerda: Contar hacia atrás significa ir restando 1. Por ejemplo: 5, 4, 3, 2, 1.`;
+            }
+        }
+
+        // Calcular puntaje
+        score = calculateQuestionScore(isCorrect, questionType, details);
+        questionScores.push({
+            question: currentQuestion,
+            score: score,
+            maxScore: maxScorePerQuestion,
+            isCorrect: isCorrect,
+            type: questionType
+        });
+
+        // Mostrar resultado
+        setTimeout(() => {
+            if (isCorrect) {
+                createConfetti();
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡CORRECTO! 🌟',
+                    html: `
+                        <div>
+                            <p>${feedback}</p>
+                            <div style="font-size: 1.2em; margin: 15px 0; color: #4CAF50;">
+                                <strong>Puntaje: ${score.toFixed(2)}/${maxScorePerQuestion.toFixed(2)} puntos</strong>
+                            </div>
+                        </div>
+                    `,
+                    confirmButtonText: currentQuestion < totalQuestions ? '¡Siguiente pregunta!' : '¡Ver resultados!',
+                    allowOutsideClick: false,
+                    customClass: {
+                        popup: 'animated bounceIn',
+                        confirmButton: 'btn btn-success'
+                    }
+                }).then(() => {
+                    nextQuestion();
+                });
+            } else {
+                Swal.fire({
+                    icon: 'info',
+                    title: '¡Sigue intentando! 💪',
+                    html: `
+                        <div>
+                            <p>${feedback}</p>
+                            <div style="font-size: 1.2em; margin: 15px 0; color: #ff9800;">
+                                <strong>Puntaje: ${score.toFixed(2)}/${maxScorePerQuestion.toFixed(2)} puntos</strong>
+                            </div>
+                        </div>
+                    `,
+                    confirmButtonText: 'Continuar',
+                    allowOutsideClick: false,
+                    customClass: {
+                        popup: 'animated shake',
+                        confirmButton: 'btn btn-primary'
+                    }
+                }).then(() => {
+                    nextQuestion();
+                });
+            }
+        }, 1500);
+    }
+
+    // Pasar a la siguiente pregunta
+    function nextQuestion() {
+        if (currentQuestion >= totalQuestions) {
+            showFinalResults();
+        } else {
+            currentQuestion++;
+            gameFinished = false;
+            displayNumbers();
+        }
+    }
+
+    // Mostrar resultados finales
+    async function showFinalResults() {
+        // Calcular puntaje total
+        const finalScore = questionScores.reduce((total, q) => total + q.score, 0);
+        const percentage = (finalScore / totalPossibleScore) * 100;
+        
+        // Determinar mensaje de estado
+        let statusMessage, statusColor, icon;
+        if (percentage >= 90) {
+            statusMessage = "¡SOBRESALIENTE!";
+            statusColor = "#4CAF50";
+            icon = "success";
+        } else if (percentage >= 80) {
+            statusMessage = "¡EXCELENTE!";
+            statusColor = "#4CAF50";
+            icon = "success";
+        } else if (percentage >= 70) {
+            statusMessage = "¡MUY BIEN!";
+            statusColor = "#2196F3";
+            icon = "success";
+        } else if (percentage >= 60) {
+            statusMessage = "¡BIEN!";
+            statusColor = "#FF9800";
+            icon = "info";
+        } else {
+            statusMessage = "Necesitas mejorar";
+            statusColor = "#FF9800";
+            icon = "warning";
+        }
+
+        // Crear resumen de preguntas
+        const questionNames = [
+            '🕒 Colorear relojes',
+            '🎨 Pares e impares', 
+            '🔢 Comparar números',
+            '🚀 Contar hacia atrás'
+        ];
+        
+        let questionSummaryHTML = '';
+        questionScores.forEach((q, index) => {
+            const emoji = q.isCorrect ? '✅' : '❌';
+            questionSummaryHTML += `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin: 8px 0; padding: 8px 0; border-bottom: 1px solid #eee;">
+                    <span style="font-weight: 500;">Pregunta ${q.question}: ${emoji}</span>
+                    <span style="font-weight: 600; color: ${q.isCorrect ? '#4CAF50' : '#f44336'};">${q.score.toFixed(2)}/${q.maxScore.toFixed(2)} puntos</span>
+                </div>
+            `;
+        });
+
+        // Guardar intento
+        const saveResult = await saveAttempt(finalScore);
+        
+        // Crear HTML del resultado final
+        const resultHTML = `
+            <div style="text-align: center; font-family: 'Comic Sans MS', cursive;">
+                <!-- Título principal -->
+                <div style="background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%); color: white; padding: 20px; border-radius: 15px; margin-bottom: 20px;">
+                    <h2 style="margin: 0; font-size: 1.8rem; font-weight: 900;">
+                        ¡JUEGO COMPLETADO! 🏆
+                    </h2>
+                </div>
+
+                <!-- Estado y nota -->
+                <div style="background: ${statusColor}; color: white; padding: 15px; border-radius: 12px; margin-bottom: 20px;">
+                    <div style="font-size: 1.4rem; font-weight: 700; margin-bottom: 8px;">
+                        ${statusMessage}
+                    </div>
+                    <div style="font-size: 1.6rem; font-weight: 900;">
+                        NOTA FINAL: ${finalScore.toFixed(2)}/10
+                    </div>
+                </div>
+
+                <!-- Resumen por pregunta -->
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; margin-bottom: 20px; text-align: left;">
+                    <h4 style="margin: 0 0 15px 0; color: #333; font-size: 1.3rem; font-weight: 700; text-align: center;">
+                        📊 Resumen por pregunta:
+                    </h4>
+                    ${questionSummaryHTML}
+                </div>
+
+                <!-- Estado de vidas -->
+                <div style="background: #f0f0f0; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+                    <h4 style="margin: 0 0 15px 0; color: #666; font-size: 1.3rem; font-weight: 700;">
+                        💗 Estado de vidas:
+                    </h4>
+                    <div style="font-size: 1.1rem; line-height: 1.6;">
+                        <div><strong>Vidas antes:</strong> ${vidasTotales}/${vidasTotales}</div>
+                        <div><strong>Vidas después:</strong> ${saveResult.vidasRestantes}/${vidasTotales}</div>
+                        <div style="color: #4CAF50; font-weight: 600; margin-top: 10px;">
+                            ${saveResult.puedeIntentar ? '¡Puedes intentar 1 vez más!' : '¡Sin vidas restantes!'}
+                        </div>
+                    </div>
+                </div>
+
+                ${saveResult.success && saveResult.data.is_best_score ? 
+                    '<div style="background: #fff3cd; color: #856404; padding: 15px; border-radius: 10px; margin-bottom: 15px;"><strong>🏆 ¡Nuevo mejor puntaje!</strong></div>' : ''
+                }
+                
+                ${saveResult.success && saveResult.data.nivel_completado ? 
+                    '<div style="background: #d1ecf1; color: #0c5460; padding: 15px; border-radius: 10px; margin-bottom: 15px;"><strong>🎉 ¡Nivel completado!</strong></div>' : ''
+                }
+            </div>
+        `;
+
+        // Mostrar resultados
+        Swal.fire({
+            icon: icon,
+            title: false, // No mostrar título por defecto
+            html: resultHTML,
+            showCancelButton: true,
+            confirmButtonText: '🏠 Volver al menú',
+            cancelButtonText: '🔄 Jugar de nuevo',
+            allowOutsideClick: false,
+            width: '600px',
+            customClass: {
+                popup: 'animated bounceIn',
+                confirmButton: 'btn btn-primary',
+                cancelButton: 'btn btn-success'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Volver al menú
+                window.location.href = `/modulo/${moduloId}/niveles/`;
+            } else {
+                // Reiniciar juego
+                if (saveResult.puedeIntentar) {
+                    resetGame();
+                } else {
+                    showNoLivesMessage();
+                }
+            }
+        });
+
+        // Actualizar mejor puntaje
+        await updateBestScore();
+    }
+
+    // Función para obtener CSRF token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // Guardar intento
+    async function saveAttempt(finalScore) {
+        try {
+            console.log('Enviando datos:', {
+                estudiante_id: studentId,
+                nivel_id: levelId,
+                puntaje_total: finalScore
+            });
+
+            const response = await fetch('/save_attempt/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    estudiante_id: studentId,
+                    nivel_id: levelId,
+                    puntaje_total: finalScore
+                })
+            });
+            
+            const data = await response.json();
+            console.log('Respuesta del servidor:', data);
+            
+            if (data.success) {
+                vidasRestantes = data.vidas_restantes;
+                puedeIntentar = data.puede_continuar;
+                
+                updateLivesDisplay();
+                
+                console.log('Intento guardado correctamente con nota:', data.nota);
+                return { 
+                    success: true, 
+                    data: data,
+                    vidasRestantes: vidasRestantes,
+                    puedeIntentar: puedeIntentar
+                };
+            } else {
+                console.error('Error del servidor:', data.error);
+                return { success: false, error: data.error };
+            }
+        } catch (error) {
+            console.error('Error de red al guardar intento:', error);
+            return { success: false, error: 'Error de conexión: ' + error.message };
+        }
+    }
+
+    // Actualizar mejor puntaje
+    async function updateBestScore() {
+        try {
+            const response = await fetch('/update_best_score/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    estudiante_id: studentId,
+                    nivel_id: levelId
+                })
+            });
+            
+            const data = await response.json();
+            if (data.success) {
+                console.log('Mejor puntaje actualizado:', data.best_score);
+            } else {
+                console.error('Error al actualizar mejor puntaje:', data.error);
+            }
+        } catch (error) {
+            console.error('Error al actualizar mejor puntaje:', error);
+        }
+    }
+
+    // Reiniciar juego
+    function resetGame() {
+        currentQuestion = 1;
+        selectedNumbers = [];
+        currentNumbers = [];
+        usedQuestions.clear();
+        gameFinished = false;
+        hasGameStarted = false;
+        
+        // Reiniciar variables de puntaje
+        questionScores = [];
+        currentScore = 0;
+        
+        // Reiniciar variables de preguntas específicas
+        selectedColor = null;
+        evenOddSelections = {};
+        comparisonSelections = {};
+        countdownSelections = {};
+        
+        clearGameSession();
+        registerGameSession();
+        
+        // ELIMINAR TODOS LOS SELECTORES DE COLORES PARA EVITAR DUPLICADOS
+        const colorSelectors = document.querySelectorAll('#color-selector, #even-odd-color-selector');
+        colorSelectors.forEach(selector => selector.remove());
+        
+        // Ocultar contenedores
+        const containers = [
+            'even-odd-container',
+            'comparison-container', 
+            'countdown-container'
+        ];
+        
+        containers.forEach(containerId => {
+            const container = document.getElementById(containerId);
+            if (container) {
+                container.style.display = 'none';
+            }
+        });
+        
+        // Limpiar selecciones
+        document.querySelectorAll('.clock-number').forEach(btn => {
+            btn.classList.remove('selected-hora', 'selected-minuto');
+        });
+        
+        document.querySelectorAll('.even-odd-number').forEach(btn => {
+            btn.classList.remove('selected-even', 'selected-odd');
+        });
+        
+        document.querySelectorAll('.comparison-btn').forEach(btn => {
+            btn.classList.remove('selected');
+        });
+        
+        document.querySelectorAll('.countdown-btn').forEach(btn => {
+            btn.classList.remove('selected');
+        });
+        
+        // Restaurar cajas vacías en pregunta 4
+        document.querySelectorAll('.countdown-sequence').forEach(sequence => {
+            const boxes = sequence.querySelectorAll('.sequence-box');
+            boxes.forEach(box => {
+                if (box.dataset.answer) {
+                    box.textContent = '?';
+                    box.classList.add('empty');
+                    box.classList.remove('correct', 'filled');
+                }
+            });
+        });
+        
+        displayNumbers();
+    }
+
+    // Agregar animación de pulso para vidas bajas
+    const pulseStyle = document.createElement('style');
+    pulseStyle.textContent = `
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    `;
+    document.head.appendChild(pulseStyle);
+
+    // Inicializar el juego cuando la página carga
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof initializeGameData === 'function') {
+            initializeGameData().then((canPlay) => {
+                if (canPlay) {
+                    createFloatingElements();
+                    displayNumbers();
+                }
+            }).catch((error) => {
+                console.error('Error al inicializar el juego:', error);
+            });
+        } else {
+            console.error('La función initializeGameData no está definida');
+        }
+        
+        // Atajo de teclado para responder
+        document.addEventListener('keydown', function(e) {
+            const answerBtn = document.getElementById('answer-btn');
+            if (e.key === 'Enter' && answerBtn && !answerBtn.disabled) {
+                if (typeof checkAnswer === 'function') {
+                    checkAnswer();
+                }
+            }
+        });
+    
+        // Configurar SweetAlert2 con estilos personalizados
+        const swalStyle = document.createElement('style');
+        swalStyle.textContent = `
+            .swal2-popup {
+                font-family: 'Comic Sans MS', cursive, sans-serif !important;
+                border-radius: 20px !important;
+            }
+            .swal2-title {
+                color: #ff6b6b !important;
+                font-weight: 900 !important;
+            }
+            .swal2-confirm {
+                background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%) !important;
+                border: none !important;
+                border-radius: 25px !important;
+                font-weight: 700 !important;
+                padding: 12px 30px !important;
+            }
+            .swal2-cancel {
+                background: linear-gradient(135deg, #96ceb4 0%, #45b7d1 100%) !important;
+                border: none !important;
+                border-radius: 25px !important;
+                font-weight: 700 !important;
+                padding: 12px 30px !important;
+            }
+        `;
+        document.head.appendChild(swalStyle);
+    });
+</script>
+{% endblock %}

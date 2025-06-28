@@ -1,0 +1,333 @@
+<!-- templates/pdfs/pdf_nivel.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte de Avance - {{ nivel.niv_nombre }}</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+            @bottom-center {
+                content: "Página " counter(page) " de " counter(pages);
+                font-size: 10px;
+                color: #666;
+            }
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            font-size: 12px;
+            line-height: 1.4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #2E86AB;
+            padding-bottom: 20px;
+        }
+        
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2E86AB;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 18px;
+            color: #A23B72;
+            margin-bottom: 5px;
+        }
+        
+        .info-section {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #2E86AB;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .info-item {
+            margin-bottom: 8px;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            color: #2E86AB;
+        }
+        
+        .promedio-destacado {
+            background-color: #e8f4f8;
+            border: 2px solid #2E86AB;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .promedio-numero {
+            font-size: 28px;
+            font-weight: bold;
+            color: #2E86AB;
+            margin-bottom: 5px;
+        }
+        
+        .promedio-texto {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .table-container {
+            margin: 20px 0;
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #A23B72;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #A23B72;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        th {
+            background-color: #2E86AB;
+            color: white;
+            padding: 12px 8px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 11px;
+        }
+        
+        td {
+            padding: 10px 8px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+            font-size: 11px;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        tr:hover {
+            background-color: #e8f4f8;
+        }
+        
+        .nota-alta { color: #28a745; font-weight: bold; }
+        .nota-media { color: #ffc107; font-weight: bold; }
+        .nota-baja { color: #dc3545; font-weight: bold; }
+        
+        .estado-completado { 
+            background-color: #d4edda; 
+            color: #155724; 
+            padding: 4px 8px; 
+            border-radius: 4px;
+            font-size: 10px;
+        }
+        
+        .estado-progreso { 
+            background-color: #fff3cd; 
+            color: #856404; 
+            padding: 4px 8px; 
+            border-radius: 4px;
+            font-size: 10px;
+        }
+        
+        .estado-iniciado { 
+            background-color: #cce5ff; 
+            color: #004085; 
+            padding: 4px 8px; 
+            border-radius: 4px;
+            font-size: 10px;
+        }
+        
+        .estado-sin-iniciar { 
+            background-color: #f8d7da; 
+            color: #721c24; 
+            padding: 4px 8px; 
+            border-radius: 4px;
+            font-size: 10px;
+        }
+        
+        .stats-section {
+            background-color: #fff8e1;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border-left: 4px solid #A23B72;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 10px;
+            background-color: white;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+        }
+        
+        .stat-number {
+            font-size: 20px;
+            font-weight: bold;
+            color: #A23B72;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 2px solid #ddd;
+            font-size: 10px;
+            color: #666;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="title">Reporte de Avance Estudiantil</div>
+        <div class="subtitle">{{ clase.cla_nombre }} - {{ nivel.niv_nombre }}</div>
+    </div>
+
+    <div class="info-section">
+        <div class="info-grid">
+            <div>
+                <div class="info-item">
+                    <span class="info-label">Módulo:</span> {{ clase.fk_modulo.mod_nombre }}
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Docente:</span> {{ docente_nombre }}
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Nivel:</span> {{ nivel.niv_nombre }}
+                </div>
+            </div>
+            <div>
+                <div class="info-item">
+                    <span class="info-label">Fecha del reporte:</span> {{ fecha_reporte|date:"d/m/Y H:i" }}
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Total estudiantes:</span> {{ total_estudiantes }}
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Estudiantes con nota:</span> {{ estudiantes_con_nota }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="promedio-destacado">
+        <div class="promedio-numero">{{ promedio_general }}</div>
+        <div class="promedio-texto">Promedio General del Nivel</div>
+    </div>
+
+    <div class="table-container">
+        <div class="section-title">Detalle de Estudiantes</div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 5%;">#</th>
+                    <th style="width: 35%;">Estudiante</th>
+                    <th style="width: 10%;">Nota</th>
+                    <th style="width: 15%;">Estado</th>
+                    <th style="width: 10%;">Vidas Restantes</th>
+                    <th style="width: 10%;">Intentos</th>
+                    <th style="width: 15%;">Último Intento</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in avance_data %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td style="text-align: left;">
+                        {{ item.estudiante.fk_id_persona.fk_id_usuario.first_name }}
+                        {{ item.estudiante.fk_id_persona.per_segundo_nombre }}
+                        {{ item.estudiante.fk_id_persona.fk_id_usuario.last_name }}
+                        {{ item.estudiante.fk_id_persona.per_segundo_apellido }}
+                    </td>
+                    <td>
+                        {% if item.nota >= 7 %}
+                            <span class="nota-alta">{{ item.nota|floatformat:1 }}</span>
+                        {% elif item.nota >= 5 %}
+                            <span class="nota-media">{{ item.nota|floatformat:1 }}</span>
+                        {% elif item.nota > 0 %}
+                            <span class="nota-baja">{{ item.nota|floatformat:1 }}</span>
+                        {% else %}
+                            <span class="nota-baja">0.0</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if item.estado == "Completado" %}
+                            <span class="estado-completado">{{ item.estado }}</span>
+                        {% elif item.estado == "En Progreso" %}
+                            <span class="estado-progreso">{{ item.estado }}</span>
+                        {% elif item.estado == "Iniciado" %}
+                            <span class="estado-iniciado">{{ item.estado }}</span>
+                        {% else %}
+                            <span class="estado-sin-iniciar">{{ item.estado }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ item.vidas_restantes }}</td>
+                    <td>{{ item.intentos }}</td>
+                    <td>
+                        {% if item.ultimo_intento %}
+                            {{ item.ultimo_intento|date:"d/m/Y" }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="stats-section">
+        <div class="section-title">Estadísticas del Nivel</div>
+        <div class="stats-grid">
+            {% for estado, cantidad in estados_count.items %}
+            <div class="stat-item">
+                <div class="stat-number">{{ cantidad }}</div>
+                <div class="stat-label">{{ estado }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Reporte generado el {{ fecha_reporte|date:"d/m/Y" }} a las {{ fecha_reporte|date:"H:i" }}</p>
+        <p>Sistema de Gestión Académica - {{ clase.fk_modulo.mod_nombre }}</p>
+    </div>
+</body>
+</html>

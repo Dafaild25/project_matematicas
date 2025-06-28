@@ -1,0 +1,2558 @@
+{% extends 'plantillas/MasterEstudiante.html' %}
+{% load static %}
+{% block title %}
+  Estudiantes_Modulos
+{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{% static 'css/Modulo-1/primer-nivel.css' %}" />
+  <style>
+    body {
+      background: linear-gradient(-45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ffa726, #ef5350);
+      background-size: 400% 400%;
+      animation: rainbowShift 8s ease infinite;
+      min-height: 100vh;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      overflow-x: hidden;
+    }
+    
+    @keyframes rainbowShift {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+    
+    .main-container {
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .card-header {
+      background: linear-gradient(45deg, #ff6b6b, #feca57);
+      color: white;
+      padding: 25px;
+      text-align: center;
+    }
+    
+    .card-header h2 {
+      font-size: 2.5rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      margin: 0;
+    }
+    
+    .header-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 30px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      animation: bounceIn 1s ease-out;
+      border: 5px solid #ff6b6b;
+    }
+    
+    @keyframes bounceIn {
+      0% {
+        transform: scale(0.3);
+        opacity: 0;
+      }
+      50% {
+        transform: scale(1.05);
+      }
+      70% {
+        transform: scale(0.9);
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+    
+    .header-card h1 {
+      color: #ff6b6b;
+      font-size: 3rem;
+      font-weight: 900;
+      margin-bottom: 15px;
+      text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+      animation: wiggle 2s ease-in-out infinite;
+    }
+    
+    @keyframes wiggle {
+      0%,
+      100% {
+        transform: rotate(0deg);
+      }
+      25% {
+        transform: rotate(1deg);
+      }
+      75% {
+        transform: rotate(-1deg);
+      }
+    }
+    
+    .header-card p {
+      color: #333;
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 0;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%,
+      100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+    }
+    
+    .game-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 30px;
+      padding: 30px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      border: 5px solid #4ecdc4;
+      animation: slideInUp 1s ease-out;
+    }
+    
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(100px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .instruction-card {
+      background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
+      color: white;
+      padding: 25px;
+      border-radius: 25px;
+      margin-bottom: 30px;
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: 800;
+      box-shadow: 0 15px 30px rgba(255, 107, 107, 0.4);
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+    
+    @keyframes glow {
+      from {
+        box-shadow: 0 15px 30px rgba(255, 107, 107, 0.4);
+      }
+      to {
+        box-shadow: 0 15px 30px rgba(255, 107, 107, 0.8);
+      }
+    }
+
+    /* PREGUNTA 1: Ábacos */
+    .abacos-container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .abaco-exercise {
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+      border-radius: 15px;
+      padding: 25px;
+      text-align: center;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .abaco-display {
+      background: #8B4513;
+      border-radius: 10px;
+      padding: 30px;
+      margin: 20px 0;
+      position: relative;
+      min-height: 200px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 50px;
+    }
+
+    .abaco-rod {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .rod-line {
+      width: 6px;
+      height: 160px;
+      background: #333;
+      position: relative;
+      border-radius: 3px;
+      box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .abaco-beads {
+      position: absolute;
+      top: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      max-height: 130px;
+      align-items: center;
+    }
+
+    .bead {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      position: relative;
+      z-index: 2;
+      flex-shrink: 0;
+      border: 2px solid rgba(255,255,255,0.3);
+      box-shadow: 2px 2px 4px rgba(0,0,0,0.4), inset 1px 1px 2px rgba(255,255,255,0.3);
+    }
+
+    .bead.centena { 
+      background: linear-gradient(135deg, #4CAF50, #2E7D32);
+      border-color: #1B5E20;
+    }
+    
+    .bead.decena { 
+      background: linear-gradient(135deg, #2196F3, #1565C0);
+      border-color: #0D47A1;
+    }
+    
+    .bead.unidad { 
+      background: linear-gradient(135deg, #f44336, #C62828);
+      border-color: #B71C1C;
+    }
+
+    .rod-label {
+      position: absolute;
+      bottom: -35px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: white;
+      background: rgba(0,0,0,0.6);
+      padding: 4px 8px;
+      border-radius: 8px;
+      min-width: 30px;
+      text-align: center;
+    }
+
+    .word-input {
+      background: white;
+      border: 3px solid #ff6b6b;
+      border-radius: 15px;
+      padding: 15px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      text-align: center;
+      width: 100%;
+      max-width: 200px;
+      margin: 10px auto;
+      display: block;
+    }
+
+    .word-input:focus {
+      outline: none;
+      border-color: #4ecdc4;
+      box-shadow: 0 0 10px rgba(76, 201, 196, 0.3);
+    }
+
+    /* PREGUNTA 2: Representaciones Gráficas */
+    .graficas-container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      display: none;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 20px;
+    }
+
+    .grafica-exercise {
+      background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+      border-radius: 15px;
+      padding: 25px;
+      text-align: center;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .blocks-display {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 15px 0;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .block-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .centena-block {
+      width: 80px;
+      height: 80px;
+      background: #4CAF50;
+      border: 2px solid #2E7D32;
+      border-radius: 5px;
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      grid-template-rows: repeat(10, 1fr);
+      gap: 1px;
+      padding: 2px;
+    }
+
+    .centena-unit {
+      background: #81C784;
+      border-radius: 1px;
+    }
+
+    .decena-block {
+      width: 60px;
+      height: 12px;
+      background: #2196F3;
+      border: 2px solid #1565C0;
+      border-radius: 3px;
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 1px;
+      padding: 1px;
+    }
+
+    .decena-unit {
+      background: #64B5F6;
+      border-radius: 1px;
+    }
+
+    .unidad-block {
+      width: 12px;
+      height: 12px;
+      background: #f44336;
+      border: 2px solid #C62828;
+      border-radius: 3px;
+    }
+
+    .number-input-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin: 15px 0;
+    }
+
+    .number-input {
+      background: white;
+      border: 3px solid #ff6b6b;
+      border-radius: 15px;
+      padding: 10px 15px;
+      font-size: 1.5rem;
+      font-weight: 600;
+      text-align: center;
+      width: 80px;
+    }
+
+    .number-input:focus {
+      outline: none;
+      border-color: #4ecdc4;
+      box-shadow: 0 0 10px rgba(76, 201, 196, 0.3);
+    }
+
+    /* PREGUNTA 3: Descomposición Numérica (5 ejercicios) */
+    .comparacion-container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      display: none;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .comparison-exercise {
+      background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
+      border-radius: 15px;
+      padding: 25px;
+      text-align: center;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .comparison-display {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+
+    .number-box {
+      background: white;
+      border: 4px solid #4ecdc4;
+      border-radius: 15px;
+      padding: 15px 20px;
+      font-size: 2rem;
+      font-weight: 900;
+      color: #4ecdc4;
+      min-width: 60px;
+    }
+
+    .comparison-symbol {
+      font-size: 3rem;
+      color: #ff6b6b;
+      font-weight: 900;
+    }
+
+    /* PREGUNTA 4: Secuencias Numéricas (5 ejercicios) */
+    .secuencia-container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      display: none;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .sequence-exercise {
+      background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+      border-radius: 15px;
+      padding: 25px;
+      text-align: center;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .sequence-display {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+
+    .sequence-number {
+      background: white;
+      border: 4px solid #45b7d1;
+      border-radius: 15px;
+      padding: 12px 15px;
+      font-size: 2rem;
+      font-weight: 900;
+      color: #45b7d1;
+      min-width: 60px;
+    }
+
+    .missing-number {
+      background: #ffe082;
+      border: 4px dashed #ff9800;
+      color: #ff9800;
+    }
+
+    /* Opciones de respuesta */
+    .number-options {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .number-option {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      border-radius: 15px;
+      padding: 15px 25px;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .number-option:hover {
+      transform: scale(1.1) translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .number-option.selected {
+      background: linear-gradient(135deg, #ffa726 0%, #ff9800 100%);
+      border: 3px solid #fff;
+      transform: scale(1.1);
+    }
+
+    .answer-btn {
+      background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
+      color: white;
+      border: none;
+      padding: 20px 50px;
+      border-radius: 50px;
+      font-size: 1.8rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 15px 30px rgba(255, 107, 107, 0.4);
+      display: block;
+      margin: 30px auto 0;
+      animation: rainbow 3s ease-in-out infinite;
+    }
+    
+    @keyframes rainbow {
+      0% {
+        filter: hue-rotate(0deg);
+      }
+      100% {
+        filter: hue-rotate(360deg);
+      }
+    }
+    
+    .answer-btn:hover {
+      transform: scale(1.1) translateY(-5px);
+      box-shadow: 0 20px 40px rgba(255, 107, 107, 0.6);
+    }
+    
+    .answer-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      animation: none;
+    }
+    
+    .floating-elements {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    .floating-element {
+      position: absolute;
+      font-size: 2rem;
+      animation: floatAround 8s infinite ease-in-out;
+      opacity: 0.7;
+    }
+    
+    @keyframes floatAround {
+      0%,
+      100% {
+        transform: translateY(0px) rotate(0deg);
+        opacity: 0.7;
+      }
+      25% {
+        transform: translateY(-30px) rotate(90deg);
+        opacity: 1;
+      }
+      50% {
+        transform: translateY(-20px) rotate(180deg);
+        opacity: 0.8;
+      }
+      75% {
+        transform: translateY(-40px) rotate(270deg);
+        opacity: 1;
+      }
+    }
+    
+    .confetti {
+      position: fixed;
+      top: -10px;
+      background-color: #f0f0f0;
+      width: 10px;
+      height: 10px;
+      animation: confetti 3s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 1000;
+    }
+    
+    @keyframes confetti {
+      0% {
+        transform: translateY(-100vh) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+    
+    .question-counter {
+      background: linear-gradient(135deg, #45b7d1 0%, #96ceb4 100%);
+      color: white;
+      padding: 15px 30px;
+      border-radius: 20px;
+      text-align: center;
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 20px rgba(69, 183, 209, 0.3);
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .header-card h1 {
+        font-size: 2.5rem;
+      }
+      .header-card p {
+        font-size: 1.5rem;
+      }
+      .number-option {
+        font-size: 1.5rem;
+        padding: 12px 20px;
+      }
+      .main-container {
+        padding: 15px;
+      }
+      .abaco-display {
+        min-height: 160px;
+        gap: 30px;
+        padding: 20px;
+      }
+      .bead {
+        width: 18px;
+        height: 18px;
+        gap: 3px;
+      }
+      .rod-line {
+        height: 120px;
+        width: 5px;
+      }
+      .rod-label {
+        font-size: 0.9rem;
+        bottom: -25px;
+      }
+      .abaco-beads {
+        gap: 3px;
+        max-height: 100px;
+      }
+      .centena-block {
+        width: 60px;
+        height: 60px;
+      }
+      .number-input {
+        font-size: 1.3rem;
+        width: 70px;
+      }
+      .word-input {
+        font-size: 1rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .header-card h1 {
+        font-size: 2rem;
+      }
+      .header-card p {
+        font-size: 1.3rem;
+      }
+      .number-option {
+        font-size: 1.3rem;
+        padding: 10px 15px;
+      }
+      .instruction-card {
+        font-size: 1.5rem;
+      }
+      .abacos-container,
+      .graficas-container,
+      .comparacion-container,
+      .secuencia-container {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+      .abaco-display {
+        min-height: 140px;
+        gap: 20px;
+        padding: 15px;
+      }
+      .rod-line {
+        height: 100px;
+      }
+      .abaco-beads {
+        max-height: 80px;
+        gap: 2px;
+      }
+      .bead {
+        width: 16px;
+        height: 16px;
+      }
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="container-fluid">
+    <nav class="breadcrumb">
+      <a style="color: #000;" href="{% url 'core_estudiante' %}">🏠 Inicio</a> &nbsp;/&nbsp;
+      <a style="color: #000;" href="{% url 'estudiante_modulo' %}">📚 Módulos</a> &nbsp;/&nbsp;
+      <a style="color: #000;" href="{% url 'ver_niveles_modulo' modulo.mod_id %}">🎯 Niveles</a> &nbsp;/&nbsp;
+      <span style="color: #2632df;">🎮 Juego</span>
+    </nav>
+
+    <div class="card loading">
+      <div class="card-header">
+        <h2>🌟 {{ nivel.niv_nombre }} - {{ nivel.niv_descripcion }}</h2>
+      </div>
+      <div class="card-body">
+        <div class="main-container">
+          <div class="floating-elements" id="floating-elements"></div>
+
+          <!-- Header Card -->
+          <div class="header-card">
+            <h1>🧮 ¡Matemáticas Divertidas! 🧮</h1>
+            <p id="main-instruction">🚀 ¡Vamos a aprender matemáticas! 🚀</p>
+          </div>
+
+          <!-- Game Card -->
+          <div class="game-card">
+            <!-- Question Counter -->
+            <div class="question-counter" id="question-counter">
+              <i class="fas fa-star mr-2"></i>
+              Pregunta 1 de 4
+              <i class="fas fa-star ml-2"></i>
+            </div>
+
+            <!-- PREGUNTA 1: Ábacos - Escribir números en letras -->
+            <div class="instruction-card" id="instruction-card">
+              🧮 ¡Observa el ábaco y escribe el número en letras!
+            </div>
+
+            <div class="abacos-container" id="abacos-container">
+              <!-- Ábaco 1: 23 (veintitrés) -->
+              <div class="abaco-exercise" data-correct="veintitrés">
+                <div style="font-size: 1.1rem; font-weight: 600; color: #333; margin-bottom: 10px;">
+                  ¿Qué número representa este ábaco?
+                </div>
+                <div class="abaco-display">
+                  <div class="abaco-rod">
+                    <div class="rod-line"></div>
+                    <div class="abaco-beads">
+                      <div class="bead decena"></div>
+                      <div class="bead decena"></div>
+                    </div>
+                    <div class="rod-label">D</div>
+                  </div>
+                  <div class="abaco-rod">
+                    <div class="rod-line"></div>
+                    <div class="abaco-beads">
+                      <div class="bead unidad"></div>
+                      <div class="bead unidad"></div>
+                      <div class="bead unidad"></div>
+                    </div>
+                    <div class="rod-label">U</div>
+                  </div>
+                </div>
+                <div style="font-size: 0.9rem; color: #666; margin: 10px 0;">
+                  💡 Cuenta las bolitas: <span style="color: #2196F3;">azules = decenas</span>, <span style="color: #f44336;">rojas = unidades</span>
+                </div>
+                <input type="text" class="word-input" placeholder="Escribe el número en letras..." data-exercise="0">
+              </div>
+
+              <!-- Ábaco 2: 45 (cuarenta y cinco) -->
+              <div class="abaco-exercise" data-correct="cuarenta y cinco">
+                <div style="font-size: 1.1rem; font-weight: 600; color: #333; margin-bottom: 10px;">
+                  ¿Qué número representa este ábaco?
+                </div>
+                <div class="abaco-display">
+                  <div class="abaco-rod">
+                    <div class="rod-line"></div>
+                    <div class="abaco-beads">
+                      <div class="bead decena"></div>
+                      <div class="bead decena"></div>
+                      <div class="bead decena"></div>
+                      <div class="bead decena"></div>
+                    </div>
+                    <div class="rod-label">D</div>
+                  </div>
+                  <div class="abaco-rod">
+                    <div class="rod-line"></div>
+                    <div class="abaco-beads">
+                      <div class="bead unidad"></div>
+                      <div class="bead unidad"></div>
+                      <div class="bead unidad"></div>
+                      <div class="bead unidad"></div>
+                      <div class="bead unidad"></div>
+                    </div>
+                    <div class="rod-label">U</div>
+                  </div>
+                </div>
+                <div style="font-size: 0.9rem; color: #666; margin: 10px 0;">
+                  💡 Cuenta las bolitas: <span style="color: #2196F3;">azules = decenas</span>, <span style="color: #f44336;">rojas = unidades</span>
+                </div>
+                <input type="text" class="word-input" placeholder="Escribe el número en letras..." data-exercise="1">
+              </div>
+
+              <!-- Ábaco 3: 78 (setenta y ocho) -->
+              <div class="abaco-exercise" data-correct="setenta y ocho">
+                <div style="font-size: 1.1rem; font-weight: 600; color: #333; margin-bottom: 10px;">
+                  ¿Qué número representa este ábaco?
+                </div>
+                <div class="abaco-display">
+                  <div class="abaco-rod">
+                    <div class="rod-line"></div>
+                    <div class="abaco-beads">
+                      <div class="bead decena"></div>
+                      <div class="bead decena"></div>
+                      <div class="bead decena"></div>
+                      <div class="bead decena"></div>
+                      <div class="bead decena"></div>
+                      <div class="bead decena"></div>
+                      <div class="bead decena"></div>
+                    </div>
+                    <div class="rod-label">D</div>
+                  </div>
+                  <div class="abaco-rod">
+                    <div class="rod-line"></div>
+                    <div class="abaco-beads">
+                      <div class="bead unidad"></div>
+                      <div class="bead unidad"></div>
+                      <div class="bead unidad"></div>
+                      <div class="bead unidad"></div>
+                      <div class="bead unidad"></div>
+                      <div class="bead unidad"></div>
+                      <div class="bead unidad"></div>
+                      <div class="bead unidad"></div>
+                    </div>
+                    <div class="rod-label">U</div>
+                  </div>
+                </div>
+                <div style="font-size: 0.9rem; color: #666; margin: 10px 0;">
+                  💡 Cuenta las bolitas: <span style="color: #2196F3;">azules = decenas</span>, <span style="color: #f44336;">rojas = unidades</span>
+                </div>
+                <input type="text" class="word-input" placeholder="Escribe el número en letras..." data-exercise="2">
+              </div>
+
+              <!-- Ábaco 4: 156 (ciento cincuenta y seis) -->
+              <div class="abaco-exercise" data-correct="ciento cincuenta y seis">
+                <div style="font-size: 1.1rem; font-weight: 600; color: #333; margin-bottom: 10px;">
+                  ¿Qué número representa este ábaco?
+                </div>
+                <div class="abaco-display">
+                  <div class="abaco-rod">
+                    <div class="rod-line"></div>
+                    <div class="abaco-beads">
+                      <div class="bead centena"></div>
+                    </div>
+                    <div class="rod-label">C</div>
+                  </div>
+                  <div class="abaco-rod">
+                    <div class="rod-line"></div>
+                    <div class="abaco-beads">
+                      <div class="bead decena"></div>
+                      <div class="bead decena"></div>
+                      <div class="bead decena"></div>
+                      <div class="bead decena"></div>
+                      <div class="bead decena"></div>
+                    </div>
+                    <div class="rod-label">D</div>
+                  </div>
+                  <div class="abaco-rod">
+                    <div class="rod-line"></div>
+                    <div class="abaco-beads">
+                      <div class="bead unidad"></div>
+                      <div class="bead unidad"></div>
+                      <div class="bead unidad"></div>
+                      <div class="bead unidad"></div>
+                      <div class="bead unidad"></div>
+                      <div class="bead unidad"></div>
+                    </div>
+                    <div class="rod-label">U</div>
+                  </div>
+                </div>
+                <div style="font-size: 0.9rem; color: #666; margin: 10px 0;">
+                  💡 Cuenta las bolitas: <span style="color: #4CAF50;">verdes = centenas</span>, <span style="color: #2196F3;">azules = decenas</span>, <span style="color: #f44336;">rojas = unidades</span>
+                </div>
+                <input type="text" class="word-input" placeholder="Escribe el número en letras..." data-exercise="3">
+              </div>
+
+              <!-- Ábaco 5: 234 (doscientos treinta y cuatro) -->
+              <div class="abaco-exercise" data-correct="doscientos treinta y cuatro">
+                <div style="font-size: 1.1rem; font-weight: 600; color: #333; margin-bottom: 10px;">
+                  ¿Qué número representa este ábaco?
+                </div>
+                <div class="abaco-display">
+                  <div class="abaco-rod">
+                    <div class="rod-line"></div>
+                    <div class="abaco-beads">
+                      <div class="bead centena"></div>
+                      <div class="bead centena"></div>
+                    </div>
+                    <div class="rod-label">C</div>
+                  </div>
+                  <div class="abaco-rod">
+                    <div class="rod-line"></div>
+                    <div class="abaco-beads">
+                      <div class="bead decena"></div>
+                      <div class="bead decena"></div>
+                      <div class="bead decena"></div>
+                    </div>
+                    <div class="rod-label">D</div>
+                  </div>
+                  <div class="abaco-rod">
+                    <div class="rod-line"></div>
+                    <div class="abaco-beads">
+                      <div class="bead unidad"></div>
+                      <div class="bead unidad"></div>
+                      <div class="bead unidad"></div>
+                      <div class="bead unidad"></div>
+                    </div>
+                    <div class="rod-label">U</div>
+                  </div>
+                </div>
+                <div style="font-size: 0.9rem; color: #666; margin: 10px 0;">
+                  💡 Cuenta las bolitas: <span style="color: #4CAF50;">verdes = centenas</span>, <span style="color: #2196F3;">azules = decenas</span>, <span style="color: #f44336;">rojas = unidades</span>
+                </div>
+                <input type="text" class="word-input" placeholder="Escribe el número en letras..." data-exercise="4">
+              </div>
+            </div>
+
+            <!-- PREGUNTA 2: Representaciones Gráficas -->
+            <div class="graficas-container" id="graficas-container">
+              <!-- Gráfica 1: 125 -->
+              <div class="grafica-exercise" data-correct="125">
+                <div class="blocks-display">
+                  <div class="block-row">
+                    <!-- 1 centena -->
+                    <div class="centena-block">
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                    </div>
+                  </div>
+                  <div class="block-row">
+                    <!-- 2 decenas -->
+                    <div class="decena-block">
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                    </div>
+                    <div class="decena-block">
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                    </div>
+                  </div>
+                  <div class="block-row">
+                    <!-- 5 unidades -->
+                    <div class="unidad-block"></div>
+                    <div class="unidad-block"></div>
+                    <div class="unidad-block"></div>
+                    <div class="unidad-block"></div>
+                    <div class="unidad-block"></div>
+                  </div>
+                </div>
+                <div class="number-input-container">
+                  <span style="font-size: 1.2rem; font-weight: 600;">Número:</span>
+                  <input type="number" class="number-input" placeholder="?" data-exercise="0">
+                </div>
+              </div>
+
+              <!-- Gráfica 2: 243 -->
+              <div class="grafica-exercise" data-correct="243">
+                <div class="blocks-display">
+                  <div class="block-row">
+                    <!-- 2 centenas -->
+                    <div class="centena-block">
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                    </div>
+                    <div class="centena-block">
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                    </div>
+                  </div>
+                  <div class="block-row">
+                    <!-- 4 decenas -->
+                    <div class="decena-block">
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                    </div>
+                    <div class="decena-block">
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                    </div>
+                    <div class="decena-block">
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                    </div>
+                    <div class="decena-block">
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                    </div>
+                  </div>
+                  <div class="block-row">
+                    <!-- 3 unidades -->
+                    <div class="unidad-block"></div>
+                    <div class="unidad-block"></div>
+                    <div class="unidad-block"></div>
+                  </div>
+                </div>
+                <div class="number-input-container">
+                  <span style="font-size: 1.2rem; font-weight: 600;">Número:</span>
+                  <input type="number" class="number-input" placeholder="?" data-exercise="1">
+                </div>
+              </div>
+
+              <!-- Gráfica 3: 87 -->
+              <div class="grafica-exercise" data-correct="87">
+                <div class="blocks-display">
+                  <div class="block-row">
+                    <!-- 8 decenas -->
+                    <div class="decena-block">
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                    </div>
+                    <div class="decena-block">
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                    </div>
+                    <div class="decena-block">
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                    </div>
+                    <div class="decena-block">
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                    </div>
+                  </div>
+                  <div class="block-row">
+                    <div class="decena-block">
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                    </div>
+                    <div class="decena-block">
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                    </div>
+                    <div class="decena-block">
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                    </div>
+                    <div class="decena-block">
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                    </div>
+                  </div>
+                  <div class="block-row">
+                    <!-- 7 unidades -->
+                    <div class="unidad-block"></div>
+                    <div class="unidad-block"></div>
+                    <div class="unidad-block"></div>
+                    <div class="unidad-block"></div>
+                    <div class="unidad-block"></div>
+                    <div class="unidad-block"></div>
+                    <div class="unidad-block"></div>
+                  </div>
+                </div>
+                <div class="number-input-container">
+                  <span style="font-size: 1.2rem; font-weight: 600;">Número:</span>
+                  <input type="number" class="number-input" placeholder="?" data-exercise="2">
+                </div>
+              </div>
+
+              <!-- Gráfica 4: 346 -->
+              <div class="grafica-exercise" data-correct="346">
+                <div class="blocks-display">
+                  <div class="block-row">
+                    <!-- 3 centenas -->
+                    <div class="centena-block">
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                    </div>
+                    <div class="centena-block">
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                    </div>
+                    <div class="centena-block">
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                    </div>
+                  </div>
+                  <div class="block-row">
+                    <!-- 4 decenas -->
+                    <div class="decena-block">
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                    </div>
+                    <div class="decena-block">
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                    </div>
+                    <div class="decena-block">
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                    </div>
+                    <div class="decena-block">
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                    </div>
+                  </div>
+                  <div class="block-row">
+                    <!-- 6 unidades -->
+                    <div class="unidad-block"></div>
+                    <div class="unidad-block"></div>
+                    <div class="unidad-block"></div>
+                    <div class="unidad-block"></div>
+                    <div class="unidad-block"></div>
+                    <div class="unidad-block"></div>
+                  </div>
+                </div>
+                <div class="number-input-container">
+                  <span style="font-size: 1.2rem; font-weight: 600;">Número:</span>
+                  <input type="number" class="number-input" placeholder="?" data-exercise="3">
+                </div>
+              </div>
+
+              <!-- Gráfica 5: 152 -->
+              <div class="grafica-exercise" data-correct="152">
+                <div class="blocks-display">
+                  <div class="block-row">
+                    <!-- 1 centena -->
+                    <div class="centena-block">
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                      <div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div><div class="centena-unit"></div>
+                    </div>
+                  </div>
+                  <div class="block-row">
+                    <!-- 5 decenas -->
+                    <div class="decena-block">
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                    </div>
+                    <div class="decena-block">
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                    </div>
+                    <div class="decena-block">
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                    </div>
+                    <div class="decena-block">
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                    </div>
+                    <div class="decena-block">
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                      <div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div><div class="decena-unit"></div>
+                    </div>
+                  </div>
+                  <div class="block-row">
+                    <!-- 2 unidades -->
+                    <div class="unidad-block"></div>
+                    <div class="unidad-block"></div>
+                  </div>
+                </div>
+                <div class="number-input-container">
+                  <span style="font-size: 1.2rem; font-weight: 600;">Número:</span>
+                  <input type="number" class="number-input" placeholder="?" data-exercise="4">
+                </div>
+              </div>
+            </div>
+
+            <!-- PREGUNTA 3: Descomposición Numérica (5 ejercicios) -->
+            <div class="comparacion-container" id="comparacion-container">
+              <!-- Descomposición 1: 3D + 5U = 35 -->
+              <div class="comparison-exercise" data-correct="35">
+                <div style="font-size: 1.3rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  3 Decenas + 5 Unidades = ?
+                </div>
+                <div class="comparison-display">
+                  <div class="number-box">3D</div>
+                  <div class="comparison-symbol">+</div>
+                  <div class="number-box">5U</div>
+                  <div class="comparison-symbol">=</div>
+                  <div class="comparison-symbol" style="color: #666;">?</div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="35">35</button>
+                  <button class="number-option" data-value="53">53</button>
+                  <button class="number-option" data-value="8">8</button>
+                </div>
+              </div>
+
+              <!-- Descomposición 2: 6D + 7U = 67 -->
+              <div class="comparison-exercise" data-correct="67">
+                <div style="font-size: 1.3rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  6 Decenas + 7 Unidades = ?
+                </div>
+                <div class="comparison-display">
+                  <div class="number-box">6D</div>
+                  <div class="comparison-symbol">+</div>
+                  <div class="number-box">7U</div>
+                  <div class="comparison-symbol">=</div>
+                  <div class="comparison-symbol" style="color: #666;">?</div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="76">76</button>
+                  <button class="number-option" data-value="67">67</button>
+                  <button class="number-option" data-value="13">13</button>
+                </div>
+              </div>
+
+              <!-- Descomposición 3: 2C + 4D + 8U = 248 -->
+              <div class="comparison-exercise" data-correct="248">
+                <div style="font-size: 1.3rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  2 Centenas + 4 Decenas + 8 Unidades = ?
+                </div>
+                <div class="comparison-display">
+                  <div class="number-box">2C</div>
+                  <div class="comparison-symbol">+</div>
+                  <div class="number-box">4D</div>
+                  <div class="comparison-symbol">+</div>
+                  <div class="number-box">8U</div>
+                  <div class="comparison-symbol">=</div>
+                  <div class="comparison-symbol" style="color: #666;">?</div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="284">284</button>
+                  <button class="number-option" data-value="248">248</button>
+                  <button class="number-option" data-value="824">824</button>
+                </div>
+              </div>
+
+              <!-- Descomposición 4: 5C + 3D + 9U = 539 -->
+              <div class="comparison-exercise" data-correct="539">
+                <div style="font-size: 1.3rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  5 Centenas + 3 Decenas + 9 Unidades = ?
+                </div>
+                <div class="comparison-display">
+                  <div class="number-box">5C</div>
+                  <div class="comparison-symbol">+</div>
+                  <div class="number-box">3D</div>
+                  <div class="comparison-symbol">+</div>
+                  <div class="number-box">9U</div>
+                  <div class="comparison-symbol">=</div>
+                  <div class="comparison-symbol" style="color: #666;">?</div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="539">539</button>
+                  <button class="number-option" data-value="395">395</button>
+                  <button class="number-option" data-value="953">953</button>
+                </div>
+              </div>
+
+              <!-- Descomposición 5: 1C + 8D + 2U = 182 -->
+              <div class="comparison-exercise" data-correct="182">
+                <div style="font-size: 1.3rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  1 Centena + 8 Decenas + 2 Unidades = ?
+                </div>
+                <div class="comparison-display">
+                  <div class="number-box">1C</div>
+                  <div class="comparison-symbol">+</div>
+                  <div class="number-box">8D</div>
+                  <div class="comparison-symbol">+</div>
+                  <div class="number-box">2U</div>
+                  <div class="comparison-symbol">=</div>
+                  <div class="comparison-symbol" style="color: #666;">?</div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="182">182</button>
+                  <button class="number-option" data-value="218">218</button>
+                  <button class="number-option" data-value="821">821</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- PREGUNTA 4: Secuencias Numéricas (5 ejercicios) -->
+            <div class="secuencia-container" id="secuencia-container">
+              <!-- Secuencia 1: Conteo de 10 en 10 -->
+              <div class="sequence-exercise" data-correct="140">
+                <div style="font-size: 1.3rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  ¿Qué número continúa? (contamos de 10 en 10)
+                </div>
+                <div class="sequence-display">
+                  <div class="sequence-number">120</div>
+                  <div class="sequence-number">130</div>
+                  <div class="sequence-number missing-number">?</div>
+                  <div class="sequence-number">150</div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="135">135</button>
+                  <button class="number-option" data-value="140">140</button>
+                  <button class="number-option" data-value="145">145</button>
+                </div>
+              </div>
+
+              <!-- Secuencia 2: Conteo de 25 en 25 -->
+              <div class="sequence-exercise" data-correct="175">
+                <div style="font-size: 1.3rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  ¿Qué número falta? (contamos de 25 en 25)
+                </div>
+                <div class="sequence-display">
+                  <div class="sequence-number">125</div>
+                  <div class="sequence-number">150</div>
+                  <div class="sequence-number missing-number">?</div>
+                  <div class="sequence-number">200</div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="165">165</button>
+                  <button class="number-option" data-value="175">175</button>
+                  <button class="number-option" data-value="185">185</button>
+                </div>
+              </div>
+
+              <!-- Secuencia 3: Números consecutivos -->
+              <div class="sequence-exercise" data-correct="298">
+                <div style="font-size: 1.3rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  ¿Qué número va antes de 299?
+                </div>
+                <div class="sequence-display">
+                  <div class="sequence-number">296</div>
+                  <div class="sequence-number">297</div>
+                  <div class="sequence-number missing-number">?</div>
+                  <div class="sequence-number">299</div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="297">297</button>
+                  <button class="number-option" data-value="298">298</button>
+                  <button class="number-option" data-value="300">300</button>
+                </div>
+              </div>
+
+              <!-- Secuencia 4: Conteo de 5 en 5 -->
+              <div class="sequence-exercise" data-correct="85">
+                <div style="font-size: 1.3rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  ¿Qué número falta? (contamos de 5 en 5)
+                </div>
+                <div class="sequence-display">
+                  <div class="sequence-number">75</div>
+                  <div class="sequence-number">80</div>
+                  <div class="sequence-number missing-number">?</div>
+                  <div class="sequence-number">90</div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="83">83</button>
+                  <button class="number-option" data-value="85">85</button>
+                  <button class="number-option" data-value="87">87</button>
+                </div>
+              </div>
+
+              <!-- Secuencia 5: Conteo hacia atrás de 2 en 2 -->
+              <div class="sequence-exercise" data-correct="46">
+                <div style="font-size: 1.3rem; margin-bottom: 15px; color: #333; font-weight: 600;">
+                  ¿Qué número falta? (contamos hacia atrás de 2 en 2)
+                </div>
+                <div class="sequence-display">
+                  <div class="sequence-number">50</div>
+                  <div class="sequence-number">48</div>
+                  <div class="sequence-number missing-number">?</div>
+                  <div class="sequence-number">44</div>
+                </div>
+                <div class="number-options">
+                  <button class="number-option" data-value="45">45</button>
+                  <button class="number-option" data-value="46">46</button>
+                  <button class="number-option" data-value="47">47</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Answer Button -->
+            <button class="answer-btn" id="answer-btn" onclick="checkAnswer()" disabled>
+              <i class="fas fa-check mr-2"></i>
+              ¡RESPONDER!
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block js %}
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    // Variables globales para el juego
+    window.studentId = {{ matricula_id}};
+    window.levelId   = {{ level_id }};
+    const moduloId = {{ modulo_id }};
+    
+    let currentQuestion = 1;
+    let totalQuestions = 4;
+    let gameFinished = false;
+    
+    // Variables para el sistema de calificaciones
+    let questionScores = [];
+    let maxScorePerQuestion = 10/4;
+    let totalPossibleScore = 10;
+    
+    // Variables para el sistema de vidas
+    let studentId = null;
+    let levelId = null;
+    let vidasRestantes = 0;
+    let vidasTotales = 0;
+    let puedeIntentar = false;
+
+    // Variables para controlar recargas
+    let gameSessionId = null;
+    let hasGameStarted = false;
+
+    // Variables para preguntas específicas
+    let abacosInputs = {}; // Para pregunta 1 - ábacos
+    let graficasInputs = {}; // Para pregunta 2 - gráficas
+    let descomposicionSelections = {}; // Para pregunta 3
+    let secuenciaSelections = {}; // Para pregunta 4
+
+    // Lista de números válidos en letras para la pregunta 1
+    const numerosEnLetras = {
+        "veintitrés": "23",
+        "cuarenta y cinco": "45", 
+        "setenta y ocho": "78",
+        "ciento cincuenta y seis": "156",
+        "doscientos treinta y cuatro": "234",
+        // Variaciones comunes
+        "veintitres": "23",
+        "cuarenta y 5": "45",
+        "setenta y 8": "78",
+        "ciento 56": "156",
+        "doscientos 34": "234"
+    };
+
+    // Función para normalizar texto
+    function normalizeText(text) {
+        return text.toLowerCase()
+                   .trim()
+                   .replace(/[áàäâ]/g, 'a')
+                   .replace(/[éèëê]/g, 'e')
+                   .replace(/[íìïî]/g, 'i')
+                   .replace(/[óòöô]/g, 'o')
+                   .replace(/[úùüû]/g, 'u')
+                   .replace(/ñ/g, 'n');
+    }
+
+    // Función para verificar si un texto coincide con el número esperado
+    function checkNumberInWords(input, expected) {
+        const normalizedInput = normalizeText(input);
+        const normalizedExpected = normalizeText(expected);
+        
+        // Verificar coincidencia exacta
+        if (normalizedInput === normalizedExpected) {
+            return true;
+        }
+        
+        // Verificar en la lista de números válidos
+        for (let [words, number] of Object.entries(numerosEnLetras)) {
+            if (normalizeText(words) === normalizedInput) {
+                return numerosEnLetras[normalizedExpected] === number;
+            }
+        }
+        
+        return false;
+    }
+
+    // Generar ID único de sesión
+    function generateSessionId() {
+        return 'game_' + studentId + '_' + levelId + '_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    }
+
+    // Inicializar datos del juego
+    async function initializeGameData() {
+        studentId = window.studentId || 1;
+        levelId = window.levelId || 1;
+        
+        console.log('Student ID:', studentId, 'Level ID:', levelId);
+        
+        registerGameSession();
+        
+        const gameInfo = await getGameInfo();
+        return gameInfo;
+    }
+
+    // Obtener información del juego
+    async function getGameInfo() {
+        try {
+            const response = await fetch('/get_game_info/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    estudiante_id: studentId,
+                    nivel_id: levelId
+                })
+            });
+            
+            const data = await response.json();
+            if (data.success) {
+                vidasRestantes = data.vidas_restantes;
+                vidasTotales = data.vidas_originales_nivel;
+                puedeIntentar = data.puede_intentar;
+                
+                console.log(`Vidas: ${vidasRestantes}/${vidasTotales}, Puede intentar: ${puedeIntentar}`);
+                
+                updateLivesDisplay();
+                
+                if (!puedeIntentar) {
+                    showNoLivesMessage();
+                    return false;
+                }
+                
+                return true;
+            } else {
+                console.error('Error al obtener info del juego:', data.error);
+                return false;
+            }
+        } catch (error) {
+            console.error('Error de red al obtener info del juego:', error);
+            return false;
+        }
+    }
+
+    // Registrar sesión de juego
+    function registerGameSession() {
+        const sessionKey = `game_session_${studentId}_${levelId}`;
+        gameSessionId = generateSessionId();
+        
+        const sessionData = {
+            sessionId: gameSessionId,
+            timestamp: Date.now(),
+            questionNumber: currentQuestion,
+            hasStarted: hasGameStarted
+        };
+        
+        sessionStorage.setItem(sessionKey, JSON.stringify(sessionData));
+    }
+
+    // Actualizar display de vidas
+    function updateLivesDisplay() {
+        let livesIndicator = document.getElementById('lives-indicator');
+        if (!livesIndicator) {
+            livesIndicator = document.createElement('div');
+            livesIndicator.id = 'lives-indicator';
+            livesIndicator.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
+                color: white;
+                padding: 15px 20px;
+                border-radius: 25px;
+                font-weight: bold;
+                font-size: 1.1em;
+                box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+                z-index: 1000;
+                font-family: 'Comic Sans MS', cursive, sans-serif;
+                transition: all 0.3s ease;
+            `;
+            document.body.appendChild(livesIndicator);
+        }
+        
+        let heartsHTML = '';
+        for (let i = 0; i < vidasTotales; i++) {
+            if (i < vidasRestantes) {
+                heartsHTML += '❤️';
+            } else {
+                heartsHTML += '🖤';
+            }
+        }
+        
+        let bgColor = 'linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%)';
+        if (vidasRestantes <= 1) {
+            bgColor = 'linear-gradient(135deg, #f44336 0%, #ff9800 100%)';
+            livesIndicator.style.animation = 'pulse 1s infinite';
+        } else if (vidasRestantes <= 2) {
+            bgColor = 'linear-gradient(135deg, #ff9800 0%, #ffc107 100%)';
+        }
+        
+        livesIndicator.style.background = bgColor;
+        
+        livesIndicator.innerHTML = `
+            <div style="text-align: center;">
+                <div style="font-size: 1.2em; margin-bottom: 5px;">${heartsHTML}</div>
+                <div>Vidas: ${vidasRestantes}/${vidasTotales}</div>
+                ${vidasRestantes <= 1 ? '<div style="font-size: 0.8em; color: #ffeb3b;">¡Cuidado!</div>' : ''}
+            </div>
+        `;
+    }
+
+    // Mostrar mensaje sin vidas
+    function showNoLivesMessage() {
+        Swal.fire({
+            icon: 'warning',
+            title: '¡Sin vidas restantes! 💔',
+            html: `
+                <div>
+                    <p>Has agotado todas las vidas para este nivel.</p>
+                    <p><strong>Vidas utilizadas: ${vidasTotales}</p>
+                    <br>
+                    <p style="color: #666;">Contacta a tu profesor para obtener más intentos.</p>
+                </div>
+            `,
+            confirmButtonText: 'Volver al menú',
+            allowOutsideClick: false,
+            customClass: {
+                popup: 'animated shake'
+            }
+        }).then(() => {
+            window.location.href = `/modulo/${moduloId}/niveles/`;
+        });
+    }
+
+    // Crear elementos flotantes
+    function createFloatingElements() {
+        const container = document.getElementById('floating-elements');
+        const elements = ['🧮', '🔢', '➕', '➖', '✨', '🌟', '💫', '⭐', '📚', '🎯'];
+        
+        for (let i = 0; i < 20; i++) {
+            const element = document.createElement('div');
+            element.className = 'floating-element';
+            element.innerHTML = elements[Math.floor(Math.random() * elements.length)];
+            element.style.left = Math.random() * 100 + '%';
+            element.style.top = Math.random() * 100 + '%';
+            element.style.animationDelay = Math.random() * 8 + 's';
+            element.style.animationDuration = (Math.random() * 4 + 6) + 's';
+            container.appendChild(element);
+        }
+    }
+
+    // Crear confeti
+    function createConfetti() {
+        const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffa726', '#ef5350'];
+        
+        for (let i = 0; i < 50; i++) {
+            setTimeout(() => {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 3000);
+            }, i * 100);
+        }
+    }
+
+    // Función para calcular puntaje de cada pregunta
+    function calculateQuestionScore(isCorrect, questionType, details = {}) {
+        let score = 0;
+        
+        if (questionType === 'abacos') {
+            const totalAbacos = 5;
+            score = (details.correctCount / totalAbacos) * maxScorePerQuestion;
+        } 
+        else if (questionType === 'graficas') {
+            const totalGraficas = 5;
+            score = (details.correctCount / totalGraficas) * maxScorePerQuestion;
+        }
+        else if (questionType === 'descomposicion') {
+            const totalDescomposiciones = 5;
+            score = (details.correctCount / totalDescomposiciones) * maxScorePerQuestion;
+        }
+        else if (questionType === 'secuencia') {
+            const totalSecuencias = 5;
+            score = (details.correctCount / totalSecuencias) * maxScorePerQuestion;
+        }
+        else {
+            score = isCorrect ? maxScorePerQuestion : 0;
+        }
+        
+        return Math.round(score * 100) / 100;
+    }
+
+    // Función principal para mostrar preguntas
+    function displayNumbers() {
+        if (currentQuestion === 1 && !hasGameStarted) {
+            hasGameStarted = true;
+            registerGameSession();
+        }
+
+        // Ocultar TODOS los contenedores
+        document.getElementById('abacos-container').style.display = 'none';
+        document.getElementById('graficas-container').style.display = 'none';
+        document.getElementById('comparacion-container').style.display = 'none';
+        document.getElementById('secuencia-container').style.display = 'none';
+
+        // PREGUNTA 1: Ábacos
+        if (currentQuestion === 1) {
+            document.getElementById('abacos-container').style.display = 'grid';
+            setupAbacosQuestion();
+            
+            document.getElementById('main-instruction').innerHTML = '🧮 ¡Observa los ábacos y escribe en letras!';
+            document.getElementById('instruction-card').innerHTML = `
+                🧮 Observa cada ábaco y escribe el número en letras
+            `;
+        }
+        
+        // PREGUNTA 2: Representaciones Gráficas
+        else if (currentQuestion === 2) {
+            document.getElementById('graficas-container').style.display = 'grid';
+            setupGraficasQuestion();
+            
+            document.getElementById('main-instruction').innerHTML = '📊 ¡Observa las gráficas y escribe el número!';
+            document.getElementById('instruction-card').innerHTML = `
+                📊 Cuenta los bloques y escribe el número que representan
+            `;
+        }
+        
+        // PREGUNTA 3: Descomposición Numérica (5 ejercicios)
+        else if (currentQuestion === 3) {
+            document.getElementById('comparacion-container').style.display = 'grid';
+            setupDescomposicionQuestion();
+            
+            document.getElementById('main-instruction').innerHTML = '🔢 ¡Descompón los números!';
+            document.getElementById('instruction-card').innerHTML = `
+                🔢 Combina centenas, decenas y unidades
+            `;
+        }
+        
+        // PREGUNTA 4: Secuencias Numéricas (5 ejercicios)
+        else if (currentQuestion === 4) {
+            document.getElementById('secuencia-container').style.display = 'grid';
+            setupSecuenciaQuestion();
+            
+            document.getElementById('main-instruction').innerHTML = '🔢 ¡Completa las secuencias!';
+            document.getElementById('instruction-card').innerHTML = `
+                🔢 Descubre el patrón y encuentra el número que falta
+            `;
+        }
+
+        // Actualizar contador
+        document.getElementById('question-counter').innerHTML = `
+            <i class="fas fa-star mr-2"></i>
+            Pregunta ${currentQuestion} de ${totalQuestions}
+            <i class="fas fa-star ml-2"></i>
+        `;
+    }
+
+    // Configurar pregunta 1: Ábacos
+    function setupAbacosQuestion() {
+        abacosInputs = {};
+        
+        // Limpiar eventos previos
+        document.querySelectorAll('.word-input').forEach(input => {
+            const newInput = input.cloneNode(true);
+            input.parentNode.replaceChild(newInput, input);
+        });
+        
+        // Agregar eventos a los inputs
+        document.querySelectorAll('.word-input').forEach(input => {
+            input.addEventListener('input', function() {
+                const exerciseIndex = parseInt(this.dataset.exercise);
+                abacosInputs[exerciseIndex] = this.value;
+                
+                // Verificar si hay al menos una entrada para habilitar botón
+                const hasInputs = Object.keys(abacosInputs).some(key => abacosInputs[key] && abacosInputs[key].trim() !== '');
+                document.getElementById('answer-btn').disabled = !hasInputs;
+            });
+        });
+        
+        document.getElementById('answer-btn').disabled = true;
+    }
+
+    // Configurar pregunta 2: Representaciones Gráficas
+    function setupGraficasQuestion() {
+        graficasInputs = {};
+        
+        // Limpiar eventos previos
+        document.querySelectorAll('.number-input').forEach(input => {
+            const newInput = input.cloneNode(true);
+            input.parentNode.replaceChild(newInput, input);
+        });
+        
+        // Agregar eventos a los inputs
+        document.querySelectorAll('.number-input').forEach(input => {
+            input.addEventListener('input', function() {
+                const exerciseIndex = parseInt(this.dataset.exercise);
+                graficasInputs[exerciseIndex] = parseInt(this.value) || 0;
+                
+                // Verificar si hay al menos una entrada para habilitar botón
+                const hasInputs = Object.keys(graficasInputs).length > 0;
+                document.getElementById('answer-btn').disabled = !hasInputs;
+            });
+        });
+        
+        document.getElementById('answer-btn').disabled = true;
+    }
+
+    // Configurar pregunta 3: Descomposición Numérica
+    function setupDescomposicionQuestion() {
+        descomposicionSelections = {};
+        
+        document.querySelectorAll('.comparison-exercise .number-option').forEach(btn => {
+            btn.classList.remove('selected');
+            
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode.replaceChild(newBtn, btn);
+        });
+        
+        document.querySelectorAll('.comparison-exercise .number-option').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const exercise = this.closest('.comparison-exercise');
+                const exerciseIndex = Array.from(document.querySelectorAll('.comparison-exercise')).indexOf(exercise);
+                
+                // Limpiar selección previa en este ejercicio
+                exercise.querySelectorAll('.number-option').forEach(b => {
+                    b.classList.remove('selected');
+                });
+                
+                // Marcar como seleccionado
+                this.classList.add('selected');
+                
+                // Guardar selección
+                descomposicionSelections[exerciseIndex] = parseInt(this.dataset.value);
+                
+                // Verificar si hay al menos una selección para habilitar botón
+                const hasSelections = Object.keys(descomposicionSelections).length > 0;
+                document.getElementById('answer-btn').disabled = !hasSelections;
+                
+                // Efecto visual
+                this.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            });
+        });
+        
+        document.getElementById('answer-btn').disabled = true;
+    }
+
+    // Configurar pregunta 4: Secuencias
+    function setupSecuenciaQuestion() {
+        secuenciaSelections = {};
+        
+        document.querySelectorAll('.sequence-exercise .number-option').forEach(btn => {
+            btn.classList.remove('selected');
+            
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode.replaceChild(newBtn, btn);
+        });
+        
+        document.querySelectorAll('.sequence-exercise .number-option').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const exercise = this.closest('.sequence-exercise');
+                const exerciseIndex = Array.from(document.querySelectorAll('.sequence-exercise')).indexOf(exercise);
+                
+                // Limpiar selección previa en este ejercicio
+                exercise.querySelectorAll('.number-option').forEach(b => {
+                    b.classList.remove('selected');
+                });
+                
+                // Marcar como seleccionado
+                this.classList.add('selected');
+                
+                // Guardar selección
+                secuenciaSelections[exerciseIndex] = parseInt(this.dataset.value);
+                
+                // Verificar si hay al menos una selección para habilitar botón
+                const hasSelections = Object.keys(secuenciaSelections).length > 0;
+                document.getElementById('answer-btn').disabled = !hasSelections;
+                
+                // Efecto visual
+                this.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            });
+        });
+        
+        document.getElementById('answer-btn').disabled = true;
+    }
+
+    // Función principal para verificar respuestas
+    function checkAnswer() {
+        if (gameFinished) return;
+
+        gameFinished = true;
+        
+        let isCorrect = false;
+        let feedback = '';
+        let questionType = '';
+        let score = 0;
+        let details = {};
+
+        if (currentQuestion === 1) {
+            // Pregunta 1: Ábacos
+            questionType = 'abacos';
+            const exercises = document.querySelectorAll('.abaco-exercise');
+            let correct = 0;
+
+            exercises.forEach((exercise, index) => {
+                const correctAnswer = exercise.dataset.correct;
+                const userAnswer = abacosInputs[index] || '';
+                
+                if (checkNumberInWords(userAnswer, correctAnswer)) {
+                    correct++;
+                }
+            });
+
+            const total = exercises.length;
+            details = { correctCount: correct, totalCount: total };
+            isCorrect = correct === total;
+
+            if (correct === total) {
+                feedback = '🎉 ¡Excelente! Escribiste todos los números en letras correctamente.';
+            } else if (correct >= 4) {
+                feedback = `🌟 ¡Muy bien! Acertaste ${correct} de ${total} ábacos.`;
+            } else if (correct >= 3) {
+                feedback = `👍 ¡Bien! Acertaste ${correct} de ${total} ábacos.`;
+            } else {
+                feedback = `💡 Recuerda: Observa cuántas bolitas hay en cada varilla para formar el número.`;
+            }
+        }
+        else if (currentQuestion === 2) {
+            // Pregunta 2: Representaciones Gráficas
+            questionType = 'graficas';
+            const exercises = document.querySelectorAll('.grafica-exercise');
+            let correct = 0;
+
+            exercises.forEach((exercise, index) => {
+                const correctAnswer = parseInt(exercise.dataset.correct);
+                const userAnswer = graficasInputs[index] || 0;
+                
+                if (userAnswer === correctAnswer) {
+                    correct++;
+                }
+            });
+
+            const total = exercises.length;
+            details = { correctCount: correct, totalCount: total };
+            isCorrect = correct === total;
+
+            if (correct === total) {
+                feedback = '🎉 ¡Perfecto! Interpretaste todas las gráficas correctamente.';
+            } else if (correct >= 4) {
+                feedback = `🌟 ¡Muy bien! Acertaste ${correct} de ${total} gráficas.`;
+            } else if (correct >= 3) {
+                feedback = `👍 ¡Bien! Acertaste ${correct} de ${total} gráficas.`;
+            } else if (correct >= 2) {
+                feedback = `📊 ¡Vas mejorando! Acertaste ${correct} de ${total} gráficas.`;
+            } else {
+                feedback = `💡 Recuerda: Cuenta los bloques grandes (centenas), medianos (decenas) y pequeños (unidades).`;
+            }
+        }
+        else if (currentQuestion === 3) {
+            // Pregunta 3: Descomposición Numérica (5 ejercicios)
+            questionType = 'descomposicion';
+            const exercises = document.querySelectorAll('.comparison-exercise');
+            let correct = 0;
+
+            exercises.forEach((exercise, index) => {
+                const correctAnswer = parseInt(exercise.dataset.correct);
+                const userAnswer = descomposicionSelections[index];
+                
+                if (userAnswer === correctAnswer) {
+                    correct++;
+                }
+            });
+
+            const total = exercises.length;
+            details = { correctCount: correct, totalCount: total };
+            isCorrect = correct === total;
+
+            if (correct === total) {
+                feedback = '🎉 ¡Excelente! Descompusiste todos los números correctamente.';
+            } else if (correct >= 4) {
+                feedback = `🌟 ¡Muy bien! Acertaste ${correct} de ${total} descomposiciones.`;
+            } else if (correct >= 3) {
+                feedback = `👍 ¡Bien! Acertaste ${correct} de ${total} descomposiciones.`;
+            } else {
+                feedback = `💡 Recuerda: C=Centenas (×100), D=Decenas (×10), U=Unidades (×1).`;
+            }
+        }
+        else if (currentQuestion === 4) {
+            // Pregunta 4: Secuencias (5 ejercicios)
+            questionType = 'secuencia';
+            const exercises = document.querySelectorAll('.sequence-exercise');
+            let correct = 0;
+
+            exercises.forEach((exercise, index) => {
+                const correctAnswer = parseInt(exercise.dataset.correct);
+                const userAnswer = secuenciaSelections[index];
+                
+                if (userAnswer === correctAnswer) {
+                    correct++;
+                }
+            });
+
+            const total = exercises.length;
+            details = { correctCount: correct, totalCount: total };
+            isCorrect = correct === total;
+
+            if (correct === total) {
+                feedback = '🎉 ¡Perfecto! Completaste todas las secuencias correctamente.';
+            } else if (correct >= 4) {
+                feedback = `🌟 ¡Muy bien! Acertaste ${correct} de ${total} secuencias.`;
+            } else if (correct >= 3) {
+                feedback = `👍 ¡Bien! Acertaste ${correct} de ${total} secuencias.`;
+            } else {
+                feedback = `💡 Recuerda: Busca el patrón en los números para encontrar el que falta.`;
+            }
+        }
+
+        // Calcular puntaje
+        score = calculateQuestionScore(isCorrect, questionType, details);
+        questionScores.push({
+            question: currentQuestion,
+            score: score,
+            maxScore: maxScorePerQuestion,
+            isCorrect: isCorrect,
+            type: questionType
+        });
+
+        // Mostrar resultado
+        setTimeout(() => {
+            if (isCorrect) {
+                createConfetti();
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡CORRECTO! 🌟',
+                    html: `
+                        <div>
+                            <p>${feedback}</p>
+                            <div style="font-size: 1.2em; margin: 15px 0; color: #4CAF50;">
+                                <strong>Puntaje: ${score.toFixed(2)}/${maxScorePerQuestion.toFixed(2)} puntos</strong>
+                            </div>
+                        </div>
+                    `,
+                    confirmButtonText: currentQuestion < totalQuestions ? '¡Siguiente pregunta!' : '¡Ver resultados!',
+                    allowOutsideClick: false,
+                    customClass: {
+                        popup: 'animated bounceIn',
+                        confirmButton: 'btn btn-success'
+                    }
+                }).then(() => {
+                    nextQuestion();
+                });
+            } else {
+                Swal.fire({
+                    icon: 'info',
+                    title: '¡Sigue intentando! 💪',
+                    html: `
+                        <div>
+                            <p>${feedback}</p>
+                            <div style="font-size: 1.2em; margin: 15px 0; color: #ff9800;">
+                                <strong>Puntaje: ${score.toFixed(2)}/${maxScorePerQuestion.toFixed(2)} puntos</strong>
+                            </div>
+                        </div>
+                    `,
+                    confirmButtonText: 'Continuar',
+                    allowOutsideClick: false,
+                    customClass: {
+                        popup: 'animated shake',
+                        confirmButton: 'btn btn-primary'
+                    }
+                }).then(() => {
+                    nextQuestion();
+                });
+            }
+        }, 1500);
+    }
+
+    // Pasar a la siguiente pregunta
+    function nextQuestion() {
+        if (currentQuestion >= totalQuestions) {
+            showFinalResults();
+        } else {
+            currentQuestion++;
+            gameFinished = false;
+            displayNumbers();
+        }
+    }
+
+    // Mostrar resultados finales
+    async function showFinalResults() {
+        // Calcular puntaje total
+        const finalScore = questionScores.reduce((total, q) => total + q.score, 0);
+        const percentage = (finalScore / totalPossibleScore) * 100;
+        
+        // Determinar mensaje de estado
+        let statusMessage, statusColor, icon;
+        if (percentage >= 90) {
+            statusMessage = "¡SOBRESALIENTE!";
+            statusColor = "#4CAF50";
+            icon = "success";
+        } else if (percentage >= 80) {
+            statusMessage = "¡EXCELENTE!";
+            statusColor = "#4CAF50";
+            icon = "success";
+        } else if (percentage >= 70) {
+            statusMessage = "¡MUY BIEN!";
+            statusColor = "#2196F3";
+            icon = "success";
+        } else if (percentage >= 60) {
+            statusMessage = "¡BIEN!";
+            statusColor = "#FF9800";
+            icon = "info";
+        } else {
+            statusMessage = "Necesitas mejorar";
+            statusColor = "#FF9800";
+            icon = "warning";
+        }
+
+        // Crear resumen de preguntas
+        const questionNames = [
+            '🧮 Ábacos en letras',
+            '📊 Representaciones gráficas', 
+            '🔢 Descomposición numérica',
+            '🔢 Secuencias numéricas'
+        ];
+        
+        let questionSummaryHTML = '';
+        questionScores.forEach((q, index) => {
+            const emoji = q.isCorrect ? '✅' : '❌';
+            const questionName = questionNames[index] || `Pregunta ${q.question}`;
+            questionSummaryHTML += `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin: 8px 0; padding: 8px 0; border-bottom: 1px solid #eee;">
+                    <span style="font-weight: 500;">${questionName}: ${emoji}</span>
+                    <span style="font-weight: 600; color: ${q.isCorrect ? '#4CAF50' : '#f44336'};">${q.score.toFixed(2)}/${q.maxScore.toFixed(2)} puntos</span>
+                </div>
+            `;
+        });
+
+        // Guardar intento
+        const saveResult = await saveAttempt(finalScore);
+        
+        // Crear HTML del resultado final
+        const resultHTML = `
+            <div style="text-align: center; font-family: 'Comic Sans MS', cursive;">
+                <!-- Título principal -->
+                <div style="background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%); color: white; padding: 20px; border-radius: 15px; margin-bottom: 20px;">
+                    <h2 style="margin: 0; font-size: 1.8rem; font-weight: 900;">
+                        ¡JUEGO COMPLETADO! 🏆
+                    </h2>
+                </div>
+
+                <!-- Estado y nota -->
+                <div style="background: ${statusColor}; color: white; padding: 15px; border-radius: 12px; margin-bottom: 20px;">
+                    <div style="font-size: 1.4rem; font-weight: 700; margin-bottom: 8px;">
+                        ${statusMessage}
+                    </div>
+                    <div style="font-size: 1.6rem; font-weight: 900;">
+                        NOTA FINAL: ${finalScore.toFixed(2)}/10
+                    </div>
+                </div>
+
+                <!-- Resumen por pregunta -->
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; margin-bottom: 20px; text-align: left;">
+                    <h4 style="margin: 0 0 15px 0; color: #333; font-size: 1.3rem; font-weight: 700; text-align: center;">
+                        📊 Resumen por pregunta:
+                    </h4>
+                    ${questionSummaryHTML}
+                </div>
+
+                <!-- Estado de vidas -->
+                <div style="background: #f0f0f0; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+                    <h4 style="margin: 0 0 15px 0; color: #666; font-size: 1.3rem; font-weight: 700;">
+                        💗 Estado de vidas:
+                    </h4>
+                    <div style="font-size: 1.1rem; line-height: 1.6;">
+                        <div><strong>Vidas antes:</strong> ${vidasTotales}/${vidasTotales}</div>
+                        <div><strong>Vidas después:</strong> ${saveResult.vidasRestantes}/${vidasTotales}</div>
+                        <div style="color: #4CAF50; font-weight: 600; margin-top: 10px;">
+                            ${saveResult.puedeIntentar ? '¡Puedes intentar nuevamente!' : '¡Sin vidas restantes!'}
+                        </div>
+                    </div>
+                </div>
+
+                ${saveResult.success && saveResult.data.is_best_score ? 
+                    '<div style="background: #fff3cd; color: #856404; padding: 15px; border-radius: 10px; margin-bottom: 15px;"><strong>🏆 ¡Nuevo mejor puntaje!</strong></div>' : ''
+                }
+                
+                ${saveResult.success && saveResult.data.nivel_completado ? 
+                    '<div style="background: #d1ecf1; color: #0c5460; padding: 15px; border-radius: 10px; margin-bottom: 15px;"><strong>🎉 ¡Nivel completado!</strong></div>' : ''
+                }
+            </div>
+        `;
+
+        // Mostrar resultados
+        Swal.fire({
+            icon: icon,
+            title: false,
+            html: resultHTML,
+            showCancelButton: saveResult.puedeIntentar, // Solo mostrar cancelButton si puede intentar
+            confirmButtonText: '🏠 Volver al menú',
+            cancelButtonText: saveResult.puedeIntentar ? '🔄 Jugar de nuevo' : undefined,
+            allowOutsideClick: false,
+            width: '600px',
+            customClass: {
+                popup: 'animated bounceIn',
+                confirmButton: 'btn btn-primary',
+                cancelButton: 'btn btn-success'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Volver al menú
+                window.location.href = `/modulo/${moduloId}/niveles/`;
+            } else if (result.dismiss === Swal.DismissReason.cancel && saveResult.puedeIntentar) {
+                // Reiniciar juego solo si puede intentar
+                resetGame();
+            } else {
+                // Si no puede intentar, ir al menú
+                window.location.href = `/modulo/${moduloId}/niveles/`;
+            }
+        });
+
+        // Actualizar mejor puntaje
+        await updateBestScore();
+    }
+
+    // Función para obtener CSRF token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // Guardar intento
+    async function saveAttempt(finalScore) {
+        try {
+            console.log('Enviando datos:', {
+                estudiante_id: studentId,
+                nivel_id: levelId,
+                puntaje_total: finalScore
+            });
+
+            const response = await fetch('/save_attempt/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    estudiante_id: studentId,
+                    nivel_id: levelId,
+                    puntaje_total: finalScore
+                })
+            });
+            
+            const data = await response.json();
+            console.log('Respuesta del servidor:', data);
+            
+            if (data.success) {
+                // Actualizar variables locales
+                vidasRestantes = data.vidas_restantes;
+                puedeIntentar = data.puede_continuar;
+                
+                // Actualizar display de vidas
+                updateLivesDisplay();
+                
+                console.log('Intento guardado correctamente con nota:', data.nota);
+                return { 
+                    success: true, 
+                    data: data,
+                    vidasRestantes: vidasRestantes,
+                    puedeIntentar: puedeIntentar
+                };
+            } else {
+                console.error('Error del servidor:', data.error);
+                return { success: false, error: data.error };
+            }
+        } catch (error) {
+            console.error('Error de red al guardar intento:', error);
+            return { success: false, error: 'Error de conexión: ' + error.message };
+        }
+    }
+
+    // Actualizar mejor puntaje
+    async function updateBestScore() {
+        try {
+            const response = await fetch('/update_best_score/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    estudiante_id: studentId,
+                    nivel_id: levelId
+                })
+            });
+            
+            const data = await response.json();
+            if (data.success) {
+                console.log('Mejor puntaje actualizado:', data.best_score);
+            } else {
+                console.error('Error al actualizar mejor puntaje:', data.error);
+            }
+        } catch (error) {
+            console.error('Error al actualizar mejor puntaje:', error);
+        }
+    }
+
+    // Reiniciar juego
+    function resetGame() {
+        currentQuestion = 1;
+        gameFinished = false;
+        hasGameStarted = false;
+        
+        // Reiniciar variables de puntaje
+        questionScores = [];
+        
+        // Reiniciar variables de preguntas específicas
+        abacosInputs = {};
+        graficasInputs = {};
+        descomposicionSelections = {};
+        secuenciaSelections = {};
+        
+        registerGameSession();
+        
+        // Ocultar contenedores
+        const containers = [
+            'graficas-container',
+            'comparacion-container', 
+            'secuencia-container'
+        ];
+        
+        containers.forEach(containerId => {
+            const container = document.getElementById(containerId);
+            if (container) {
+                container.style.display = 'none';
+            }
+        });
+        
+        // Limpiar inputs y selecciones
+        document.querySelectorAll('.word-input, .number-input').forEach(input => {
+            input.value = '';
+        });
+        
+        document.querySelectorAll('.number-option').forEach(btn => {
+            btn.classList.remove('selected');
+        });
+        
+        displayNumbers();
+    }
+
+    // Event listeners para salida
+    window.addEventListener('beforeunload', function(e) {
+        if (hasGameStarted && currentQuestion > 1 && !gameFinished) {
+            const message = '¿Estás seguro de que quieres salir? Perderás el progreso actual.';
+            e.returnValue = message;
+            return message;
+        }
+    });
+
+    // Inicializar el juego cuando la página carga
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof initializeGameData === 'function') {
+            initializeGameData().then((canPlay) => {
+                if (canPlay) {
+                    createFloatingElements();
+                    displayNumbers();
+                }
+            }).catch((error) => {
+                console.error('Error al inicializar el juego:', error);
+            });
+        } else {
+            console.error('La función initializeGameData no está definida');
+        }
+        
+        // Atajo de teclado para responder
+        document.addEventListener('keydown', function(e) {
+            const answerBtn = document.getElementById('answer-btn');
+            if (e.key === 'Enter' && answerBtn && !answerBtn.disabled) {
+                if (typeof checkAnswer === 'function') {
+                    checkAnswer();
+                }
+            }
+        });
+    
+        // Configurar SweetAlert2 con estilos personalizados
+        const swalStyle = document.createElement('style');
+        swalStyle.textContent = `
+            .swal2-popup {
+                font-family: 'Comic Sans MS', cursive, sans-serif !important;
+                border-radius: 20px !important;
+            }
+            .swal2-title {
+                color: #ff6b6b !important;
+                font-weight: 900 !important;
+            }
+            .swal2-confirm {
+                background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%) !important;
+                border: none !important;
+                border-radius: 25px !important;
+                font-weight: 700 !important;
+                padding: 12px 30px !important;
+            }
+            .swal2-cancel {
+                background: linear-gradient(135deg, #96ceb4 0%, #45b7d1 100%) !important;
+                border: none !important;
+                border-radius: 25px !important;
+                font-weight: 700 !important;
+                padding: 12px 30px !important;
+            }
+        `;
+        document.head.appendChild(swalStyle);
+        
+        // Agregar animación de pulso para vidas bajas
+        const pulseStyle = document.createElement('style');
+        pulseStyle.textContent = `
+            @keyframes pulse {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.05); }
+                100% { transform: scale(1); }
+            }
+        `;
+        document.head.appendChild(pulseStyle);
+    });
+  </script>
+{% endblock %}

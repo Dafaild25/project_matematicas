@@ -13,7 +13,7 @@ Avance Estudiantes
 
 <div class="container-fluid ">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Clases</h1>
+        <h1 class="h3 mb-0 text-gray-800">{{ clase.cla_nombre }}</h1>
 
     </div>
 
@@ -24,13 +24,42 @@ Avance Estudiantes
     </ol>
 
     <div class="card mb-4">
-        <div class="card-header">
-            <i class="fas fa-table me-1"></i>
-            Calificaciones
-        </div>
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <div>
+              <i class="fas fa-table me-1"></i>
+              <strong>{{ clase.fk_modulo.mod_nombre }}</strong>
+          </div>
+          <div class="btn-group">
+              <button type="button" class="btn btn-sm btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                  📄 PDF
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end">
+                  {% for nivel in niveles %}
+                  <li>
+                      <a class="dropdown-item" href="{% url 'pdf_nivel' clase.cla_id nivel.niv_id %}" target="_blank" rel="noopener noreferrer">
+                          <i class="fas fa-file-alt text-primary"></i> PDF {{ nivel.niv_nombre }}
+                      </a>
+                  </li>
+                  {% endfor %}
+                  <li><hr class="dropdown-divider"></li>
+                  <li>
+                      <a class="dropdown-item text-primary fw-bold" href="{% url 'pdf_general' clase.cla_id %}" target="_blank" rel="noopener noreferrer">
+                          <i class="fas fa-file-pdf text-danger"></i> 📘 PDF Reporte General
+                      </a>
+                  </li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li class="px-3 py-2">
+                      <small class="text-muted">
+                          <i class="fas fa-info-circle"></i> Los PDFs se abren en nueva pestaña
+                      </small>
+                  </li>
+              </ul>
+          </div>
+      </div>
+
         <div class="card-body">
-
-
+                <div class="table-responsive"> 
+                {% load custom_filters %}
                 <table class="table table-striped" id="tbl-matriculados-docente" width="100%" cellspacing="0">
                     <thead>
                         <tr>
@@ -70,6 +99,9 @@ Avance Estudiantes
                                             <li>
                                                 <a class="dropdown-item" href="#" onclick="abrirModalVidas('{{ fila.matricula_id}}', '{{ nivel.nivel_id }}')">❤️ Vidas </a>
                                             </li>
+                                             <li>
+                                                <a class="dropdown-item" href="{% url 'reporte_intento_individual' matricula_id=fila.matricula_id nivel_id=nivel.nivel_id %}"> <i class="fas fa-file-pdf text-danger"></i> Reporte </a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>
@@ -77,8 +109,19 @@ Avance Estudiantes
                             {% endfor %}
                         </tr>
                         {% endfor %}
+                        <tr style="background-color: #f2f2f2; font-weight: bold;">
+                            <td>—</td> <!-- Columna del contador -->
+                            <td>Promedio del nivel</td> <!-- Columna del nombre -->
+
+                            {% for nivel in niveles %}
+                            <td class="text-center">
+                                {{ promedios_por_nivel|get_item:nivel.niv_id }}
+                            </td>
+                            {% endfor %}
+                        </tr>
                     </tbody>
                 </table>
+            </div>
 
         </div>
     </div>
@@ -146,11 +189,47 @@ Avance Estudiantes
 </div>
 
 
-{%block js%}
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
+<!-- Alerta de éxito para PDFs -->
+<div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
+  <div id="pdfToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header bg-success text-white">
+      <i class="fas fa-external-link-alt me-2"></i>
+      <strong class="me-auto">PDF Abierto</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+      El PDF se ha abierto en una nueva pestaña para su visualización.
+    </div>
+  </div>
+</div>
 
+
+{%block js%}
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+       document.addEventListener("DOMContentLoaded", function() {
         recargarTablaMatriculados();
+        
+        // Mejorar la experiencia de visualización de PDFs
+        document.querySelectorAll('a[href*="pdf"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                // Mostrar indicador de carga
+                const originalText = this.innerHTML;
+                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando PDF...';
+                this.style.pointerEvents = 'none';
+                
+                // Restaurar el texto después de un momento
+                setTimeout(() => {
+                    this.innerHTML = originalText;
+                    this.style.pointerEvents = 'auto';
+                    
+                    // Mostrar toast de confirmación
+                    const toast = new bootstrap.Toast(document.getElementById('pdfToast'));
+                    toast.show();
+                }, 1000);
+            });
+        });
     });
     function recargarTablaMatriculados(){
         $('#tbl-matriculados-docente').DataTable({
@@ -222,18 +301,41 @@ Avance Estudiantes
       body: formData
     })
     .then(response => response.json())
-    .then(data => {
+   .then(data => {
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        }
+      });
+
       if (data.success) {
-        alert(data.message);
+        Toast.fire({
+          icon: 'success',
+          title: data.message
+        });
         bootstrap.Modal.getInstance(document.getElementById('modalVidas')).hide();
-        location.reload(); // Recarga la tabla si deseas
+        setTimeout(() => location.reload(), 3200); // Espera a que termine el toast
       } else {
-        alert(data.message || "Error al asignar vidas.");
+        Toast.fire({
+          icon: 'error',
+          title: data.message || "Error al asignar vidas."
+        });
       }
     })
     .catch(error => {
       console.error("Error:", error);
-      alert("Ha ocurrido un error inesperado.");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error inesperado',
+        text: 'Ha ocurrido un error inesperado.',
+        confirmButtonColor: '#d33',
+      });
     });
   });
 </script>

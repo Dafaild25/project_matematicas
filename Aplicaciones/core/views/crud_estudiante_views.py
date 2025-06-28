@@ -3,23 +3,23 @@ from django.contrib import messages  # Importar mensajes
 from django.contrib.auth.models import Group # Importar grupos
 from Aplicaciones.core.forms.user_form import UserForm  # Importar clase de registro
 from ..models import * # Importar modelos
-from Aplicaciones.core.validaciones.validar_cedula import * # Importar funciones de validaciones
-from Aplicaciones.core.decorators import rol_required # Importar decorador para requerir administrador
+from ..decorators import admin_required
 
 # VISTA PRINCIPAL PARA LISTAR ESTUDIANTES
-@rol_required('administrador')
+
+@admin_required
 def index(request):
     # Obtener todos los estudiantes excluyendo al usuario logueado
     estudiantes = Estudiantes.objects.exclude(fk_id_persona__fk_id_usuario=request.user) 
     return render(request, 'estudiante/index.html', {'estudiantes': estudiantes})
 
 # VISTA PARA FORMULARIO ESTUDIANTE
-@rol_required('administrador')
+@admin_required
 def create_estudiante(request):
     return render(request, 'estudiante/Create.html')
 
 # METODO CREAR UN NUEVO ESTUDIANTE
-@rol_required('administrador')
+@admin_required
 def nuevo_estudiante(request):
     if(request.method == 'POST'):
         try:
@@ -56,7 +56,7 @@ def nuevo_estudiante(request):
     return redirect('estudiante_index')
 
 # VISTA PARA EDITAR UN ESTUDIANTE
-@rol_required('administrador')
+@admin_required
 def edit_estudiante(request, id_estud):
     estudiante = get_object_or_404(Estudiantes,pk=id_estud) # Obtener el estudiante por su ID
     persona = estudiante.fk_id_persona # Obtener la persona asociada al estudiante
@@ -69,7 +69,7 @@ def edit_estudiante(request, id_estud):
     return render(request,'estudiante/Edit.html', contexto) # Renderizar la plantilla de edición
 
 # METODO PARA ACTUALIZAR UN ESTUDIANTE
-@rol_required('administrador')
+@admin_required
 def actualizar_estudiante(request):
     if request.method == 'POST':
         try:
@@ -109,7 +109,7 @@ def actualizar_estudiante(request):
             return redirect('estudiante_index')
         
 # METODO PARA ELIMINAR UN ESTUDIANTE
-@rol_required('administrador')
+@admin_required
 def eliminar_estudiante(request, id_estud):
     estudiante = get_object_or_404(Estudiantes, pk=id_estud)  # Obtener el estudiante por su ID
     try:
