@@ -3547,6 +3547,7 @@ DEBUG 2025-06-28 13:02:37,781 middleware 19132 9328 Usuario: admin1 - URL: matri
 DEBUG 2025-06-28 13:02:37,782 decorators 19132 9328 Admin acceso: admin1 a vista_tabla_matriculados
 DEBUG 2025-06-28 13:02:41,608 middleware 19132 18264 Usuario: admin1 - URL: matricula_individual
 DEBUG 2025-06-28 13:02:41,608 decorators 19132 18264 Admin acceso: admin1 a matriculaIndividual
+<<<<<<< HEAD
 DEBUG 2025-06-28 13:31:13,500 middleware 3124 10468 Usuario: admin1 - URL: matricula_detalle
 DEBUG 2025-06-28 13:31:13,506 decorators 3124 10468 Admin acceso: admin1 a detalle
 DEBUG 2025-06-28 13:31:13,673 middleware 3124 10468 Usuario: admin1 - URL: None
@@ -4426,3 +4427,126 @@ DEBUG 2025-06-28 16:12:32,784 middleware 6380 1744 Usuario: admin1 - URL: cerrar
 INFO 2025-06-28 16:12:32,797 loguin_views 6380 1744 Logout exitoso para usuario: admin1
 DEBUG 2025-06-28 16:12:32,815 middleware 6380 9204 Usuario: Anónimo - URL: loguin_index
 WARNING 2025-06-28 16:12:32,893 middleware 6380 4396 URL no encontrada: /favicon.ico
+=======
+DEBUG 2025-06-28 13:37:25,975 middleware 17188 7920 Usuario: Anónimo - URL: loguin_index
+WARNING 2025-06-28 13:37:26,423 middleware 17188 7920 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 13:37:38,019 middleware 17188 7920 Usuario: Anónimo - URL: iniciar_sesion
+INFO 2025-06-28 13:37:38,747 loguin_views 17188 7920 Login exitoso para usuario: admin1
+DEBUG 2025-06-28 13:37:38,767 middleware 17188 7920 Usuario: admin1 - URL: core_admin
+DEBUG 2025-06-28 13:37:38,767 middleware 17188 7920 Usuario admin1 con grupos ['Administradores'] accediendo a core_admin
+DEBUG 2025-06-28 13:37:38,767 decorators 17188 7920 Admin acceso: admin1 a dashboard_admin
+INFO 2025-06-28 13:37:38,767 core_views 17188 7920 Usuario admin1 accedió al dashboard admin
+DEBUG 2025-06-28 13:37:38,921 middleware 17188 21868 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 13:37:39,151 middleware 17188 21868 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 13:37:39,190 middleware 17188 21868 Usuario: admin1 - URL: login
+DEBUG 2025-06-28 13:37:46,403 middleware 17188 21868 Usuario: admin1 - URL: administrador_edit
+DEBUG 2025-06-28 13:37:46,403 decorators 17188 21868 Admin acceso: admin1 a edit_administrador
+DEBUG 2025-06-28 13:37:46,568 middleware 17188 21868 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 13:37:55,687 middleware 17188 21868 Usuario: admin1 - URL: administrador_actualizar
+DEBUG 2025-06-28 13:37:55,687 decorators 17188 21868 Admin acceso: admin1 a actualizar_administrador
+DEBUG 2025-06-28 13:37:55,839 middleware 17188 21868 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 13:38:46,849 middleware 17188 21868 Usuario: admin1 - URL: administrador_actualizar
+DEBUG 2025-06-28 13:38:46,849 decorators 17188 21868 Admin acceso: admin1 a actualizar_administrador
+DEBUG 2025-06-28 13:38:46,912 middleware 17188 21868 Usuario: admin1 - URL: administrador_index
+DEBUG 2025-06-28 13:38:46,914 decorators 17188 21868 Admin acceso: admin1 a index
+DEBUG 2025-06-28 13:38:47,021 middleware 17188 21868 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 13:39:04,181 middleware 17188 21868 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 13:39:04,181 decorators 17188 21868 Admin acceso: admin1 a index
+DEBUG 2025-06-28 13:39:04,295 middleware 17188 21868 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 13:39:11,004 middleware 17188 21868 Usuario: admin1 - URL: nivel_index
+DEBUG 2025-06-28 13:39:11,004 decorators 17188 21868 Admin acceso: admin1 a index
+DEBUG 2025-06-28 13:39:11,206 middleware 17188 21868 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 13:39:13,923 middleware 17188 21868 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 13:39:13,930 decorators 17188 21868 Admin acceso: admin1 a index
+DEBUG 2025-06-28 13:39:13,989 middleware 17188 21868 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 13:39:18,995 middleware 17188 21868 Usuario: admin1 - URL: cerrar_sesion
+INFO 2025-06-28 13:39:19,007 loguin_views 17188 21868 Logout exitoso para usuario: admin1
+DEBUG 2025-06-28 13:39:19,015 middleware 17188 21868 Usuario: Anónimo - URL: loguin_index
+DEBUG 2025-06-28 13:39:21,200 middleware 17188 21868 Usuario: Anónimo - URL: docente_index
+INFO 2025-06-28 13:39:21,200 middleware 17188 21868 Usuario no autenticado redirigido desde: docente_index
+DEBUG 2025-06-28 13:39:21,200 middleware 17188 21868 Usuario: Anónimo - URL: loguin_index
+DEBUG 2025-06-28 13:39:21,871 middleware 17188 21868 Usuario: Anónimo - URL: nivel_index
+INFO 2025-06-28 13:39:21,872 middleware 17188 21868 Usuario no autenticado redirigido desde: nivel_index
+DEBUG 2025-06-28 13:39:21,886 middleware 17188 21868 Usuario: Anónimo - URL: loguin_index
+DEBUG 2025-06-28 13:39:22,330 middleware 17188 21868 Usuario: Anónimo - URL: loguin_index
+DEBUG 2025-06-28 13:39:22,501 middleware 17188 21868 Usuario: Anónimo - URL: administrador_index
+INFO 2025-06-28 13:39:22,504 middleware 17188 21868 Usuario no autenticado redirigido desde: administrador_index
+DEBUG 2025-06-28 13:39:22,509 middleware 17188 21868 Usuario: Anónimo - URL: loguin_index
+DEBUG 2025-06-28 13:39:25,237 middleware 17188 21868 Usuario: Anónimo - URL: loguin_index
+DEBUG 2025-06-28 13:39:34,611 middleware 17188 21868 Usuario: Anónimo - URL: iniciar_sesion
+WARNING 2025-06-28 13:39:35,311 loguin_views 17188 21868 Credenciales incorrectas para usuario: docente1
+DEBUG 2025-06-28 13:39:45,795 middleware 17188 21868 Usuario: Anónimo - URL: iniciar_sesion
+INFO 2025-06-28 13:39:46,514 loguin_views 17188 21868 Login exitoso para usuario: docente1
+DEBUG 2025-06-28 13:39:46,536 middleware 17188 21868 Usuario: docente1 - URL: core_docente
+DEBUG 2025-06-28 13:39:46,544 middleware 17188 21868 Usuario docente1 con grupos ['Docentes'] accediendo a core_docente
+DEBUG 2025-06-28 13:39:46,545 decorators 17188 21868 Docente acceso: docente1 a dashboard_docente
+DEBUG 2025-06-28 13:39:46,687 middleware 17188 21868 Usuario: docente1 - URL: None
+DEBUG 2025-06-28 13:39:46,760 middleware 17188 21868 Usuario: docente1 - URL: obtener_datos_dashboard
+DEBUG 2025-06-28 13:39:46,760 decorators 17188 21868 Docente acceso: docente1 a obtener_datos_dashboard
+DEBUG 2025-06-28 13:39:52,321 middleware 17188 21868 Usuario: docente1 - URL: clase_asignada
+DEBUG 2025-06-28 13:39:52,321 decorators 17188 21868 Docente acceso: docente1 a clases_asignadas_docente
+DEBUG 2025-06-28 13:39:52,394 middleware 17188 21868 Usuario: docente1 - URL: None
+DEBUG 2025-06-28 13:39:53,911 middleware 17188 21868 Usuario: docente1 - URL: core_docente
+DEBUG 2025-06-28 13:39:53,915 middleware 17188 21868 Usuario docente1 con grupos ['Docentes'] accediendo a core_docente
+DEBUG 2025-06-28 13:39:53,916 decorators 17188 21868 Docente acceso: docente1 a dashboard_docente
+DEBUG 2025-06-28 13:39:53,987 middleware 17188 21868 Usuario: docente1 - URL: None
+DEBUG 2025-06-28 13:39:54,019 middleware 17188 7920 Usuario: docente1 - URL: obtener_datos_dashboard
+DEBUG 2025-06-28 13:39:54,019 decorators 17188 7920 Docente acceso: docente1 a obtener_datos_dashboard
+DEBUG 2025-06-28 13:39:57,071 middleware 17188 7920 Usuario: docente1 - URL: clase_asignada
+DEBUG 2025-06-28 13:39:57,080 decorators 17188 7920 Docente acceso: docente1 a clases_asignadas_docente
+DEBUG 2025-06-28 13:39:57,139 middleware 17188 7920 Usuario: docente1 - URL: None
+DEBUG 2025-06-28 13:39:59,261 middleware 17188 7920 Usuario: docente1 - URL: matriculados_asignados
+DEBUG 2025-06-28 13:39:59,261 decorators 17188 7920 Docente acceso: docente1 a matriculados_asignados_docente
+DEBUG 2025-06-28 13:39:59,407 middleware 17188 7920 Usuario: docente1 - URL: None
+DEBUG 2025-06-28 13:39:59,437 middleware 17188 7920 Usuario: docente1 - URL: tabla_matriculados_docente
+DEBUG 2025-06-28 13:39:59,444 decorators 17188 7920 Docente acceso: docente1 a vista_tabla_matriculados_docente
+DEBUG 2025-06-28 13:40:07,248 middleware 17188 7920 Usuario: docente1 - URL: clase_asignada
+DEBUG 2025-06-28 13:40:07,248 decorators 17188 7920 Docente acceso: docente1 a clases_asignadas_docente
+DEBUG 2025-06-28 13:40:08,374 middleware 17188 7920 Usuario: docente1 - URL: core_docente
+DEBUG 2025-06-28 13:40:08,374 middleware 17188 7920 Usuario docente1 con grupos ['Docentes'] accediendo a core_docente
+DEBUG 2025-06-28 13:40:08,374 decorators 17188 7920 Docente acceso: docente1 a dashboard_docente
+DEBUG 2025-06-28 13:40:08,455 middleware 17188 7920 Usuario: docente1 - URL: obtener_datos_dashboard
+DEBUG 2025-06-28 13:40:08,455 decorators 17188 7920 Docente acceso: docente1 a obtener_datos_dashboard
+DEBUG 2025-06-28 13:40:09,332 middleware 17188 7920 Usuario: docente1 - URL: clase_asignada
+DEBUG 2025-06-28 13:40:09,332 decorators 17188 7920 Docente acceso: docente1 a clases_asignadas_docente
+DEBUG 2025-06-28 13:40:10,123 middleware 17188 7920 Usuario: docente1 - URL: core_docente
+DEBUG 2025-06-28 13:40:10,128 middleware 17188 7920 Usuario docente1 con grupos ['Docentes'] accediendo a core_docente
+DEBUG 2025-06-28 13:40:10,129 decorators 17188 7920 Docente acceso: docente1 a dashboard_docente
+DEBUG 2025-06-28 13:40:10,213 middleware 17188 7920 Usuario: docente1 - URL: obtener_datos_dashboard
+DEBUG 2025-06-28 13:40:10,213 decorators 17188 7920 Docente acceso: docente1 a obtener_datos_dashboard
+DEBUG 2025-06-28 13:40:13,761 middleware 17188 7920 Usuario: docente1 - URL: loguin_index
+DEBUG 2025-06-28 13:40:13,796 middleware 17188 7920 Usuario: docente1 - URL: core_docente
+DEBUG 2025-06-28 13:40:13,804 middleware 17188 7920 Usuario docente1 con grupos ['Docentes'] accediendo a core_docente
+DEBUG 2025-06-28 13:40:13,810 decorators 17188 7920 Docente acceso: docente1 a dashboard_docente
+DEBUG 2025-06-28 13:40:13,966 middleware 17188 7920 Usuario: docente1 - URL: obtener_datos_dashboard
+DEBUG 2025-06-28 13:40:13,966 decorators 17188 7920 Docente acceso: docente1 a obtener_datos_dashboard
+DEBUG 2025-06-28 13:40:19,831 middleware 17188 7920 Usuario: docente1 - URL: cerrar_sesion
+INFO 2025-06-28 13:40:19,844 loguin_views 17188 7920 Logout exitoso para usuario: docente1
+DEBUG 2025-06-28 13:40:19,849 middleware 17188 7920 Usuario: Anónimo - URL: loguin_index
+>>>>>>> 4fd299d1a03366ec7962f47055b669c8235af84d
+DEBUG 2025-06-28 16:18:14,560 middleware 8680 14436 Usuario: Anónimo - URL: loguin_index
+WARNING 2025-06-28 16:18:14,671 middleware 8680 14436 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 16:18:24,516 middleware 8680 14436 Usuario: Anónimo - URL: iniciar_sesion
+INFO 2025-06-28 16:18:26,671 loguin_views 8680 14436 Login exitoso para usuario: Mauricio1
+DEBUG 2025-06-28 16:18:26,719 middleware 8680 14436 Usuario: Mauricio1 - URL: core_estudiante
+DEBUG 2025-06-28 16:18:26,728 middleware 8680 14436 Usuario Mauricio1 con grupos ['Estudiantes'] accediendo a core_estudiante
+DEBUG 2025-06-28 16:18:26,870 decorators 8680 14436 Estudiante acceso: Mauricio1 a core_estudiante
+DEBUG 2025-06-28 16:18:27,081 middleware 8680 14436 Usuario: Mauricio1 - URL: None
+WARNING 2025-06-28 16:18:27,175 middleware 8680 3956 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 16:18:28,762 middleware 8680 14436 Usuario: Mauricio1 - URL: editar_perfil_estudiante
+DEBUG 2025-06-28 16:18:28,766 decorators 8680 14436 Estudiante acceso: Mauricio1 a editar_perfil_estudiante
+DEBUG 2025-06-28 16:18:28,911 middleware 8680 3956 Usuario: Mauricio1 - URL: None
+DEBUG 2025-06-28 16:18:31,133 middleware 8680 14436 Usuario: Mauricio1 - URL: actualizar_perfil_estudiante
+DEBUG 2025-06-28 16:18:31,142 decorators 8680 14436 Estudiante acceso: Mauricio1 a actualizar_perfil_estudiante
+DEBUG 2025-06-28 16:18:31,380 middleware 8680 3956 Usuario: Mauricio1 - URL: core_estudiante
+DEBUG 2025-06-28 16:18:31,380 middleware 8680 3956 Usuario Mauricio1 con grupos ['Estudiantes'] accediendo a core_estudiante
+DEBUG 2025-06-28 16:18:31,396 decorators 8680 3956 Estudiante acceso: Mauricio1 a core_estudiante
+DEBUG 2025-06-28 16:18:31,531 middleware 8680 3956 Usuario: Mauricio1 - URL: None
+WARNING 2025-06-28 16:18:31,589 middleware 8680 3956 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 16:18:34,741 middleware 8680 14436 Usuario: Mauricio1 - URL: cerrar_sesion
+INFO 2025-06-28 16:18:34,751 loguin_views 8680 14436 Logout exitoso para usuario: Mauricio1
+DEBUG 2025-06-28 16:18:34,769 middleware 8680 3956 Usuario: Anónimo - URL: loguin_index
+DEBUG 2025-06-28 16:18:35,766 middleware 8680 14436 Usuario: Anónimo - URL: core_estudiante
+INFO 2025-06-28 16:18:35,766 middleware 8680 14436 Usuario no autenticado redirigido desde: core_estudiante
+DEBUG 2025-06-28 16:18:35,784 middleware 8680 3956 Usuario: Anónimo - URL: loguin_index
+WARNING 2025-06-28 16:18:35,881 middleware 8680 3956 URL no encontrada: /favicon.ico
