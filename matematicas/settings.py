@@ -29,19 +29,6 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-kg5lwvu9%k18^wnf3a=
 # Configuración mejorada: DEBUG=True por defecto en desarrollo
 DEBUG = os.getenv('DEBUG', 'True').lower() in ['true', '1', 'yes']
 
-# # Hosts permitidos - mejorado para desarrollo y producción
-# if DEBUG:
-#     # En desarrollo: permitir hosts locales
-#     ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '0.0.0.0', '::1']
-# else:
-#     # En producción: usar variable de entorno
-#     ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
-
-# # CSRF_TRUSTED_ORIGINS - solo en producción
-# if not DEBUG:
-#     CSRF_TRUSTED_ORIGINS = [
-#         f'https://{host}' for host in ALLOWED_HOSTS if host not in ['localhost', '127.0.0.1']
-#     ]
 
 # Application definition
 INSTALLED_APPS = [
@@ -241,6 +228,22 @@ if DEBUG:
 else:
     # ===== CONFIGURACIÓN DE PRODUCCIÓN =====
     print("🔴 Ejecutando en modo PRODUCCIÓN")
+    
+    ALLOWED_HOSTS = ['159.69.216.217', 'localhost', '127.0.0.1']
+    
+    # Base de datos PostgreSQL para VPS (si no hay DATABASE_URL)
+    if 'DATABASE_URL' not in os.environ:
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.postgresql',
+                'NAME': 'matematicas_db',
+                'USER': 'matematicas_user',
+                'PASSWORD': 'matematicas_dj_123',
+                'HOST': 'localhost',
+                'PORT': '5432',
+            }
+        }
+    
     
     # Seguridad estricta para producción
     SESSION_COOKIE_SECURE = True
