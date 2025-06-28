@@ -1,0 +1,79 @@
+{% extends 'plantillas/MasterDocente.html'%}
+{% load form_tags %}
+{% block title %}
+Editar Docente
+{% endblock %}
+{% block css %}
+<style>
+    body {
+        background-color: #f4f8ff;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Docente</h1>
+    </div>
+
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="{% url 'core_docente' %}">Inicio</a></li>
+        <li class="breadcrumb-item active">Editar Perfil Docente</li>
+    </ol>
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data" action="{% url 'actualizar_perfil_docente' %}">
+                {% csrf_token %}
+                <div class="row g-4">
+                    <input type="hidden" name="docen_id" value="{{docente.doc_id}}">
+                    <div class="col-md-6">
+                       {% include 'includes/IncludeEditUserForm.html' %}
+                       <label for="fotografia" class="form-label"><b>Fotografía (Opcional):</b></label>
+                        <div class="input-group mb-4">
+                            <span class="input-group-text"><i class="fa-solid fa-camera"></i></span>
+                            <input type="file" name="fotografia" id="fotografia" accept="image/*" class="form-control">
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            {% if docente.doc_fotografia %}
+                                <img id="preview" src="{{ docente.doc_fotografia.url }}" alt="Fotografía actual" class="img-thumbnail" style="max-width: 150px;">
+                            {% else %}
+                                <img id="preview" src="#" alt="Previsualización" class="img-thumbnail" style="max-width: 150px; display: none;">
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        {% include 'includes/IncludeEditPersonaForm.html' %}
+                    </div>
+                </div>       
+                <div class="col-md-12 text-center mt-5">
+                    <button class="btn btn-primary " type="submit">Actualizar Docente</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% block js %}
+<script>
+    const inputFoto = document.getElementById('fotografia');
+    const preview = document.getElementById('preview');
+
+    inputFoto.addEventListener('change', function(){
+        const file = this.files[0];
+        if(file){
+            const reader = new FileReader();
+            reader.onload = function(e){
+                preview.setAttribute('src', e.target.result);
+                preview.style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+        } else {
+            preview.setAttribute('src', '#');
+            preview.style.display = 'none';
+        }
+    });
+</script>
+{% endblock %}
+{% endblock %}
+

@@ -18,12 +18,14 @@ from .views import crud_estudiante_views
 from .views import crud_matricula_views
 from .views import crud_avance_views
 # VISTA DOCENTE
+from .views.master_docente import docente_perfil_views
 from .views.master_docente import core_docente_views
 from .views.master_docente import clases_asignadas_docente_views
 from .views.master_docente import avance_matriculados_docente_views
 # VISTA REPORTES DOCENTE
 from .views.master_docente import reportes_docente
 # VISTA ESTUDIANTE
+from .views.master_estudiante import estudiante_perfil_views
 from .views.master_estudiante import core_estudiante_views
 from .views.master_estudiante import estudiante_modulo_views
 #REPORTE-HISTORIAL
@@ -68,6 +70,10 @@ urlpatterns = [
     #######################################CRUD DOCENTE####################################
     # Vista Inicial del Docente
     path('docente/', crud_docente_views.index, name='docente_index'),
+    # Metodo para Descargar Plantilla de Docente
+    path('docente/plantilla/', crud_docente_views.descargar_plantilla_docentes, name='descargar_plantilla_docentes'),
+    # Metodo para Exportar Docentes
+    path('docente/exportar/', crud_docente_views.exportar_docentes, name='exportar_docentes'),
     # Vista para Crear un Docente
     path('docente/create', crud_docente_views.create_docente, name='docente_create'),
     # Metodo para Crear un Nuevo Docente
@@ -131,6 +137,10 @@ urlpatterns = [
     ########################################VISTA DOCENTE###################################
     # Vista Inicial del Docente
     path('core/docente/', core_docente_views.dashboard_docente, name='core_docente'),
+    # Vista Editar Perfil del Docente
+    path('docente/perfil/', docente_perfil_views.editar_perfil_docente, name='editar_perfil_docente'),
+    # Metodo para Actualizar el Perfil del Docente
+    path('docente/perfil/actualizar/', docente_perfil_views.actualizar_perfil_docente, name='actualizar_perfil_docente'),
     path('dashboard/obtener_datos/', core_docente_views.obtener_datos_dashboard, name='obtener_datos_dashboard'),
     path('docente/clase/', clases_asignadas_docente_views.clases_asignadas_docente, name='clase_asignada'),
     path('docente/matriculados/<int:clase_id>/', clases_asignadas_docente_views.matriculados_asignados_docente, name='matriculados_asignados'),
@@ -158,6 +168,10 @@ urlpatterns = [
     ########################################VISTA ESTUDIANTE##################################
     # Vista Inicial del Estudiante
     path('core/estudiante/', core_estudiante_views.core_estudiante, name='core_estudiante'),
+    # Vista Editar Perfil del Estudiante
+    path('estudiante/perfil/', estudiante_perfil_views.editar_perfil_estudiante, name='editar_perfil_estudiante'),
+    # Metodo para Actualizar el Perfil del Estudiante
+    path('estudiante/perfil/actualizar/',estudiante_perfil_views.actualizar_perfil_estudiante, name='actualizar_perfil_estudiante'),
     path('estudiante/modulo/', estudiante_modulo_views.estudiante_modulo, name='estudiante_modulo'),
     path('modulo/<int:modulo_id>/niveles/', estudiante_modulo_views.ver_niveles_modulo, name='ver_niveles_modulo'),
     

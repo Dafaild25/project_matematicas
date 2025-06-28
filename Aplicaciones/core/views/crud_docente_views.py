@@ -1,20 +1,118 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse # Importar para enviar respuesta HTTP
 from django.contrib import messages  # Importar mensajes
 from django.contrib.auth.models import Group # Importar grupos
 from Aplicaciones.core.forms.user_form import * # Importar clase de registro
 from ..models import * # Importar modelos
 from ..decorators import admin_required
+# PLANTILLA EXCEL
+from openpyxl import Workbook, load_workbook # Importar librería para crear archivos excel
+import io
+from openpyxl.styles import Font
 
 # VISTA PRINCIPAL PARA LISTAR DOCENTES
-
 @admin_required
 def index(request):
     # Obtener todos los docentes excluyendo al usuario logueado
     docentes = Docentes.objects.exclude(fk_id_persona__fk_id_usuario=request.user) 
     return render(request, 'docente/index.html', {'docentes': docentes})
 
-# VISTA PARA FORMULARIO DOCENTES
+# METODO PARA DESCARGAR PLANTILLA EN EXCEL
+@admin_required
+def descargar_plantilla_docentes(request):
+    # Crear archivo Excel
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Docentes"
+    # Encabezados ordenados y estilizados
+    columnas = ['primer_nombre', 'segundo_nombre', 'primer_apellido', 'segundo_apellido','fecha_nacimiento', 'cedula', 'telefono','email']
+    ws.append(columnas)
+    for cell in ws[1]:
+        cell.font = Font(bold=True)
+    # Fila de ejemplo (valores como texto, conservando ceros)
+    ejemplo = ['Juan', 'Carlos', 'Pérez', 'González','1985-10-22', '1729077856', '0912345678', 'juan.perez@example.com']
+    ws.append(ejemplo)
+    # Aplicar formato texto explícito a cédula y teléfono (columnas 6 y 7: F y G)
+    for row in ws.iter_rows(min_row=2, max_row=2, min_col=6, max_col=7):
+        for cell in row:
+            cell.number_format = '@'
+    # Ajuste de anchos
+    for col in ws.columns:
+        max_length = 0
+        column = col[0].column_letter
+        for cell in col:
+            if cell.value:
+                max_length = max(max_length, len(str(cell.value)))
+        ws.column_dimensions[column].width = max_length + 2
+    # Preparar archivo para descarga
+    output = io.BytesIO()
+    wb.save(output)
+    output.seek(0)
+    response = HttpResponse(
+        output,
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    response['Content-Disposition'] = 'attachment; filename=plantilla_docentes.xlsx'
+    return response
 
+# METODO PARA EXPORTAR EL LISTADO DE DOCENTES A EXCEL
+@admin_required
+def exportar_docentes(request):
+    # Crear el archivo Excel
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Docentes"
+    # Encabezados
+    columnas = [
+        'Primer Nombre', 'Segundo Nombre', 'Primer Apellido', 'Segundo Apellido',
+        'Fecha de Nacimiento', 'Cédula', 'Teléfono', 'Email', 'Estado'
+    ]
+    ws.append(columnas)
+    # Aplicar negrita a los encabezados
+    for cell in ws[1]:
+        cell.font = Font(bold=True)
+    # Consultar todos los docentes
+    docentes = Docentes.objects.all()
+    # Agregar los datos al Excel
+    for docente in docentes:
+        persona = docente.fk_id_persona
+        usuario = persona.fk_id_usuario
+        fila = [
+            usuario.first_name,  
+            persona.per_segundo_nombre,       
+            usuario.last_name,   
+            persona.per_segundo_apellido,
+            persona.per_fecha_nacimiento.strftime('%Y-%m-%d') if persona.per_fecha_nacimiento else '',
+            persona.per_cedula,
+            persona.per_telefono,
+            usuario.email,
+            'Activo' if docente.doc_estado else 'Inactivo'  # Estado (mostrar como texto)
+        ]
+        ws.append(fila)
+    # Aplicar formato texto explícito a cédula y teléfono (columnas F y G)
+    for row in ws.iter_rows(min_row=2, min_col=6, max_col=7):
+        for cell in row:
+            cell.number_format = '@'
+    # Ajustar el ancho de las columnas
+    for col in ws.columns:
+        max_length = 0
+        column = col[0].column_letter
+        for cell in col:
+            if cell.value:
+                max_length = max(max_length, len(str(cell.value)))
+        ws.column_dimensions[column].width = max_length + 2
+    # Preparar archivo para descarga
+    output = io.BytesIO()
+    wb.save(output)
+    output.seek(0)
+    response = HttpResponse(
+        output,
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    response['Content-Disposition'] = 'attachment; filename=docentes.xlsx'
+    return response
+
+# VISTA PARA FORMULARIO DOCENTES
 @admin_required
 def create_docente(request):
     formUsuario = UserCreateForm()

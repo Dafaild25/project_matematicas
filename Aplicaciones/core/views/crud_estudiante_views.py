@@ -6,7 +6,6 @@ from ..models import * # Importar modelos
 from ..decorators import admin_required
 
 # VISTA PRINCIPAL PARA LISTAR ESTUDIANTES
-
 @admin_required
 def index(request):
     # Obtener todos los estudiantes excluyendo al usuario logueado

@@ -3547,3 +3547,882 @@ DEBUG 2025-06-28 13:02:37,781 middleware 19132 9328 Usuario: admin1 - URL: matri
 DEBUG 2025-06-28 13:02:37,782 decorators 19132 9328 Admin acceso: admin1 a vista_tabla_matriculados
 DEBUG 2025-06-28 13:02:41,608 middleware 19132 18264 Usuario: admin1 - URL: matricula_individual
 DEBUG 2025-06-28 13:02:41,608 decorators 19132 18264 Admin acceso: admin1 a matriculaIndividual
+DEBUG 2025-06-28 13:31:13,500 middleware 3124 10468 Usuario: admin1 - URL: matricula_detalle
+DEBUG 2025-06-28 13:31:13,506 decorators 3124 10468 Admin acceso: admin1 a detalle
+DEBUG 2025-06-28 13:31:13,673 middleware 3124 10468 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 13:31:13,723 middleware 3124 21360 Usuario: admin1 - URL: matricula_listado
+DEBUG 2025-06-28 13:31:13,740 decorators 3124 21360 Admin acceso: admin1 a vista_tabla_matriculados
+DEBUG 2025-06-28 13:31:30,161 middleware 3124 10468 Usuario: admin1 - URL: clase_index
+DEBUG 2025-06-28 13:31:30,164 decorators 3124 10468 Admin acceso: admin1 a index
+DEBUG 2025-06-28 13:31:30,341 middleware 3124 21360 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 13:31:32,736 middleware 3124 10468 Usuario: admin1 - URL: matricula_index
+DEBUG 2025-06-28 13:31:32,739 decorators 3124 10468 Admin acceso: admin1 a index
+DEBUG 2025-06-28 13:31:32,794 middleware 3124 21360 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 13:31:35,358 middleware 3124 10468 Usuario: admin1 - URL: avance_index
+DEBUG 2025-06-28 13:31:35,360 decorators 3124 10468 Admin acceso: admin1 a index
+DEBUG 2025-06-28 13:31:35,468 middleware 3124 21360 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 13:31:46,786 middleware 3124 10468 Usuario: admin1 - URL: historial_intentos
+DEBUG 2025-06-28 13:31:46,833 middleware 3124 21360 Usuario: admin1 - URL: loguin_index
+DEBUG 2025-06-28 13:31:46,853 middleware 3124 10468 Usuario: admin1 - URL: core_admin
+DEBUG 2025-06-28 13:31:46,853 middleware 3124 10468 Usuario admin1 con grupos ['Administradores'] accediendo a core_admin
+DEBUG 2025-06-28 13:31:46,858 decorators 3124 10468 Admin acceso: admin1 a dashboard_admin
+INFO 2025-06-28 13:31:46,858 core_views 3124 10468 Usuario admin1 accedió al dashboard admin
+DEBUG 2025-06-28 13:31:49,206 middleware 3124 21360 Usuario: admin1 - URL: historial_intentos
+DEBUG 2025-06-28 13:31:49,248 middleware 3124 10468 Usuario: admin1 - URL: loguin_index
+DEBUG 2025-06-28 13:31:49,266 middleware 3124 21360 Usuario: admin1 - URL: core_admin
+DEBUG 2025-06-28 13:31:49,266 middleware 3124 21360 Usuario admin1 con grupos ['Administradores'] accediendo a core_admin
+DEBUG 2025-06-28 13:31:49,268 decorators 3124 21360 Admin acceso: admin1 a dashboard_admin
+INFO 2025-06-28 13:31:49,270 core_views 3124 21360 Usuario admin1 accedió al dashboard admin
+DEBUG 2025-06-28 13:31:51,175 middleware 3124 10468 Usuario: admin1 - URL: historial_intentos
+DEBUG 2025-06-28 13:31:51,195 middleware 3124 21360 Usuario: admin1 - URL: loguin_index
+DEBUG 2025-06-28 13:31:51,218 middleware 3124 10468 Usuario: admin1 - URL: core_admin
+DEBUG 2025-06-28 13:31:51,218 middleware 3124 10468 Usuario admin1 con grupos ['Administradores'] accediendo a core_admin
+DEBUG 2025-06-28 13:31:51,218 decorators 3124 10468 Admin acceso: admin1 a dashboard_admin
+INFO 2025-06-28 13:31:51,223 core_views 3124 10468 Usuario admin1 accedió al dashboard admin
+DEBUG 2025-06-28 13:32:00,555 middleware 3124 21360 Usuario: admin1 - URL: matricula_index
+DEBUG 2025-06-28 13:32:00,556 decorators 3124 21360 Admin acceso: admin1 a index
+DEBUG 2025-06-28 13:32:00,626 middleware 3124 21360 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 13:32:01,574 middleware 3124 10468 Usuario: admin1 - URL: matricula_detalle
+DEBUG 2025-06-28 13:32:01,575 decorators 3124 10468 Admin acceso: admin1 a detalle
+DEBUG 2025-06-28 13:32:01,634 middleware 3124 21360 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 13:32:01,687 middleware 3124 21360 Usuario: admin1 - URL: matricula_listado
+DEBUG 2025-06-28 13:32:01,687 decorators 3124 21360 Admin acceso: admin1 a vista_tabla_matriculados
+DEBUG 2025-06-28 13:32:53,676 middleware 3124 10468 Usuario: admin1 - URL: clase_index
+DEBUG 2025-06-28 13:32:53,685 decorators 3124 10468 Admin acceso: admin1 a index
+DEBUG 2025-06-28 13:32:53,853 middleware 3124 21360 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 13:33:08,758 middleware 3124 10468 Usuario: admin1 - URL: matricula_detalle
+DEBUG 2025-06-28 13:33:08,764 decorators 3124 10468 Admin acceso: admin1 a detalle
+DEBUG 2025-06-28 13:33:08,845 middleware 3124 21360 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 13:33:08,903 middleware 3124 21360 Usuario: admin1 - URL: matricula_listado
+DEBUG 2025-06-28 13:33:08,907 decorators 3124 21360 Admin acceso: admin1 a vista_tabla_matriculados
+DEBUG 2025-06-28 13:33:21,564 middleware 3124 10468 Usuario: admin1 - URL: matricula_index
+DEBUG 2025-06-28 13:33:21,571 decorators 3124 10468 Admin acceso: admin1 a index
+DEBUG 2025-06-28 13:33:21,646 middleware 3124 21360 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 13:34:03,941 middleware 3124 10468 Usuario: admin1 - URL: matricula_detalle
+DEBUG 2025-06-28 13:34:03,941 decorators 3124 10468 Admin acceso: admin1 a detalle
+DEBUG 2025-06-28 13:34:04,035 middleware 3124 21360 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 13:34:04,074 middleware 3124 10468 Usuario: admin1 - URL: matricula_listado
+DEBUG 2025-06-28 13:34:04,074 decorators 3124 10468 Admin acceso: admin1 a vista_tabla_matriculados
+DEBUG 2025-06-28 13:35:35,890 middleware 3124 21360 Usuario: admin1 - URL: matricula_detalle
+DEBUG 2025-06-28 13:35:35,897 decorators 3124 21360 Admin acceso: admin1 a detalle
+DEBUG 2025-06-28 13:35:36,027 middleware 3124 10468 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 13:35:36,260 middleware 3124 2804 Usuario: admin1 - URL: matricula_listado
+DEBUG 2025-06-28 13:35:36,262 decorators 3124 2804 Admin acceso: admin1 a vista_tabla_matriculados
+DEBUG 2025-06-28 13:35:39,431 middleware 3124 10468 Usuario: admin1 - URL: administrador_index
+DEBUG 2025-06-28 13:35:39,434 decorators 3124 10468 Admin acceso: admin1 a index
+DEBUG 2025-06-28 13:35:39,525 middleware 3124 2804 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 13:38:27,620 middleware 3124 11424 Usuario: admin1 - URL: administrador_index
+DEBUG 2025-06-28 13:38:27,620 decorators 3124 11424 Admin acceso: admin1 a index
+DEBUG 2025-06-28 13:38:27,688 middleware 3124 11424 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 13:44:08,013 middleware 18536 19904 Usuario: admin1 - URL: administrador_index
+DEBUG 2025-06-28 13:44:08,013 decorators 18536 19904 Admin acceso: admin1 a index
+DEBUG 2025-06-28 13:44:08,080 middleware 18536 19904 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 13:44:28,569 middleware 18536 19904 Usuario: admin1 - URL: administrador_index
+DEBUG 2025-06-28 13:44:28,575 decorators 18536 19904 Admin acceso: admin1 a index
+DEBUG 2025-06-28 13:44:28,649 middleware 18536 19904 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 13:44:32,009 middleware 18536 19904 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 13:44:32,009 decorators 18536 19904 Admin acceso: admin1 a index
+DEBUG 2025-06-28 13:44:32,085 middleware 18536 19904 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 13:44:42,224 middleware 18536 19904 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 13:44:42,226 decorators 18536 19904 Admin acceso: admin1 a index
+DEBUG 2025-06-28 13:44:42,323 middleware 18536 19904 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 13:45:28,364 middleware 18536 19904 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 13:45:28,371 decorators 18536 19904 Admin acceso: admin1 a index
+DEBUG 2025-06-28 13:45:28,438 middleware 18536 19904 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 13:45:29,159 middleware 18536 19904 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 13:45:29,162 decorators 18536 19904 Admin acceso: admin1 a index
+DEBUG 2025-06-28 13:45:29,207 middleware 18536 8616 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 13:45:30,477 middleware 18536 20104 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 13:45:30,478 decorators 18536 20104 Admin acceso: admin1 a index
+DEBUG 2025-06-28 13:45:30,800 middleware 18536 11688 Usuario: admin1 - URL: None
+WARNING 2025-06-28 13:45:30,953 middleware 18536 11688 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 13:45:52,890 middleware 18536 11688 Usuario: admin1 - URL: docente_create
+DEBUG 2025-06-28 13:45:52,890 decorators 18536 11688 Admin acceso: admin1 a create_docente
+DEBUG 2025-06-28 13:45:52,973 middleware 18536 11688 Usuario: admin1 - URL: docente_create
+DEBUG 2025-06-28 13:45:52,975 decorators 18536 11688 Admin acceso: admin1 a create_docente
+DEBUG 2025-06-28 13:45:52,978 middleware 18536 18472 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 13:59:12,915 middleware 6612 12696 Usuario: admin1 - URL: docente_create
+DEBUG 2025-06-28 13:59:12,915 decorators 6612 12696 Admin acceso: admin1 a create_docente
+DEBUG 2025-06-28 13:59:13,266 middleware 6612 17328 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 13:59:13,266 middleware 6612 5248 Usuario: admin1 - URL: docente_create
+DEBUG 2025-06-28 13:59:13,266 decorators 6612 5248 Admin acceso: admin1 a create_docente
+WARNING 2025-06-28 13:59:13,426 middleware 6612 17328 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 13:59:15,894 middleware 6612 17328 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 13:59:15,899 decorators 6612 17328 Admin acceso: admin1 a index
+DEBUG 2025-06-28 13:59:16,036 middleware 6612 17328 Usuario: admin1 - URL: None
+WARNING 2025-06-28 13:59:16,128 middleware 6612 17328 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 13:59:17,361 middleware 6612 17328 Usuario: admin1 - URL: descargar_plantilla_docentes
+DEBUG 2025-06-28 14:00:08,607 middleware 6612 17328 Usuario: admin1 - URL: estudiante_index
+DEBUG 2025-06-28 14:00:08,623 decorators 6612 17328 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:00:08,692 middleware 6612 17328 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:00:08,743 middleware 6612 17328 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:00:21,481 middleware 6612 17328 Usuario: admin1 - URL: estudiante_index
+DEBUG 2025-06-28 14:00:21,481 decorators 6612 17328 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:00:21,557 middleware 6612 17328 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:00:21,607 middleware 6612 17328 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:00:30,881 middleware 6612 17328 Usuario: admin1 - URL: estudiante_index
+DEBUG 2025-06-28 14:00:30,881 decorators 6612 17328 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:00:30,960 middleware 6612 17328 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:00:31,019 middleware 6612 17328 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:00:32,333 middleware 6612 17328 Usuario: admin1 - URL: descargar_plantilla_estudiantes
+DEBUG 2025-06-28 14:03:23,257 middleware 6612 11128 Usuario: admin1 - URL: matricula_detalle
+DEBUG 2025-06-28 14:03:23,257 decorators 6612 11128 Admin acceso: admin1 a detalle
+DEBUG 2025-06-28 14:03:23,340 middleware 6612 11128 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 14:03:23,382 middleware 6612 3480 Usuario: admin1 - URL: matricula_listado
+DEBUG 2025-06-28 14:03:23,382 decorators 6612 3480 Admin acceso: admin1 a vista_tabla_matriculados
+WARNING 2025-06-28 14:03:23,405 middleware 6612 3480 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:03:29,417 middleware 6612 17776 Usuario: admin1 - URL: matricula_detalle
+DEBUG 2025-06-28 14:03:29,418 decorators 6612 17776 Admin acceso: admin1 a detalle
+DEBUG 2025-06-28 14:03:29,669 middleware 6612 19592 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 14:03:29,744 middleware 6612 19592 Usuario: admin1 - URL: matricula_listado
+DEBUG 2025-06-28 14:03:29,746 decorators 6612 19592 Admin acceso: admin1 a vista_tabla_matriculados
+WARNING 2025-06-28 14:03:29,867 middleware 6612 19592 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:04:42,931 middleware 6612 19592 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:04:42,932 decorators 6612 19592 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:04:43,042 middleware 6612 19592 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:04:43,098 middleware 6612 19592 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:06:16,950 middleware 6612 19592 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:06:16,953 decorators 6612 19592 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:06:17,032 middleware 6612 19592 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:06:17,076 middleware 6612 19592 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:06:32,921 middleware 6612 19592 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:06:32,923 decorators 6612 19592 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:06:32,993 middleware 6612 19592 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:06:33,045 middleware 6612 19592 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:07:12,200 middleware 6612 19592 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:07:12,200 decorators 6612 19592 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:07:12,258 middleware 6612 19592 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:07:12,325 middleware 6612 19592 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:07:57,435 middleware 6612 19592 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:07:57,435 decorators 6612 19592 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:07:57,515 middleware 6612 19592 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:07:57,575 middleware 6612 19592 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:08:24,881 middleware 6612 19592 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:08:24,881 decorators 6612 19592 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:08:24,989 middleware 6612 19592 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:08:25,065 middleware 6612 19592 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:08:48,772 middleware 6612 19592 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:08:48,772 decorators 6612 19592 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:08:48,863 middleware 6612 19592 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:08:48,933 middleware 6612 19592 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:08:52,558 middleware 6612 19592 Usuario: admin1 - URL: docente_create
+DEBUG 2025-06-28 14:08:52,558 decorators 6612 19592 Admin acceso: admin1 a create_docente
+DEBUG 2025-06-28 14:08:52,644 middleware 6612 19592 Usuario: admin1 - URL: docente_create
+DEBUG 2025-06-28 14:08:52,648 decorators 6612 19592 Admin acceso: admin1 a create_docente
+DEBUG 2025-06-28 14:08:52,648 middleware 6612 15064 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:08:52,732 middleware 6612 19592 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:08:53,627 middleware 6612 15064 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:08:53,632 decorators 6612 15064 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:08:53,715 middleware 6612 19592 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 14:08:56,618 middleware 6612 15064 Usuario: admin1 - URL: docente_create
+DEBUG 2025-06-28 14:08:56,622 decorators 6612 15064 Admin acceso: admin1 a create_docente
+DEBUG 2025-06-28 14:08:56,757 middleware 6612 19592 Usuario: admin1 - URL: docente_create
+DEBUG 2025-06-28 14:08:56,762 decorators 6612 19592 Admin acceso: admin1 a create_docente
+DEBUG 2025-06-28 14:08:56,786 middleware 6612 15064 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:08:56,851 middleware 6612 19592 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:08:58,028 middleware 6612 15064 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:08:58,032 decorators 6612 15064 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:08:58,139 middleware 6612 19592 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 14:09:22,516 middleware 6612 15064 Usuario: admin1 - URL: estudiante_index
+DEBUG 2025-06-28 14:09:22,516 decorators 6612 15064 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:09:22,597 middleware 6612 19592 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:09:22,645 middleware 6612 15064 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:09:30,903 middleware 6612 19592 Usuario: admin1 - URL: matricula_index
+DEBUG 2025-06-28 14:09:30,913 decorators 6612 19592 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:09:31,067 middleware 6612 15064 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:09:31,152 middleware 6612 19592 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:09:32,211 middleware 6612 15064 Usuario: admin1 - URL: matricula_detalle
+DEBUG 2025-06-28 14:09:32,215 decorators 6612 15064 Admin acceso: admin1 a detalle
+DEBUG 2025-06-28 14:09:32,299 middleware 6612 19592 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 14:09:32,341 middleware 6612 15064 Usuario: admin1 - URL: matricula_listado
+DEBUG 2025-06-28 14:09:32,345 decorators 6612 15064 Admin acceso: admin1 a vista_tabla_matriculados
+WARNING 2025-06-28 14:09:32,404 middleware 6612 15064 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:11:08,669 middleware 6612 19592 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:11:08,683 decorators 6612 19592 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:11:08,750 middleware 6612 15064 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:11:08,806 middleware 6612 19592 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:14:38,126 middleware 6612 16364 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:14:38,126 decorators 6612 16364 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:14:38,206 middleware 6612 16364 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:14:38,271 middleware 6612 16364 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:14:53,711 middleware 6612 16364 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:14:53,711 decorators 6612 16364 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:14:53,787 middleware 6612 16364 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:14:53,835 middleware 6612 16088 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:15:06,381 middleware 6612 16364 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:15:06,381 decorators 6612 16364 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:15:06,458 middleware 6612 16088 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:15:06,522 middleware 6612 16088 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:15:33,567 middleware 6612 16364 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:15:33,567 decorators 6612 16364 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:15:33,653 middleware 6612 16088 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:15:33,699 middleware 6612 16088 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:15:34,638 middleware 6612 16364 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:15:34,638 decorators 6612 16364 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:15:34,779 middleware 6612 16088 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:15:34,822 middleware 6612 16088 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:15:35,026 middleware 6612 16364 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:15:35,026 decorators 6612 16364 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:15:35,119 middleware 6612 16088 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 14:16:04,978 middleware 6612 16364 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:16:04,978 decorators 6612 16364 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:16:05,059 middleware 6612 16088 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:16:05,127 middleware 6612 16088 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:16:34,280 middleware 6612 16364 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:16:34,280 decorators 6612 16364 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:16:34,359 middleware 6612 16088 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:16:34,418 middleware 6612 16088 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:16:43,760 middleware 6612 16364 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:16:43,762 decorators 6612 16364 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:16:43,830 middleware 6612 16088 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:16:43,882 middleware 6612 16088 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:17:12,210 middleware 6612 16364 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:17:12,210 decorators 6612 16364 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:17:12,288 middleware 6612 16088 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:17:12,364 middleware 6612 16088 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:17:21,399 middleware 6612 16364 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:17:21,401 decorators 6612 16364 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:17:21,552 middleware 6612 16088 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:17:21,690 middleware 6612 16088 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:18:12,409 middleware 6612 16364 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:18:12,424 decorators 6612 16364 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:18:12,478 middleware 6612 16088 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:18:12,520 middleware 6612 16088 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:18:27,400 middleware 6612 16364 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:18:27,401 decorators 6612 16364 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:18:27,474 middleware 6612 16088 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:18:27,543 middleware 6612 16088 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:19:18,946 middleware 6612 16364 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:19:18,946 decorators 6612 16364 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:19:19,026 middleware 6612 16088 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:19:19,101 middleware 6612 16088 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:19:19,750 middleware 6612 16364 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:19:19,753 decorators 6612 16364 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:19:19,857 middleware 6612 16088 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:19:20,092 middleware 6612 16088 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:19:23,328 middleware 6612 16364 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:19:23,328 decorators 6612 16364 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:19:23,416 middleware 6612 16088 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 14:19:40,096 middleware 6612 16364 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:19:40,100 decorators 6612 16364 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:19:40,148 middleware 6612 16088 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:19:40,213 middleware 6612 16088 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:19:40,738 middleware 6612 16364 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:19:40,740 decorators 6612 16364 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:19:40,807 middleware 6612 16088 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 14:19:41,100 middleware 6612 16364 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:19:41,101 decorators 6612 16364 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:19:41,147 middleware 6612 16088 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:19:41,212 middleware 6612 16088 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:19:57,731 middleware 6612 16364 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:19:57,734 decorators 6612 16364 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:19:57,790 middleware 6612 16088 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 14:20:18,642 middleware 6612 16364 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:20:18,645 decorators 6612 16364 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:20:18,721 middleware 6612 16088 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 14:20:19,417 middleware 6612 16364 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:20:19,419 decorators 6612 16364 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:20:19,478 middleware 6612 16088 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 14:20:23,294 middleware 6612 16364 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:20:23,296 decorators 6612 16364 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:20:23,449 middleware 6612 16088 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 14:21:27,181 middleware 6612 16364 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:21:27,181 decorators 6612 16364 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:21:27,258 middleware 6612 16088 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:21:27,336 middleware 6612 16088 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:21:27,976 middleware 6612 16364 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:21:27,976 decorators 6612 16364 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:21:28,076 middleware 6612 16088 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 14:21:39,821 middleware 6612 16364 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:21:39,821 decorators 6612 16364 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:21:39,907 middleware 6612 16088 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:21:39,967 middleware 6612 16088 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:21:46,561 middleware 6612 16364 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:21:46,563 decorators 6612 16364 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:21:46,631 middleware 6612 16088 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:21:46,685 middleware 6612 16088 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:22:47,803 middleware 6612 16364 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:22:47,810 decorators 6612 16364 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:22:47,897 middleware 6612 16088 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:22:47,949 middleware 6612 16088 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:22:48,619 middleware 6612 16364 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:22:48,619 decorators 6612 16364 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:22:48,725 middleware 6612 16088 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 14:22:48,979 middleware 6612 16364 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:22:48,993 decorators 6612 16364 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:22:49,130 middleware 6612 16088 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 14:22:49,346 middleware 6612 16364 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:22:49,354 decorators 6612 16364 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:22:49,413 middleware 6612 16364 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 14:22:49,703 middleware 6612 16364 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:22:49,706 decorators 6612 16364 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:22:49,754 middleware 6612 9492 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 14:23:09,604 middleware 6612 16364 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:23:09,604 decorators 6612 16364 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:23:09,683 middleware 6612 9492 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:23:09,735 middleware 6612 9492 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:28:42,093 middleware 6612 18224 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:28:42,105 decorators 6612 18224 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:28:42,183 middleware 6612 18224 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:28:42,221 middleware 6612 18224 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:28:59,012 middleware 6612 18224 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:28:59,024 decorators 6612 18224 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:28:59,146 middleware 6612 18224 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:28:59,208 middleware 6612 18224 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:29:44,958 middleware 6612 18224 Usuario: admin1 - URL: administrador_index
+DEBUG 2025-06-28 14:29:44,958 decorators 6612 18224 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:29:45,100 middleware 6612 18224 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:29:45,145 middleware 6612 16456 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:29:49,599 middleware 6612 18224 Usuario: admin1 - URL: estudiante_index
+DEBUG 2025-06-28 14:29:49,600 decorators 6612 18224 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:29:49,749 middleware 6612 16456 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:29:49,799 middleware 6612 16456 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:30:32,427 middleware 6612 18224 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:30:32,443 decorators 6612 18224 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:30:32,558 middleware 6612 16456 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:30:32,618 middleware 6612 16456 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:35:00,777 middleware 6612 16440 Usuario: admin1 - URL: docente_create
+DEBUG 2025-06-28 14:35:00,787 decorators 6612 16440 Admin acceso: admin1 a create_docente
+DEBUG 2025-06-28 14:35:00,915 middleware 6612 16440 Usuario: admin1 - URL: docente_create
+DEBUG 2025-06-28 14:35:00,915 decorators 6612 16440 Admin acceso: admin1 a create_docente
+DEBUG 2025-06-28 14:35:00,915 middleware 6612 708 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:35:01,004 middleware 6612 708 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:45:30,759 middleware 16576 11368 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:45:30,763 decorators 16576 11368 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:45:30,983 middleware 16576 11368 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:45:31,046 middleware 16576 11368 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:45:34,186 middleware 16576 11368 Usuario: admin1 - URL: exportar_docentes
+DEBUG 2025-06-28 14:46:29,998 middleware 16576 11368 Usuario: admin1 - URL: matricula_index
+DEBUG 2025-06-28 14:46:29,998 decorators 16576 11368 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:46:30,089 middleware 16576 11368 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:46:30,146 middleware 16576 6108 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:46:31,148 middleware 16576 11368 Usuario: admin1 - URL: matricula_detalle
+DEBUG 2025-06-28 14:46:31,151 decorators 16576 11368 Admin acceso: admin1 a detalle
+DEBUG 2025-06-28 14:46:31,308 middleware 16576 6108 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 14:46:31,390 middleware 16576 6108 Usuario: admin1 - URL: matricula_listado
+DEBUG 2025-06-28 14:46:31,390 decorators 16576 6108 Admin acceso: admin1 a vista_tabla_matriculados
+WARNING 2025-06-28 14:46:31,428 middleware 16576 6108 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:46:39,587 middleware 16576 11368 Usuario: admin1 - URL: matricula_detalle
+DEBUG 2025-06-28 14:46:39,587 decorators 16576 11368 Admin acceso: admin1 a detalle
+DEBUG 2025-06-28 14:46:39,700 middleware 16576 6108 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 14:46:39,903 middleware 16576 11368 Usuario: admin1 - URL: matricula_listado
+DEBUG 2025-06-28 14:46:39,907 decorators 16576 11368 Admin acceso: admin1 a vista_tabla_matriculados
+DEBUG 2025-06-28 14:46:42,218 middleware 16576 11368 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:46:42,218 decorators 16576 11368 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:46:42,341 middleware 16576 11368 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:46:42,405 middleware 16576 12484 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:46:53,701 middleware 16576 11368 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:46:53,712 decorators 16576 11368 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:46:53,789 middleware 16576 12484 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 14:46:54,370 middleware 16576 11368 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:46:54,370 decorators 16576 11368 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:46:54,440 middleware 16576 12484 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 14:46:55,432 middleware 16576 18792 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 14:46:55,432 decorators 16576 18792 Admin acceso: admin1 a index
+DEBUG 2025-06-28 14:46:55,699 middleware 16576 20036 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:46:55,854 middleware 16576 20036 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:48:45,522 middleware 16576 20036 Usuario: admin1 - URL: core_admin
+DEBUG 2025-06-28 14:48:45,524 middleware 16576 20036 Usuario admin1 con grupos ['Administradores'] accediendo a core_admin
+DEBUG 2025-06-28 14:48:45,524 decorators 16576 20036 Admin acceso: admin1 a dashboard_admin
+INFO 2025-06-28 14:48:45,524 core_views 16576 20036 Usuario admin1 accedió al dashboard admin
+DEBUG 2025-06-28 14:48:45,634 middleware 16576 20036 Usuario: admin1 - URL: None
+WARNING 2025-06-28 14:48:45,714 middleware 16576 20036 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:48:45,740 middleware 16576 18980 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 14:48:45,819 middleware 16576 20036 Usuario: admin1 - URL: login
+DEBUG 2025-06-28 14:48:48,848 middleware 16576 20036 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 14:48:48,919 middleware 16576 20036 Usuario: admin1 - URL: login
+DEBUG 2025-06-28 14:48:55,664 middleware 16576 20036 Usuario: admin1 - URL: cerrar_sesion
+INFO 2025-06-28 14:48:55,708 loguin_views 16576 20036 Logout exitoso para usuario: admin1
+DEBUG 2025-06-28 14:48:55,726 middleware 16576 20036 Usuario: Anónimo - URL: loguin_index
+WARNING 2025-06-28 14:48:55,771 middleware 16576 20036 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:49:08,796 middleware 16576 20036 Usuario: Anónimo - URL: iniciar_sesion
+INFO 2025-06-28 14:49:10,477 loguin_views 16576 20036 Login exitoso para usuario: docente1
+DEBUG 2025-06-28 14:49:10,510 middleware 16576 20036 Usuario: docente1 - URL: core_docente
+DEBUG 2025-06-28 14:49:10,515 middleware 16576 20036 Usuario docente1 con grupos ['Docentes'] accediendo a core_docente
+DEBUG 2025-06-28 14:49:10,519 decorators 16576 20036 Docente acceso: docente1 a dashboard_docente
+DEBUG 2025-06-28 14:49:10,918 middleware 16576 20036 Usuario: docente1 - URL: None
+WARNING 2025-06-28 14:49:10,992 middleware 16576 20036 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:49:11,026 middleware 16576 18980 Usuario: docente1 - URL: obtener_datos_dashboard
+DEBUG 2025-06-28 14:49:11,032 decorators 16576 18980 Docente acceso: docente1 a obtener_datos_dashboard
+DEBUG 2025-06-28 14:49:16,564 middleware 16576 20036 Usuario: docente1 - URL: clase_asignada
+DEBUG 2025-06-28 14:49:16,574 decorators 16576 20036 Docente acceso: docente1 a clases_asignadas_docente
+DEBUG 2025-06-28 14:49:16,712 middleware 16576 20036 Usuario: docente1 - URL: None
+DEBUG 2025-06-28 14:49:19,815 middleware 16576 20036 Usuario: docente1 - URL: ver_notas_estudiantes
+DEBUG 2025-06-28 14:49:19,821 decorators 16576 20036 Docente acceso: docente1 a ver_notas_estudiantes
+DEBUG 2025-06-28 14:49:20,039 middleware 16576 20036 Usuario: docente1 - URL: None
+WARNING 2025-06-28 14:49:20,133 middleware 16576 20036 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:49:23,439 middleware 16576 20036 Usuario: docente1 - URL: core_docente
+DEBUG 2025-06-28 14:49:23,445 middleware 16576 20036 Usuario docente1 con grupos ['Docentes'] accediendo a core_docente
+DEBUG 2025-06-28 14:49:23,445 decorators 16576 20036 Docente acceso: docente1 a dashboard_docente
+DEBUG 2025-06-28 14:49:23,539 middleware 16576 20036 Usuario: docente1 - URL: None
+DEBUG 2025-06-28 14:49:23,597 middleware 16576 20036 Usuario: docente1 - URL: obtener_datos_dashboard
+DEBUG 2025-06-28 14:49:23,597 decorators 16576 20036 Docente acceso: docente1 a obtener_datos_dashboard
+DEBUG 2025-06-28 14:50:09,325 middleware 4160 16480 Usuario: docente1 - URL: core_docente
+DEBUG 2025-06-28 14:50:09,327 middleware 4160 16480 Usuario docente1 con grupos ['Docentes'] accediendo a core_docente
+DEBUG 2025-06-28 14:50:09,327 decorators 4160 16480 Docente acceso: docente1 a dashboard_docente
+DEBUG 2025-06-28 14:50:09,660 middleware 4160 12232 Usuario: docente1 - URL: None
+DEBUG 2025-06-28 14:50:09,739 middleware 4160 12232 Usuario: docente1 - URL: obtener_datos_dashboard
+DEBUG 2025-06-28 14:50:09,740 decorators 4160 12232 Docente acceso: docente1 a obtener_datos_dashboard
+WARNING 2025-06-28 14:50:09,824 middleware 4160 12232 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:50:12,800 middleware 4160 12232 Usuario: docente1 - URL: exportar_docentes
+DEBUG 2025-06-28 14:50:12,840 middleware 4160 12232 Usuario: docente1 - URL: loguin_index
+DEBUG 2025-06-28 14:50:12,856 middleware 4160 12232 Usuario: docente1 - URL: core_docente
+DEBUG 2025-06-28 14:50:12,862 middleware 4160 12232 Usuario docente1 con grupos ['Docentes'] accediendo a core_docente
+DEBUG 2025-06-28 14:50:12,865 decorators 4160 12232 Docente acceso: docente1 a dashboard_docente
+DEBUG 2025-06-28 14:50:12,938 middleware 4160 12232 Usuario: docente1 - URL: None
+WARNING 2025-06-28 14:50:12,981 middleware 4160 12232 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 14:50:13,016 middleware 4160 19460 Usuario: docente1 - URL: obtener_datos_dashboard
+DEBUG 2025-06-28 14:50:13,022 decorators 4160 19460 Docente acceso: docente1 a obtener_datos_dashboard
+DEBUG 2025-06-28 15:00:17,843 middleware 4160 16724 Usuario: docente1 - URL: administrador_edit
+DEBUG 2025-06-28 15:00:17,900 middleware 4160 16724 Usuario: docente1 - URL: loguin_index
+DEBUG 2025-06-28 15:00:17,960 middleware 4160 16724 Usuario: docente1 - URL: core_docente
+DEBUG 2025-06-28 15:00:17,960 middleware 4160 16724 Usuario docente1 con grupos ['Docentes'] accediendo a core_docente
+DEBUG 2025-06-28 15:00:17,960 decorators 4160 16724 Docente acceso: docente1 a dashboard_docente
+DEBUG 2025-06-28 15:00:18,120 middleware 4160 16724 Usuario: docente1 - URL: None
+WARNING 2025-06-28 15:00:18,242 middleware 4160 16724 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 15:00:18,289 middleware 4160 13828 Usuario: docente1 - URL: obtener_datos_dashboard
+DEBUG 2025-06-28 15:00:18,316 decorators 4160 13828 Docente acceso: docente1 a obtener_datos_dashboard
+DEBUG 2025-06-28 15:19:10,999 middleware 7060 12124 Usuario: Anónimo - URL: core_estudiantes_changelist
+INFO 2025-06-28 15:19:10,999 middleware 7060 12124 Usuario no autenticado redirigido desde: core_estudiantes_changelist
+DEBUG 2025-06-28 15:19:11,058 middleware 7060 12124 Usuario: Anónimo - URL: loguin_index
+DEBUG 2025-06-28 15:19:16,220 middleware 7060 12124 Usuario: Anónimo - URL: iniciar_sesion
+INFO 2025-06-28 15:19:18,027 loguin_views 7060 12124 Login exitoso para usuario: xavier
+DEBUG 2025-06-28 15:19:18,235 middleware 7060 12124 Usuario: xavier - URL: index
+DEBUG 2025-06-28 15:19:23,159 middleware 7060 12124 Usuario: xavier - URL: core_estudiantes_changelist
+DEBUG 2025-06-28 15:19:23,350 middleware 7060 12124 Usuario: xavier - URL: jsi18n
+DEBUG 2025-06-28 15:19:25,706 middleware 7060 12124 Usuario: xavier - URL: core_estudiantes_change
+DEBUG 2025-06-28 15:19:25,893 middleware 7060 12124 Usuario: xavier - URL: jsi18n
+DEBUG 2025-06-28 15:19:30,760 middleware 7060 12124 Usuario: xavier - URL: logout
+DEBUG 2025-06-28 15:19:30,818 middleware 7060 12124 Usuario: Anónimo - URL: loguin_index_alt
+DEBUG 2025-06-28 15:19:35,409 middleware 7060 4276 Usuario: docente1 - URL: cerrar_sesion
+INFO 2025-06-28 15:19:35,461 loguin_views 7060 4276 Logout exitoso para usuario: docente1
+DEBUG 2025-06-28 15:19:35,468 middleware 7060 4276 Usuario: Anónimo - URL: loguin_index
+WARNING 2025-06-28 15:19:35,532 middleware 7060 4276 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 15:19:44,687 middleware 7060 4276 Usuario: Anónimo - URL: iniciar_sesion
+INFO 2025-06-28 15:19:46,756 loguin_views 7060 4276 Login exitoso para usuario: Mauricio1
+DEBUG 2025-06-28 15:19:46,796 middleware 7060 4276 Usuario: Mauricio1 - URL: core_estudiante
+DEBUG 2025-06-28 15:19:46,802 middleware 7060 4276 Usuario Mauricio1 con grupos ['Estudiantes'] accediendo a core_estudiante
+DEBUG 2025-06-28 15:19:46,803 decorators 7060 4276 Estudiante acceso: Mauricio1 a core_estudiante
+WARNING 2025-06-28 15:19:46,963 middleware 7060 4276 URL no encontrada: /core/estudiante/None
+WARNING 2025-06-28 15:19:47,091 middleware 7060 18184 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 15:35:24,850 middleware 14436 1524 Usuario: Mauricio1 - URL: core_estudiante
+DEBUG 2025-06-28 15:35:24,850 middleware 14436 1524 Usuario Mauricio1 con grupos ['Estudiantes'] accediendo a core_estudiante
+DEBUG 2025-06-28 15:35:24,858 decorators 14436 1524 Estudiante acceso: Mauricio1 a core_estudiante
+WARNING 2025-06-28 15:35:24,957 middleware 14436 1524 URL no encontrada: /core/estudiante/None
+WARNING 2025-06-28 15:35:25,027 middleware 14436 10976 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 15:35:26,100 middleware 14436 1524 Usuario: Mauricio1 - URL: core_estudiante
+DEBUG 2025-06-28 15:35:26,100 middleware 14436 1524 Usuario Mauricio1 con grupos ['Estudiantes'] accediendo a core_estudiante
+DEBUG 2025-06-28 15:35:26,110 decorators 14436 1524 Estudiante acceso: Mauricio1 a core_estudiante
+WARNING 2025-06-28 15:35:26,176 middleware 14436 10976 URL no encontrada: /core/estudiante/None
+WARNING 2025-06-28 15:35:26,232 middleware 14436 10976 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 15:35:27,546 middleware 14436 1524 Usuario: Mauricio1 - URL: editar_perfil_estudiante
+DEBUG 2025-06-28 15:35:27,548 decorators 14436 1524 Estudiante acceso: Mauricio1 a editar_perfil_estudiante
+DEBUG 2025-06-28 15:35:39,344 middleware 14436 10976 Usuario: Mauricio1 - URL: core_estudiante
+DEBUG 2025-06-28 15:35:39,351 middleware 14436 10976 Usuario Mauricio1 con grupos ['Estudiantes'] accediendo a core_estudiante
+DEBUG 2025-06-28 15:35:39,351 decorators 14436 10976 Estudiante acceso: Mauricio1 a core_estudiante
+WARNING 2025-06-28 15:35:39,472 middleware 14436 10976 URL no encontrada: /core/estudiante/None
+DEBUG 2025-06-28 15:35:41,264 middleware 14436 12796 Usuario: Mauricio1 - URL: core_estudiante
+DEBUG 2025-06-28 15:35:41,264 middleware 14436 12796 Usuario Mauricio1 con grupos ['Estudiantes'] accediendo a core_estudiante
+DEBUG 2025-06-28 15:35:41,264 decorators 14436 12796 Estudiante acceso: Mauricio1 a core_estudiante
+WARNING 2025-06-28 15:35:41,623 middleware 14436 21156 URL no encontrada: /core/estudiante/None
+WARNING 2025-06-28 15:35:41,836 middleware 14436 21156 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 15:36:46,964 middleware 14436 21156 Usuario: Mauricio1 - URL: core_estudiante
+DEBUG 2025-06-28 15:36:46,966 middleware 14436 21156 Usuario Mauricio1 con grupos ['Estudiantes'] accediendo a core_estudiante
+DEBUG 2025-06-28 15:36:46,966 decorators 14436 21156 Estudiante acceso: Mauricio1 a core_estudiante
+WARNING 2025-06-28 15:36:47,035 middleware 14436 21156 URL no encontrada: /core/estudiante/None
+DEBUG 2025-06-28 15:36:47,659 middleware 14436 21156 Usuario: Mauricio1 - URL: core_estudiante
+DEBUG 2025-06-28 15:36:47,660 middleware 14436 21156 Usuario Mauricio1 con grupos ['Estudiantes'] accediendo a core_estudiante
+DEBUG 2025-06-28 15:36:47,662 decorators 14436 21156 Estudiante acceso: Mauricio1 a core_estudiante
+WARNING 2025-06-28 15:36:47,711 middleware 14436 21156 URL no encontrada: /core/estudiante/None
+DEBUG 2025-06-28 15:36:48,030 middleware 14436 21156 Usuario: Mauricio1 - URL: core_estudiante
+DEBUG 2025-06-28 15:36:48,032 middleware 14436 21156 Usuario Mauricio1 con grupos ['Estudiantes'] accediendo a core_estudiante
+DEBUG 2025-06-28 15:36:48,033 decorators 14436 21156 Estudiante acceso: Mauricio1 a core_estudiante
+WARNING 2025-06-28 15:36:48,078 middleware 14436 21156 URL no encontrada: /core/estudiante/None
+DEBUG 2025-06-28 15:36:49,407 middleware 14436 21156 Usuario: Mauricio1 - URL: editar_perfil_estudiante
+DEBUG 2025-06-28 15:36:49,409 decorators 14436 21156 Estudiante acceso: Mauricio1 a editar_perfil_estudiante
+WARNING 2025-06-28 15:36:49,460 middleware 14436 21156 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 15:39:25,764 middleware 10016 19940 Usuario: Mauricio1 - URL: core_estudiante
+DEBUG 2025-06-28 15:39:25,764 middleware 10016 19940 Usuario Mauricio1 con grupos ['Estudiantes'] accediendo a core_estudiante
+DEBUG 2025-06-28 15:39:25,775 decorators 10016 19940 Estudiante acceso: Mauricio1 a core_estudiante
+WARNING 2025-06-28 15:39:25,988 middleware 10016 20944 URL no encontrada: /core/estudiante/None
+WARNING 2025-06-28 15:39:26,046 middleware 10016 20944 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 15:39:27,754 middleware 10016 20944 Usuario: Mauricio1 - URL: editar_perfil_estudiante
+DEBUG 2025-06-28 15:39:27,755 decorators 10016 20944 Estudiante acceso: Mauricio1 a editar_perfil_estudiante
+WARNING 2025-06-28 15:39:27,815 middleware 10016 20944 URL no encontrada: /estudiante/perfil/None
+DEBUG 2025-06-28 15:39:27,840 middleware 10016 11300 Usuario: Mauricio1 - URL: editar_perfil_estudiante
+DEBUG 2025-06-28 15:39:27,840 decorators 10016 11300 Estudiante acceso: Mauricio1 a editar_perfil_estudiante
+WARNING 2025-06-28 15:39:27,937 middleware 10016 20944 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 15:39:33,700 middleware 10016 20944 Usuario: Mauricio1 - URL: core_estudiante
+DEBUG 2025-06-28 15:39:33,701 middleware 10016 20944 Usuario Mauricio1 con grupos ['Estudiantes'] accediendo a core_estudiante
+DEBUG 2025-06-28 15:39:33,701 decorators 10016 20944 Estudiante acceso: Mauricio1 a core_estudiante
+WARNING 2025-06-28 15:39:33,776 middleware 10016 20944 URL no encontrada: /core/estudiante/None
+DEBUG 2025-06-28 15:39:35,496 middleware 10016 20944 Usuario: Mauricio1 - URL: editar_perfil_estudiante
+DEBUG 2025-06-28 15:39:35,498 decorators 10016 20944 Estudiante acceso: Mauricio1 a editar_perfil_estudiante
+WARNING 2025-06-28 15:39:35,547 middleware 10016 20944 URL no encontrada: /estudiante/perfil/None
+DEBUG 2025-06-28 15:39:35,568 middleware 10016 11300 Usuario: Mauricio1 - URL: editar_perfil_estudiante
+DEBUG 2025-06-28 15:39:35,583 decorators 10016 11300 Estudiante acceso: Mauricio1 a editar_perfil_estudiante
+WARNING 2025-06-28 15:39:35,648 middleware 10016 20944 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 15:39:51,496 middleware 10016 20944 Usuario: Mauricio1 - URL: core_estudiante
+DEBUG 2025-06-28 15:39:51,498 middleware 10016 20944 Usuario Mauricio1 con grupos ['Estudiantes'] accediendo a core_estudiante
+DEBUG 2025-06-28 15:39:51,499 decorators 10016 20944 Estudiante acceso: Mauricio1 a core_estudiante
+WARNING 2025-06-28 15:39:51,564 middleware 10016 20944 URL no encontrada: /core/estudiante/None
+DEBUG 2025-06-28 15:40:37,460 middleware 10016 20944 Usuario: Mauricio1 - URL: core_estudiante
+DEBUG 2025-06-28 15:40:37,460 middleware 10016 20944 Usuario Mauricio1 con grupos ['Estudiantes'] accediendo a core_estudiante
+DEBUG 2025-06-28 15:40:37,460 decorators 10016 20944 Estudiante acceso: Mauricio1 a core_estudiante
+WARNING 2025-06-28 15:40:37,540 middleware 10016 20944 URL no encontrada: /core/estudiante/None
+WARNING 2025-06-28 15:40:37,604 middleware 10016 20944 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 15:40:39,317 middleware 10016 20944 Usuario: Mauricio1 - URL: editar_perfil_estudiante
+DEBUG 2025-06-28 15:40:39,319 decorators 10016 20944 Estudiante acceso: Mauricio1 a editar_perfil_estudiante
+WARNING 2025-06-28 15:40:39,377 middleware 10016 20944 URL no encontrada: /estudiante/perfil/None
+DEBUG 2025-06-28 15:40:39,395 middleware 10016 11300 Usuario: Mauricio1 - URL: editar_perfil_estudiante
+DEBUG 2025-06-28 15:40:39,398 decorators 10016 11300 Estudiante acceso: Mauricio1 a editar_perfil_estudiante
+WARNING 2025-06-28 15:40:39,472 middleware 10016 20944 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 15:40:42,418 middleware 10016 20944 Usuario: Mauricio1 - URL: core_estudiante
+DEBUG 2025-06-28 15:40:42,422 middleware 10016 20944 Usuario Mauricio1 con grupos ['Estudiantes'] accediendo a core_estudiante
+DEBUG 2025-06-28 15:40:42,428 decorators 10016 20944 Estudiante acceso: Mauricio1 a core_estudiante
+WARNING 2025-06-28 15:40:42,526 middleware 10016 20944 URL no encontrada: /core/estudiante/None
+DEBUG 2025-06-28 15:45:09,904 middleware 8660 2548 Usuario: Mauricio1 - URL: editar_perfil_estudiante
+DEBUG 2025-06-28 15:45:09,914 decorators 8660 2548 Estudiante acceso: Mauricio1 a editar_perfil_estudiante
+WARNING 2025-06-28 15:45:09,997 middleware 8660 2548 URL no encontrada: /estudiante/perfil/None
+DEBUG 2025-06-28 15:45:10,029 middleware 8660 5280 Usuario: Mauricio1 - URL: editar_perfil_estudiante
+DEBUG 2025-06-28 15:45:10,045 decorators 8660 5280 Estudiante acceso: Mauricio1 a editar_perfil_estudiante
+WARNING 2025-06-28 15:45:10,112 middleware 8660 5280 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 15:45:11,999 middleware 8660 2548 Usuario: Mauricio1 - URL: actualizar_perfil_estudiante
+DEBUG 2025-06-28 15:45:12,006 decorators 8660 2548 Estudiante acceso: Mauricio1 a actualizar_perfil_estudiante
+DEBUG 2025-06-28 15:45:12,145 middleware 8660 2548 Usuario: Mauricio1 - URL: core_estudiante
+DEBUG 2025-06-28 15:45:12,145 middleware 8660 2548 Usuario Mauricio1 con grupos ['Estudiantes'] accediendo a core_estudiante
+DEBUG 2025-06-28 15:45:12,145 decorators 8660 2548 Estudiante acceso: Mauricio1 a core_estudiante
+WARNING 2025-06-28 15:45:12,202 middleware 8660 5280 URL no encontrada: /core/estudiante/None
+WARNING 2025-06-28 15:45:12,258 middleware 8660 5280 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 15:45:15,702 middleware 8660 2548 Usuario: Mauricio1 - URL: editar_perfil_estudiante
+DEBUG 2025-06-28 15:45:15,709 decorators 8660 2548 Estudiante acceso: Mauricio1 a editar_perfil_estudiante
+WARNING 2025-06-28 15:45:15,819 middleware 8660 5280 URL no encontrada: /estudiante/perfil/None
+DEBUG 2025-06-28 15:45:15,869 middleware 8660 2548 Usuario: Mauricio1 - URL: editar_perfil_estudiante
+DEBUG 2025-06-28 15:45:15,877 decorators 8660 2548 Estudiante acceso: Mauricio1 a editar_perfil_estudiante
+DEBUG 2025-06-28 15:45:19,606 middleware 8660 5280 Usuario: Mauricio1 - URL: actualizar_perfil_estudiante
+DEBUG 2025-06-28 15:45:19,612 decorators 8660 5280 Estudiante acceso: Mauricio1 a actualizar_perfil_estudiante
+DEBUG 2025-06-28 15:45:19,708 middleware 8660 2548 Usuario: Mauricio1 - URL: core_estudiante
+DEBUG 2025-06-28 15:45:19,708 middleware 8660 2548 Usuario Mauricio1 con grupos ['Estudiantes'] accediendo a core_estudiante
+DEBUG 2025-06-28 15:45:19,708 decorators 8660 2548 Estudiante acceso: Mauricio1 a core_estudiante
+WARNING 2025-06-28 15:45:19,822 middleware 8660 5280 URL no encontrada: /core/estudiante/None
+WARNING 2025-06-28 15:45:19,883 middleware 8660 5280 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 15:45:21,631 middleware 8660 2548 Usuario: Mauricio1 - URL: editar_perfil_estudiante
+DEBUG 2025-06-28 15:45:21,631 decorators 8660 2548 Estudiante acceso: Mauricio1 a editar_perfil_estudiante
+WARNING 2025-06-28 15:45:21,727 middleware 8660 5280 URL no encontrada: /estudiante/perfil/None
+DEBUG 2025-06-28 15:45:21,779 middleware 8660 2548 Usuario: Mauricio1 - URL: editar_perfil_estudiante
+DEBUG 2025-06-28 15:45:21,791 decorators 8660 2548 Estudiante acceso: Mauricio1 a editar_perfil_estudiante
+DEBUG 2025-06-28 15:45:32,912 middleware 8660 5280 Usuario: Mauricio1 - URL: actualizar_perfil_estudiante
+DEBUG 2025-06-28 15:45:32,917 decorators 8660 5280 Estudiante acceso: Mauricio1 a actualizar_perfil_estudiante
+WARNING 2025-06-28 15:45:33,029 middleware 8660 5280 URL no encontrada: /estudiante/perfil/actualizar/None
+DEBUG 2025-06-28 15:45:33,077 middleware 8660 2548 Usuario: Mauricio1 - URL: actualizar_perfil_estudiante
+DEBUG 2025-06-28 15:45:33,093 decorators 8660 2548 Estudiante acceso: Mauricio1 a actualizar_perfil_estudiante
+WARNING 2025-06-28 15:45:33,188 middleware 8660 5280 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 15:45:37,149 middleware 8660 2548 Usuario: Mauricio1 - URL: actualizar_perfil_estudiante
+DEBUG 2025-06-28 15:45:37,154 decorators 8660 2548 Estudiante acceso: Mauricio1 a actualizar_perfil_estudiante
+DEBUG 2025-06-28 15:45:37,237 middleware 8660 2548 Usuario: Mauricio1 - URL: core_estudiante
+DEBUG 2025-06-28 15:45:37,251 middleware 8660 2548 Usuario Mauricio1 con grupos ['Estudiantes'] accediendo a core_estudiante
+DEBUG 2025-06-28 15:45:37,251 decorators 8660 2548 Estudiante acceso: Mauricio1 a core_estudiante
+WARNING 2025-06-28 15:45:37,363 middleware 8660 5280 URL no encontrada: /core/estudiante/None
+WARNING 2025-06-28 15:45:37,425 middleware 8660 5280 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 15:45:39,165 middleware 8660 2548 Usuario: Mauricio1 - URL: editar_perfil_estudiante
+DEBUG 2025-06-28 15:45:39,175 decorators 8660 2548 Estudiante acceso: Mauricio1 a editar_perfil_estudiante
+WARNING 2025-06-28 15:45:39,398 middleware 8660 5280 URL no encontrada: /estudiante/perfil/None
+DEBUG 2025-06-28 15:45:39,452 middleware 8660 2548 Usuario: Mauricio1 - URL: editar_perfil_estudiante
+DEBUG 2025-06-28 15:45:39,479 decorators 8660 2548 Estudiante acceso: Mauricio1 a editar_perfil_estudiante
+WARNING 2025-06-28 15:45:39,542 middleware 8660 5280 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 15:45:51,449 middleware 8660 2548 Usuario: Mauricio1 - URL: actualizar_perfil_estudiante
+DEBUG 2025-06-28 15:45:51,474 decorators 8660 2548 Estudiante acceso: Mauricio1 a actualizar_perfil_estudiante
+DEBUG 2025-06-28 15:45:51,587 middleware 8660 2548 Usuario: Mauricio1 - URL: core_estudiante
+DEBUG 2025-06-28 15:45:51,587 middleware 8660 2548 Usuario Mauricio1 con grupos ['Estudiantes'] accediendo a core_estudiante
+DEBUG 2025-06-28 15:45:51,601 decorators 8660 2548 Estudiante acceso: Mauricio1 a core_estudiante
+DEBUG 2025-06-28 15:45:51,691 middleware 8660 5280 Usuario: Mauricio1 - URL: None
+DEBUG 2025-06-28 15:45:56,023 middleware 8660 5280 Usuario: Mauricio1 - URL: editar_perfil_estudiante
+DEBUG 2025-06-28 15:45:56,023 decorators 8660 5280 Estudiante acceso: Mauricio1 a editar_perfil_estudiante
+DEBUG 2025-06-28 15:45:56,157 middleware 8660 5280 Usuario: Mauricio1 - URL: None
+WARNING 2025-06-28 15:45:56,231 middleware 8660 5280 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 15:46:02,352 middleware 8660 5280 Usuario: Mauricio1 - URL: core_estudiante
+DEBUG 2025-06-28 15:46:02,365 middleware 8660 5280 Usuario Mauricio1 con grupos ['Estudiantes'] accediendo a core_estudiante
+DEBUG 2025-06-28 15:46:02,368 decorators 8660 5280 Estudiante acceso: Mauricio1 a core_estudiante
+DEBUG 2025-06-28 15:46:02,510 middleware 8660 5280 Usuario: Mauricio1 - URL: None
+WARNING 2025-06-28 15:46:02,573 middleware 8660 5280 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 15:46:10,291 middleware 8660 5280 Usuario: Mauricio1 - URL: cerrar_sesion
+INFO 2025-06-28 15:46:10,337 loguin_views 8660 5280 Logout exitoso para usuario: Mauricio1
+DEBUG 2025-06-28 15:46:10,357 middleware 8660 5280 Usuario: Anónimo - URL: loguin_index
+WARNING 2025-06-28 15:46:10,496 middleware 8660 5280 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 15:46:20,878 middleware 8660 5280 Usuario: Anónimo - URL: iniciar_sesion
+WARNING 2025-06-28 15:46:23,085 loguin_views 8660 5280 Credenciales incorrectas para usuario: docente1
+WARNING 2025-06-28 15:46:23,244 middleware 8660 5280 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 15:46:28,038 middleware 8660 5280 Usuario: Anónimo - URL: iniciar_sesion
+INFO 2025-06-28 15:46:30,309 loguin_views 8660 5280 Login exitoso para usuario: docente1
+DEBUG 2025-06-28 15:46:30,367 middleware 8660 5280 Usuario: docente1 - URL: core_docente
+DEBUG 2025-06-28 15:46:30,371 middleware 8660 5280 Usuario docente1 con grupos ['Docentes'] accediendo a core_docente
+DEBUG 2025-06-28 15:46:30,376 decorators 8660 5280 Docente acceso: docente1 a dashboard_docente
+DEBUG 2025-06-28 15:46:30,648 middleware 8660 5280 Usuario: docente1 - URL: None
+WARNING 2025-06-28 15:46:30,758 middleware 8660 5280 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 15:46:30,797 middleware 8660 2548 Usuario: docente1 - URL: obtener_datos_dashboard
+DEBUG 2025-06-28 15:46:30,804 decorators 8660 2548 Docente acceso: docente1 a obtener_datos_dashboard
+DEBUG 2025-06-28 15:48:35,224 middleware 8660 15256 Usuario: docente1 - URL: cerrar_sesion
+INFO 2025-06-28 15:48:35,267 loguin_views 8660 15256 Logout exitoso para usuario: docente1
+DEBUG 2025-06-28 15:48:35,279 middleware 8660 15256 Usuario: Anónimo - URL: loguin_index
+WARNING 2025-06-28 15:48:35,342 middleware 8660 15256 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 15:48:45,313 middleware 8660 15256 Usuario: Anónimo - URL: iniciar_sesion
+INFO 2025-06-28 15:48:46,937 loguin_views 8660 15256 Login exitoso para usuario: Mauricio1
+DEBUG 2025-06-28 15:48:46,965 middleware 8660 15256 Usuario: Mauricio1 - URL: core_estudiante
+DEBUG 2025-06-28 15:48:46,965 middleware 8660 15256 Usuario Mauricio1 con grupos ['Estudiantes'] accediendo a core_estudiante
+DEBUG 2025-06-28 15:48:46,971 decorators 8660 15256 Estudiante acceso: Mauricio1 a core_estudiante
+DEBUG 2025-06-28 15:48:47,110 middleware 8660 15256 Usuario: Mauricio1 - URL: None
+WARNING 2025-06-28 15:48:47,179 middleware 8660 20828 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 15:49:11,244 middleware 8660 15256 Usuario: Mauricio1 - URL: core_estudiante
+DEBUG 2025-06-28 15:49:11,244 middleware 8660 15256 Usuario Mauricio1 con grupos ['Estudiantes'] accediendo a core_estudiante
+DEBUG 2025-06-28 15:49:11,244 decorators 8660 15256 Estudiante acceso: Mauricio1 a core_estudiante
+DEBUG 2025-06-28 15:49:11,331 middleware 8660 20828 Usuario: Mauricio1 - URL: None
+WARNING 2025-06-28 15:49:11,388 middleware 8660 20828 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 15:49:14,014 middleware 8660 15256 Usuario: Mauricio1 - URL: editar_perfil_estudiante
+DEBUG 2025-06-28 15:49:14,014 decorators 8660 15256 Estudiante acceso: Mauricio1 a editar_perfil_estudiante
+DEBUG 2025-06-28 15:49:14,114 middleware 8660 20828 Usuario: Mauricio1 - URL: None
+WARNING 2025-06-28 15:49:14,216 middleware 8660 20828 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 15:49:15,423 middleware 8660 15256 Usuario: Mauricio1 - URL: actualizar_perfil_estudiante
+DEBUG 2025-06-28 15:49:15,434 decorators 8660 15256 Estudiante acceso: Mauricio1 a actualizar_perfil_estudiante
+DEBUG 2025-06-28 15:49:15,544 middleware 8660 20828 Usuario: Mauricio1 - URL: core_estudiante
+DEBUG 2025-06-28 15:49:15,544 middleware 8660 20828 Usuario Mauricio1 con grupos ['Estudiantes'] accediendo a core_estudiante
+DEBUG 2025-06-28 15:49:15,553 decorators 8660 20828 Estudiante acceso: Mauricio1 a core_estudiante
+DEBUG 2025-06-28 15:49:15,666 middleware 8660 20828 Usuario: Mauricio1 - URL: None
+DEBUG 2025-06-28 15:49:23,277 middleware 8660 15256 Usuario: Mauricio1 - URL: cerrar_sesion
+INFO 2025-06-28 15:49:23,318 loguin_views 8660 15256 Logout exitoso para usuario: Mauricio1
+DEBUG 2025-06-28 15:49:23,318 middleware 8660 20828 Usuario: Anónimo - URL: loguin_index
+WARNING 2025-06-28 15:49:23,403 middleware 8660 20828 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 15:49:34,398 middleware 8660 15256 Usuario: Anónimo - URL: iniciar_sesion
+WARNING 2025-06-28 15:49:36,644 loguin_views 8660 15256 Credenciales incorrectas para usuario: docente1
+WARNING 2025-06-28 15:49:36,726 middleware 8660 20828 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 15:49:42,960 middleware 8660 15256 Usuario: Anónimo - URL: iniciar_sesion
+INFO 2025-06-28 15:49:45,246 loguin_views 8660 15256 Login exitoso para usuario: docente1
+DEBUG 2025-06-28 15:49:45,290 middleware 8660 20828 Usuario: docente1 - URL: core_docente
+DEBUG 2025-06-28 15:49:45,290 middleware 8660 20828 Usuario docente1 con grupos ['Docentes'] accediendo a core_docente
+DEBUG 2025-06-28 15:49:45,309 decorators 8660 20828 Docente acceso: docente1 a dashboard_docente
+DEBUG 2025-06-28 15:49:45,512 middleware 8660 20828 Usuario: docente1 - URL: None
+WARNING 2025-06-28 15:49:45,614 middleware 8660 20828 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 15:49:45,654 middleware 8660 15256 Usuario: docente1 - URL: obtener_datos_dashboard
+DEBUG 2025-06-28 15:49:45,662 decorators 8660 15256 Docente acceso: docente1 a obtener_datos_dashboard
+DEBUG 2025-06-28 16:00:59,258 middleware 10716 21032 Usuario: docente1 - URL: core_docente
+DEBUG 2025-06-28 16:00:59,258 middleware 10716 21032 Usuario docente1 con grupos ['Docentes'] accediendo a core_docente
+DEBUG 2025-06-28 16:00:59,266 decorators 10716 21032 Docente acceso: docente1 a dashboard_docente
+DEBUG 2025-06-28 16:00:59,634 middleware 10716 21552 Usuario: docente1 - URL: None
+DEBUG 2025-06-28 16:00:59,744 middleware 10716 21552 Usuario: docente1 - URL: obtener_datos_dashboard
+DEBUG 2025-06-28 16:00:59,746 decorators 10716 21552 Docente acceso: docente1 a obtener_datos_dashboard
+WARNING 2025-06-28 16:00:59,809 middleware 10716 21552 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 16:01:02,772 middleware 10716 21552 Usuario: docente1 - URL: core_docente
+DEBUG 2025-06-28 16:01:02,774 middleware 10716 21552 Usuario docente1 con grupos ['Docentes'] accediendo a core_docente
+DEBUG 2025-06-28 16:01:02,777 decorators 10716 21552 Docente acceso: docente1 a dashboard_docente
+DEBUG 2025-06-28 16:01:02,874 middleware 10716 21552 Usuario: docente1 - URL: None
+WARNING 2025-06-28 16:01:02,965 middleware 10716 21552 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 16:01:02,989 middleware 10716 10888 Usuario: docente1 - URL: obtener_datos_dashboard
+DEBUG 2025-06-28 16:01:03,034 decorators 10716 10888 Docente acceso: docente1 a obtener_datos_dashboard
+DEBUG 2025-06-28 16:01:04,638 middleware 10716 21552 Usuario: docente1 - URL: editar_perfil_docente
+DEBUG 2025-06-28 16:01:04,645 decorators 10716 21552 Docente acceso: docente1 a editar_perfil_docente
+DEBUG 2025-06-28 16:01:04,854 middleware 10716 21552 Usuario: docente1 - URL: None
+DEBUG 2025-06-28 16:01:08,856 middleware 10716 21552 Usuario: docente1 - URL: core_docente
+DEBUG 2025-06-28 16:01:08,859 middleware 10716 21552 Usuario docente1 con grupos ['Docentes'] accediendo a core_docente
+DEBUG 2025-06-28 16:01:08,859 decorators 10716 21552 Docente acceso: docente1 a dashboard_docente
+DEBUG 2025-06-28 16:01:09,013 middleware 10716 21552 Usuario: docente1 - URL: None
+DEBUG 2025-06-28 16:01:09,081 middleware 10716 10888 Usuario: docente1 - URL: obtener_datos_dashboard
+DEBUG 2025-06-28 16:01:09,081 decorators 10716 10888 Docente acceso: docente1 a obtener_datos_dashboard
+WARNING 2025-06-28 16:01:09,172 middleware 10716 21552 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 16:01:11,712 middleware 10716 21552 Usuario: docente1 - URL: editar_perfil_docente
+DEBUG 2025-06-28 16:01:11,716 decorators 10716 21552 Docente acceso: docente1 a editar_perfil_docente
+DEBUG 2025-06-28 16:01:11,861 middleware 10716 21552 Usuario: docente1 - URL: None
+WARNING 2025-06-28 16:01:11,984 middleware 10716 21552 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 16:01:28,923 middleware 10716 21552 Usuario: docente1 - URL: editar_perfil_docente
+DEBUG 2025-06-28 16:01:28,923 decorators 10716 21552 Docente acceso: docente1 a editar_perfil_docente
+DEBUG 2025-06-28 16:01:29,048 middleware 10716 21552 Usuario: docente1 - URL: None
+DEBUG 2025-06-28 16:04:14,815 middleware 11732 2436 Usuario: docente1 - URL: editar_perfil_docente
+DEBUG 2025-06-28 16:04:14,815 decorators 11732 2436 Docente acceso: docente1 a editar_perfil_docente
+DEBUG 2025-06-28 16:04:15,177 middleware 11732 10732 Usuario: docente1 - URL: None
+WARNING 2025-06-28 16:04:15,567 middleware 11732 10732 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 16:04:17,111 middleware 11732 10732 Usuario: docente1 - URL: actualizar_perfil_docente
+DEBUG 2025-06-28 16:04:17,127 decorators 11732 10732 Docente acceso: docente1 a actualizar_perfil_docente
+DEBUG 2025-06-28 16:04:17,371 middleware 11732 10732 Usuario: docente1 - URL: None
+WARNING 2025-06-28 16:04:17,434 middleware 11732 10732 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 16:04:54,981 middleware 11732 10732 Usuario: docente1 - URL: actualizar_perfil_docente
+DEBUG 2025-06-28 16:04:54,984 decorators 11732 10732 Docente acceso: docente1 a actualizar_perfil_docente
+DEBUG 2025-06-28 16:04:55,095 middleware 11732 10732 Usuario: docente1 - URL: core_docente
+DEBUG 2025-06-28 16:04:55,095 middleware 11732 10732 Usuario docente1 con grupos ['Docentes'] accediendo a core_docente
+DEBUG 2025-06-28 16:04:55,109 decorators 11732 10732 Docente acceso: docente1 a dashboard_docente
+DEBUG 2025-06-28 16:04:55,245 middleware 11732 10732 Usuario: docente1 - URL: None
+DEBUG 2025-06-28 16:04:55,334 middleware 11732 10732 Usuario: docente1 - URL: obtener_datos_dashboard
+DEBUG 2025-06-28 16:04:55,336 decorators 11732 10732 Docente acceso: docente1 a obtener_datos_dashboard
+DEBUG 2025-06-28 16:05:37,206 middleware 15384 21560 Usuario: docente1 - URL: editar_perfil_docente
+DEBUG 2025-06-28 16:05:37,206 decorators 15384 21560 Docente acceso: docente1 a editar_perfil_docente
+DEBUG 2025-06-28 16:05:37,416 middleware 15384 21560 Usuario: docente1 - URL: None
+WARNING 2025-06-28 16:05:37,594 middleware 15384 9868 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 16:05:39,279 middleware 15384 21560 Usuario: docente1 - URL: actualizar_perfil_docente
+DEBUG 2025-06-28 16:05:39,292 decorators 15384 21560 Docente acceso: docente1 a actualizar_perfil_docente
+DEBUG 2025-06-28 16:05:39,493 middleware 15384 21560 Usuario: docente1 - URL: core_docente
+DEBUG 2025-06-28 16:05:39,493 middleware 15384 21560 Usuario docente1 con grupos ['Docentes'] accediendo a core_docente
+DEBUG 2025-06-28 16:05:39,502 decorators 15384 21560 Docente acceso: docente1 a dashboard_docente
+DEBUG 2025-06-28 16:05:39,614 middleware 15384 9868 Usuario: docente1 - URL: None
+DEBUG 2025-06-28 16:05:39,665 middleware 15384 21560 Usuario: docente1 - URL: obtener_datos_dashboard
+DEBUG 2025-06-28 16:05:39,674 decorators 15384 21560 Docente acceso: docente1 a obtener_datos_dashboard
+WARNING 2025-06-28 16:05:39,757 middleware 15384 9868 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 16:05:44,125 middleware 15384 21560 Usuario: docente1 - URL: editar_perfil_docente
+DEBUG 2025-06-28 16:05:44,125 decorators 15384 21560 Docente acceso: docente1 a editar_perfil_docente
+DEBUG 2025-06-28 16:05:44,247 middleware 15384 9868 Usuario: docente1 - URL: None
+DEBUG 2025-06-28 16:05:48,351 middleware 15384 21560 Usuario: docente1 - URL: actualizar_perfil_docente
+DEBUG 2025-06-28 16:05:48,356 decorators 15384 21560 Docente acceso: docente1 a actualizar_perfil_docente
+DEBUG 2025-06-28 16:05:48,426 middleware 15384 9868 Usuario: docente1 - URL: core_docente
+DEBUG 2025-06-28 16:05:48,439 middleware 15384 9868 Usuario docente1 con grupos ['Docentes'] accediendo a core_docente
+DEBUG 2025-06-28 16:05:48,439 decorators 15384 9868 Docente acceso: docente1 a dashboard_docente
+DEBUG 2025-06-28 16:05:48,554 middleware 15384 9868 Usuario: docente1 - URL: None
+DEBUG 2025-06-28 16:05:48,652 middleware 15384 21560 Usuario: docente1 - URL: obtener_datos_dashboard
+DEBUG 2025-06-28 16:05:48,665 decorators 15384 21560 Docente acceso: docente1 a obtener_datos_dashboard
+WARNING 2025-06-28 16:05:48,696 middleware 15384 9868 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 16:05:51,637 middleware 15384 21560 Usuario: docente1 - URL: editar_perfil_docente
+DEBUG 2025-06-28 16:05:51,645 decorators 15384 21560 Docente acceso: docente1 a editar_perfil_docente
+DEBUG 2025-06-28 16:05:51,821 middleware 15384 9868 Usuario: docente1 - URL: None
+WARNING 2025-06-28 16:05:51,959 middleware 15384 9868 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 16:06:01,544 middleware 15384 21560 Usuario: docente1 - URL: actualizar_perfil_docente
+DEBUG 2025-06-28 16:06:01,560 decorators 15384 21560 Docente acceso: docente1 a actualizar_perfil_docente
+DEBUG 2025-06-28 16:06:01,647 middleware 15384 9868 Usuario: docente1 - URL: core_docente
+DEBUG 2025-06-28 16:06:01,652 middleware 15384 9868 Usuario docente1 con grupos ['Docentes'] accediendo a core_docente
+DEBUG 2025-06-28 16:06:01,656 decorators 15384 9868 Docente acceso: docente1 a dashboard_docente
+DEBUG 2025-06-28 16:06:01,777 middleware 15384 9868 Usuario: docente1 - URL: None
+DEBUG 2025-06-28 16:06:01,853 middleware 15384 9868 Usuario: docente1 - URL: obtener_datos_dashboard
+DEBUG 2025-06-28 16:06:01,863 decorators 15384 9868 Docente acceso: docente1 a obtener_datos_dashboard
+DEBUG 2025-06-28 16:06:05,779 middleware 15384 21560 Usuario: docente1 - URL: editar_perfil_docente
+DEBUG 2025-06-28 16:06:05,792 decorators 15384 21560 Docente acceso: docente1 a editar_perfil_docente
+DEBUG 2025-06-28 16:06:05,887 middleware 15384 9868 Usuario: docente1 - URL: None
+WARNING 2025-06-28 16:06:05,998 middleware 15384 9868 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 16:06:57,889 middleware 13724 10312 Usuario: docente1 - URL: editar_perfil_docente
+DEBUG 2025-06-28 16:06:57,893 decorators 13724 10312 Docente acceso: docente1 a editar_perfil_docente
+DEBUG 2025-06-28 16:06:58,200 middleware 13724 16168 Usuario: docente1 - URL: None
+WARNING 2025-06-28 16:06:58,409 middleware 13724 16168 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 16:07:04,936 middleware 13724 16168 Usuario: docente1 - URL: actualizar_perfil_docente
+DEBUG 2025-06-28 16:07:04,965 decorators 13724 16168 Docente acceso: docente1 a actualizar_perfil_docente
+DEBUG 2025-06-28 16:07:05,176 middleware 13724 16168 Usuario: docente1 - URL: core_docente
+DEBUG 2025-06-28 16:07:05,187 middleware 13724 16168 Usuario docente1 con grupos ['Docentes'] accediendo a core_docente
+DEBUG 2025-06-28 16:07:05,192 decorators 13724 16168 Docente acceso: docente1 a dashboard_docente
+DEBUG 2025-06-28 16:07:05,342 middleware 13724 16168 Usuario: docente1 - URL: None
+DEBUG 2025-06-28 16:07:05,477 middleware 13724 16168 Usuario: docente1 - URL: obtener_datos_dashboard
+DEBUG 2025-06-28 16:07:05,477 decorators 13724 16168 Docente acceso: docente1 a obtener_datos_dashboard
+WARNING 2025-06-28 16:07:05,549 middleware 13724 16168 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 16:07:18,380 middleware 13724 16168 Usuario: docente1 - URL: obtener_datos_dashboard
+DEBUG 2025-06-28 16:07:18,380 decorators 13724 16168 Docente acceso: docente1 a obtener_datos_dashboard
+DEBUG 2025-06-28 16:07:35,156 middleware 13724 16168 Usuario: docente1 - URL: obtener_datos_dashboard
+DEBUG 2025-06-28 16:07:35,156 decorators 13724 16168 Docente acceso: docente1 a obtener_datos_dashboard
+DEBUG 2025-06-28 16:07:36,385 middleware 13724 16168 Usuario: docente1 - URL: obtener_datos_dashboard
+DEBUG 2025-06-28 16:07:36,385 decorators 13724 16168 Docente acceso: docente1 a obtener_datos_dashboard
+DEBUG 2025-06-28 16:07:49,760 middleware 13724 16168 Usuario: docente1 - URL: cerrar_sesion
+INFO 2025-06-28 16:07:49,810 loguin_views 13724 16168 Logout exitoso para usuario: docente1
+DEBUG 2025-06-28 16:07:49,810 middleware 13724 16168 Usuario: Anónimo - URL: loguin_index
+WARNING 2025-06-28 16:07:49,880 middleware 13724 16168 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 16:07:58,931 middleware 13724 16168 Usuario: Anónimo - URL: iniciar_sesion
+INFO 2025-06-28 16:08:00,987 loguin_views 13724 16168 Login exitoso para usuario: Mauricio1
+DEBUG 2025-06-28 16:08:01,062 middleware 13724 16168 Usuario: Mauricio1 - URL: core_estudiante
+DEBUG 2025-06-28 16:08:01,070 middleware 13724 16168 Usuario Mauricio1 con grupos ['Estudiantes'] accediendo a core_estudiante
+DEBUG 2025-06-28 16:08:01,077 decorators 13724 16168 Estudiante acceso: Mauricio1 a core_estudiante
+DEBUG 2025-06-28 16:08:01,324 middleware 13724 16168 Usuario: Mauricio1 - URL: None
+WARNING 2025-06-28 16:08:01,425 middleware 13724 16168 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 16:08:04,059 middleware 13724 16168 Usuario: Mauricio1 - URL: editar_perfil_estudiante
+DEBUG 2025-06-28 16:08:04,059 decorators 13724 16168 Estudiante acceso: Mauricio1 a editar_perfil_estudiante
+DEBUG 2025-06-28 16:08:04,182 middleware 13724 16168 Usuario: Mauricio1 - URL: None
+DEBUG 2025-06-28 16:08:06,437 middleware 13724 16168 Usuario: Mauricio1 - URL: core_estudiante
+DEBUG 2025-06-28 16:08:06,437 middleware 13724 16168 Usuario Mauricio1 con grupos ['Estudiantes'] accediendo a core_estudiante
+DEBUG 2025-06-28 16:08:06,443 decorators 13724 16168 Estudiante acceso: Mauricio1 a core_estudiante
+DEBUG 2025-06-28 16:08:06,579 middleware 13724 16168 Usuario: Mauricio1 - URL: None
+WARNING 2025-06-28 16:08:06,630 middleware 13724 16168 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 16:08:07,835 middleware 13724 16168 Usuario: Mauricio1 - URL: estudiante_modulo
+DEBUG 2025-06-28 16:08:07,839 decorators 13724 16168 Estudiante acceso: Mauricio1 a estudiante_modulo
+DEBUG 2025-06-28 16:08:07,924 middleware 13724 16168 Usuario: Mauricio1 - URL: None
+DEBUG 2025-06-28 16:08:27,700 middleware 13724 16168 Usuario: Mauricio1 - URL: estudiante_modulo
+DEBUG 2025-06-28 16:08:27,711 decorators 13724 16168 Estudiante acceso: Mauricio1 a estudiante_modulo
+DEBUG 2025-06-28 16:08:27,829 middleware 13724 16168 Usuario: Mauricio1 - URL: None
+DEBUG 2025-06-28 16:08:30,212 middleware 13724 16168 Usuario: Mauricio1 - URL: editar_perfil_estudiante
+DEBUG 2025-06-28 16:08:30,212 decorators 13724 16168 Estudiante acceso: Mauricio1 a editar_perfil_estudiante
+DEBUG 2025-06-28 16:08:30,316 middleware 13724 16168 Usuario: Mauricio1 - URL: None
+WARNING 2025-06-28 16:08:30,414 middleware 13724 16168 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 16:08:30,994 middleware 13724 16168 Usuario: Mauricio1 - URL: core_estudiante
+DEBUG 2025-06-28 16:08:30,996 middleware 13724 16168 Usuario Mauricio1 con grupos ['Estudiantes'] accediendo a core_estudiante
+DEBUG 2025-06-28 16:08:31,002 decorators 13724 16168 Estudiante acceso: Mauricio1 a core_estudiante
+DEBUG 2025-06-28 16:08:31,100 middleware 13724 16168 Usuario: Mauricio1 - URL: None
+DEBUG 2025-06-28 16:08:49,235 middleware 13724 16168 Usuario: Mauricio1 - URL: cerrar_sesion
+INFO 2025-06-28 16:08:49,281 loguin_views 13724 16168 Logout exitoso para usuario: Mauricio1
+DEBUG 2025-06-28 16:08:49,292 middleware 13724 16168 Usuario: Anónimo - URL: loguin_index
+WARNING 2025-06-28 16:08:49,525 middleware 13724 16168 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 16:09:31,374 middleware 6380 1744 Usuario: Anónimo - URL: iniciar_sesion
+INFO 2025-06-28 16:09:33,514 loguin_views 6380 1744 Login exitoso para usuario: admin1
+DEBUG 2025-06-28 16:09:33,720 middleware 6380 1744 Usuario: admin1 - URL: core_admin
+DEBUG 2025-06-28 16:09:33,720 middleware 6380 1744 Usuario admin1 con grupos ['Administradores'] accediendo a core_admin
+DEBUG 2025-06-28 16:09:33,720 decorators 6380 1744 Admin acceso: admin1 a dashboard_admin
+INFO 2025-06-28 16:09:33,720 core_views 6380 1744 Usuario admin1 accedió al dashboard admin
+DEBUG 2025-06-28 16:09:33,942 middleware 6380 1744 Usuario: admin1 - URL: None
+WARNING 2025-06-28 16:09:34,022 middleware 6380 4396 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 16:09:34,052 middleware 6380 9204 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 16:09:34,125 middleware 6380 4396 Usuario: admin1 - URL: login
+DEBUG 2025-06-28 16:09:42,003 middleware 6380 1744 Usuario: admin1 - URL: administrador_edit
+DEBUG 2025-06-28 16:09:42,003 decorators 6380 1744 Admin acceso: admin1 a edit_administrador
+DEBUG 2025-06-28 16:09:42,138 middleware 6380 4396 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 16:09:49,765 middleware 6380 1744 Usuario: admin1 - URL: administrador_index
+DEBUG 2025-06-28 16:09:49,772 decorators 6380 1744 Admin acceso: admin1 a index
+DEBUG 2025-06-28 16:09:49,917 middleware 6380 4396 Usuario: admin1 - URL: None
+WARNING 2025-06-28 16:09:49,973 middleware 6380 4396 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 16:10:13,753 middleware 6380 1744 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 16:10:13,753 decorators 6380 1744 Admin acceso: admin1 a index
+DEBUG 2025-06-28 16:10:13,885 middleware 6380 4396 Usuario: admin1 - URL: None
+WARNING 2025-06-28 16:10:13,982 middleware 6380 4396 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 16:10:19,820 middleware 6380 1744 Usuario: admin1 - URL: descargar_plantilla_docentes
+DEBUG 2025-06-28 16:10:19,830 decorators 6380 1744 Admin acceso: admin1 a descargar_plantilla_docentes
+DEBUG 2025-06-28 16:10:47,800 middleware 6380 4396 Usuario: admin1 - URL: docente_create
+DEBUG 2025-06-28 16:10:47,800 decorators 6380 4396 Admin acceso: admin1 a create_docente
+DEBUG 2025-06-28 16:10:47,941 middleware 6380 9204 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 16:10:47,953 middleware 6380 4396 Usuario: admin1 - URL: docente_create
+DEBUG 2025-06-28 16:10:47,965 decorators 6380 4396 Admin acceso: admin1 a create_docente
+WARNING 2025-06-28 16:10:48,112 middleware 6380 4396 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 16:10:52,484 middleware 6380 1744 Usuario: admin1 - URL: docente_index
+DEBUG 2025-06-28 16:10:52,484 decorators 6380 1744 Admin acceso: admin1 a index
+DEBUG 2025-06-28 16:10:52,608 middleware 6380 9204 Usuario: admin1 - URL: None
+WARNING 2025-06-28 16:10:52,699 middleware 6380 4396 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 16:10:56,602 middleware 6380 1744 Usuario: admin1 - URL: exportar_docentes
+DEBUG 2025-06-28 16:10:56,606 decorators 6380 1744 Admin acceso: admin1 a exportar_docentes
+DEBUG 2025-06-28 16:11:12,636 middleware 6380 9204 Usuario: admin1 - URL: modulo_index
+DEBUG 2025-06-28 16:11:12,636 decorators 6380 9204 Admin acceso: admin1 a index
+DEBUG 2025-06-28 16:11:12,872 middleware 6380 4396 Usuario: admin1 - URL: None
+WARNING 2025-06-28 16:11:12,928 middleware 6380 9204 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 16:11:15,673 middleware 6380 1744 Usuario: admin1 - URL: nivel_index
+DEBUG 2025-06-28 16:11:15,677 decorators 6380 1744 Admin acceso: admin1 a index
+DEBUG 2025-06-28 16:11:15,937 middleware 6380 4396 Usuario: admin1 - URL: None
+WARNING 2025-06-28 16:11:15,992 middleware 6380 9204 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 16:11:21,028 middleware 6380 1744 Usuario: admin1 - URL: clase_index
+DEBUG 2025-06-28 16:11:21,033 decorators 6380 1744 Admin acceso: admin1 a index
+DEBUG 2025-06-28 16:11:21,218 middleware 6380 4396 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 16:11:28,417 middleware 6380 9204 Usuario: admin1 - URL: matricula_index
+DEBUG 2025-06-28 16:11:28,421 decorators 6380 9204 Admin acceso: admin1 a index
+DEBUG 2025-06-28 16:11:28,551 middleware 6380 4396 Usuario: admin1 - URL: None
+WARNING 2025-06-28 16:11:28,610 middleware 6380 9204 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 16:11:30,912 middleware 6380 1744 Usuario: admin1 - URL: avance_index
+DEBUG 2025-06-28 16:11:30,916 decorators 6380 1744 Admin acceso: admin1 a index
+DEBUG 2025-06-28 16:11:31,054 middleware 6380 4396 Usuario: admin1 - URL: None
+WARNING 2025-06-28 16:11:31,132 middleware 6380 9204 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 16:11:49,157 middleware 6380 1744 Usuario: admin1 - URL: matricula_index
+DEBUG 2025-06-28 16:11:49,161 decorators 6380 1744 Admin acceso: admin1 a index
+DEBUG 2025-06-28 16:11:49,294 middleware 6380 4396 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 16:11:57,609 middleware 6380 9204 Usuario: admin1 - URL: matricula_detalle
+DEBUG 2025-06-28 16:11:57,619 decorators 6380 9204 Admin acceso: admin1 a detalle
+DEBUG 2025-06-28 16:11:57,746 middleware 6380 4396 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 16:11:57,801 middleware 6380 9204 Usuario: admin1 - URL: matricula_listado
+DEBUG 2025-06-28 16:11:57,801 decorators 6380 9204 Admin acceso: admin1 a vista_tabla_matriculados
+WARNING 2025-06-28 16:11:57,884 middleware 6380 4396 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 16:12:05,943 middleware 6380 1744 Usuario: admin1 - URL: matricula_individual
+DEBUG 2025-06-28 16:12:05,945 decorators 6380 1744 Admin acceso: admin1 a matriculaIndividual
+DEBUG 2025-06-28 16:12:09,237 middleware 6380 9204 Usuario: admin1 - URL: matricula_listado
+DEBUG 2025-06-28 16:12:09,237 decorators 6380 9204 Admin acceso: admin1 a vista_tabla_matriculados
+DEBUG 2025-06-28 16:12:28,719 middleware 6380 4396 Usuario: admin1 - URL: core_admin
+DEBUG 2025-06-28 16:12:28,719 middleware 6380 4396 Usuario admin1 con grupos ['Administradores'] accediendo a core_admin
+DEBUG 2025-06-28 16:12:28,732 decorators 6380 4396 Admin acceso: admin1 a dashboard_admin
+INFO 2025-06-28 16:12:28,732 core_views 6380 4396 Usuario admin1 accedió al dashboard admin
+DEBUG 2025-06-28 16:12:28,869 middleware 6380 9204 Usuario: admin1 - URL: None
+WARNING 2025-06-28 16:12:28,927 middleware 6380 4396 URL no encontrada: /favicon.ico
+DEBUG 2025-06-28 16:12:28,953 middleware 6380 9204 Usuario: admin1 - URL: None
+DEBUG 2025-06-28 16:12:29,040 middleware 6380 4396 Usuario: admin1 - URL: login
+DEBUG 2025-06-28 16:12:32,784 middleware 6380 1744 Usuario: admin1 - URL: cerrar_sesion
+INFO 2025-06-28 16:12:32,797 loguin_views 6380 1744 Logout exitoso para usuario: admin1
+DEBUG 2025-06-28 16:12:32,815 middleware 6380 9204 Usuario: Anónimo - URL: loguin_index
+WARNING 2025-06-28 16:12:32,893 middleware 6380 4396 URL no encontrada: /favicon.ico

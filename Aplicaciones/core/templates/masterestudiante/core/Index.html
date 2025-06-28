@@ -11,6 +11,17 @@ Estudiantes
 
 {% block content %}
 <div class="container-fluid">
+    <!-- Mensajes de exito-->
+    {% if messages %}
+        {% for message in messages %}
+        {% if message.tags == "success" %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endif %}
+        {% endfor %}
+    {% endif %}
   <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
