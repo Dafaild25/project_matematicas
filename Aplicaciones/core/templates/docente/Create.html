@@ -1,6 +1,7 @@
 {% extends 'plantillas/MasterAdmin.html'%}
+{% load form_tags %}
 {% block title %}
-Crear Administrador
+Crear Docente
 {% endblock %}
 {% block css %}
 <style>
@@ -28,148 +29,10 @@ Crear Administrador
             <form method="post" enctype="multipart/form-data" action="{% url 'docente_nuevo' %}">
                 {% csrf_token %}
                 <div class="row g-4">
-                    <div class="col-md-6">
-                        <label for="first_name" class="form-label">
-                            <b>Primer Nombre: *</b>
-                        </label>
-                        <div class="mb-4">
-                            <div class="input-group">                               
-                                <span class="input-group-text">
-                                    <i class="fa fa-user" aria-hidden="true"></i>
-                                </span>
-                                <input type="text" name="first_name" id="first_name" class="form-control" 
-                                placeholder="Ingresar primer nombre" value="{{usuarios.data.first_name}}">                  
-                            </div>
-                        </div>
-                        <label for="segundo_nombre" class="form-label">
-                            <b>Segundo Nombre: *</b>
-                        </label>
-                        <div class="mb-4">
-                            <div class="input-group">                               
-                                <span class="input-group-text">
-                                    <i class="fa fa-user" aria-hidden="true"></i>
-                                </span>
-                                <input type="text" name="segundo_nombre" id="segundo_nombre" class="form-control" 
-                                placeholder="Ingresar segundo nombre" value="{{usuarios.data.segundo_nombre}}">                  
-                            </div>
-                        </div>
-                        <label for="last_name" class="form-label">
-                            <b>Apellido Paterno: *</b>
-                        </label>
-                        <div class="mb-4">
-                            <div class="input-group">
-                                <span class="input-group-text">
-                                    <i class="fa fa-user" aria-hidden="true"></i>
-                                </span>
-                                <input type="text" name="last_name" id="last_name" class="form-control" 
-                                placeholder="Ingresar apellido paterno" value="{{usuarios.data.last_name}}">     
-                            </div>
-                        </div>
-                         <label for="segundo_apellido" class="form-label">
-                            <b>Apellido Materno: *</b>
-                        </label>
-                        <div class="mb-4">
-                            <div class="input-group">
-                                <span class="input-group-text">
-                                    <i class="fa fa-user" aria-hidden="true"></i>
-                                </span>
-                                <input type="text" name="segundo_apellido" id="segundo_apellido" class="form-control" 
-                                placeholder="Ingresar apellido materno" value="{{usuarios.data.segundo_apellido}}">     
-                            </div>
-                        </div>
-                        <label for="fecha_nacimiento" class="form-label">
-                            <b>Fecha de Nacimiento: *</b>
-                        </label>
-                        <div class="mb-4">
-                            <div class="input-group">                               
-                                <span class="input-group-text">
-                                    <i class="fas fa-birthday-cake" aria-hidden="true"></i>
-                                </span>
-                                <input type="date" name="fecha_nacimiento" id="fecha_nacimiento" class="form-control"
-                                     value="{{usuarios.data.fecha_nacimiento}}">                                                             
-                            </div>
-                        </div>
-                        <label for="cedula" class="form-label">
-                            <b>Cédula: *</b>
-                        </label>
-                        <div class="mb-4">
-                            <div class="input-group">                               
-                                <span class="input-group-text">
-                                    <i class="fa-solid fa-id-card" aria-hidden="true"></i>
-                                </span>
-                                <input type="text" name="cedula" id="cedula" class="form-control" 
-                                placeholder="Ingrese su número de cédula" value="{{usuarios.data.cedula}}">                                                             
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="telefono" class="form-label">
-                            <b>Teléfono: *</b>
-                        </label>
-                        <div class="mb-4">
-                            <div class="input-group">                               
-                                <span class="input-group-text">
-                                    <i class="fa-solid fa-phone" aria-hidden="true"></i>
-                                </span>
-                                <input type="text" name="telefono" id="telefono" class="form-control" 
-                                    placeholder="Ingresar su número de teléfono" value="{{usuarios.data.telefono}}">                                                             
-                            </div>
-                        </div>
-                        <label for="email" class="form-label">
-                            <b>Dirección de Correo: *</b>
-                        </label>
-                        <div class="input-group mb-4">
-                            <span class="input-group-text">
-                                <i class="fa fa-envelope" aria-hidden="true"></i>
-                            </span>
-                            <input type="text" name="email" id="email" class="form-control" 
-                                placeholder="ejemplo@ejemplo.com" value="{{usuarios.data.email}}">                                
-                        </div>     
-                        <label for="fotografia" class="form-label">
-                            <b>Fotografía (Opcional):</b>
-                        </label>
-                        <!-- Campo para subir una nueva foto -->
-                        <div class="input-group mb-4">
-                            <span class="input-group-text">
-                                <i class="fa-solid fa-camera" aria-hidden="true"></i>
-                            </span>
-                            <input type="file" name="fotografia" id="fotografia" accept="image/*" class="form-control">
-                        </div>
-                        <!-- Imagen para previsualización -->
-                        <div class="d-flex justify-content-center">
-                            <img id="preview" src="#" alt="Previsualización" class="img-thumbnail" style="max-width: 150px; display: none;">
-                        </div>
-                        <label for="username" class="form-label">
-                            <b>Nombre de Usuario: *</b>
-                        </label>
-                        <div class="input-group mb-4">
-                            <span class="input-group-text">
-                                <i class="fa-solid fa-circle-user" aria-hidden="true"></i>
-                            </span>
-                            <input type="text" name="username" id="username" class="form-control" 
-                            placeholder="Ingresar nombre de usuario" value="{{usuarios.data.username}}">
-                        </div>
-                        <label for="password1" class="form-label">
-                            <b>Contraseña: *</b>
-                        </label>
-                        <div class="input-group mb-4">
-                            <span class="input-group-text">
-                                <i class="fa fa-lock" aria-hidden="true"></i>
-                            </span>
-                            <input type="password" name="password1" id="password1" class="form-control" 
-                                placeholder="Ingrese una contraseña" value="{{usuarios.data.password1}}">
-                        </div> 
-                        <label for="password2" class="form-label">
-                            <b>Confirmar Contraseña: *</b>
-                        </label>
-                        <div class="input-group mb-4">
-                            <span class="input-group-text">
-                                <i class="fa fa-lock" aria-hidden="true"></i>
-                            </span>
-                            <input type="password" name="password2" id="password2" class="form-control" 
-                                placeholder="Confirmar contraseña" value="{{usuarios.data.password2}}">
-                        </div> 
-                    </div>
+                    <!-- FORMULARIO DE USUARIO -->
+                    {% include 'includes/IncludeCreateUserForm.html' %}
+                    <!-- FORMULARIO DE PERSONA -->
+                    {% include 'includes/IncludeCreatePersonaForm.html'  %}
                 </div>       
                 <div class="col-md-12 text-center mt-5">
                     <button class="btn btn-primary " type="submit">Crear Docente</button>
@@ -178,6 +41,25 @@ Crear Administrador
         </div>
     </div>
 </div>
+<script>
+    const inputFoto = document.getElementById('fotografia');
+    const preview = document.getElementById('preview');
+
+    inputFoto.addEventListener('change', function(){
+        const file = this.files[0];
+        if(file){
+            const reader = new FileReader();
+            reader.onload = function(e){
+                preview.setAttribute('src', e.target.result);
+                preview.style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+        } else {
+            preview.setAttribute('src', '#');
+            preview.style.display = 'none';
+        }
+    });
+</script>
 {% endblock %}
 
 {% block js %}

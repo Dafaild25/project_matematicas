@@ -7,8 +7,8 @@ from django.utils import timezone # Importar modelo de zona horaria
 from datetime import date # Importar modelo de fecha
 import re # Importar expresiones regulares para validaciones
 
-# VALIDACIONES DE FORMULARIO PARA USUARIOS
-class UserForm(UserCreationForm):
+# VALIDACIONES DE FORMULARIO PARA CREAR USUARIOS
+class UserCreateForm(UserCreationForm):
     first_name = forms.CharField(
         label='Nombre',
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese su nombre'}),
@@ -64,8 +64,60 @@ class UserForm(UserCreationForm):
             'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese un nombre de usuario'}),
         }
 
-# VALIDACIONES DE FORMULARIO PARA PERSONAS
-class PersonaForm(forms.Form):
+# VALIDACIONES DE FORMULARIO PARA ACTUALIZAR USUARIOS
+class UserUpdateForm(forms.ModelForm):
+    first_name = forms.CharField(
+        label='Nombre',
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese su nombre'}),
+        validators=[
+            MinLengthValidator(2, 'Su nombre es muy corto'),
+            RegexValidator('^[A-Za-ñÑáéíóúÁÉÍÓÚ ]+$', 'No incluir datos especiales ni números'),
+        ]
+    )
+    last_name = forms.CharField(
+        label='Primer Apellido',
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese solo un apellido'}),
+        validators=[
+            MinLengthValidator(2, 'Su apellido es muy corto'),
+            RegexValidator('^[A-Za-ñÑáéíóúÁÉÍÓÚ ]+$', 'No incluir datos especiales ni números'),
+        ]
+    )
+    email = forms.EmailField(
+        label='Correo Electrónico',
+        widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'ejemplo@gmail.com'}),
+        error_messages={
+            'invalid': 'Ingrese un correo electrónico válido (ej: ejemplo@gmail.com).'
+        }
+    )  
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email', 'username']
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese un nombre de usuario'}),
+        }
+    # Validar email cuando cambie
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        dominios_validos = ['gmail.com', 'hotmail.com', 'outlook.com', 'yahoo.com']
+        if email:
+            dominio = email.split('@')[-1]
+            if dominio.lower() not in dominios_validos:
+                raise ValidationError('El correo debe ser de gmail, hotmail, outlook o yahoo.')
+            if self.instance and email != self.instance.email:
+                if User.objects.filter(email=email).exists():
+                    raise ValidationError('Este correo ya está registrado.')
+        return email
+    # Validar username cuando cambie
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if self.instance and username != self.instance.username:
+            if User.objects.filter(username=username).exists():
+                raise ValidationError('Este nombre de usuario ya está registrado.')
+        return username
+
+
+# VALIDACIONES DE FORMULARIO PARA CREAR PERSONAS
+class PersonaCreateForm(forms.Form):
     per_segundo_nombre = forms.CharField(
         label='Segundo Nombre',
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese su segundo nombre'}),
@@ -133,7 +185,7 @@ class PersonaForm(forms.Form):
             raise forms.ValidationError(f"La edad máxima permitida es {edad_maxima} años.")
         return fecha
 
-# Validar cédula ecuatoriana
+    # Validar cédula ecuatoriana
     def validar_cedula_ecuatoriana(self, cedula):
         if len(cedula) != 10 or not cedula.isdigit():
             return False
@@ -154,3 +206,4 @@ class PersonaForm(forms.Form):
         if verificador == 10:
             verificador = 0
         return verificador == digitos[9]
+ 

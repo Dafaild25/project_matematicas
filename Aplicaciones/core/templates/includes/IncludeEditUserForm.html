@@ -1,0 +1,46 @@
+{% load widget_tweaks %}
+<!-- FORMULARIO USUARIO -->
+<label for="first_name" class="form-label"><b>Primer Nombre: *</b></label>
+<div class="input-group mb-2">
+    <span class="input-group-text"><i class="fa fa-user"></i></span>
+    {{ formUsuario.first_name|add_class:'form-control' }}
+</div>
+{% if formUsuario.first_name.errors %}
+    <div class="text-danger">{{ formUsuario.first_name.errors.0 }}</div>
+{% endif %}
+
+<label for="last_name" class="form-label"><b>Primer Apellido: *</b></label>
+<div class="input-group mb-2">
+    <span class="input-group-text"><i class="fa fa-user"></i></span>
+    {{ formUsuario.last_name|add_class:'form-control' }}
+</div>
+{% if formUsuario.last_name.errors %}
+    <div class="text-danger">{{ formUsuario.last_name.errors.0 }}</div>
+{% endif %}
+
+<label for="fecha_nacimiento" class="form-label"><b>Fecha de Nacimiento: *</b></label>
+<div class="input-group mb-2">
+    <span class="input-group-text"><i class="fas fa-birthday-cake"></i></span>
+    {{ formPersona.per_fecha_nacimiento|add_class:'form-control' }}
+</div>
+{% if formPersona.per_fecha_nacimiento.errors %}
+    <div class="text-danger">{{ formPersona.per_fecha_nacimiento.errors.0 }}</div>
+{% endif %}                      
+
+<label for="email" class="form-label"><b>Correo Electrónico: *</b></label>
+<div class="input-group mb-2">
+    <span class="input-group-text"><i class="fa fa-envelope"></i></span>
+    {{ formUsuario.email|add_class:'form-control' }}
+</div>
+{% if formUsuario.email.errors %}
+    <div class="text-danger">{{ formUsuario.email.errors.0 }}</div>
+{% endif %}
+
+<label for="username" class="form-label"><b>Nombre de Usuario: *</b></label>
+<div class="input-group mb-2">
+    <span class="input-group-text"><i class="fa-solid fa-circle-user"></i></span>
+    {{ formUsuario.username|add_class:'form-control' }}
+</div>
+{% if formUsuario.username.errors %}
+    <div class="text-danger">{{ formUsuario.username.errors.0 }}</div>
+{% endif %}
