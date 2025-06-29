@@ -134,17 +134,29 @@ Docentes
 {%block js%}
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-
   document.addEventListener('DOMContentLoaded', function () {
     recargarTablaDocentes(); // Asegúrate de llamar a la función cuando el DOM esté listo
-});
-
-function recargarTablaDocentes() {
-    
-    if ($.fn.DataTable.isDataTable('#tbl-docente')) {
-        $('#tbl-docente').DataTable().clear().destroy();
+  });
+  // Funcion para las cookies
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+            if (cookie.startsWith(name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
     }
-
+    return cookieValue;
+  }
+  // Función para recargar la tabla de docentes
+  function recargarTablaDocentes() {
+    if ($.fn.DataTable.isDataTable('#tbl-docente')) {
+      $('#tbl-docente').DataTable().clear().destroy();
+    }
     $('#tbl-docente').DataTable({
         language: {
             search: "Buscar:",
@@ -158,7 +170,96 @@ function recargarTablaDocentes() {
             }
         }
     });
-}
+  }
+  // Función para importar docentes masivamente
+  document.getElementById('form-importar-excel').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    fetch("{% url 'importar_docentes_excel' %}", {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'X-CSRFToken': getCookie('csrftoken'),
+        'X-Requested-With': 'XMLHttpRequest'
+      }
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          let htmlResultado = `<h4>Resultado de la Importación:</h4>`;
+          htmlResultado += `<p><strong>Docentes agregados:</strong> ${data.agregados || 0}</p>`;
+
+          if (data.duplicados && data.duplicados.length > 0) {
+            htmlResultado += `<h4>Duplicados:</h4><ul>`;
+            data.duplicados.forEach(item => {
+              htmlResultado += `<li>${item}</li>`;
+            });
+            htmlResultado += `</ul>`;
+          }
+          if (data.errores && data.errores.length > 0) {
+            htmlResultado += `<h4>Errores de Validación:</h4>`;
+            data.errores.forEach(error => {
+              htmlResultado += `<strong>Fila ${error.fila}:</strong><ul>`;
+
+              if (error.errores_usuario.length > 0) {
+                error.errores_usuario.forEach(e => {
+                  htmlResultado += `<li>${e}</li>`;
+                });
+              }
+
+              if (error.errores_persona.length > 0) {
+                error.errores_persona.forEach(e => {
+                  htmlResultado += `<li>${e}</li>`;
+                });
+              }
+              htmlResultado += `</ul><hr>`;
+            });
+          }
+          let icono = '';
+          let titulo = '';
+          if (data.status === 'success') {
+            icono = 'success';
+            titulo = '¡Importación exitosa!';
+          } else if (data.status === 'warning') {
+            icono = 'warning';
+            titulo = 'Importación Incompleta: se encontraron errores';
+          } else {
+            icono = 'error';
+            titulo = 'Error en la importación';
+          }
+          Swal.fire({
+            icon: icono,
+            title: titulo,
+            html: htmlResultado,
+            confirmButtonColor: '#3085d6',
+            width: '800px',
+            scrollbarPadding: false,
+            showConfirmButton: true,
+          }).then((result) => {
+            if (result.isConfirmed && data.agregados > 0) {
+              location.reload(); // Recarga la página para reflejar los cambios
+            }
+            document.getElementById('form-importar-excel').reset(); // Resetear el formulario
+          });
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error en la importación',
+            text: data.message,
+            confirmButtonColor: '#d33',
+          });
+        }
+      })
+      .catch(error => {
+        console.error("Error en la importación:", error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error inesperado',
+          text: 'Ocurrió un error al importar el archivo.',
+          confirmButtonColor: '#d33',
+        });
+      });
+  });
 </script>
 
 {%endblock%}

@@ -10,10 +10,10 @@ class Personas(models.Model):
     per_segundo_nombre = models.CharField(max_length=50,default="Null",null=False,verbose_name="Segundo nombre:")
     per_segundo_apellido = models.CharField(max_length=50,default="Null",null=False,verbose_name="Segundo apellido:")
     per_fecha_nacimiento = models.DateField(
-    null=True,          # permite guardar NULL en la base de datos
-    blank=True,         # permite dejarlo en blanco en formularios
-    verbose_name="Fecha de nacimiento:"
-)
+        null=True,          # permite guardar NULL en la base de datos
+        blank=True,         # permite dejarlo en blanco en formularios
+        verbose_name="Fecha de nacimiento:"
+    )
     per_cedula = models.CharField(max_length=15,default="Null",null=False,verbose_name="Cédula:")
     per_telefono = models.CharField(max_length=15,default="Null",null=True,verbose_name="Teléfono:")
     per_fecha_actualizacion = models.DateTimeField(auto_now=True,verbose_name='Actualizado el:')

@@ -79,6 +79,7 @@ class UserUpdateForm(forms.ModelForm):
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese solo un apellido'}),
         validators=[
             MinLengthValidator(2, 'Su apellido es muy corto'),
+            # Caracteres permitidos
             RegexValidator('^[A-Za-ñÑáéíóúÁÉÍÓÚ ]+$', 'No incluir datos especiales ni números'),
         ]
     )
@@ -123,7 +124,7 @@ class PersonaCreateForm(forms.Form):
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese su segundo nombre'}),
         validators=[
             MinLengthValidator(2, 'El nombre es muy corto.'),
-            RegexValidator('^[A-Za-zñÑ ]+$', 'El nombre no puede tener caracteres especiales ni números.')
+            RegexValidator('^[A-Za-ñÑáéíóúÁÉÍÓÚ ]+$', 'El nombre no puede tener caracteres especiales ni números.')
         ]
     )
     per_segundo_apellido = forms.CharField(
@@ -131,7 +132,7 @@ class PersonaCreateForm(forms.Form):
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese su segundo apellido'}),
         validators=[
             MinLengthValidator(2, 'El apellido es muy corto.'),
-            RegexValidator('^[A-Za-zñÑ ]+$', 'El apellido no puede tener caracteres especiales ni números.')
+            RegexValidator('^[A-Za-ñÑáéíóúÁÉÍÓÚ ]+$', 'El apellido no puede tener caracteres especiales ni números.')
         ]
     )
     per_fecha_nacimiento = forms.DateField(

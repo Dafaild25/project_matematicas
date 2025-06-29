@@ -1,11 +1,16 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse # Importar para enviar respuesta HTTP
+from django.http import JsonResponse # Importar para enviar respuesta JSON
 from django.contrib import messages  # Importar mensajes
-from django.contrib.auth.models import Group # Importar grupos
+from django.contrib.auth.models import User,Group # Importar user y grupos
 from Aplicaciones.core.forms.user_form import * # Importar clase de registro
 from ..models import * # Importar modelos
 from ..decorators import admin_required
+from datetime import datetime # Importar fecha y hora
+from django.forms.utils import ErrorDict # Importar para presentar una vista mejor de los errores
+from Aplicaciones.core.diccionarios.NombreCampos import Fields_names # Diccionario con los nombres de los campos formateados
 # PLANTILLA EXCEL
+import pandas as pd
 from openpyxl import Workbook, load_workbook # Importar librería para crear archivos excel
 import io
 from openpyxl.styles import Font
@@ -112,6 +117,140 @@ def exportar_docentes(request):
     response['Content-Disposition'] = 'attachment; filename=docentes.xlsx'
     return response
 
+# METODO PARA REGISTRAR DOCENTES DE FORMA MASIVA
+@admin_required
+def importar_docentes_excel(request):
+    if request.method == 'POST' and request.FILES.get('archivo'):
+        try:
+            # Obtener el archivo subido
+            archivo_excel = request.FILES['archivo']
+            # Verificar si el archivo es un archivo Excel válido
+            df = pd.read_excel(archivo_excel, dtype=str)
+            # Verificar si las columnas necesarias existen
+            columnas_necesarias = ['primer_nombre', 'segundo_nombre', 'primer_apellido', 'segundo_apellido', 'fecha_nacimiento', 'cedula', 'telefono', 'email']
+            for columna in columnas_necesarias:
+                if columna not in df.columns:
+                    return JsonResponse({'success': False, 'message': f'Falta la columna: {columna}'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': f'Error al leer el archivo: {str(e)}'})
+        duplicados = [] # Array para almacenar cedulas o usuarios duplicados
+        errores = [] # Array para almacenar errores de validación
+        agregados = 0 # Variable para contar los docentes agregados
+        # Recorrer las filas del DataFrame
+        for index, row in df.iterrows():
+            fila_num = index + 2  # Fila real en Excel
+            primer_nombre = str(row.get('primer_nombre', '')).strip().title()
+            segundo_nombre = str(row.get('segundo_nombre', '')).strip().title()
+            primer_apellido = str(row.get('primer_apellido', '')).strip().title()
+            segundo_apellido = str(row.get('segundo_apellido', '')).strip().title()
+            fecha_nacimiento_str = str(row.get('fecha_nacimiento', '')).strip()
+            # Verificar que exista una cedula sino envia Vacio, y quita puntos o comas
+            cedula = str(row.get('cedula', '')).strip().replace('.', '').replace(',', '')
+            telefono = str(row.get('telefono', '')).strip().replace('.', '').replace(',', '')
+            # Si no hay email, agrega uno basado en el numero de cedula
+            email = row.get('email', f"{cedula}@gmail.com").strip()
+            # Verificar que la cedula no sea un digito
+            if not cedula.isdigit():
+                duplicados.append(f"Fila {index + 2} - Cédula inválida: {cedula}")
+                continue  
+            # Verificar si existe la cedula en otro usuario
+            if(Personas.objects.filter(per_cedula=cedula).exists()):
+                duplicados.append(f"Fila {index + 2} - Cédula duplicada: {cedula}")
+                continue
+            # Verificar si el username tiene el mismo numero de cedula
+            if User.objects.filter(username=cedula).exists():
+                duplicados.append(f"Fila {index + 2} - Username duplicado: {cedula}")
+                continue
+            # Procesar fecha de nacimiento
+            fecha_nacimiento = None
+            if fecha_nacimiento_str:
+                try:
+                    # Convertir en formato Y-M-D
+                    fecha_nacimiento = datetime.strptime(fecha_nacimiento_str, '%Y-%m-%d').date()
+                except ValueError: # Error de valor, el tipo de dato no corresponde con el formato
+                    errores.append({
+                        'fila': fila_num,
+                        'errores_usuario': [],
+                        'errores_persona': [f"Fecha de Nacimiento: Fecha inválida ({fecha_nacimiento_str})"]
+                    })
+                    continue
+            # Validar User con formulario
+            user_data = {
+                'username': cedula,
+                'first_name': primer_nombre,
+                'last_name': primer_apellido,
+                'email': email,
+            }
+            # Validar Persona con formulario
+            persona_data = {
+                'per_segundo_nombre': segundo_nombre,
+                'per_segundo_apellido': segundo_apellido,
+                'per_fecha_nacimiento': fecha_nacimiento,
+                'cedula': cedula,
+                'per_telefono': telefono,
+            }
+            formUsuario = UserUpdateForm(user_data)
+            formPersona = PersonaCreateForm(persona_data)
+            # Validar datos de User y Personas
+            if(formUsuario.is_valid() and formPersona.is_valid()):
+                nombre_grupo = 'Docentes' # Nombre del grupo
+                grupo, created = Group.objects.get_or_create(name=nombre_grupo)
+                # Datos para tabla User
+                usuario = User.objects.create_user(
+                    username = cedula,
+                    first_name= primer_nombre,
+                    last_name= primer_apellido,
+                    email = email,
+                    password=cedula
+                )
+                usuario.groups.add(grupo) # Agregar usuario al grupo  
+                # Datos para tabla Personas
+                persona = Personas.objects.create(
+                    fk_id_usuario=usuario,
+                    per_segundo_nombre=segundo_nombre,
+                    per_segundo_apellido=segundo_apellido,
+                    per_fecha_nacimiento=fecha_nacimiento,
+                    per_cedula=cedula,
+                    per_telefono=telefono
+                )
+                # Crear Docente
+                docente = Docentes.objects.create(
+                    fk_id_persona=persona
+                )
+                agregados += 1 # Contar de Docentes agregados
+            else:
+                errores_fila = {
+                    'fila': fila_num,
+                    'errores_usuario': [],
+                    'errores_persona': []
+                }
+                if not formUsuario.is_valid():
+                    for field, error_list in formUsuario.errors.items():
+                        nombre_campo = Fields_names.get(field, field)
+                        for error in error_list:
+                            errores_fila['errores_usuario'].append(f"{nombre_campo}: {error}")
+                if not formPersona.is_valid():
+                    for field, error_list in formPersona.errors.items():
+                        nombre_campo = Fields_names.get(field, field)
+                        for error in error_list:
+                            errores_fila['errores_persona'].append(f"{nombre_campo}: {error}")
+                errores.append(errores_fila)
+        # Clasificar el resultado
+        if agregados > 0 and (len(duplicados) > 0 or len(errores) > 0):
+            status = 'warning'
+        elif agregados > 0:
+            status = 'success'
+        else:
+            status = 'error'
+        return JsonResponse({
+            'success': True,  # Lo dejamos siempre en True para que JS lo maneje
+            'status': status,
+            'agregados': agregados,
+            'duplicados': duplicados,
+            'errores': errores
+        })
+    return JsonResponse({'error': False, 'message': 'Solicitud inválida'})
+
 # VISTA PARA FORMULARIO DOCENTES
 @admin_required
 def create_docente(request):
@@ -141,7 +280,6 @@ def nuevo_docente(request):
                 usuario.last_name = usuario.last_name.title()
                 usuario.save() # Guardar el usuario con los cambios
                 usuario.groups.add(grupo) # Agregar usuario al grupo  
-                usuario.save()  # Guardar los cambios
                 # Datos para la tabla Personas
                 persona = Personas.objects.create(
                     fk_id_usuario=usuario,
@@ -257,8 +395,10 @@ def actualizar_docente(request):
 @admin_required
 def eliminar_docente(request, id_docen):
     docente = get_object_or_404(Docentes, pk=id_docen)  # Obtener el docente por su ID
+    persona = docente.fk_id_persona # Obtener la persona asociada al docente
+    usuario = persona.fk_id_usuario # Obtener el usuario asociado a la persona
     try:
-        docente.delete()  # Eliminar usuario
+        usuario.delete()  # Eliminar usuario
     except Exception as e:
         messages.error(request, f'Error al eliminar: {str(e)}')
     

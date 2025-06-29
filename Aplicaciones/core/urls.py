@@ -73,6 +73,8 @@ urlpatterns = [
     path('docente/', crud_docente_views.index, name='docente_index'),
     # Metodo para Descargar Plantilla de Docente
     path('docente/plantilla/', crud_docente_views.descargar_plantilla_docentes, name='descargar_plantilla_docentes'),
+    # Metodo para Importar Docentes Masivamente
+    path('docente/importar/', crud_docente_views.importar_docentes_excel, name='importar_docentes_excel'),
     # Metodo para Exportar Docentes
     path('docente/exportar/', crud_docente_views.exportar_docentes, name='exportar_docentes'),
     # Vista para Crear un Docente
