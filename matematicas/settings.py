@@ -159,7 +159,7 @@ LOGOUT_REDIRECT_URL = '/loguin/'
 if DEBUG:
     # ===== CONFIGURACIÓN DE DESARROLLO =====
     print("🟢 Ejecutando en modo DESARROLLO")
-    ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '0.0.0.0', '::1']
+    ALLOWED_HOSTS = ['mathe-kids.com', 'www.mathe-kids.com', '159.69.216.217', 'localhost', '127.0.0.1']
     
     # Seguridad relajada para desarrollo local
     SESSION_COOKIE_SECURE = False
