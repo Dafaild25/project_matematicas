@@ -1,17 +1,14 @@
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
-from django.contrib.auth.decorators import login_required
 from django.template.loader import get_template
 from django.template import Context
 from weasyprint import HTML, CSS
 from django.conf import settings
 from datetime import datetime
-import os
-
-# Importar tus modelos
+from ...decorators import docente_required
 from ...models import Clases, Niveles, Matriculas, Avance_Matriculados, IntentoNivel
 
-@login_required
+@docente_required
 def generar_pdf_nivel(request, clase_id, nivel_id):
     """Genera PDF para un nivel específico usando template HTML"""
     clase = get_object_or_404(Clases, cla_id=clase_id)
@@ -93,7 +90,7 @@ def generar_pdf_nivel(request, clase_id, nivel_id):
     
     return response
 
-@login_required
+@docente_required
 def generar_pdf_general(request, clase_id):
     """Genera PDF general con todos los niveles usando template HTML"""
     clase = get_object_or_404(Clases, cla_id=clase_id)

@@ -12,58 +12,19 @@ from openpyxl.styles import Font
 from django.db.models import Count
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required
+from ..decorators import admin_required
 
-
-
-# def index(request):
-#     matriculas = Matriculas.objects.all()
-#     form = MatriculasForm()
-
-#     if request.method == 'POST':
-#         if 'crear_matricula' in request.POST:
-#             form = MatriculasForm(request.POST)
-#             if form.is_valid():
-#                 form.save()
-#                 messages.success(request, 'Matrícula creada correctamente.')
-#                 return redirect('matricula_index')
-#         elif 'editar_matricula' in request.POST:
-#             mat_id = request.POST.get('mat_id')
-#             matricula = get_object_or_404(Matriculas, pk=mat_id)
-
-#             # Editar manualmente los campos
-#             matricula.fk_clase_id = request.POST.get('fk_clase')
-#             matricula.fk_estudiante_id = request.POST.get('fk_estudiante')
-#             matricula.mat_estado = 'mat_estado' in request.POST
-#             matricula.save()
-
-#             messages.success(request, 'Matrícula actualizada correctamente.')
-#             return redirect('matricula_index')
-
-#         elif 'eliminar_matricula' in request.POST:
-#             mat_id = request.POST.get('mat_id')
-#             matricula = get_object_or_404(Matriculas, pk=mat_id)
-#             matricula.delete()
-#             messages.success(request, 'Matrícula eliminada correctamente.')
-#         return redirect('matricula_index')
-
-#     estudiantes = Estudiantes.objects.all()
-#     clases = Clases.objects.filter(cla_estado=True)
-
-#     return render(request, 'matricula/Index.html', {
-#         'matriculas': matriculas,
-#         'form': form,
-#         'estudiantes': estudiantes,
-#         'clases': clases,
-#     })
-    
+@admin_required 
 def index(request):
     clases = Clases.objects.annotate(
         num_matriculados=Count('matriculas'),
         
     )
 
-    return render(request, 'matricula/IndexM.html', {'clases': clases})
+    return render(request, 'matricula/Index.html', {'clases': clases})
 
+
+@admin_required
 def detalle(request, cla_id):
     clase = get_object_or_404(Clases, pk=cla_id)
     matriculas = Matriculas.objects.filter(fk_clase=cla_id)
@@ -71,6 +32,7 @@ def detalle(request, cla_id):
     return render(request, 'matricula/Detalle.html', {'matriculas': matriculas,'clase':clase, 'estudiantes': estudiantes})
 
 
+@admin_required
 def matriculaIndividual(request):
     if request.method == 'POST' and request.headers.get('x-requested-with') == 'XMLHttpRequest':
         cla_id = request.POST.get('cla_id')
@@ -88,7 +50,7 @@ def matriculaIndividual(request):
 
     return JsonResponse({'success': False, 'message': 'Solicitud inválida'})
     
-
+@admin_required
 def vista_tabla_matriculados(request, cla_id):
     matriculas = Matriculas.objects.filter(fk_clase=cla_id).order_by(
         'fk_estudiante__fk_id_persona__fk_id_usuario__last_name',
@@ -98,6 +60,7 @@ def vista_tabla_matriculados(request, cla_id):
 
 
 @require_POST
+@admin_required
 def eliminar_matricula(request, matricula_id):
     try:
         matricula = Matriculas.objects.get(pk=matricula_id)
@@ -108,6 +71,7 @@ def eliminar_matricula(request, matricula_id):
 
 
 @csrf_exempt
+@admin_required
 def importar_estudiantes_excel(request):
     if request.method == 'POST' and request.FILES.get('archivo'):
         archivo_excel = request.FILES['archivo']
@@ -220,7 +184,7 @@ def descargar_plantilla_estudiantes(request):
     )
     response['Content-Disposition'] = 'attachment; filename=plantilla_estudiantes.xlsx'
     return response
-@login_required
+@admin_required
 def importar(request):
     clases = Clases.objects.all()
     resultados = {}

@@ -2,9 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from ..models import Clases, Modulos, Docentes
 from ..forms.clases_form import ClasesForm
+from ..decorators import admin_required
 
 
-
+@admin_required
 def index(request):
     clases = Clases.objects.all()
     form = ClasesForm()

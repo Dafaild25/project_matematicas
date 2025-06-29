@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+     <style>
+        body {
+            font-family: "Helvetica", sans-serif;
+            font-size: 13px;
+            color: #333;
+            margin: 40px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+
+        p {
+            margin: 4px 0;
+        }
+
+        .info {
+            background-color: #f0f8ff;
+            border-left: 5px solid #2980b9;
+            padding: 10px 15px;
+            margin-bottom: 25px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th {
+            background-color: #2980b9;
+            color: #fff;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+
+        td {
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .nota-alta {
+            background-color: #d4edda;
+        }
+
+        .nota-baja {
+            background-color: #f8d7da;
+        }
+
+        .nota-vacia {
+            background-color: #fef9e7;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Reporte de Intentos</h1>
+    <div class="info">
+        <p><strong>Estudiante:</strong> {{ estudiante.id }}: {{ estudiante }}</p>
+        <p><strong>Módulo:</strong> {{ modulo.mod_nombre }}</p>
+        <p><strong>Nivel:</strong> {{ nivel.niv_nombre }} - {{ nivel.niv_descripcion }}</p>
+    </div>
+{% if intentos %}
+    <table>
+        <thead>
+            <tr>
+                <th>Nota</th>
+                <th>Vidas Usadas</th>
+                <th>Fecha del Intento</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for intento in intentos %}
+            <tr class="{% if intento.in_nota == None %}nota-vacia
+                        {% elif intento.in_nota|floatformat:2 >= 7.0 %}nota-alta
+                        {% elif intento.in_nota|floatformat:2 < 4.0 %}nota-baja
+                        {% endif %}">
+                <td>
+                    {% if intento.in_nota is not None %}
+                        {{ intento.in_nota|stringformat:"0.2f" }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td>{{ intento.in_vidas_usadas|default:"-" }}</td>
+                <td>{{ intento.in_fecha_creacion|date:"d/m/Y H:i" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="text-align:center; margin-top:20px;">Este estudiante aún no ha realizado intentos en este nivel.</p>
+{% endif %}
+</body>
+</html>

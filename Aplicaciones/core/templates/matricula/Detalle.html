@@ -115,6 +115,8 @@
 
 
 {% block js %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -154,18 +156,42 @@
         })
         .then(response => response.json())
         .then(data => {
-            if (data.success) {
-                alert(data.message);
-                // Recargar tabla de matriculados
-                
-                
-                recargarTablaMatriculados(cla_id);
-
-            } else {
-                alert(data.message);
+           const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
             }
         });
-    }
+
+        if (data.success) {
+            Toast.fire({
+                icon: 'success',
+                title: data.message || "Estudiante matriculado correctamente"
+            });
+            // Recargar la tabla después del toast
+            setTimeout(() => recargarTablaMatriculados(cla_id), 3200);
+        } else {
+            Toast.fire({
+                icon: 'error',
+                title: data.message || "Error al matricular"
+            });
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error inesperado',
+            text: 'No se pudo procesar la matrícula.',
+            confirmButtonColor: '#d33',
+        });
+    });
+}
 function recargarTablaMatriculados(claseId) {
     const contenedorTabla = document.getElementById("contenedor-tabla-matriculados");
     const scrollPosition = contenedorTabla.scrollTop;
@@ -195,6 +221,7 @@ function recargarTablaMatriculados(claseId) {
             console.error("❌ Error al recargar tabla:", error);
         });
 }
+
 
 // aqui se controlara la eliminacion
 let idMatriculaAEliminar = null;
@@ -246,21 +273,37 @@ document.getElementById('form-importar-excel').addEventListener('submit', functi
         method: 'POST',
         body: formData,
         headers: {
-            'X-Requested-With': 'XMLHttpRequest'  // importante para distinguir petición AJAX
+            'X-Requested-With': 'XMLHttpRequest'
         }
     })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert(data.message);
-            recargarTablaMatriculados(cla_id);  // actualiza la tabla
+            Swal.fire({
+                icon: 'success',
+                title: '¡Importación exitosa!',
+                html: data.message.replace(/\n/g, '<br>'),  // convierte saltos de línea en HTML
+                confirmButtonColor: '#3085d6',
+                width: '600px'
+            });
+            recargarTablaMatriculados(cla_id);
         } else {
-            alert("Error: " + data.message);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error en la importación',
+                text: data.message,
+                confirmButtonColor: '#d33',
+            });
         }
     })
     .catch(error => {
         console.error("Error en la importación:", error);
-        alert("Ocurrió un error al importar el archivo.");
+        Swal.fire({
+            icon: 'error',
+            title: 'Error inesperado',
+            text: 'Ocurrió un error al importar el archivo.',
+            confirmButtonColor: '#d33',
+        });
     });
 });
 

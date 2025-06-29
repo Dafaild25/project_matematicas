@@ -1,7 +1,11 @@
-{% extends 'plantillas/MasterEstudiante.html' %}
+{% extends template_base|default:"plantillas/MasterEstudiante.html" %}
 {% load static %}
 {% block title %}
-  Estudiantes_Modulos
+    {% if es_docente %}
+        Docente - Probando {{nivel.niv_nombre}}
+    {% else %}
+        Estudiantes_Modulos
+    {% endif %}
 {% endblock %}
 
 {% block css %}
@@ -573,15 +577,31 @@
 {% block content %}
   <div class="container-fluid">
     <nav class="breadcrumb">
-      <a style="color: #000;" href="{% url 'core_estudiante' %}">🏠 Inicio</a> &nbsp;/&nbsp;
-      <a style="color: #000;" href="{% url 'estudiante_modulo' %}">📚 Módulos</a> &nbsp;/&nbsp;
-      <a style="color: #000;" href="{% url 'ver_niveles_modulo' modulo.mod_id %}">🎯 Niveles</a> &nbsp;/&nbsp;
-      <span style="color: #2632df;">🎮 Juego</span>
+      {% if es_docente %}
+          <a style="color: #000;" href="{% url 'core_docente' %}">🏠 Inicio Docente</a> &nbsp;/&nbsp;
+          <a style="color: #000;" href="{% url 'docente_ver_niveles_modulo' modulo.mod_id %}">📚 Niveles</a> &nbsp;/&nbsp;
+          <span style="color: #2632df;">🎮 Probando Juego</span>
+      {% else %}
+          <a style="color: #000;" href="{% url 'core_estudiante' %}">🏠 Inicio</a> &nbsp;/&nbsp;
+          <a style="color: #000;" href="{% url 'estudiante_modulo' %}">📚 Módulos</a> &nbsp;/&nbsp;
+          <a style="color: #000;" href="{% url 'ver_niveles_modulo' modulo.mod_id %}"> 🎯 Niveles</a> &nbsp;/&nbsp;
+          <span style="color: #2632df;">🎮 Juego</span>
+      {% endif %}
     </nav>
 
     <div class="card loading">
       <div class="card-header">
-        <h2>🌟 {{ nivel.niv_nombre }} - {{ nivel.niv_descripcion }}</h2>
+        <h2>
+            {% if es_docente %}
+                🧑‍🏫 MODO DOCENTE - 
+            {% endif %}
+            🌟 {{nivel.niv_nombre}} - {{nivel.niv_descripcion}}
+        </h2>
+        {% if es_docente %}
+            <div style="background: #ff9800; color: white; padding: 10px; border-radius: 10px; margin-top: 10px;">
+                ⚠️ <strong>Modo Prueba:</strong> No se guardarán intentos ni se usarán vidas
+            </div>
+        {% endif %}
       </div>
       <div class="card-body">
         <div class="main-container">
@@ -1051,16 +1071,83 @@
 
 {% block js %}
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script>
-   
-    // Variables globales para el juego
-    window.studentId = {{ matricula_id}};
-    window.levelId   = {{ level_id }};
-    const moduloId = {{ modulo_id }};
-    
-</script>
+  
 
-<script>
+  <script>
+    // ✅ 1. DETECCIÓN ULTRA MEJORADA DE MODO DOCENTE
+    console.log('🚀 === INICIANDO DETECCIÓN DE MODO ===');
+
+    // Múltiples métodos de detección
+    const currentPath = window.location.pathname;
+    const isDocenteURL = currentPath.includes('/docente/');
+    const templateDocente = '{{ es_docente|yesno:"true,false" }}' === 'true';
+    const modoContexto = '{{ modo_prueba|yesno:"true,false" }}' === 'true';
+
+    // NUEVA: Detectar por elementos únicos del template docente
+    const docenteIndicator = document.querySelector('.card-header h2');
+    const hasDocenteText = docenteIndicator && docenteIndicator.textContent.includes('MODO DOCENTE');
+
+    console.log('🔍 === ANÁLISIS COMPLETO DE MODO ===');
+    console.log('  - URL actual:', currentPath);
+    console.log('  - URL contiene /docente/:', isDocenteURL);
+    console.log('  - Template es_docente:', templateDocente);
+    console.log('  - Contexto modo_prueba:', modoContexto);
+    console.log('  - Elemento HTML indica docente:', hasDocenteText);
+
+    // ✅ DETERMINACIÓN FINAL CON MÚLTIPLES VERIFICACIONES
+    const esDocente = isDocenteURL || templateDocente || modoContexto || hasDocenteText;
+
+    console.log('🎯 === RESULTADO FINAL ===');
+    console.log('  - MODO DETECTADO:', esDocente ? '🧑‍🏫 DOCENTE' : '👨‍🎓 ESTUDIANTE');
+
+    // ✅ 2. CONFIGURACIÓN GLOBAL ULTRA SEGURA
+    if (esDocente) {
+        // MODO DOCENTE - Configuración forzada
+        window.esDocente = true;
+        window.modoPrueba = true;
+        window.studentId = -1;
+        window.levelId = {{ level_id|default:1 }};
+        window.moduloId = {{ modulo_id|default:1 }};
+        window.DISABLE_STUDENT_AJAX = true;
+        
+        console.log('🧑‍🏫 === MODO DOCENTE CONFIGURADO ===');
+        console.log('  - studentId:', window.studentId);
+        console.log('  - levelId:', window.levelId);
+        console.log('  - moduloId:', window.moduloId);
+        console.log('  - AJAX deshabilitado:', window.DISABLE_STUDENT_AJAX);
+        
+    } else {
+        // MODO ESTUDIANTE - Configuración normal
+        window.esDocente = false;
+        window.modoPrueba = false;
+        window.studentId = {{ matricula_id|default:1 }};
+        window.levelId = {{ level_id|default:1 }};
+        window.moduloId = {{ modulo_id|default:1 }};
+        window.DISABLE_STUDENT_AJAX = false;
+        
+        console.log('👨‍🎓 === MODO ESTUDIANTE CONFIGURADO ===');
+        console.log('  - studentId:', window.studentId);
+        console.log('  - levelId:', window.levelId);
+        console.log('  - moduloId:', window.moduloId);
+    }
+
+    // ✅ 3. VALIDACIONES ADICIONALES
+    if (!window.levelId || window.levelId <= 0) {
+        console.warn('⚠️ levelId inválido, corrigiendo a 1');
+        window.levelId = 1;
+    }
+
+    if (!window.moduloId || window.moduloId <= 0) {
+        console.warn('⚠️ moduloId inválido, corrigiendo a 1');
+        window.moduloId = 1;
+    }
+
+    console.log('✅ === CONFIGURACIÓN COMPLETADA ===');
+    console.log('  - Modo final:', window.esDocente ? 'DOCENTE' : 'ESTUDIANTE');
+    console.log('  - Level ID:', window.levelId);
+    console.log('  - Módulo ID:', window.moduloId);
+    console.log('  - Student ID:', window.studentId);
+
     let selectedNumbers = [];
     let currentNumbers = [];
     let currentQuestion = 1;
@@ -1139,49 +1226,150 @@
         console.log('Sesión limpiada');
     }
 
+    // ✅ 4. OVERRIDE FORZADO PARA FUNCIONES CRÍTICAS
+    // Sobrescribir initializeGameData para modo docente
+    const originalInitializeGameData = window.initializeGameData;
+
     async function initializeGameData() {
-        studentId = window.studentId || 1;
-        levelId = window.levelId || 1;
+        console.log('🔧 === INICIO initializeGameData MEJORADO ===');
+        console.log('🔍 Verificando modo: window.esDocente =', window.esDocente);
         
-        console.log('Student ID:', studentId, 'Level ID:', levelId);
+        // VERIFICACIÓN TRIPLE DE MODO DOCENTE
+        const tripleCheck = window.esDocente || 
+                        window.DISABLE_STUDENT_AJAX || 
+                        currentPath.includes('/docente/');
         
-        const isReload = isUnauthorizedReload();
-        
-        if (isReload) {
-            console.log('⚠️ RECARGA DETECTADA - Penalizando con una vida');
+        if (tripleCheck) {
+            console.log('🧑‍🏫 === MODO DOCENTE CONFIRMADO - CONFIGURACIÓN DIRECTA ===');
             
-            Swal.fire({
-                icon: 'warning',
-                title: '⚠️ Recarga Detectada',
-                html: `
-                    <div>
-                        <p><strong>Se ha detectado una recarga de página.</strong></p>
-                        <p>Como penalización, se restará <span style="color: #f44336; font-weight: bold;">1 vida</span>.</p>
-                        <br>
-                        <p style="color: #666; font-size: 0.9em;">
-                            💡 <strong>Consejo:</strong> Evita recargar la página durante el juego.
-                        </p>
-                    </div>
-                `,
-                confirmButtonText: 'Continuar',
-                allowOutsideClick: false,
-                timer: 4000,
-                timerProgressBar: true
-            });
+            // Configurar variables de docente de forma ultra segura
+            studentId = -1;
+            levelId = window.levelId || 1;
+            vidasRestantes = 999;
+            vidasTotales = 999;
+            puedeIntentar = true;
             
-            const penaltyResult = await penalizeReload();
-            if (!penaltyResult.success) {
-                console.error('Error al penalizar recarga:', penaltyResult.error);
+            // Mostrar display especial para docente
+            updateLivesDisplayDocente();
+            
+            // IMPORTANTE: NO mostrar popup si ya está en una secuencia de juego
+            if (currentQuestion === 1 && !hasGameStarted) {
+                showDocenteWelcome();
             }
+            
+            console.log('✅ Docente configurado correctamente');
+            return true;
         }
         
-        registerGameSession();
+        // Para estudiantes, usar lógica original
+        console.log('👨‍🎓 Configurando modo estudiante...');
+        studentId = window.studentId;
+        levelId = window.levelId;
+        
+        if (!levelId || levelId <= 0 || isNaN(levelId)) {
+            console.error('❌ ERROR: levelId inválido para estudiante:', levelId);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error del sistema',
+                text: 'No se pudo cargar la información del nivel.',
+                confirmButtonText: 'Volver'
+            }).then(() => {
+                window.location.href = '/core_estudiante/';
+            });
+            return false;
+        }
         
         const gameInfo = await getGameInfo();
         return gameInfo;
     }
 
+    // ✅ 6. FUNCIÓN MEJORADA showDocenteWelcome
+    function showDocenteWelcome() {
+        console.log('🎉 Mostrando bienvenida de docente...');
+        
+        setTimeout(() => {
+            Swal.fire({
+                icon: 'info',
+                title: '🧑‍🏫 MODO DOCENTE ACTIVADO',
+                html: `
+                    <div style="text-align: center;">
+                        <div style="background: #e3f2fd; padding: 15px; border-radius: 10px; margin: 10px 0;">
+                            <p><strong>🎮 Nivel:</strong> ${levelId}</p>
+                            <p><strong>📚 Módulo:</strong> ${window.moduloId}</p>
+                            <p><strong>💖 Vidas:</strong> Ilimitadas</p>
+                            <p><strong>💾 Guardado:</strong> Deshabilitado</p>
+                        </div>
+                        <p style="color: #666; font-size: 0.9em;">
+                            ¡Listo para probar el juego! Todas las funciones están disponibles.
+                        </p>
+                    </div>
+                `,
+                confirmButtonText: '¡Comenzar demostración!',
+                allowOutsideClick: false,
+                timer: 2500,
+                timerProgressBar: true
+            });
+        }, 500);
+    }
+
+    // ✅ 7. FUNCIÓN MEJORADA updateLivesDisplayDocente
+    function updateLivesDisplayDocente() {
+        console.log('🔄 Actualizando display de vidas para docente...');
+        
+        let livesIndicator = document.getElementById('lives-indicator');
+        if (!livesIndicator) {
+            livesIndicator = document.createElement('div');
+            livesIndicator.id = 'lives-indicator';
+            livesIndicator.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+                color: white;
+                padding: 15px 20px;
+                border-radius: 25px;
+                font-weight: bold;
+                font-size: 1.1em;
+                box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+                z-index: 1000;
+                font-family: 'Comic Sans MS', cursive, sans-serif;
+                border: 3px solid #fff;
+            `;
+            document.body.appendChild(livesIndicator);
+        }
+        
+        livesIndicator.innerHTML = `
+            <div style="text-align: center;">
+                <div style="font-size: 1.4em; margin-bottom: 5px;">🧑‍🏫</div>
+                <div style="font-weight: bold;">MODO DOCENTE</div>
+                <div style="font-size: 0.9em; margin-top: 5px;">∞ Vidas ilimitadas</div>
+            </div>
+        `;
+    }
+
+    // ✅ 5. OVERRIDE PARA getGameInfo
     async function getGameInfo() {
+        // VERIFICACIÓN TRIPLE PARA DOCENTES
+        const tripleCheck = window.esDocente || 
+                        window.DISABLE_STUDENT_AJAX || 
+                        currentPath.includes('/docente/');
+        
+        if (tripleCheck) {
+            console.log('🧑‍🏫 getGameInfo() - MODO DOCENTE: Sin peticiones AJAX');
+            return true;
+        }
+        
+        // Lógica normal para estudiantes (sin cambios)
+        if (!studentId || studentId <= 0 || isNaN(studentId)) {
+            console.error('❌ getGameInfo: studentId inválido:', studentId);
+            return false;
+        }
+        
+        if (!levelId || levelId <= 0 || isNaN(levelId)) {
+            console.error('❌ getGameInfo: levelId inválido:', levelId);
+            return false;
+        }
+        
         try {
             const response = await fetch('/get_game_info/', {
                 method: 'POST',
@@ -1201,15 +1389,14 @@
                 vidasTotales = data.vidas_originales_nivel;
                 puedeIntentar = data.puede_intentar;
                 
-                console.log(`Vidas: ${vidasRestantes}/${vidasTotales}, Puede intentar: ${puedeIntentar}`);
-                
                 updateLivesDisplay();
                 
                 if (!puedeIntentar) {
                     showNoLivesMessage();
                     return false;
                 }
-                
+
+                // Mostrar mensaje de vidas restauradas si aplica
                 if (data.vidas_restauradas > 0) {
                     Swal.fire({
                         icon: 'info',
@@ -1221,11 +1408,11 @@
                 
                 return true;
             } else {
-                console.error('Error al obtener info del juego:', data.error);
+                console.error('❌ Error en getGameInfo:', data.error);
                 return false;
             }
         } catch (error) {
-            console.error('Error de red al obtener info del juego:', error);
+            console.error('❌ Error de red en getGameInfo:', error);
             return false;
         }
     }
@@ -1395,7 +1582,10 @@
     function displayNumbers() {
         if (currentQuestion === 1 && !hasGameStarted) {
             hasGameStarted = true;
-            registerGameSession();
+            // ✅ SOLO registrar sesión para estudiantes
+            if (!window.esDocente) {
+                registerGameSession(); // Solo registrar sesión para estudiantes
+            }
         }
 
         // Ocultar TODOS los contenedores
@@ -1886,6 +2076,106 @@
             `;
         });
 
+        // ✅ VERIFICACIÓN CORREGIDA PARA MODO DOCENTE
+        if (window.esDocente || window.DISABLE_STUDENT_AJAX) {
+            console.log('🧑‍🏫 Mostrando resultados finales para docente');
+            
+            // ✅ HTML ESPECÍFICO PARA DOCENTE (CORREGIDO)
+            const docenteResultHTML = `
+                <div style="text-align: center; font-family: 'Comic Sans MS', cursive;">
+                    <!-- Banner de modo docente -->
+                    <div style="background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%); color: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; border: 3px solid #fff;">
+                        <h2 style="margin: 0 0 10px 0; font-size: 1.8rem; font-weight: 900;">
+                            🧑‍🏫 MODO DOCENTE ACTIVADO
+                        </h2>
+                        <div style="font-size: 1.1rem; opacity: 0.9;">
+                            Demostración completada exitosamente
+                        </div>
+                    </div>
+
+                    <!-- Puntaje obtenido -->
+                    <div style="background: ${statusColor}; color: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                        <div style="font-size: 1.4rem; font-weight: 700; margin-bottom: 8px;">
+                            ${statusMessage}
+                        </div>
+                        <div style="font-size: 2rem; font-weight: 900; margin: 10px 0;">
+                            PUNTAJE: ${finalScore.toFixed(2)}/10
+                        </div>
+                        <div style="font-size: 1.1rem; opacity: 0.9;">
+                            Porcentaje: ${percentage.toFixed(1)}%
+                        </div>
+                    </div>
+
+                    <!-- Resumen por pregunta -->
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; margin-bottom: 20px; text-align: left;">
+                        <h4 style="margin: 0 0 15px 0; color: #333; font-size: 1.3rem; font-weight: 700; text-align: center;">
+                            📊 Resumen detallado por pregunta:
+                        </h4>
+                        ${questionSummaryHTML}
+                    </div>
+
+                    <!-- Información del modo docente -->
+                    <div style="background: #e3f2fd; padding: 20px; border-radius: 12px; margin-bottom: 20px; border-left: 5px solid #2196F3;">
+                        <h4 style="margin: 0 0 15px 0; color: #1976d2; font-size: 1.2rem; font-weight: 700;">
+                            ℹ️ Información del modo docente:
+                        </h4>
+                        <div style="text-align: left; color: #333; line-height: 1.6;">
+                            <p style="margin: 8px 0; display: flex; align-items: center;">
+                                <span style="color: #4CAF50; margin-right: 10px;">✓</span>
+                                <strong>Nivel probado:</strong> ${window.levelId || 'N/A'}
+                            </p>
+                            <p style="margin: 8px 0; display: flex; align-items: center;">
+                                <span style="color: #4CAF50; margin-right: 10px;">✓</span>
+                                <strong>Módulo:</strong> ${window.moduloId || 'N/A'}
+                            </p>
+                            <p style="margin: 8px 0; display: flex; align-items: center;">
+                                <span style="color: #ff9800; margin-right: 10px;">⚠</span>
+                                <strong>Guardado:</strong> Deshabilitado (modo demostración)
+                            </p>
+                            <p style="margin: 8px 0; display: flex; align-items: center;">
+                                <span style="color: #ff9800; margin-right: 10px;">⚠</span>
+                                <strong>Vidas:</strong> Ilimitadas (no se consumen)
+                            </p>
+                            <p style="margin: 8px 0; display: flex; align-items: center;">
+                                <span style="color: #2196F3; margin-right: 10px;">ℹ</span>
+                                <strong>Propósito:</strong> Prueba y demostración del juego
+                            </p>
+                        </div>
+                    </div>
+
+                    
+                </div>
+            `;
+
+            // ✅ MOSTRAR SWEETALERT PARA DOCENTE
+            await Swal.fire({
+                icon: 'info',
+                title: false, // Sin título por defecto
+                html: docenteResultHTML,
+                confirmButtonText: '🔄 Probar de nuevo',
+                cancelButtonText: '🏠 Volver al menú docente',
+                showCancelButton: true,
+                allowOutsideClick: false,
+                width: '700px',
+                customClass: {
+                    popup: 'animated tada',
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-secondary'
+                },
+                buttonsStyling: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Reiniciar el juego en modo docente
+                    resetGame();
+                } else {
+                    // Volver al menú de docente
+                    window.location.href = `/docente/modulo/${window.moduloId}/niveles/`;
+                }
+            });
+            
+            return; // ✅ IMPORTANTE: Salir aquí para docentes
+        }
+
         // Guardar intento
         const saveResult = await saveAttempt(finalScore);
         
@@ -2001,15 +2291,36 @@
         return cookieValue;
     }
 
-    // FUNCIÓN MODIFICADA: saveAttempt actualizada
+    // FUNCIÓN SEGURA: saveAttempt para docente
     async function saveAttempt(finalScore) {
+        // ✅ SIMULACIÓN PARA DOCENTES
+        if (window.esDocente || window.DISABLE_STUDENT_AJAX) {
+            console.log('🧑‍🏫 saveAttempt() - Modo docente: SIMULANDO guardado');
+            
+            // Simular respuesta exitosa sin hacer petición real
+            return { 
+                success: true, 
+                vidasRestantes: 999,
+                puedeIntentar: true,
+                nota: finalScore,
+                puede_continuar: true,
+                estado: 'modo_docente',
+                mensaje: 'Simulación: Intento no guardado'
+            };
+        }
+        
+        // Lógica normal para estudiantes
+        if (!studentId || studentId <= 0 || isNaN(studentId)) {
+            console.error('❌ saveAttempt: studentId inválido:', studentId);
+            return { success: false, error: 'ID de estudiante inválido' };
+        }
+        
+        if (!levelId || levelId <= 0 || isNaN(levelId)) {
+            console.error('❌ saveAttempt: levelId inválido:', levelId);
+            return { success: false, error: 'ID de nivel inválido' };
+        }
+        
         try {
-            console.log('Enviando datos:', {
-                estudiante_id: studentId,
-                nivel_id: levelId,
-                puntaje_total: finalScore
-            });
-
             const response = await fetch('/save_attempt/', {
                 method: 'POST',
                 headers: {
@@ -2024,17 +2335,12 @@
             });
             
             const data = await response.json();
-            console.log('Respuesta del servidor:', data);
             
             if (data.success) {
-                // Actualizar variables locales
                 vidasRestantes = data.vidas_restantes;
                 puedeIntentar = data.puede_continuar;
-                
-                // Actualizar display de vidas
                 updateLivesDisplay();
                 
-                console.log('Intento guardado correctamente con nota:', data.nota);
                 return { 
                     success: true, 
                     data: data,
@@ -2042,11 +2348,11 @@
                     puedeIntentar: puedeIntentar
                 };
             } else {
-                console.error('Error del servidor:', data.error);
+                console.error('❌ Error del servidor en saveAttempt:', data.error);
                 return { success: false, error: data.error };
             }
         } catch (error) {
-            console.error('Error de red al guardar intento:', error);
+            console.error('❌ Error de red en saveAttempt:', error);
             return { success: false, error: 'Error de conexión: ' + error.message };
         }
     }
@@ -2077,33 +2383,6 @@
         }
     }
 
-    // Función para penalizar recarga (necesitas agregarla si no existe)
-    async function penalizeReload() {
-        try {
-            const response = await fetch('/penalize_reload/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': getCookie('csrftoken')
-                },
-                body: JSON.stringify({
-                    estudiante_id: studentId,
-                    nivel_id: levelId
-                })
-            });
-            
-            const data = await response.json();
-            if (data.success) {
-                vidasRestantes = data.vidas_restantes;
-                updateLivesDisplay();
-                return { success: true };
-            } else {
-                return { success: false, error: data.error };
-            }
-        } catch (error) {
-            return { success: false, error: error.message };
-        }
-    }
 
     // Reiniciar juego
     function resetGame() {
@@ -2162,29 +2441,51 @@
 
     // Inicializar el juego cuando la página carga
     document.addEventListener('DOMContentLoaded', function() {
-        if (typeof initializeGameData === 'function') {
-            initializeGameData().then((canPlay) => {
-                if (canPlay) {
-                    createFloatingElements();
-                    displayNumbers();
-                }
-            }).catch((error) => {
-                console.error('Error al inicializar el juego:', error);
-            });
-        } else {
-            console.error('La función initializeGameData no está definida');
-        }
+        console.log('🚀 === INICIALIZANDO JUEGO ===');
+        console.log('Modo:', window.esDocente ? 'DOCENTE' : 'ESTUDIANTE');
         
-        // Atajo de teclado para responder
+        // Quitar el overlay de debug después de unos segundos
+        setTimeout(() => {
+            const debugOverlay = document.getElementById('debug-critical');
+            if (debugOverlay) {
+                debugOverlay.style.display = 'none';
+            }
+        }, 3000);
+            
+        // Inicializar datos del juego
+        initializeGameData().then((canPlay) => {
+            if (canPlay) {
+                console.log('✅ Puede jugar - Iniciando elementos del juego');
+                createFloatingElements();
+                
+                
+                // ✅ ASEGURAR QUE displayNumbers SE EJECUTE
+                setTimeout(() => {
+                    displayNumbers();
+                    console.log('🎮 Juego completamente inicializado');
+                }, 100);
+            } else {
+                console.log('❌ No puede jugar - Mostrando mensaje correspondiente');
+            }
+        }).catch((error) => {
+            console.error('❌ Error en initializeGameData:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Hubo un problema al inicializar el juego. Por favor, recarga la página.',
+                confirmButtonText: 'Recargar'
+            }).then(() => {
+                window.location.reload();
+            });
+        });
+        
+        // Agregar atajo de teclado para responder (tecla Enter)
         document.addEventListener('keydown', function(e) {
-            const answerBtn = document.getElementById('answer-btn');
-            if (e.key === 'Enter' && answerBtn && !answerBtn.disabled) {
-                if (typeof checkAnswer === 'function') {
-                    checkAnswer();
-                }
+            if (e.key === 'Enter' && !document.getElementById('answer-btn').disabled) {
+                checkAnswer();
             }
         });
-    
+        
         // Configurar SweetAlert2 con estilos personalizados
         const swalStyle = document.createElement('style');
         swalStyle.textContent = `
@@ -2213,5 +2514,5 @@
         `;
         document.head.appendChild(swalStyle);
     });
-</script>
+  </script>
 {% endblock %}

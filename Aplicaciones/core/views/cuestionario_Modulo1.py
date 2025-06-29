@@ -18,6 +18,22 @@ def get_game_info(request):
         data = json.loads(request.body)
         estudiante_id = data.get('estudiante_id')
         nivel_id = data.get('nivel_id')
+
+        # ✅ DETECTAR SI ES DOCENTE (ID -1)
+        if estudiante_id == -1:
+            # Es docente, retornar datos ficticios
+            nivel = get_object_or_404(Niveles, niv_id=nivel_id)
+            return JsonResponse({
+                'success': True,
+                'vidas_restantes': 999,
+                'vidas_totales': 999,
+                'vidas_originales_nivel': nivel.vidas,
+                'intentos_realizados': 0,
+                'puede_intentar': True,
+                'estado': 'modo_docente',
+                'es_docente': True,
+                'mensaje': 'Modo docente activado - Sin límite de vidas'
+            })
         
         # Obtener el nivel
         nivel = get_object_or_404(Niveles, niv_id=nivel_id)
@@ -232,14 +248,41 @@ def save_attempt(request):
         estudiante_id = data.get('estudiante_id')
         nivel_id = data.get('nivel_id')
         puntaje_total = data.get('puntaje_total', 0)
+
+        # ✅ DETECTAR SI ES DOCENTE (ID -1)
+        if estudiante_id == -1:
+            # Es docente, no guardar nada
+            return JsonResponse({
+                'success': True,
+                'nota': puntaje_total,
+                'vidas_restantes': 999,
+                'estado': 'modo_docente',
+                'puede_continuar': True,
+                'aprobado': puntaje_total >= 7,
+                'mensaje': 'Modo docente: Intento no guardado',
+                'es_docente': True
+            })
         
         # Obtener el nivel y matrícula
         nivel = get_object_or_404(Niveles, niv_id=nivel_id)
-        # Obtener avance (con acceso indirecto a la matrícula)
-        avance = get_object_or_404(Avance_Matriculados,
-                                   mat_id=estudiante_id,
-                                   fk_nivel=nivel)
-        matricula = avance.fk_matricula
+        # ✅ CORREGIR - Buscar matrícula por ID y luego el avance
+        try:
+            matricula = Matriculas.objects.get(mat_id=estudiante_id)
+            avance = Avance_Matriculados.objects.get(
+                fk_matricula=matricula,
+                fk_nivel=nivel
+            )
+        except Matriculas.DoesNotExist:
+            return JsonResponse({
+                'success': False,
+                'error': 'No se encontró la matrícula'
+            })
+        except Avance_Matriculados.DoesNotExist:
+            return JsonResponse({
+                'success': False,
+                'error': 'No se encontró el avance para este nivel'
+            })
+        
         
         # Verificar si puede hacer el intento
         if not avance.puede_intentar():
@@ -351,14 +394,18 @@ def update_best_score(request):
      
         nivel = get_object_or_404(Niveles, niv_id=nivel_id)
 
-         # Obtener avance único relacionado al estudiante y al nivel
-        avance = get_object_or_404(
-            Avance_Matriculados,
-            mat_id=estudiante_id,
-            fk_nivel=nivel
-        )
-
-        matricula = avance.fk_matricula
+        # ✅ CORREGIR - Buscar por matricula_id
+        try:
+            matricula = Matriculas.objects.get(mat_id=estudiante_id)
+            avance = Avance_Matriculados.objects.get(
+                fk_matricula=matricula,
+                fk_nivel=nivel
+            )
+        except (Matriculas.DoesNotExist, Avance_Matriculados.DoesNotExist):
+            return JsonResponse({
+                'success': False,
+                'error': 'No se encontró el avance'
+            })
         
         # Obtener el mejor intento
         mejor_intento = IntentoNivel.objects.filter(

@@ -1,9 +1,15 @@
-{% extends "plantillas/MasterEstudiante.html" %}
+{% extends template_base|default:"plantillas/MasterEstudiante.html" %}
 {% load static %}
-{% block title %}Estudiantes_Modulos{% endblock %}
+{% block title %}
+    {% if es_docente %}
+        Docente - Probando {{nivel.niv_nombre}}
+    {% else %}
+        Estudiantes_Modulos
+    {% endif %}
+{% endblock %}
 
 {% block css %}
-    <link rel="stylesheet" href="{% static 'css/Modulo-1/primer-nivel.css' %}">
+    <!--<link rel="stylesheet" href="{% static 'css/Modulo-1/primer-nivel.css' %}">-->
     <style>
             body {
                 background: linear-gradient(-45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ffa726, #ef5350);
@@ -1396,21 +1402,58 @@
             }
 
     </style>
+
+    <style>
+        /* Todo tu CSS actual se mantiene igual */
+        /* Solo agregar este debug temporal */
+        .debug-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: red;
+            color: white;
+            padding: 10px;
+            z-index: 99999;
+            font-family: monospace;
+            font-size: 12px;
+        }
+    </style>
 {% endblock %}
 
 
 {% block content %}
+
+    
+  
     <div class="container-fluid">
+
         <nav class="breadcrumb">
-            <a style="color: #000;" href="{% url 'core_estudiante' %}">🏠 Inicio</a> &nbsp;/&nbsp;
-            <a style="color: #000;" href="{% url 'estudiante_modulo' %}">📚 Módulos</a> &nbsp;/&nbsp;
-            <a style="color: #000;" href="{% url 'ver_niveles_modulo' modulo.mod_id %}"> 🎯 Niveles</a> &nbsp;/&nbsp;
-            <span style="color: #2632df;">🎮 Juego</span>
+            {% if es_docente %}
+                <a style="color: #000;" href="{% url 'core_docente' %}">🏠 Inicio Docente</a> &nbsp;/&nbsp;
+                <a style="color: #000;" href="{% url 'docente_ver_niveles_modulo' modulo.mod_id %}">📚 Niveles</a> &nbsp;/&nbsp;
+                <span style="color: #2632df;">🎮 Probando Juego</span>
+            {% else %}
+                <a style="color: #000;" href="{% url 'core_estudiante' %}">🏠 Inicio</a> &nbsp;/&nbsp;
+                <a style="color: #000;" href="{% url 'estudiante_modulo' %}">📚 Módulos</a> &nbsp;/&nbsp;
+                <a style="color: #000;" href="{% url 'ver_niveles_modulo' modulo.mod_id %}"> 🎯 Niveles</a> &nbsp;/&nbsp;
+                <span style="color: #2632df;">🎮 Juego</span>
+            {% endif %}
         </nav>
 
         <div class="card loading">
             <div class="card-header">
-                <h2>🌟 {{nivel.niv_nombre}} -{{nivel.niv_descripcion}} </h2>
+                <h2>
+                    {% if es_docente %}
+                        🧑‍🏫 MODO DOCENTE - 
+                    {% endif %}
+                    🌟 {{nivel.niv_nombre}} - {{nivel.niv_descripcion}}
+                </h2>
+                {% if es_docente %}
+                    <div style="background: #ff9800; color: white; padding: 10px; border-radius: 10px; margin-top: 10px;">
+                        ⚠️ <strong>Modo Prueba:</strong> No se guardarán intentos ni se usarán vidas
+                    </div>
+                {% endif %}
             </div>
             <div class="card-body">
 
@@ -1624,15 +1667,80 @@
 {% block js %}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-    
-        // Variables globales para el juego
-        window.studentId = {{ matricula_id}};
-        window.levelId   = {{ level_id }};
-        const moduloId = {{ modulo_id }};
-        
-    </script>
+        // ✅ 1. DETECCIÓN ULTRA MEJORADA DE MODO DOCENTE
+        console.log('🚀 === INICIANDO DETECCIÓN DE MODO ===');
 
-    <script>
+        // Múltiples métodos de detección
+        const currentPath = window.location.pathname;
+        const isDocenteURL = currentPath.includes('/docente/');
+        const templateDocente = '{{ es_docente|yesno:"true,false" }}' === 'true';
+        const modoContexto = '{{ modo_prueba|yesno:"true,false" }}' === 'true';
+
+        // NUEVA: Detectar por elementos únicos del template docente
+        const docenteIndicator = document.querySelector('.card-header h2');
+        const hasDocenteText = docenteIndicator && docenteIndicator.textContent.includes('MODO DOCENTE');
+
+        console.log('🔍 === ANÁLISIS COMPLETO DE MODO ===');
+        console.log('  - URL actual:', currentPath);
+        console.log('  - URL contiene /docente/:', isDocenteURL);
+        console.log('  - Template es_docente:', templateDocente);
+        console.log('  - Contexto modo_prueba:', modoContexto);
+        console.log('  - Elemento HTML indica docente:', hasDocenteText);
+
+        // ✅ DETERMINACIÓN FINAL CON MÚLTIPLES VERIFICACIONES
+        const esDocente = isDocenteURL || templateDocente || modoContexto || hasDocenteText;
+
+        console.log('🎯 === RESULTADO FINAL ===');
+        console.log('  - MODO DETECTADO:', esDocente ? '🧑‍🏫 DOCENTE' : '👨‍🎓 ESTUDIANTE');
+
+        // ✅ 2. CONFIGURACIÓN GLOBAL ULTRA SEGURA
+        if (esDocente) {
+            // MODO DOCENTE - Configuración forzada
+            window.esDocente = true;
+            window.modoPrueba = true;
+            window.studentId = -1;
+            window.levelId = {{ level_id|default:1 }};
+            window.moduloId = {{ modulo_id|default:1 }};
+            window.DISABLE_STUDENT_AJAX = true;
+            
+            console.log('🧑‍🏫 === MODO DOCENTE CONFIGURADO ===');
+            console.log('  - studentId:', window.studentId);
+            console.log('  - levelId:', window.levelId);
+            console.log('  - moduloId:', window.moduloId);
+            console.log('  - AJAX deshabilitado:', window.DISABLE_STUDENT_AJAX);
+            
+        } else {
+            // MODO ESTUDIANTE - Configuración normal
+            window.esDocente = false;
+            window.modoPrueba = false;
+            window.studentId = {{ matricula_id|default:1 }};
+            window.levelId = {{ level_id|default:1 }};
+            window.moduloId = {{ modulo_id|default:1 }};
+            window.DISABLE_STUDENT_AJAX = false;
+            
+            console.log('👨‍🎓 === MODO ESTUDIANTE CONFIGURADO ===');
+            console.log('  - studentId:', window.studentId);
+            console.log('  - levelId:', window.levelId);
+            console.log('  - moduloId:', window.moduloId);
+        }
+
+        // ✅ 3. VALIDACIONES ADICIONALES
+        if (!window.levelId || window.levelId <= 0) {
+            console.warn('⚠️ levelId inválido, corrigiendo a 1');
+            window.levelId = 1;
+        }
+
+        if (!window.moduloId || window.moduloId <= 0) {
+            console.warn('⚠️ moduloId inválido, corrigiendo a 1');
+            window.moduloId = 1;
+        }
+
+        console.log('✅ === CONFIGURACIÓN COMPLETADA ===');
+        console.log('  - Modo final:', window.esDocente ? 'DOCENTE' : 'ESTUDIANTE');
+        console.log('  - Level ID:', window.levelId);
+        console.log('  - Módulo ID:', window.moduloId);
+        console.log('  - Student ID:', window.studentId);
+
         let selectedNumbers = [];
         let currentNumbers = [];
         let currentQuestion = 1;
@@ -1645,7 +1753,7 @@
         let currentScore = 0;
         let maxScorePerQuestion = 10/4 ;// Aproximadamente 3.33 puntos por pregunta
         let totalPossibleScore = 10; // 10 puntos TOTAL
-    // VARIABLES PARA EL SISTEMA DE VIDAS (ACTUALIZADAS)
+        // VARIABLES PARA EL SISTEMA DE VIDAS (ACTUALIZADAS)
         let studentId = null;
         let levelId = null;
         let vidasRestantes = 0;
@@ -1674,6 +1782,7 @@
         function generateSessionId() {
             return 'game_' + studentId + '_' + levelId + '_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
         }
+
         // Verificar si es una recarga no autorizada
         function isUnauthorizedReload() {
             const sessionKey = `game_session_${studentId}_${levelId}`;
@@ -1716,57 +1825,152 @@
             console.log('Sesión limpiada');
         }
 
-        // FUNCIÓN MODIFICADA: initializeGameData
+        // ✅ 4. OVERRIDE FORZADO PARA FUNCIONES CRÍTICAS
+        // Sobrescribir initializeGameData para modo docente
+        const originalInitializeGameData = window.initializeGameData;
+
         async function initializeGameData() {
-            studentId = window.studentId || 1;
-            levelId = window.levelId || 1;
+            console.log('🔧 === INICIO initializeGameData MEJORADO ===');
+            console.log('🔍 Verificando modo: window.esDocente =', window.esDocente);
             
-            console.log('Student ID:', studentId, 'Level ID:', levelId);
+            // VERIFICACIÓN TRIPLE DE MODO DOCENTE
+            const tripleCheck = window.esDocente || 
+                            window.DISABLE_STUDENT_AJAX || 
+                            currentPath.includes('/docente/');
             
-            // Verificar si es una recarga no autorizada
-            const isReload = isUnauthorizedReload();
-            
-            if (isReload) {
-                console.log('⚠️ RECARGA DETECTADA - Penalizando con una vida');
+            if (tripleCheck) {
+                console.log('🧑‍🏫 === MODO DOCENTE CONFIRMADO - CONFIGURACIÓN DIRECTA ===');
                 
-                // Mostrar advertencia de recarga
-                Swal.fire({
-                    icon: 'warning',
-                    title: '⚠️ Recarga Detectada',
-                    html: `
-                        <div>
-                            <p><strong>Se ha detectado una recarga de página.</strong></p>
-                            <p>Como penalización, se restará <span style="color: #f44336; font-weight: bold;">1 vida</span>.</p>
-                            <br>
-                            <p style="color: #666; font-size: 0.9em;">
-                                💡 <strong>Consejo:</strong> Evita recargar la página durante el juego.
-                            </p>
-                        </div>
-                    `,
-                    confirmButtonText: 'Continuar',
-                    allowOutsideClick: false,
-                    timer: 4000,
-                    timerProgressBar: true
-                });
+                // Configurar variables de docente de forma ultra segura
+                studentId = -1;
+                levelId = window.levelId || 1;
+                vidasRestantes = 999;
+                vidasTotales = 999;
+                puedeIntentar = true;
                 
-                // Penalizar con una vida
-                const penaltyResult = await penalizeReload();
-                if (!penaltyResult.success) {
-                    console.error('Error al penalizar recarga:', penaltyResult.error);
+                // Mostrar display especial para docente
+                updateLivesDisplayDocente();
+                
+                // IMPORTANTE: NO mostrar popup si ya está en una secuencia de juego
+                if (currentQuestion === 1 && !hasGameStarted) {
+                    showDocenteWelcome();
                 }
+                
+                console.log('✅ Docente configurado correctamente');
+                return true;
             }
             
-            // Registrar nueva sesión
-            registerGameSession();
+            // Para estudiantes, usar lógica original
+            console.log('👨‍🎓 Configurando modo estudiante...');
+            studentId = window.studentId;
+            levelId = window.levelId;
             
-            // Obtener información del juego
+            if (!levelId || levelId <= 0 || isNaN(levelId)) {
+                console.error('❌ ERROR: levelId inválido para estudiante:', levelId);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error del sistema',
+                    text: 'No se pudo cargar la información del nivel.',
+                    confirmButtonText: 'Volver'
+                }).then(() => {
+                    window.location.href = '/core_estudiante/';
+                });
+                return false;
+            }
+            
             const gameInfo = await getGameInfo();
             return gameInfo;
         }
 
 
-        // NUEVA FUNCIÓN: Obtener información del juego
+        // ✅ 6. FUNCIÓN MEJORADA showDocenteWelcome
+        function showDocenteWelcome() {
+            console.log('🎉 Mostrando bienvenida de docente...');
+            
+            setTimeout(() => {
+                Swal.fire({
+                    icon: 'info',
+                    title: '🧑‍🏫 MODO DOCENTE ACTIVADO',
+                    html: `
+                        <div style="text-align: center;">
+                            <div style="background: #e3f2fd; padding: 15px; border-radius: 10px; margin: 10px 0;">
+                                <p><strong>🎮 Nivel:</strong> ${levelId}</p>
+                                <p><strong>📚 Módulo:</strong> ${window.moduloId}</p>
+                                <p><strong>💖 Vidas:</strong> Ilimitadas</p>
+                                <p><strong>💾 Guardado:</strong> Deshabilitado</p>
+                            </div>
+                            <p style="color: #666; font-size: 0.9em;">
+                                ¡Listo para probar el juego! Todas las funciones están disponibles.
+                            </p>
+                        </div>
+                    `,
+                    confirmButtonText: '¡Comenzar demostración!',
+                    allowOutsideClick: false,
+                    timer: 2500,
+                    timerProgressBar: true
+                });
+            }, 500);
+        }
+
+        // ✅ 7. FUNCIÓN MEJORADA updateLivesDisplayDocente
+        function updateLivesDisplayDocente() {
+            console.log('🔄 Actualizando display de vidas para docente...');
+            
+            let livesIndicator = document.getElementById('lives-indicator');
+            if (!livesIndicator) {
+                livesIndicator = document.createElement('div');
+                livesIndicator.id = 'lives-indicator';
+                livesIndicator.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+                    color: white;
+                    padding: 15px 20px;
+                    border-radius: 25px;
+                    font-weight: bold;
+                    font-size: 1.1em;
+                    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+                    z-index: 1000;
+                    font-family: 'Comic Sans MS', cursive, sans-serif;
+                    border: 3px solid #fff;
+                `;
+                document.body.appendChild(livesIndicator);
+            }
+            
+            livesIndicator.innerHTML = `
+                <div style="text-align: center;">
+                    <div style="font-size: 1.4em; margin-bottom: 5px;">🧑‍🏫</div>
+                    <div style="font-weight: bold;">MODO DOCENTE</div>
+                    <div style="font-size: 0.9em; margin-top: 5px;">∞ Vidas ilimitadas</div>
+                </div>
+            `;
+        }
+
+
+        // ✅ 5. OVERRIDE PARA getGameInfo
         async function getGameInfo() {
+            // VERIFICACIÓN TRIPLE PARA DOCENTES
+            const tripleCheck = window.esDocente || 
+                            window.DISABLE_STUDENT_AJAX || 
+                            currentPath.includes('/docente/');
+            
+            if (tripleCheck) {
+                console.log('🧑‍🏫 getGameInfo() - MODO DOCENTE: Sin peticiones AJAX');
+                return true;
+            }
+            
+            // Lógica normal para estudiantes (sin cambios)
+            if (!studentId || studentId <= 0 || isNaN(studentId)) {
+                console.error('❌ getGameInfo: studentId inválido:', studentId);
+                return false;
+            }
+            
+            if (!levelId || levelId <= 0 || isNaN(levelId)) {
+                console.error('❌ getGameInfo: levelId inválido:', levelId);
+                return false;
+            }
+            
             try {
                 const response = await fetch('/get_game_info/', {
                     method: 'POST',
@@ -1786,17 +1990,13 @@
                     vidasTotales = data.vidas_originales_nivel;
                     puedeIntentar = data.puede_intentar;
                     
-                    console.log(`Vidas: ${vidasRestantes}/${vidasTotales}, Puede intentar: ${puedeIntentar}`);
-                    
-                    // Actualizar UI con información de vidas
                     updateLivesDisplay();
                     
-                    // Verificar si puede jugar
                     if (!puedeIntentar) {
                         showNoLivesMessage();
                         return false;
                     }
-                    
+
                     // Mostrar mensaje de vidas restauradas si aplica
                     if (data.vidas_restauradas > 0) {
                         Swal.fire({
@@ -1809,17 +2009,21 @@
                     
                     return true;
                 } else {
-                    console.error('Error al obtener info del juego:', data.error);
+                    console.error('❌ Error en getGameInfo:', data.error);
                     return false;
                 }
             } catch (error) {
-                console.error('Error de red al obtener info del juego:', error);
+                console.error('❌ Error de red en getGameInfo:', error);
                 return false;
             }
         }
 
         // FUNCIÓN MODIFICADA: Actualizar display de vidas con indicador de estado
         function updateLivesDisplay() {
+            if (window.esDocente) {
+                updateLivesDisplayDocente();
+                return;
+            }
             let livesIndicator = document.getElementById('lives-indicator');
             if (!livesIndicator) {
                 livesIndicator = document.createElement('div');
@@ -2040,6 +2244,8 @@
             'treinta-y-cuatro': '34',
             'veinticuatro': '24'
         };
+        
+
         // Función corregida para la pregunta de opción múltiple
         function showMultipleChoiceQuestion() {
             // Ocultar otros contenedores
@@ -2078,7 +2284,7 @@
             
             // Agregar event listeners a las opciones
             const choiceOptions = document.querySelectorAll('.choice-option');
-            choiceOptions.forEach(option => {
+                choiceOptions.forEach(option => {
                 // Remover event listeners anteriores clonando el elemento
                 const newOption = option.cloneNode(true);
                 option.parentNode.replaceChild(newOption, option);
@@ -2114,10 +2320,18 @@
 
         // Función corregida para mostrar números en la pantalla
         function displayNumbers() {
+            console.log('🎯 === INICIANDO displayNumbers() ===');
+            console.log('currentQuestion:', currentQuestion);
+            console.log('esDocente:', window.esDocente);
+            
             // Marcar que el juego ha iniciado cuando se muestra la primera pregunta
             if (currentQuestion === 1 && !hasGameStarted) {
                 hasGameStarted = true;
-                registerGameSession(); // Actualizar sesión
+                // ✅ SOLO registrar sesión para estudiantes
+                if (!window.esDocente) {
+                    registerGameSession(); // Solo registrar sesión para estudiantes
+                }
+                console.log('✅ Juego marcado como iniciado');
             }
             
             // Primero, ocultar TODOS los contenedores
@@ -2131,44 +2345,62 @@
                 matchingContainer.style.display = 'none';
             }
             
+            console.log('📦 Contenedores ocultados');
+            
             // Pregunta 1: números con 2,4
             if (currentQuestion === 1) {
+                console.log('🔢 Preparando pregunta 1 - números con 2 y 4');
+                
                 document.getElementById('numbers-container').style.display = 'grid';
                 
                 const container = document.getElementById('numbers-container');
+                console.log('📋 Contenedor encontrado:', container ? 'SÍ' : 'NO');
+                
                 container.innerHTML = '';
                 selectedNumbers = [];
                 
                 currentNumbers = generateUniqueNumbers();
+                console.log('🎲 Números generados:', currentNumbers);
                 
-                currentNumbers.forEach((number, index) => {
-                    const button = document.createElement('button');
-                    button.className = 'number-btn';
-                    button.textContent = number;
-                    // CORREGIR: Usar función anónima para evitar problemas de contexto
-                    button.onclick = function() {
-                        selectNumber(number, this);
-                    };
-                    button.style.animationDelay = (index * 0.2) + 's';
-                    button.dataset.number = number;
-                    container.appendChild(button);
-                });
+                if (currentNumbers && currentNumbers.length > 0) {
+                    currentNumbers.forEach((number, index) => {
+                        const button = document.createElement('button');
+                        button.className = 'number-btn';
+                        button.textContent = number;
+                        // CORREGIR: Usar función anónima para evitar problemas de contexto
+                        button.onclick = function() {
+                            selectNumber(number, this);
+                        };
+                        button.style.animationDelay = (index * 0.2) + 's';
+                        button.dataset.number = number;
+                        container.appendChild(button);
+                        console.log(`➕ Botón creado para número: ${number}`);
+                    });
+                    
+                    console.log(`✅ ${currentNumbers.length} botones creados y agregados`);
+                } else {
+                    console.error('❌ ERROR: No se generaron números o el array está vacío');
+                }
                 
                 // Resetear botón de respuesta
                 document.getElementById('answer-btn').disabled = true;
+                console.log('🔘 Botón de respuesta deshabilitado');
             }
             // Pregunta 2: seleccionar número según nombre (multiple choice)
             else if (currentQuestion === 2) {
+                console.log('📝 Mostrando pregunta de opción múltiple');
                 showMultipleChoiceQuestion();
                 return;
             }
             // Pregunta 3: drag and drop
             else if (currentQuestion === 3) {
+                console.log('🔄 Mostrando pregunta de drag and drop');
                 showDragDropQuestion();
                 return;
             }
             // Pregunta 4: unir con líneas
             else if (currentQuestion === 4) {
+                console.log('🔗 Mostrando pregunta de unir con líneas');
                 // SOLO aquí mostrar el contenedor de matching
                 const matchingContainer = document.getElementById('matching-container');
                 if (matchingContainer) {
@@ -2183,14 +2415,21 @@
             
             // Actualizar contador de preguntas
             document.getElementById('question-counter').innerHTML = `
+                <i class="fas fa-star mr-2"></i>
                 Pregunta ${currentQuestion} de ${totalQuestions}
+                <i class="fas fa-star ml-2"></i>
             `;
+            
+            console.log('📊 Contador de preguntas actualizado');
             
             // Resetear botón de respuesta (solo para pregunta 1)
             if (currentQuestion === 1) {
                 document.getElementById('answer-btn').disabled = true;
             }
+            
+            console.log('🎯 === FIN displayNumbers() ===');
         }
+
 
         // Seleccionar/deseleccionar número
         function selectNumber(number, button) {
@@ -2781,7 +3020,7 @@
             }
         }
 
-        // FUNCIÓN CORREGIDA: showFinalResults con cálculo correcto de vidas
+        // FUNCIÓN ACTUALIZADA: showFinalResults para manejar docente correctamente
         function showFinalResults() {
             const totalScore = questionScores.reduce((sum, q) => sum + q.score, 0);
             const finalScore = Math.round(totalScore * 100) / 100;
@@ -2801,7 +3040,61 @@
             const statusColor = isPassed ? '#4CAF50' : '#ff9800';
             const statusText = isPassed ? '¡APROBADO!' : 'Necesitas mejorar';
 
-            // ✅ Cálculo correcto de vidas antes y después
+            // ✅ MENSAJE ESPECÍFICO PARA DOCENTE
+            if (window.esDocente || window.DISABLE_STUDENT_AJAX) {
+                console.log('🧑‍🏫 Mostrando resultados finales para docente');
+                
+                Swal.fire({
+                    icon: 'info',
+                    title: '🧑‍🏫 DEMOSTRACIÓN COMPLETADA',
+                    html: `
+                        <div style="font-size: 1.1em;">
+                            <div style="margin: 20px 0; padding: 15px; background: #ff9800; color: white; border-radius: 10px;">
+                                <h3 style="margin: 0; color: white;">MODO DOCENTE</h3>
+                                <div style="font-size: 1.5em; margin: 10px 0;">
+                                    <strong>PUNTAJE: ${finalScore.toFixed(2)}/10</strong>
+                                </div>
+                                <div style="font-size: 1.1em;">
+                                    Estado: <strong>${statusText}</strong>
+                                </div>
+                            </div>
+
+                            <div style="text-align: left; margin: 20px 0;">
+                                <h4>📊 Resumen por pregunta:</h4>
+                                ${questionsHTML}
+                            </div>
+
+                            <div style="margin: 15px 0; padding: 15px; background: #e3f2fd; border-radius: 10px;">
+                                <p><strong>ℹ️ Información del modo docente:</strong></p>
+                                <p style="margin: 5px 0;">• No se guardaron intentos</p>
+                                <p style="margin: 5px 0;">• No se consumieron vidas</p>
+                                <p style="margin: 5px 0;">• Esta es solo una demostración</p>
+                                <p style="margin: 5px 0;">• Nivel: ${window.levelId} | Módulo: ${window.moduloId}</p>
+                            </div>
+                        </div>
+                    `,
+                    confirmButtonText: '🔄 Probar de nuevo',
+                    cancelButtonText: '🏠 Volver al menú',
+                    showCancelButton: true,
+                    allowOutsideClick: false,
+                    customClass: {
+                        popup: 'animated tada',
+                        confirmButton: 'btn btn-success',
+                        cancelButton: 'btn btn-secondary'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Reiniciar el juego en modo docente
+                        resetGame();
+                    } else {
+                        // Volver al menú de docente
+                        window.location.href = `/docente/modulo/${window.moduloId}/niveles/`;
+                    }
+                });
+                return;
+            }
+
+            // ✅ CÓDIGO NORMAL PARA ESTUDIANTES
             const vidasAntes = vidasRestantes;
             const vidasDespues = Math.max(0, vidasRestantes - 1);
             const puedeIntentarMas = vidasDespues > 0;
@@ -2853,7 +3146,7 @@
                             resetGame();
                         } else {
                             updateBestScore().then(() => {
-                                window.location.href = `/modulo/${moduloId}/niveles/`;
+                                window.location.href = `/modulo/${window.moduloId}/niveles/`;
                             });
                         }
                     } else {
@@ -2886,15 +3179,36 @@
         }
 
     
-        // FUNCIÓN MODIFICADA: saveAttempt actualizada
+        // FUNCIÓN SEGURA: saveAttempt para docente
         async function saveAttempt(finalScore) {
+            // ✅ SIMULACIÓN PARA DOCENTES
+            if (window.esDocente || window.DISABLE_STUDENT_AJAX) {
+                console.log('🧑‍🏫 saveAttempt() - Modo docente: SIMULANDO guardado');
+                
+                // Simular respuesta exitosa sin hacer petición real
+                return { 
+                    success: true, 
+                    vidasRestantes: 999,
+                    puedeIntentar: true,
+                    nota: finalScore,
+                    puede_continuar: true,
+                    estado: 'modo_docente',
+                    mensaje: 'Simulación: Intento no guardado'
+                };
+            }
+            
+            // Lógica normal para estudiantes
+            if (!studentId || studentId <= 0 || isNaN(studentId)) {
+                console.error('❌ saveAttempt: studentId inválido:', studentId);
+                return { success: false, error: 'ID de estudiante inválido' };
+            }
+            
+            if (!levelId || levelId <= 0 || isNaN(levelId)) {
+                console.error('❌ saveAttempt: levelId inválido:', levelId);
+                return { success: false, error: 'ID de nivel inválido' };
+            }
+            
             try {
-                console.log('Enviando datos:', {
-                    estudiante_id: studentId,
-                    nivel_id: levelId,
-                    puntaje_total: finalScore
-                });
-
                 const response = await fetch('/save_attempt/', {
                     method: 'POST',
                     headers: {
@@ -2909,17 +3223,12 @@
                 });
                 
                 const data = await response.json();
-                console.log('Respuesta del servidor:', data);
                 
                 if (data.success) {
-                    // Actualizar variables locales
                     vidasRestantes = data.vidas_restantes;
                     puedeIntentar = data.puede_continuar;
-                    
-                    // Actualizar display de vidas
                     updateLivesDisplay();
                     
-                    console.log('Intento guardado correctamente con nota:', data.nota);
                     return { 
                         success: true, 
                         data: data,
@@ -2927,14 +3236,15 @@
                         puedeIntentar: puedeIntentar
                     };
                 } else {
-                    console.error('Error del servidor:', data.error);
+                    console.error('❌ Error del servidor en saveAttempt:', data.error);
                     return { success: false, error: data.error };
                 }
             } catch (error) {
-                console.error('Error de red al guardar intento:', error);
+                console.error('❌ Error de red en saveAttempt:', error);
                 return { success: false, error: 'Error de conexión: ' + error.message };
             }
         }
+
 
         // Función para actualizar mejor puntaje
         async function updateBestScore() {
@@ -3096,16 +3406,43 @@
 
         // Inicializar el juego cuando la página carga
         document.addEventListener('DOMContentLoaded', function() {
-                // Inicializar datos del juego
-                initializeGameData().then((canPlay) => {
-                    if (canPlay) {
-                        createFloatingElements();
-                        addClickEffects();
-                        displayNumbers();
-                    }
-                    // Si canPlay es false, ya se mostró el mensaje de sin vidas
-                });
+            console.log('🚀 === INICIALIZANDO JUEGO ===');
+            console.log('Modo:', window.esDocente ? 'DOCENTE' : 'ESTUDIANTE');
             
+            // Quitar el overlay de debug después de unos segundos
+            setTimeout(() => {
+                const debugOverlay = document.getElementById('debug-critical');
+                if (debugOverlay) {
+                    debugOverlay.style.display = 'none';
+                }
+            }, 3000);
+                
+            // Inicializar datos del juego
+            initializeGameData().then((canPlay) => {
+                if (canPlay) {
+                    console.log('✅ Puede jugar - Iniciando elementos del juego');
+                    createFloatingElements();
+                    addClickEffects();
+                    
+                    // ✅ ASEGURAR QUE displayNumbers SE EJECUTE
+                    setTimeout(() => {
+                        displayNumbers();
+                        console.log('🎮 Juego completamente inicializado');
+                    }, 100);
+                } else {
+                    console.log('❌ No puede jugar - Mostrando mensaje correspondiente');
+                }
+            }).catch((error) => {
+                console.error('❌ Error en initializeGameData:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Hubo un problema al inicializar el juego. Por favor, recarga la página.',
+                    confirmButtonText: 'Recargar'
+                }).then(() => {
+                    window.location.reload();
+                });
+            });
             
             // Agregar atajo de teclado para responder (tecla Enter)
             document.addEventListener('keydown', function(e) {
