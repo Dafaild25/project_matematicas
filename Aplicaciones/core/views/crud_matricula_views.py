@@ -1,3 +1,4 @@
+from django.db import IntegrityError, transaction
 import pandas as pd
 import io
 from django.shortcuts import render, redirect, get_object_or_404
@@ -73,71 +74,171 @@ def eliminar_matricula(request, matricula_id):
 @csrf_exempt
 @admin_required
 def importar_estudiantes_excel(request):
-    if request.method == 'POST' and request.FILES.get('archivo'):
+    # Verificar método y archivo
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'message': 'Método no permitido'})
+    
+    if not request.FILES.get('archivo'):
+        return JsonResponse({'success': False, 'message': 'No se ha seleccionado ningún archivo'})
+    
+    try:
         archivo_excel = request.FILES['archivo']
         cla_id = request.POST.get('cla_id')
+        
+        # Verificar que cla_id existe
+        if not cla_id:
+            return JsonResponse({'success': False, 'message': 'ID de clase no proporcionado'})
+        
         clase = get_object_or_404(Clases, pk=cla_id)
-
-        df = pd.read_excel(archivo_excel, dtype=str)
-
+        
+        # Verificar que el archivo es Excel
+        if not archivo_excel.name.endswith(('.xlsx', '.xls')):
+            return JsonResponse({'success': False, 'message': 'El archivo debe ser un Excel (.xlsx o .xls)'})
+        
+        # Leer el archivo Excel
+        try:
+            df = pd.read_excel(archivo_excel, dtype=str)
+            
+        except Exception as e:
+            
+            return JsonResponse({'success': False, 'message': f'Error al leer el archivo Excel: {str(e)}'})
+        
+        # Verificar que el DataFrame no esté vacío
+        if df.empty:
+            return JsonResponse({'success': False, 'message': 'El archivo Excel está vacío'})
+        
+        # Verificar columnas requeridas
+        columnas_requeridas = ['cedula', 'nombre', 'apellido']
+        columnas_faltantes = [col for col in columnas_requeridas if col not in df.columns]
+        if columnas_faltantes:
+            return JsonResponse({
+                'success': False, 
+                'message': f'Faltan las siguientes columnas en el Excel: {", ".join(columnas_faltantes)}'
+            })
+        
         duplicados = []
         agregados = 0
-
+        matriculados_existentes = 0
+        
         for index, row in df.iterrows():
-            nombre = str(row.get('nombre', '')).strip().upper()
-            apellido = str(row.get('apellido', '')).strip().upper()
-            segundo_nombre = str(row.get('segundo_nombre', '')).strip().upper()
-            segundo_apellido = str(row.get('segundo_apellido', '')).strip().upper()
-            cedula = str(row.get('cedula', '')).strip().replace('.', '').replace(',', '')
-            telefono = str(row.get('telefono', '')).strip().replace('.', '').replace(',', '')
-            email = row.get('email', f"{cedula}@example.com").strip()
-
-            # Validación de campos mínimos
-            if len(cedula) < 5 or not cedula.isdigit():
-                duplicados.append(f"Fila {index + 2} - Cédula inválida: {cedula}")
+            try:
+                # Procesar datos de la fila
+                nombre = str(row.get('nombre', '')).strip().upper()
+                apellido = str(row.get('apellido', '')).strip().upper()
+                segundo_nombre = str(row.get('segundo_nombre', '')).strip().upper()
+                segundo_apellido = str(row.get('segundo_apellido', '')).strip().upper()
+                cedula = str(row.get('cedula', '')).strip().replace('.', '').replace(',', '')
+                telefono = str(row.get('telefono', '')).strip().replace('.', '').replace(',', '')
+                email = str(row.get('email', f"{cedula}@example.com")).strip()
+                
+                
+                
+                # Validar datos mínimos
+                if not nombre or not apellido:
+                    duplicados.append(f"Fila {index + 2} - Nombre y apellido son obligatorios")
+                    continue
+                
+                # Validar cédula
+                if len(cedula) < 5 or not cedula.isdigit():
+                    duplicados.append(f"Fila {index + 2} - Cédula inválida: {cedula}")
+                    continue
+                
+                # Usar transacción para cada fila
+                try:
+                    with transaction.atomic():
+                        # Verificar si el usuario ya existe
+                        usuario_existente = User.objects.filter(username=cedula).first()
+                        
+                        if usuario_existente:
+                            # El usuario ya existe, buscar si tiene persona y estudiante
+                            try:
+                                persona = Personas.objects.get(fk_id_usuario=usuario_existente)
+                                estudiante = Estudiantes.objects.get(fk_id_persona=persona)
+                                
+                                # Verificar si ya está matriculado en esta clase
+                                if Matriculas.objects.filter(fk_clase=clase, fk_estudiante=estudiante).exists():
+                                    duplicados.append(f"Fila {index + 2} - Estudiante ya matriculado en esta clase")
+                                    continue
+                                else:
+                                    # Matricular estudiante existente
+                                    Matriculas.objects.create(fk_clase=clase, fk_estudiante=estudiante)
+                                    matriculados_existentes += 1
+                                    
+                                    continue
+                                    
+                            except (Personas.DoesNotExist, Estudiantes.DoesNotExist):
+                                duplicados.append(f"Fila {index + 2} - Usuario existe pero no tiene perfil de estudiante completo")
+                                continue
+                        
+                        # Verificar si existe persona con esta cédula pero sin usuario
+                        persona_existente = Personas.objects.filter(per_cedula=cedula).first()
+                        
+                        if persona_existente and persona_existente.fk_id_usuario is None:
+                            duplicados.append(f"Fila {index + 2} - Existe persona con esta cédula sin usuario asociado")
+                            continue
+                        elif persona_existente and persona_existente.fk_id_usuario:
+                            duplicados.append(f"Fila {index + 2} - Persona ya existe con usuario")
+                            continue
+                        
+                        # Crear nuevo usuario, persona y estudiante
+                        # Crear usuario
+                        usuario = User.objects.create_user(
+                            username=cedula,
+                            first_name=nombre,
+                            last_name=apellido,
+                            email=email,
+                            password=cedula
+                        )
+                        
+                        # Asignar al grupo de estudiantes
+                        grupo_estudiantes, _ = Group.objects.get_or_create(name="Estudiantes")
+                        usuario.groups.add(grupo_estudiantes)
+                        
+                        # Crear persona
+                        persona = Personas.objects.create(
+                            fk_id_usuario=usuario,
+                            per_segundo_nombre=segundo_nombre,
+                            per_segundo_apellido=segundo_apellido,
+                            per_cedula=cedula,
+                            per_telefono=telefono,
+                            per_fecha_nacimiento=None
+                        )
+                        
+                        # Crear estudiante
+                        estudiante = Estudiantes.objects.create(fk_id_persona=persona)
+                        
+                        # Matricular en la clase
+                        Matriculas.objects.create(fk_clase=clase, fk_estudiante=estudiante)
+                        
+                        agregados += 1
+                        
+                        
+                except IntegrityError as ie:
+                    # Error de integridad (usuario duplicado, etc.)
+                    duplicados.append(f"Fila {index + 2} - Error de integridad: Usuario o cédula ya existe")
+                    
+                    continue
+            
+            except Exception as e:
+                duplicados.append(f"Fila {index + 2} - Error inesperado: {str(e)}")
+                
                 continue
-
-            # ❌ Si ya existe un usuario con esa cédula, marcar como duplicado
-            if User.objects.filter(username=cedula).exists():
-                duplicados.append(f"Fila {index + 2} - Cédula duplicada: {cedula}")
-                continue
-
-            # ✅ Crear usuario
-            usuario = User.objects.create_user(
-                username=cedula,
-                first_name=nombre,
-                last_name=apellido,
-                email=email,
-                password=cedula
-            )
-
-            # ✅ Crear persona
-            persona = Personas.objects.create(
-                fk_id_usuario=usuario,
-                per_segundo_nombre=segundo_nombre,
-                per_segundo_apellido=segundo_apellido,
-                per_cedula=cedula,
-                per_telefono=telefono
-            )
-
-            # ✅ Crear estudiante
-            estudiante = Estudiantes.objects.create(
-                fk_id_persona=persona
-            )
-
-            # ✅ Matricular si no está ya en la clase
-            if not Matriculas.objects.filter(fk_clase=clase, fk_estudiante=estudiante).exists():
-                Matriculas.objects.create(fk_clase=clase, fk_estudiante=estudiante)
-
-            agregados += 1
-
-        mensaje = f"{agregados} estudiante(s) importado(s) correctamente."
-
+        
+        # Preparar mensaje de respuesta
+        mensaje = f"{agregados} estudiante(s) nuevo(s) importado(s).\n{matriculados_existentes} estudiante(s) existentes fueron matriculados."
+        
         if duplicados:
-            mensaje += f" {len(duplicados)} fila(s) ignoradas por duplicidad o error:\n" + "\n".join(duplicados)
-
+            mensaje += f"\n{len(duplicados)} advertencia(s):\n" + "\n".join(duplicados)
+        
+        
+        
         return JsonResponse({'success': True, 'message': mensaje})
-
+    
+    except Exception as e:
+        
+        return JsonResponse({'success': False, 'message': f'Error interno del servidor: {str(e)}'})
+    
+    # Esta línea nunca debería ejecutarse, pero por seguridad
     return JsonResponse({'success': False, 'message': 'Solicitud inválida'})
 
 

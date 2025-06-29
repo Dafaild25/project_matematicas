@@ -30,20 +30,21 @@ Clases Docente
             <i class="fas fa-file-upload me-1"></i> Matricular Estudiantes Masivamente
         </div>
         <div class="card-body">
-            <form id="form-importar-excel"  
-                {% csrf_token %}
-                <div class="row">
-                    <div class="col-md-10">
-                        <input type="hidden" name="cla_id" id="cla_id" value="{{ clase.cla_id }}">
-                        <input type="file" name="archivo" id="archivo" class="form-control" accept=".xlsx" required>
-                    </div>
-                    <div class="col-md-2">
-                        <button type="submit" class="btn btn-success">Importar</button>
-                    </div>
+          <div id="mensaje-container" style="display: none;">
+            <!-- Los mensajes se insertarán aquí dinámicamente -->
+          </div>
+             <form id="form-importar-excel" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-10">
+                    <input type="hidden" name="cla_id" id="cla_id" value="{{ clase.cla_id }}">
+                    <input type="file" name="archivo" id="archivo" class="form-control" accept=".xlsx" required>
                 </div>
-                
-                
-            </form>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-success">Importar</button>
+                </div>
+            </div>
+        </form>
         </div>
     </div>
 
@@ -366,45 +367,201 @@ function abrirModalEditar(matriculaId) {
     });
 }
 
-
 //funcion para el modal de eliminacion 
 function abrirModalEliminar(matriculaId) {
     document.getElementById('eliminar_matricula_id').value = matriculaId;
     let modal = new bootstrap.Modal(document.getElementById('modalEliminarMatricula'));
     modal.show();
-  }
+}
 
-
-//Controlar la importacion 
-document.getElementById('form-importar-excel').addEventListener('submit', function (e) {
-    e.preventDefault(); // Evita recargar la página
-
+// ÚNICO CONTROLADOR DE IMPORTACIÓN - COMBINADO Y MEJORADO
+document.getElementById('form-importar-excel').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
     const formData = new FormData(this);
+    const button = this.querySelector('button[type="submit"]');
+    const mensajeContainer = document.getElementById('mensaje-container');
     const cla_id = document.getElementById("cla_id").value;
-
+    
+    // Verificar que se seleccionó un archivo
+    const archivo = document.getElementById('archivo').files[0];
+    if (!archivo) {
+        mostrarMensaje(false, 'Por favor selecciona un archivo Excel');
+        return;
+    }
+    
+    // Verificar que es un archivo Excel
+    if (!archivo.name.endsWith('.xlsx') && !archivo.name.endsWith('.xls')) {
+        mostrarMensaje(false, 'El archivo debe ser un Excel (.xlsx o .xls)');
+        return;
+    }
+    
+    // Guardar texto original del botón
+    const originalText = button.textContent;
+    
+    // Mostrar indicador de carga
+    button.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span>Procesando...';
+    button.disabled = true;
+    
+    // Ocultar mensajes anteriores
+    if (mensajeContainer) {
+        mensajeContainer.style.display = 'none';
+        mensajeContainer.innerHTML = '';
+    }
+    
+    // Hacer la petición con la URL correcta de Django
     fetch("{% url 'importar_estudiantes_excel_docente' %}", {
         method: 'POST',
         body: formData,
         headers: {
-            'X-Requested-With': 'XMLHttpRequest'  // importante para distinguir petición AJAX
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            'X-Requested-With': 'XMLHttpRequest'
         }
     })
-    .then(response => response.json())
+    .then(response => {
+        console.log('Response status:', response.status);
+        console.log('Response headers:', response.headers.get('content-type'));
+        
+        // Verificar si la respuesta es exitosa
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        // Verificar que la respuesta es JSON
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            throw new Error('La respuesta del servidor no es JSON válido');
+        }
+        
+        return response.json();
+    })
     .then(data => {
+        console.log('Response data:', data);
+        
+        // Verificar que la respuesta tiene la estructura esperada
+        if (typeof data.success === 'undefined' || typeof data.message === 'undefined') {
+            throw new Error('Respuesta del servidor incompleta');
+        }
+        
         if (data.success) {
-            alert(data.message);
-            recargarTablaMatriculados(cla_id);  // actualiza la tabla
+            // Si hay contenedor de mensajes, usarlo, sino usar alert como fallback
+            if (mensajeContainer) {
+                mostrarMensaje(data.success, data.message);
+            } else {
+                alert(data.message);
+            }
+            
+            // Limpiar el formulario y recargar tabla
+            this.reset();
+            recargarTablaMatriculados(cla_id);
         } else {
-            alert("Error: " + data.message);
+            // Error desde el servidor
+            if (mensajeContainer) {
+                mostrarMensaje(data.success, data.message);
+            } else {
+                alert("Error: " + data.message);
+            }
         }
     })
     .catch(error => {
-        console.error("Error en la importación:", error);
-        alert("Ocurrió un error al importar el archivo.");
+        console.error('Error completo:', error);
+        
+        // Mostrar error específico
+        let errorMessage = 'Error al procesar el archivo';
+        
+        if (error.message.includes('JSON')) {
+            errorMessage = 'Error del servidor: La respuesta no es válida. Revisa los logs del servidor.';
+        } else if (error.message.includes('HTTP error')) {
+            errorMessage = `Error del servidor (${error.message}). Revisa los logs.`;
+        } else {
+            errorMessage = `Error: ${error.message}`;
+        }
+        
+        // Si hay contenedor de mensajes, usarlo, sino usar alert
+        if (mensajeContainer) {
+            mostrarMensaje(false, errorMessage);
+        } else {
+            alert("Ocurrió un error al importar el archivo: " + errorMessage);
+        }
+    })
+    .finally(() => {
+        // SIEMPRE restaurar el botón, sin importar si fue éxito o error
+        button.innerHTML = originalText;
+        button.disabled = false;
     });
 });
 
-
+// Función para mostrar mensajes (solo si existe el contenedor)
+function mostrarMensaje(success, message) {
+    const container = document.getElementById('mensaje-container');
+    
+    // Si no existe el contenedor, usar alert como fallback
+    if (!container) {
+        alert(message);
+        return;
+    }
+    
+    // Determinar el tipo de alerta
+    const alertType = success ? 'alert-success' : 'alert-danger';
+    const icon = success ? 'fas fa-check-circle' : 'fas fa-exclamation-triangle';
+    
+    // Convertir saltos de línea en elementos organizados
+    let messageHtml = '';
+    if (message.includes('\n')) {
+        const lines = message.split('\n');
+        const mainMessage = lines[0];
+        const details = lines.slice(1).filter(line => line.trim());
+        
+        messageHtml = `
+            <div class="alert ${alertType} alert-dismissible fade show" role="alert">
+                <i class="${icon} me-2"></i>
+                <strong>${mainMessage}</strong>
+                ${details.length > 0 ? `
+                    <hr class="my-2">
+                    <div class="small">
+                        ${details.map(detail => `<div class="mb-1"><i class="fas fa-info-circle me-1"></i>${detail}</div>`).join('')}
+                    </div>
+                ` : ''}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        `;
+    } else {
+        messageHtml = `
+            <div class="alert ${alertType} alert-dismissible fade show" role="alert">
+                <i class="${icon} me-2"></i>
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        `;
+    }
+    
+    container.innerHTML = messageHtml;
+    container.style.display = 'block';
+    
+    // Scroll hacia el mensaje suavemente
+    container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    
+    // Auto-cerrar mensaje de éxito después de 8 segundos
+    if (success) {
+        setTimeout(() => {
+            const alert = container.querySelector('.alert');
+            if (alert) {
+                if (typeof bootstrap !== 'undefined' && bootstrap.Alert) {
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                } else {
+                    alert.style.opacity = '0';
+                    setTimeout(() => {
+                        if (alert.parentNode) {
+                            alert.parentNode.removeChild(alert);
+                            container.style.display = 'none';
+                        }
+                    }, 150);
+                }
+            }
+        }, 5000);
+    }
+}
 </script>
 
 {% endblock %}
