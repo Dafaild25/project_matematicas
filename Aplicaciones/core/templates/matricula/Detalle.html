@@ -1,7 +1,10 @@
 {% extends "plantillas/MasterAdmin.html" %}
 {% load static %}
+
 {% block title %}Matriculas{% endblock %}
 {% block css %}
+<link rel="stylesheet" href="{% static 'css/sweetalert2.min.css' %}">
+<script src="{% static 'js/sweetalert2.min.js' %}"></script>
 
 {% endblock %}
 {% block content %}
@@ -55,12 +58,12 @@
                 </div>
                 <div class="card-body">
 
-                    <form id="form-importar-excel">
+                    <form id="form-importar-excel" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="row">
                             <div class="col-md-10">
-                                <input type="hidden" value="{{ clase.cla_id }}" name="cla_id">
-                                <input type="file" name="archivo" id="archivo" class="form-control" accept=".xlsx" required>
+                                <input type="hidden" value="{{ clase.cla_id }}" name="cla_id" id="cla_id">
+                                <input type="file" name="archivo" id="archivo" class="form-control" accept=".xlsx,.xls" required>
                             </div>
                             <div class="col-md-2">
                                 <button type="submit" class="btn btn-success">Importar</button>
@@ -114,88 +117,90 @@
 
 
 {% block js %}
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+   document.addEventListener('DOMContentLoaded', function() {
     recargarTablaMatriculados({{ clase.cla_id }});
-    });
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let cookie of cookies) {
-                cookie = cookie.trim();
-                if (cookie.startsWith(name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
+});
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+            if (cookie.startsWith(name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
             }
         }
-        return cookieValue;
     }
-
-    function matricularEstudiante() {
-        const estudiante = document.getElementById('estudiante').value;
-        const cla_id = document.getElementById('cla_id').value;
-        const csrfToken = getCookie('csrftoken');
-
-        fetch("{% url 'matricula_individual' %}", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-CSRFToken': csrfToken,
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            body: new URLSearchParams({
-                'estudiante': estudiante,
-                'cla_id': cla_id
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-           const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.onmouseenter = Swal.stopTimer;
-                toast.onmouseleave = Swal.resumeTimer;
-            }
-        });
-
-        if (data.success) {
-            Toast.fire({
-                icon: 'success',
-                title: data.message || "Estudiante matriculado correctamente"
-            });
-            // Recargar la tabla después del toast
-            setTimeout(() => recargarTablaMatriculados(cla_id), 3200);
-        } else {
-            Toast.fire({
-                icon: 'error',
-                title: data.message || "Error al matricular"
-            });
-        }
-    })
-    .catch(error => {
-        console.error("Error:", error);
-        Swal.fire({
-            icon: 'error',
-            title: 'Error inesperado',
-            text: 'No se pudo procesar la matrícula.',
-            confirmButtonColor: '#d33',
-        });
-    });
+    return cookieValue;
 }
+
+function matricularEstudiante() {
+    const estudiante = document.getElementById('estudiante').value;
+    const cla_id = document.getElementById('cla_id').value;
+    const csrfToken = getCookie('csrftoken');
+
+    fetch("{% url 'matricula_individual' %}", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': csrfToken,
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: new URLSearchParams({
+            'estudiante': estudiante,
+            'cla_id': cla_id
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+       const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+        }
+    });
+
+    if (data.success) {
+        Toast.fire({
+            icon: 'success',
+            title: data.message || "Estudiante matriculado correctamente"
+        });
+        // Recargar la tabla después del toast
+        setTimeout(() => recargarTablaMatriculados(cla_id), 3200);
+    } else {
+        Toast.fire({
+            icon: 'error',
+            title: data.message || "Error al matricular"
+        });
+    }
+})
+.catch(error => {
+    console.error("Error:", error);
+    Swal.fire({
+        icon: 'error',
+        title: 'Error inesperado',
+        text: 'No se pudo procesar la matrícula.',
+        confirmButtonColor: '#d33',
+    });
+});
+}
+
 function recargarTablaMatriculados(claseId) {
     const contenedorTabla = document.getElementById("contenedor-tabla-matriculados");
     const scrollPosition = contenedorTabla.scrollTop;
 
-    fetch(`/matricula/listado/${claseId}/`)  // URL a la vista
+    fetch(`/matricula/listado/${claseId}/`)
         .then(response => response.text())
         .then(html => {
             contenedorTabla.innerHTML = html;
@@ -221,91 +226,215 @@ function recargarTablaMatriculados(claseId) {
         });
 }
 
-
-// aqui se controlara la eliminacion
+// Control de eliminación
 let idMatriculaAEliminar = null;
 
-    function mostrarModalEliminar(elemento) {
-        idMatriculaAEliminar = elemento.getAttribute("data-id");
-        const modal = new bootstrap.Modal(document.getElementById('modalEliminar'));
-        modal.show();
-    }
+function mostrarModalEliminar(elemento) {
+    idMatriculaAEliminar = elemento.getAttribute("data-id");
+    const modal = new bootstrap.Modal(document.getElementById('modalEliminar'));
+    modal.show();
+}
 
-    document.getElementById('confirmarEliminarBtn').addEventListener('click', function () {
-        if (!idMatriculaAEliminar) return;
+document.getElementById('confirmarEliminarBtn').addEventListener('click', function () {
+    if (!idMatriculaAEliminar) return;
 
-        const csrfToken = getCookie('csrftoken');
+    const csrfToken = getCookie('csrftoken');
 
-        fetch(`/matriculas/eliminar/${idMatriculaAEliminar}/`, {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': csrfToken,
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert(data.message);
-                const cla_id = document.getElementById("cla_id").value;
-                recargarTablaMatriculados(cla_id);
-            } else {
-                alert("Error al eliminar la matrícula.");
-            }
-        });
-
-        const modal = bootstrap.Modal.getInstance(document.getElementById('modalEliminar'));
-        modal.hide();
-    });
-
-// fin del control de la eliminaciion
-
-
-//aqui se controla la importacion 
-document.getElementById('form-importar-excel').addEventListener('submit', function (e) {
-    e.preventDefault(); // Evita recargar la página
-
-    const formData = new FormData(this);
-    const cla_id = document.getElementById("cla_id").value;
-
-    fetch("{% url 'importar_matricula_excel' %}", {
+    fetch(`/matriculas/eliminar/${idMatriculaAEliminar}/`, {
         method: 'POST',
-        body: formData,
         headers: {
+            'X-CSRFToken': csrfToken,
             'X-Requested-With': 'XMLHttpRequest'
         }
     })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            Swal.fire({
-                icon: 'success',
-                title: '¡Importación exitosa!',
-                html: data.message.replace(/\n/g, '<br>'),  // convierte saltos de línea en HTML
-                confirmButtonColor: '#3085d6',
-                width: '600px'
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true
             });
+            
+            Toast.fire({
+                icon: 'success',
+                title: data.message || 'Matrícula eliminada correctamente'
+            });
+            
+            const cla_id = document.getElementById("cla_id").value;
             recargarTablaMatriculados(cla_id);
         } else {
             Swal.fire({
                 icon: 'error',
-                title: 'Error en la importación',
-                text: data.message,
-                confirmButtonColor: '#d33',
+                title: 'Error',
+                text: 'Error al eliminar la matrícula.',
+                confirmButtonColor: '#d33'
             });
         }
     })
     .catch(error => {
-        console.error("Error en la importación:", error);
+        console.error("Error:", error);
         Swal.fire({
             icon: 'error',
             title: 'Error inesperado',
-            text: 'Ocurrió un error al importar el archivo.',
-            confirmButtonColor: '#d33',
+            text: 'No se pudo eliminar la matrícula.',
+            confirmButtonColor: '#d33'
         });
     });
+
+    const modal = bootstrap.Modal.getInstance(document.getElementById('modalEliminar'));
+    modal.hide();
 });
 
+// CONTROL DE IMPORTACIÓN MEJORADO
+document.getElementById('form-importar-excel').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+    const button = this.querySelector('button[type="submit"]');
+    const cla_id = document.getElementById("cla_id").value;
+    
+    // Verificar que se seleccionó un archivo
+    const archivo = this.querySelector('input[type="file"]').files[0];
+    if (!archivo) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Archivo requerido',
+            text: 'Por favor selecciona un archivo Excel',
+            confirmButtonColor: '#3085d6'
+        });
+        return;
+    }
+    
+    // Verificar que es un archivo Excel
+    if (!archivo.name.endsWith('.xlsx') && !archivo.name.endsWith('.xls')) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Tipo de archivo inválido',
+            text: 'El archivo debe ser un Excel (.xlsx o .xls)',
+            confirmButtonColor: '#3085d6'
+        });
+        return;
+    }
+
+    // Guardar texto original del botón
+    const originalText = button.textContent;
+    
+    // Mostrar indicador de carga en el botón
+    button.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span>Procesando...';
+    button.disabled = true;
+
+    // Mostrar SweetAlert de carga
+    Swal.fire({
+        title: 'Procesando archivo...',
+        text: 'Por favor espere mientras se importan los estudiantes',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        allowEnterKey: false,
+        showConfirmButton: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+
+    fetch("{% url 'importar_matricula_excel' %}", {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => {
+        console.log('Response status:', response.status);
+        console.log('Response headers:', response.headers.get('content-type'));
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            throw new Error('La respuesta del servidor no es JSON válido');
+        }
+        
+        return response.json();
+    })
+    .then(data => {
+        console.log('Response data:', data);
+        
+        // Cerrar loading
+        Swal.close();
+        
+        if (typeof data.success === 'undefined' || typeof data.message === 'undefined') {
+            throw new Error('Respuesta del servidor incompleta');
+        }
+
+        if (data.success) {
+            // Éxito - mostrar mensaje detallado
+            Swal.fire({
+                icon: 'success',
+                title: '¡Importación exitosa!',
+                html: data.message.replace(/\n/g, '<br>'),
+                confirmButtonColor: '#3085d6',
+                width: '600px',
+                showClass: {
+                    popup: 'animate__animated animate__fadeInDown'
+                },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutUp'
+                }
+            });
+            
+            // Limpiar formulario y recargar tabla
+            this.reset();
+            recargarTablaMatriculados(cla_id);
+        } else {
+            // Error desde el servidor
+            Swal.fire({
+                icon: 'error',
+                title: 'Error en la importación',
+                html: data.message.replace(/\n/g, '<br>'),
+                confirmButtonColor: '#d33',
+                width: '600px'
+            });
+        }
+    })
+    .catch(error => {
+        console.error("Error completo:", error);
+        
+        // Cerrar loading si está abierto
+        Swal.close();
+        
+        // Mostrar error específico
+        let errorMessage = 'Ocurrió un error al importar el archivo';
+        let errorTitle = 'Error inesperado';
+        
+        if (error.message.includes('JSON')) {
+            errorTitle = 'Error del servidor';
+            errorMessage = 'La respuesta del servidor no es válida. Revisa los logs del servidor.';
+        } else if (error.message.includes('HTTP error')) {
+            errorTitle = 'Error del servidor';
+            errorMessage = `Error del servidor (${error.message}). Revisa los logs.`;
+        } else {
+            errorMessage = error.message;
+        }
+        
+        Swal.fire({
+            icon: 'error',
+            title: errorTitle,
+            text: errorMessage,
+            confirmButtonColor: '#d33'
+        });
+    })
+    .finally(() => {
+        // SIEMPRE restaurar el botón, sin importar si fue éxito o error
+        button.innerHTML = originalText;
+        button.disabled = false;
+    });
+});
 </script>
 {% endblock %}
 

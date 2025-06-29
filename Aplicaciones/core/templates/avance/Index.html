@@ -32,15 +32,15 @@
               <ul class="dropdown-menu dropdown-menu-end">
                   {% for nivel in niveles %}
                   <li>
-                      <a class="dropdown-item" href="#" target="_blank">
-                          Nivel {{ nivel.niv_nombre }}
+                      <a class="dropdown-item" href="{% url 'pdf_nivel_admin' clase.cla_id nivel.niv_id %}" target="_blank" rel="noopener noreferrer">
+                          <i class="fas fa-file-alt text-primary"></i> PDF {{ nivel.niv_nombre }}
                       </a>
                   </li>
                   {% endfor %}
                   <li><hr class="dropdown-divider"></li>
                   <li>
-                      <a class="dropdown-item text-primary fw-bold" href="#" target="_blank">
-                          📘 Todos los niveles
+                      <a class="dropdown-item text-primary fw-bold" href="{% url 'pdf_general_admin' clase.cla_id %}" target="_blank" rel="noopener noreferrer">
+                          <i class="fas fa-file-pdf text-danger"></i> 📘 PDF Reporte General
                       </a>
                   </li>
               </ul>
@@ -87,6 +87,9 @@
                                             </li>
                                             <li>
                                                 <a class="dropdown-item" href="#" onclick="abrirModalVidas('{{ fila.matricula_id}}', '{{ nivel.nivel_id }}')">❤️ Vidas </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="{% url 'reporte_intento_individual_admin' matricula_id=fila.matricula_id nivel_id=nivel.nivel_id %}"> <i class="fas fa-file-pdf text-danger"></i> Reporte </a>
                                             </li>
                                         </ul>
                                     </div>
@@ -181,25 +184,29 @@
 
         recargarTablaMatriculados();
     });
-    function recargarTablaMatriculados(){
-        $('#tbl-matriculados-admin').DataTable({
-            "language": {
-                "lengthMenu": "Mostrar _MENU_ registros por página",
-                "zeroRecords": "No se encontraron resultados",
-                "info": "Mostrando página _PAGE_ de _PAGES_",
-                "infoEmpty": "No hay registros disponibles",
-                "infoFiltered": "(filtrado de _MAX_ registros totales)",
-                "search": "Buscar:",
-                "paginate": {
-                    "first": "Primero",
-                    "last": "Último",
-                    "next": "Siguiente",
-                    "previous": "Anterior"
-                }
-            }
-        });
 
-    }
+    
+      function recargarTablaMatriculados(){
+        if (!$.fn.DataTable.isDataTable('#tbl-matriculados-admin')) {
+          $('#tbl-matriculados-admin').DataTable({
+              "language": {
+                  "lengthMenu": "Mostrar _MENU_ registros por página",
+                  "zeroRecords": "No se encontraron resultados",
+                  "info": "Mostrando página _PAGE_ de _PAGES_",
+                  "infoEmpty": "No hay registros disponibles",
+                  "infoFiltered": "(filtrado de _MAX_ registros totales)",
+                  "search": "Buscar:",
+                  "paginate": {
+                      "first": "Primero",
+                      "last": "Último",
+                      "next": "Siguiente",
+                      "previous": "Anterior"
+                  }
+              }
+          });
+
+        }
+      }
 
     function verIntentos(matriculaId, nivelId) {
     fetch(`/historial-intentos/?matricula_id=${matriculaId}&nivel_id=${nivelId}`)
