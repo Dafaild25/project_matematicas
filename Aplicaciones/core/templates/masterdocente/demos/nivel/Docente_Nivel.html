@@ -1,0 +1,375 @@
+{% extends "plantillas/MasterDocente.html" %}
+{% block title %}Niveles del {{ modulo.mod_nombre }}{% endblock %}
+
+{% load static %}
+{% block css %}
+<style>
+    .docente-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 15px;
+        margin-bottom: 2rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .docente-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+    }
+
+    .docente-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+
+    .niveles-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin: 2rem 0;
+    }
+
+    .nivel-card {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        border: none;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .nivel-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+    }
+
+    .nivel-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    }
+
+    .nivel-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+    }
+
+    .nivel-icon {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+
+    .nivel-orden {
+        background: #f8f9fa;
+        color: #6c757d;
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    .nivel-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+    }
+
+    .nivel-info {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .info-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+
+    .info-icon {
+        width: 20px;
+        height: 20px;
+        background: #e9ecef;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+    }
+
+    .nivel-actions {
+        display: flex;
+        gap: 0.8rem;
+        flex-wrap: wrap;
+    }
+
+    .btn-probar {
+        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        border: none;
+        color: white;
+        padding: 0.8rem 1.5rem;
+        border-radius: 25px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+        flex: 1;
+        justify-content: center;
+        min-width: 120px;
+    }
+
+    .btn-probar:hover {
+        background: linear-gradient(135deg, #38f9d7 0%, #43e97b 100%);
+        transform: scale(1.05);
+        color: white;
+        text-decoration: none;
+    }
+
+    .btn-info {
+        background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+        border: none;
+        color: white;
+        padding: 0.8rem 1rem;
+        border-radius: 25px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn-info:hover {
+        background: linear-gradient(135deg, #0984e3 0%, #74b9ff 100%);
+        transform: scale(1.05);
+        color: white;
+        text-decoration: none;
+    }
+
+    .btn-volver {
+        background: linear-gradient(135deg, #636e72 0%, #2d3436 100%);
+        border: none;
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 25px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+        margin-top: 2rem;
+    }
+
+    .btn-volver:hover {
+        background: linear-gradient(135deg, #2d3436 0%, #636e72 100%);
+        transform: scale(1.05);
+        color: white;
+        text-decoration: none;
+    }
+
+    .no-niveles {
+        text-align: center;
+        padding: 3rem;
+        color: #6c757d;
+    }
+
+    .no-niveles-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+
+    @media (max-width: 768px) {
+        .niveles-container {
+            grid-template-columns: 1fr;
+        }
+        
+        .docente-header {
+            padding: 1.5rem;
+        }
+        
+        .nivel-actions {
+            flex-direction: column;
+        }
+        
+        .btn-probar {
+            flex: none;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid" data-es-docente="true" data-modo-prueba="true">
+    
+    <!-- Header del docente -->
+    <div class="docente-header">
+        <div class="docente-badge">
+            <i class="fas fa-chalkboard-teacher"></i>
+            Modo Docente
+        </div>
+        <h1><i class="fas fa-gamepad"></i> Niveles del {{ modulo.mod_nombre }}</h1>
+        <p>Puedes probar todos los niveles sin guardar progreso</p>
+    </div>
+
+    <!-- Breadcrumb -->
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="{% url 'core_docente' %}">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'clase_asignada' %}">Clases</a></li>
+        <li class="breadcrumb-item active">Niveles - {{ modulo.mod_nombre }}</li>
+    </ol>
+
+    <!-- Contenedor de niveles -->
+    <div class="niveles-container">
+        {% for nivel in niveles %}
+            <div class="nivel-card">
+                <div class="nivel-header">
+                    <div class="nivel-icon">
+                        {{ nivel.orden }}
+                    </div>
+                    <div class="nivel-orden">
+                        Nivel {{ nivel.orden }}
+                    </div>
+                </div>
+                
+                <h3 class="nivel-title">{{ nivel.niv_nombre }}</h3>
+                
+                <div class="nivel-info">
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <span>{{ nivel.vidas }} vidas</span>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <span>Modo prueba</span>
+                    </div>
+                </div>
+                
+                <div class="nivel-actions">
+                    <a href="{% url 'docente_probar_nivel' nivel.niv_id %}" class="btn-probar">
+                        <i class="fas fa-play"></i>
+                        Probar Nivel
+                    </a>
+                    <a href="#" class="btn-info" onclick="mostrarInfoNivel('{{ nivel.niv_nombre }}', {{ nivel.vidas }}, '{{ nivel.niv_descripcion|default:"Sin descripción" }}')">
+                        <i class="fas fa-info"></i>
+                        Info
+                    </a>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <div class="no-niveles">
+                    <div class="no-niveles-icon">
+                        <i class="fas fa-gamepad"></i>
+                    </div>
+                    <h4>No hay niveles disponibles</h4>
+                    <p>Este módulo aún no tiene niveles configurados.</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Botón volver -->
+    <div class="text-center">
+        <a href="{% url 'clase_asignada' %}" class="btn-volver">
+            <i class="fas fa-arrow-left"></i>
+            Volver a Clases
+        </a>
+    </div>
+</div>
+
+<!-- Modal para información del nivel -->
+<div class="modal fade" id="infoModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Información del Nivel</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="modalContent">
+                <!-- Contenido dinámico -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Vista de niveles del docente cargada');
+    
+    // Animación de entrada para las cards
+    const cards = document.querySelectorAll('.nivel-card');
+    cards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        
+        setTimeout(() => {
+            card.style.transition = 'all 0.6s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, index * 100);
+    });
+});
+
+function mostrarInfoNivel(nombre, vidas, descripcion) {
+    const modalContent = document.getElementById('modalContent');
+    modalContent.innerHTML = `
+        <h6><i class="fas fa-gamepad"></i> ${nombre}</h6>
+        <p><strong>Vidas disponibles:</strong> ${vidas}</p>
+        <p><strong>Descripción:</strong> ${descripcion}</p>
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            <strong>Modo Docente:</strong> Puedes probar este nivel sin límite de vidas y sin guardar progreso.
+        </div>
+    `;
+    
+    // Mostrar modal (asumiendo que usas Bootstrap)
+    const modal = new bootstrap.Modal(document.getElementById('infoModal'));
+    modal.show();
+}
+</script>
+{% endblock %}

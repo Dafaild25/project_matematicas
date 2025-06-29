@@ -70,5 +70,8 @@ def jugar_nivel(request, nivel_id):
         'student_id': request.user.id,
         'level_id': nivel_id,
         'matricula_id': matricula_id,
+        'es_docente': False,
+        'modo_prueba': False,
+        'template_base': 'plantillas/MasterEstudiante.html',  # ✅ CLAVE: pasar plantilla base
     })
     
