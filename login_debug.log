@@ -3661,3 +3661,28 @@ DEBUG 2025-06-28 23:10:04,039 middleware 11224 17712 Usuario: Anónimo - URL: log
 DEBUG 2025-06-28 23:10:22,167 middleware 11224 7936 Usuario: estudiante1 - URL: estudiante_modulo
 DEBUG 2025-06-28 23:10:22,174 decorators 11224 7936 Estudiante acceso: estudiante1 a estudiante_modulo
 WARNING 2025-06-28 23:10:22,287 middleware 11224 7936 URL no encontrada: /estudiante/modulo/None
+DEBUG 2025-06-29 15:54:08,467 middleware 18100 2400 Usuario: Anónimo - URL: loguin_index
+WARNING 2025-06-29 15:54:09,197 middleware 18100 2400 URL no encontrada: /favicon.ico
+DEBUG 2025-06-29 15:54:31,476 middleware 18100 2400 Usuario: Anónimo - URL: iniciar_sesion
+INFO 2025-06-29 15:54:32,642 loguin_views 18100 2400 Login exitoso para usuario: docente1
+DEBUG 2025-06-29 15:54:32,676 middleware 18100 2400 Usuario: docente1 - URL: core_docente
+DEBUG 2025-06-29 15:54:32,681 middleware 18100 2400 Usuario docente1 con grupos ['Docentes'] accediendo a core_docente
+DEBUG 2025-06-29 15:54:32,683 decorators 18100 2400 Docente acceso: docente1 a dashboard_docente
+WARNING 2025-06-29 15:54:32,938 middleware 18100 2400 URL no encontrada: /core/docente/None
+DEBUG 2025-06-29 15:54:33,250 middleware 18100 872 Usuario: docente1 - URL: obtener_datos_dashboard
+DEBUG 2025-06-29 15:54:33,257 decorators 18100 872 Docente acceso: docente1 a obtener_datos_dashboard
+DEBUG 2025-06-29 15:54:34,902 middleware 18100 872 Usuario: docente1 - URL: clase_asignada
+DEBUG 2025-06-29 15:54:34,905 decorators 18100 872 Docente acceso: docente1 a clases_asignadas_docente
+WARNING 2025-06-29 15:54:34,997 middleware 18100 872 URL no encontrada: /docente/clase/None
+DEBUG 2025-06-29 15:54:38,067 middleware 18100 872 Usuario: docente1 - URL: docente_ver_niveles_modulo
+DEBUG 2025-06-29 15:54:38,068 decorators 18100 872 Docente acceso: docente1 a docente_ver_niveles_modulo
+WARNING 2025-06-29 15:54:38,147 middleware 18100 872 URL no encontrada: /docente/modulo/1/niveles/None
+DEBUG 2025-06-29 15:54:43,539 middleware 18100 872 Usuario: docente1 - URL: clase_asignada
+DEBUG 2025-06-29 15:54:43,541 decorators 18100 872 Docente acceso: docente1 a clases_asignadas_docente
+WARNING 2025-06-29 15:54:43,590 middleware 18100 872 URL no encontrada: /docente/clase/None
+DEBUG 2025-06-29 15:54:47,307 middleware 18100 872 Usuario: docente1 - URL: docente_ver_niveles_modulo
+DEBUG 2025-06-29 15:54:47,309 decorators 18100 872 Docente acceso: docente1 a docente_ver_niveles_modulo
+WARNING 2025-06-29 15:54:47,355 middleware 18100 872 URL no encontrada: /docente/modulo/3/niveles/None
+DEBUG 2025-06-29 15:54:48,802 middleware 18100 872 Usuario: docente1 - URL: docente_probar_nivel
+DEBUG 2025-06-29 15:54:48,806 decorators 18100 872 Docente acceso: docente1 a docente_probar_nivel
+WARNING 2025-06-29 15:54:48,955 middleware 18100 872 URL no encontrada: /docente/nivel/9/probar/None
