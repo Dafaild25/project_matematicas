@@ -31,6 +31,8 @@ from .views.master_estudiante import core_estudiante_views
 from .views.master_estudiante import estudiante_modulo_views
 #REPORTE-HISTORIAL
 from .views.reportehistorial import historial_intentos_views
+#REPORTE ADMIN
+from .views.reportehistorial import reportes_docente_para_admin_views
 
 
 
@@ -159,6 +161,10 @@ urlpatterns = [
     #VISTA DE REPORTES DE AVANCES DE LOS ESTUDIANTES PARA EL DOCENTE
     path('pdf/nivel/<int:clase_id>/<int:nivel_id>/', reportes_docente.generar_pdf_nivel, name='pdf_nivel'),
     path('pdf/general/<int:clase_id>/', reportes_docente.generar_pdf_general, name='pdf_general'),
+    
+    #VISTA DE REPORTES DE AVANCES DE LOS ESTUDIANTES PARA EL ADMIN
+    path('pdf/nivel/admin/<int:clase_id>/<int:nivel_id>/', reportes_docente_para_admin_views.generar_pdf_nivel_admin, name='pdf_nivel_admin'),
+    path('pdf/general/admin/<int:clase_id>/', reportes_docente_para_admin_views.generar_pdf_general_admin, name='pdf_general_admin'),
   
 
 
@@ -199,6 +205,7 @@ urlpatterns = [
     
     ######################################## REPORTE HISTORIAL DE INTENTOS ####################################
     path('reporte-intento/<int:matricula_id>/<int:nivel_id>/', historial_intentos_views.generar_reporte_intento_individual_pdf, name='reporte_intento_individual'),
+    path('reporte-intento/admin/<int:matricula_id>/<int:nivel_id>/', historial_intentos_views.generar_reporte_intento_individual_admin_pdf, name='reporte_intento_individual_admin'),
 
 
 
