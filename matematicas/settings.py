@@ -287,3 +287,8 @@ else:
             },
         },
     }
+
+# Límites de subida de archivos (10MB)
+FILE_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10MB
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10MB
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 1000
