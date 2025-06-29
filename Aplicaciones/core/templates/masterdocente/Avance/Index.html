@@ -231,25 +231,29 @@ Avance Estudiantes
             });
         });
     });
-    function recargarTablaMatriculados(){
+   function recargarTablaMatriculados() {
+    // Verifica si YA está inicializada para evitar duplicación
+    if (!$.fn.DataTable.isDataTable('#tbl-matriculados-docente')) {
         $('#tbl-matriculados-docente').DataTable({
-            "language": {
-                "lengthMenu": "Mostrar _MENU_ registros por página",
-                "zeroRecords": "No se encontraron resultados",
-                "info": "Mostrando página _PAGE_ de _PAGES_",
-                "infoEmpty": "No hay registros disponibles",
-                "infoFiltered": "(filtrado de _MAX_ registros totales)",
-                "search": "Buscar:",
-                "paginate": {
-                    "first": "Primero",
-                    "last": "Último",
-                    "next": "Siguiente",
-                    "previous": "Anterior"
+            language: {
+                lengthMenu: "Mostrar _MENU_ registros por página",
+                zeroRecords: "No se encontraron resultados",
+                info: "Mostrando página _PAGE_ de _PAGES_",
+                infoEmpty: "No hay registros disponibles",
+                infoFiltered: "(filtrado de _MAX_ registros totales)",
+                search: "Buscar:",
+                paginate: {
+                    first: "Primero",
+                    last: "Último",
+                    next: "Siguiente",
+                    previous: "Anterior"
                 }
             }
         });
-
     }
+}
+
+    
 
     function verIntentos(matriculaId, nivelId) {
     fetch(`/historial-intentos/?matricula_id=${matriculaId}&nivel_id=${nivelId}`)
