@@ -14,17 +14,59 @@ Docentes
 <div class="container-fluid ">
   <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Docentes</h1>
-    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-        class="fas fa-upload fa-sm text-white-50"></i> Exportar Docentes </a>
+    <a href="{% url 'descargar_plantilla_docentes' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+      <i class="fas fa-download"></i> Plantilla Excel
+    </a>
   </div>
 
   <ol class="breadcrumb mb-4">
     <li class="breadcrumb-item"><a href="{% url 'core_admin' %}">Inicio</a></li>
     <li class="breadcrumb-item active">Docentes</li>
   </ol>
-  <div class="mb-4">
-    <a href="{% url 'docente_create' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Nuevo
-      Docente</a>
+  <!-- Mensajes de exito-->
+  {% if messages %}
+    {% for message in messages %}
+      {% if message.tags == "success" %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+  <div class="card mb-4">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card-header bg-secondary text-white">
+          <i class="fas fa-file-upload me-1"></i> Registrar Docentes Masivamente
+        </div>
+        <div class="card-body">
+          <form id="form-importar-excel">
+            {% csrf_token %}
+            <div class="row">
+              <div class="col-md-10">
+                <input type="file" name="archivo" id="archivo" class="form-control" accept=".xlsx" required>
+              </div>
+              <div class="col-md-2">
+                <button type="submit" class="btn btn-success">Importar</button>
+              </div>
+            </div>
+          </form>
+        </div> 
+      </div>
+    </div>
+  </div>
+  <div class="row mb-4 d-flex justify-content-between">
+    <div class="col-auto">
+      <a href="{% url 'docente_create' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Nuevo
+        Docente
+      </a>
+    </div>
+    <div class="col-auto">
+      <a href="{% url 'exportar_docentes' %}" class="btn btn-warning">
+        <i class="fas fa-download fa-sm text-white-50"></i> Exportar Docentes 
+      </a>
+    </div>
   </div>
   <div class="card mb-4">
     <div class="card-header">
@@ -90,7 +132,7 @@ Docentes
 </div>
 
 {%block js%}
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 
   document.addEventListener('DOMContentLoaded', function () {
@@ -117,7 +159,6 @@ function recargarTablaDocentes() {
         }
     });
 }
-
 </script>
 
 {%endblock%}

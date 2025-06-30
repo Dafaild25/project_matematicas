@@ -1,0 +1,69 @@
+{% load widget_tweaks %}
+<!-- FORMULARIO DE USUARIO -->
+<div class="col-md-6">
+    <label for="first_name" class="form-label">
+        <b>Primer Nombre: *</b>
+    </label>
+    <div class="input-group mb-2">
+        <span class="input-group-text"><i class="fa fa-user"></i></span>
+        {{ formUsuario.first_name|add_class:'form-control' }}
+    </div>
+    {% if formUsuario.first_name.errors %}
+        <div class="text-danger">{{ formUsuario.first_name.errors.0 }}</div>
+    {% endif %}
+
+    <label for="last_name" class="form-label">
+        <b>Primer Apellido: *</b>
+    </label>
+    <div class="input-group mb-2">
+        <span class="input-group-text"><i class="fa fa-user"></i></span>
+        {{ formUsuario.last_name|add_class:'form-control' }}
+    </div>
+    {% if formUsuario.last_name.errors %}
+        <div class="text-danger">{{ formUsuario.last_name.errors.0 }}</div>
+    {% endif %}
+
+    <label for="email" class="form-label">
+        <b>Correo Electrónico: *</b>
+    </label>
+    <div class="input-group mb-2">
+        <span class="input-group-text"><i class="fa fa-envelope"></i></span>
+        {{ formUsuario.email|add_class:'form-control' }}
+    </div>
+    {% if formUsuario.email.errors %}
+        <div class="text-danger">{{ formUsuario.email.errors.0 }}</div>
+    {% endif %}
+
+    <label for="username" class="form-label">
+        <b>Nombre de Usuario: *</b>
+    </label>
+    <div class="input-group mb-2">
+        <span class="input-group-text"><i class="fa-solid fa-circle-user"></i></span>
+        {{ formUsuario.username|add_class:'form-control' }}
+    </div>
+    {% if formUsuario.username.errors %}
+        <div class="text-danger">{{ formUsuario.username.errors.0 }}</div>
+    {% endif %}
+
+    <label for="password1" class="form-label">
+        <b>Contraseña: *</b>
+    </label>
+    <div class="input-group mb-2">
+        <span class="input-group-text"><i class="fa fa-lock"></i></span>
+        {{ formUsuario.password1|add_class:'form-control' }}
+    </div>
+    {% if formUsuario.password1.errors %}
+        <div class="text-danger">{{ formUsuario.password1.errors.0 }}</div>
+    {% endif %}
+
+    <label for="password2" class="form-label">
+        <b>Confirmar Contraseña: *</b>
+    </label>
+    <div class="input-group mb-2">
+        <span class="input-group-text"><i class="fa fa-lock"></i></span>
+        {{ formUsuario.password2|add_class:'form-control' }}
+    </div>
+    {% if formUsuario.password2.errors %}
+        <div class="text-danger">{{ formUsuario.password2.errors.0 }}</div>
+    {% endif %}
+</div>

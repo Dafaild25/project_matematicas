@@ -1,0 +1,69 @@
+{% load widget_tweaks %}
+<!-- FORMULARIO DE PERSONA -->
+<div class="col-md-6">
+    <label for="segundo_nombre" class="form-label">
+        <b>Segundo Nombre: *</b>
+    </label>
+    <div class="input-group mb-2">
+        <span class="input-group-text"><i class="fa fa-user"></i></span>
+        {{ formPersona.per_segundo_nombre|add_class:'form-control' }}
+    </div>
+    {% if formPersona.per_segundo_nombre.errors %}
+        <div class="text-danger">{{ formPersona.per_segundo_nombre.errors.0 }}</div>
+    {% endif %}
+
+    <label for="segundo_apellido" class="form-label">
+        <b>Segundo Apellido: *</b>
+    </label>
+    <div class="input-group mb-2">
+        <span class="input-group-text"><i class="fa fa-user"></i></span>
+        {{ formPersona.per_segundo_apellido|add_class:'form-control' }}
+    </div>
+    {% if formPersona.per_segundo_apellido.errors %}
+        <div class="text-danger">{{ formPersona.per_segundo_apellido.errors.0 }}</div>
+    {% endif %}
+
+    <label for="fecha_nacimiento" class="form-label">
+        <b>Fecha de Nacimiento: *</b>
+    </label>
+    <div class="input-group mb-2">
+        <span class="input-group-text"><i class="fas fa-birthday-cake"></i></span>
+        {{ formPersona.per_fecha_nacimiento|add_class:'form-control' }}
+    </div>
+    {% if formPersona.per_fecha_nacimiento.errors %}
+        <div class="text-danger">{{ formPersona.per_fecha_nacimiento.errors.0 }}</div>
+    {% endif %}
+
+    <label for="cedula" class="form-label">
+        <b>Cédula: *</b>
+    </label>
+    <div class="input-group mb-2">
+        <span class="input-group-text"><i class="fa-solid fa-id-card"></i></span>
+        {{ formPersona.cedula|add_class:'form-control' }}
+    </div>
+    {% if formPersona.cedula.errors %}
+        <div class="text-danger">{{ formPersona.cedula.errors.0 }}</div>
+    {% endif %}
+
+    <label for="telefono" class="form-label">
+        <b>Teléfono: *</b>
+    </label>
+    <div class="input-group mb-2">
+        <span class="input-group-text"><i class="fa-solid fa-phone"></i></span>
+        {{ formPersona.per_telefono|add_class:'form-control' }}
+    </div>
+    {% if formPersona.per_telefono.errors %}
+        <div class="text-danger">{{ formPersona.per_telefono.errors.0 }}</div>
+    {% endif %}
+
+    <label for="fotografia" class="form-label">
+        <b>Fotografía (Opcional):</b>
+    </label>
+    <div class="input-group mb-4">
+        <span class="input-group-text"><i class="fa-solid fa-camera"></i></span>
+        <input type="file" name="fotografia" id="fotografia" accept="image/*" class="form-control">
+    </div>
+    <div class="d-flex justify-content-center">
+        <img id="preview" src="#" alt="Previsualización" class="img-thumbnail" style="max-width: 150px; display: none;">
+    </div>
+</div>

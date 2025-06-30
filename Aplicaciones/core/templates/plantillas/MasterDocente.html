@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
     {% comment %} css de bootstrap select  {% endcomment %}
     <link href="{% static 'vendor/bootstrap-select/css/bootstrap-select.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/sweetalert2.min.css' %}">
     
 
     <!-- Custom styles for this template -->
@@ -159,7 +160,7 @@
                 </a>
                 <!-- Dropdown - User Information -->
                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                  <a class="dropdown-item" href="#">
+                  <a class="dropdown-item" href="{% url 'editar_perfil_docente' %}">
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                     Perfil
                   </a>
@@ -249,7 +250,7 @@
     <script src="{% static 'js/datatables.min.js'%}"></script>
     <!-- Bootstrap Select JS -->
     
-
+    <script src="{% static 'js/sweetalert2.min.js' %}"></script>
     <!-- INICIALIZACION DE DATATABLES -->
     <script>
       $(document).ready(function () {
@@ -271,6 +272,60 @@
        
       });
     </script>
+
+    {% if messages %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            {% for message in messages %}
+                {% if message.tags == 'success' %}
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Operación Exitosa!',
+                        text: '{{ message|escapejs }}',
+                        showConfirmButton: true,
+                        confirmButtonText: '✓ Perfecto',
+                        confirmButtonColor: '#28a745',
+                        background: '#f8fff8',
+                        iconColor: '#28a745',
+                        timer: 4000,
+                        timerProgressBar: true,
+                        showClass: {
+                            popup: 'animate__animated animate__fadeInDown'
+                        },
+                        hideClass: {
+                            popup: 'animate__animated animate__fadeOutUp'
+                        }
+                    });
+                {% elif message.tags == 'error' %}
+                    Swal.fire({
+                        icon: 'error',
+                        title: '¡Ups! Algo salió mal',
+                        text: '{{ message|escapejs }}',
+                        showConfirmButton: true,
+                        confirmButtonText: '🔄 Intentar de nuevo',
+                        confirmButtonColor: '#dc3545',
+                        background: '#fff8f8',
+                        iconColor: '#dc3545',
+                        showClass: {
+                            popup: 'animate__animated animate__shakeX'
+                        }
+                    });
+                {% elif message.tags == 'warning' %}
+                    Swal.fire({
+                        icon: 'warning',
+                        title: '⚠️ Atención Requerida',
+                        text: '{{ message|escapejs }}',
+                        showConfirmButton: true,
+                        confirmButtonText: '⚡ Entendido',
+                        confirmButtonColor: '#ffc107',
+                        background: '#fffdf0',
+                        iconColor: '#ffc107'
+                    });
+                {% endif %}
+            {% endfor %}
+        });
+    </script>
+    {% endif %}
 
     <!-- Page level custom scripts -->
     {% comment %} <script src="{% static 'js/demo/chart-area-demo.js'%}"></script>

@@ -3686,3 +3686,254 @@ WARNING 2025-06-29 15:54:47,355 middleware 18100 872 URL no encontrada: /docente
 DEBUG 2025-06-29 15:54:48,802 middleware 18100 872 Usuario: docente1 - URL: docente_probar_nivel
 DEBUG 2025-06-29 15:54:48,806 decorators 18100 872 Docente acceso: docente1 a docente_probar_nivel
 WARNING 2025-06-29 15:54:48,955 middleware 18100 872 URL no encontrada: /docente/nivel/9/probar/None
+DEBUG 2025-06-29 16:30:33,954 middleware 15764 18968 Usuario: docente1 - URL: clase_asignada
+DEBUG 2025-06-29 16:30:33,957 decorators 15764 18968 Docente acceso: docente1 a clases_asignadas_docente
+WARNING 2025-06-29 16:30:34,129 middleware 15764 17528 URL no encontrada: /docente/clase/None
+DEBUG 2025-06-29 16:30:46,550 middleware 15764 17528 Usuario: docente1 - URL: cerrar_sesion
+INFO 2025-06-29 16:30:46,559 loguin_views 15764 17528 Logout exitoso para usuario: docente1
+DEBUG 2025-06-29 16:30:46,564 middleware 15764 17528 Usuario: Anónimo - URL: loguin_index
+DEBUG 2025-06-29 16:30:58,157 middleware 15764 17528 Usuario: Anónimo - URL: iniciar_sesion
+INFO 2025-06-29 16:30:58,555 loguin_views 15764 17528 Login exitoso para usuario: admin1
+DEBUG 2025-06-29 16:30:58,575 middleware 15764 17528 Usuario: admin1 - URL: core_admin
+DEBUG 2025-06-29 16:30:58,575 middleware 15764 17528 Usuario admin1 con grupos ['Administradores'] accediendo a core_admin
+DEBUG 2025-06-29 16:30:58,575 decorators 15764 17528 Admin acceso: admin1 a dashboard_admin
+INFO 2025-06-29 16:30:58,575 core_views 15764 17528 Usuario admin1 accedió al dashboard admin
+WARNING 2025-06-29 16:30:58,657 middleware 15764 17528 URL no encontrada: /core/admin/None
+DEBUG 2025-06-29 16:30:58,739 middleware 15764 17528 Usuario: admin1 - URL: None
+DEBUG 2025-06-29 16:30:58,769 middleware 15764 17528 Usuario: admin1 - URL: login
+DEBUG 2025-06-29 16:31:07,059 middleware 15764 17528 Usuario: admin1 - URL: matricula_index
+DEBUG 2025-06-29 16:31:07,061 decorators 15764 17528 Admin acceso: admin1 a index
+WARNING 2025-06-29 16:31:07,126 middleware 15764 17528 URL no encontrada: /matricula/None
+DEBUG 2025-06-29 16:31:11,733 middleware 15764 17528 Usuario: admin1 - URL: avance_index
+DEBUG 2025-06-29 16:31:11,734 decorators 15764 17528 Admin acceso: admin1 a index
+WARNING 2025-06-29 16:31:11,872 middleware 15764 17528 URL no encontrada: /avance/1/None
+DEBUG 2025-06-29 16:31:16,776 middleware 15764 17528 Usuario: admin1 - URL: matricula_index
+DEBUG 2025-06-29 16:31:16,777 decorators 15764 17528 Admin acceso: admin1 a index
+WARNING 2025-06-29 16:31:16,831 middleware 15764 17528 URL no encontrada: /matricula/None
+DEBUG 2025-06-29 16:31:18,790 middleware 15764 17528 Usuario: admin1 - URL: matricula_detalle
+DEBUG 2025-06-29 16:31:18,791 decorators 15764 17528 Admin acceso: admin1 a detalle
+WARNING 2025-06-29 16:31:18,873 middleware 15764 17528 URL no encontrada: /matricula/detalle/None
+DEBUG 2025-06-29 16:31:18,912 middleware 15764 17528 Usuario: admin1 - URL: matricula_listado
+DEBUG 2025-06-29 16:31:18,913 decorators 15764 17528 Admin acceso: admin1 a vista_tabla_matriculados
+DEBUG 2025-06-29 16:32:27,173 middleware 15764 17528 Usuario: admin1 - URL: matricula_individual
+DEBUG 2025-06-29 16:32:27,174 decorators 15764 17528 Admin acceso: admin1 a matriculaIndividual
+DEBUG 2025-06-29 16:32:36,579 middleware 15764 17528 Usuario: admin1 - URL: matricula_individual
+DEBUG 2025-06-29 16:32:36,580 decorators 15764 17528 Admin acceso: admin1 a matriculaIndividual
+DEBUG 2025-06-29 16:32:43,736 middleware 15764 17528 Usuario: admin1 - URL: descargar_plantilla_estudiantes
+DEBUG 2025-06-29 16:34:42,931 middleware 15764 17528 Usuario: admin1 - URL: cerrar_sesion
+INFO 2025-06-29 16:34:42,944 loguin_views 15764 17528 Logout exitoso para usuario: admin1
+DEBUG 2025-06-29 16:34:42,951 middleware 15764 17528 Usuario: Anónimo - URL: loguin_index
+DEBUG 2025-06-29 16:35:04,196 middleware 15764 17528 Usuario: Anónimo - URL: iniciar_sesion
+INFO 2025-06-29 16:35:04,695 loguin_views 15764 17528 Login exitoso para usuario: estudiante1
+DEBUG 2025-06-29 16:35:04,721 middleware 15764 17528 Usuario: estudiante1 - URL: core_estudiante
+DEBUG 2025-06-29 16:35:04,722 middleware 15764 17528 Usuario estudiante1 con grupos ['Estudiantes'] accediendo a core_estudiante
+DEBUG 2025-06-29 16:35:04,723 decorators 15764 17528 Estudiante acceso: estudiante1 a core_estudiante
+WARNING 2025-06-29 16:35:04,796 middleware 15764 17528 URL no encontrada: /core/estudiante/None
+DEBUG 2025-06-29 16:35:07,421 middleware 15764 17528 Usuario: estudiante1 - URL: estudiante_modulo
+DEBUG 2025-06-29 16:35:07,423 decorators 15764 17528 Estudiante acceso: estudiante1 a estudiante_modulo
+WARNING 2025-06-29 16:35:07,479 middleware 15764 17528 URL no encontrada: /estudiante/modulo/None
+DEBUG 2025-06-29 16:35:17,748 middleware 15764 17528 Usuario: estudiante1 - URL: cerrar_sesion
+INFO 2025-06-29 16:35:17,760 loguin_views 15764 17528 Logout exitoso para usuario: estudiante1
+DEBUG 2025-06-29 16:35:17,767 middleware 15764 17528 Usuario: Anónimo - URL: loguin_index
+DEBUG 2025-06-29 16:35:26,821 middleware 15764 17528 Usuario: Anónimo - URL: iniciar_sesion
+INFO 2025-06-29 16:35:27,307 loguin_views 15764 17528 Login exitoso para usuario: docente1
+DEBUG 2025-06-29 16:35:27,325 middleware 15764 17528 Usuario: docente1 - URL: core_docente
+DEBUG 2025-06-29 16:35:27,325 middleware 15764 17528 Usuario docente1 con grupos ['Docentes'] accediendo a core_docente
+DEBUG 2025-06-29 16:35:27,331 decorators 15764 17528 Docente acceso: docente1 a dashboard_docente
+WARNING 2025-06-29 16:35:27,397 middleware 15764 17528 URL no encontrada: /core/docente/None
+DEBUG 2025-06-29 16:35:27,464 middleware 15764 17528 Usuario: docente1 - URL: obtener_datos_dashboard
+DEBUG 2025-06-29 16:35:27,466 decorators 15764 17528 Docente acceso: docente1 a obtener_datos_dashboard
+DEBUG 2025-06-29 16:35:29,001 middleware 15764 17528 Usuario: docente1 - URL: clase_asignada
+DEBUG 2025-06-29 16:35:29,005 decorators 15764 17528 Docente acceso: docente1 a clases_asignadas_docente
+WARNING 2025-06-29 16:35:29,060 middleware 15764 17528 URL no encontrada: /docente/clase/None
+DEBUG 2025-06-29 16:35:32,722 middleware 15764 17528 Usuario: docente1 - URL: docente_ver_niveles_modulo
+DEBUG 2025-06-29 16:35:32,723 decorators 15764 17528 Docente acceso: docente1 a docente_ver_niveles_modulo
+WARNING 2025-06-29 16:35:32,772 middleware 15764 17528 URL no encontrada: /docente/modulo/3/niveles/None
+DEBUG 2025-06-29 16:35:38,332 middleware 15764 17528 Usuario: docente1 - URL: docente_probar_nivel
+DEBUG 2025-06-29 16:35:38,334 decorators 15764 17528 Docente acceso: docente1 a docente_probar_nivel
+WARNING 2025-06-29 16:35:38,387 middleware 15764 17528 URL no encontrada: /docente/nivel/9/probar/None
+DEBUG 2025-06-29 16:35:55,149 middleware 15764 17528 Usuario: docente1 - URL: docente_probar_nivel
+DEBUG 2025-06-29 16:35:55,151 decorators 15764 17528 Docente acceso: docente1 a docente_probar_nivel
+WARNING 2025-06-29 16:35:55,263 middleware 15764 18968 URL no encontrada: /docente/nivel/9/probar/None
+DEBUG 2025-06-29 16:36:00,209 middleware 15764 18968 Usuario: docente1 - URL: docente_probar_nivel
+DEBUG 2025-06-29 16:36:00,211 decorators 15764 18968 Docente acceso: docente1 a docente_probar_nivel
+WARNING 2025-06-29 16:36:00,267 middleware 15764 18968 URL no encontrada: /docente/nivel/9/probar/None
+WARNING 2025-06-29 16:36:47,315 middleware 15764 18968 URL no encontrada: /.well-known/appspecific/com.chrome.devtools.json
+DEBUG 2025-06-29 16:37:03,661 middleware 15764 17528 Usuario: docente1 - URL: docente_probar_nivel
+DEBUG 2025-06-29 16:37:03,663 decorators 15764 17528 Docente acceso: docente1 a docente_probar_nivel
+WARNING 2025-06-29 16:37:03,839 middleware 15764 17528 URL no encontrada: /docente/nivel/9/probar/None
+DEBUG 2025-06-29 16:37:06,249 middleware 15764 17528 Usuario: docente1 - URL: docente_probar_nivel
+DEBUG 2025-06-29 16:37:06,251 decorators 15764 17528 Docente acceso: docente1 a docente_probar_nivel
+WARNING 2025-06-29 16:37:06,305 middleware 15764 17528 URL no encontrada: /docente/nivel/9/probar/None
+DEBUG 2025-06-29 16:37:16,227 middleware 15764 17528 Usuario: docente1 - URL: docente_probar_nivel
+DEBUG 2025-06-29 16:37:16,228 decorators 15764 17528 Docente acceso: docente1 a docente_probar_nivel
+WARNING 2025-06-29 16:37:16,316 middleware 15764 17528 URL no encontrada: /docente/nivel/9/probar/None
+DEBUG 2025-06-29 16:37:29,143 middleware 15764 17528 Usuario: docente1 - URL: clase_asignada
+DEBUG 2025-06-29 16:37:29,145 decorators 15764 17528 Docente acceso: docente1 a clases_asignadas_docente
+WARNING 2025-06-29 16:37:29,197 middleware 15764 17528 URL no encontrada: /docente/clase/None
+DEBUG 2025-06-29 16:37:31,395 middleware 15764 17528 Usuario: docente1 - URL: docente_ver_niveles_modulo
+DEBUG 2025-06-29 16:37:31,396 decorators 15764 17528 Docente acceso: docente1 a docente_ver_niveles_modulo
+WARNING 2025-06-29 16:37:31,432 middleware 15764 17528 URL no encontrada: /docente/modulo/1/niveles/None
+DEBUG 2025-06-29 16:37:38,417 middleware 15764 17528 Usuario: docente1 - URL: clase_asignada
+DEBUG 2025-06-29 16:37:38,419 decorators 15764 17528 Docente acceso: docente1 a clases_asignadas_docente
+WARNING 2025-06-29 16:37:38,464 middleware 15764 17528 URL no encontrada: /docente/clase/None
+DEBUG 2025-06-29 16:37:40,210 middleware 15764 17528 Usuario: docente1 - URL: docente_ver_niveles_modulo
+DEBUG 2025-06-29 16:37:40,212 decorators 15764 17528 Docente acceso: docente1 a docente_ver_niveles_modulo
+WARNING 2025-06-29 16:37:40,255 middleware 15764 17528 URL no encontrada: /docente/modulo/3/niveles/None
+DEBUG 2025-06-29 16:37:58,787 middleware 15764 17528 Usuario: docente1 - URL: docente_probar_nivel
+DEBUG 2025-06-29 16:37:58,788 decorators 15764 17528 Docente acceso: docente1 a docente_probar_nivel
+WARNING 2025-06-29 16:37:58,869 middleware 15764 17528 URL no encontrada: /docente/nivel/7/probar/None
+DEBUG 2025-06-29 16:38:13,976 middleware 15764 17528 Usuario: docente1 - URL: docente_probar_nivel
+DEBUG 2025-06-29 16:38:13,979 decorators 15764 17528 Docente acceso: docente1 a docente_probar_nivel
+WARNING 2025-06-29 16:38:14,142 middleware 15764 15372 URL no encontrada: /docente/nivel/7/probar/None
+DEBUG 2025-06-29 16:38:18,856 middleware 15764 15372 Usuario: docente1 - URL: docente_ver_niveles_modulo
+DEBUG 2025-06-29 16:38:18,856 decorators 15764 15372 Docente acceso: docente1 a docente_ver_niveles_modulo
+WARNING 2025-06-29 16:38:18,913 middleware 15764 15372 URL no encontrada: /docente/modulo/3/niveles/None
+DEBUG 2025-06-29 16:38:20,235 middleware 15764 15372 Usuario: docente1 - URL: docente_probar_nivel
+DEBUG 2025-06-29 16:38:20,237 decorators 15764 15372 Docente acceso: docente1 a docente_probar_nivel
+WARNING 2025-06-29 16:38:20,292 middleware 15764 15372 URL no encontrada: /docente/nivel/8/probar/None
+DEBUG 2025-06-29 16:38:56,164 middleware 15764 15372 Usuario: docente1 - URL: docente_probar_nivel
+DEBUG 2025-06-29 16:38:56,168 decorators 15764 15372 Docente acceso: docente1 a docente_probar_nivel
+WARNING 2025-06-29 16:38:56,324 middleware 15764 15372 URL no encontrada: /docente/nivel/8/probar/None
+DEBUG 2025-06-29 16:39:47,200 middleware 15764 15372 Usuario: docente1 - URL: docente_ver_niveles_modulo
+DEBUG 2025-06-29 16:39:47,202 decorators 15764 15372 Docente acceso: docente1 a docente_ver_niveles_modulo
+WARNING 2025-06-29 16:39:47,257 middleware 15764 15372 URL no encontrada: /docente/modulo/3/niveles/None
+DEBUG 2025-06-29 16:39:49,643 middleware 15764 15372 Usuario: docente1 - URL: clase_asignada
+DEBUG 2025-06-29 16:39:49,645 decorators 15764 15372 Docente acceso: docente1 a clases_asignadas_docente
+WARNING 2025-06-29 16:39:49,679 middleware 15764 15372 URL no encontrada: /docente/clase/None
+DEBUG 2025-06-29 16:39:51,585 middleware 15764 15372 Usuario: docente1 - URL: docente_ver_niveles_modulo
+DEBUG 2025-06-29 16:39:51,586 decorators 15764 15372 Docente acceso: docente1 a docente_ver_niveles_modulo
+WARNING 2025-06-29 16:39:51,615 middleware 15764 15372 URL no encontrada: /docente/modulo/1/niveles/None
+DEBUG 2025-06-29 16:40:12,354 middleware 15764 15372 Usuario: docente1 - URL: docente_ver_niveles_modulo
+DEBUG 2025-06-29 16:40:12,356 decorators 15764 15372 Docente acceso: docente1 a docente_ver_niveles_modulo
+WARNING 2025-06-29 16:40:12,389 middleware 15764 15372 URL no encontrada: /docente/modulo/1/niveles/None
+DEBUG 2025-06-29 16:40:14,440 middleware 15764 15372 Usuario: docente1 - URL: docente_probar_nivel
+DEBUG 2025-06-29 16:40:14,442 decorators 15764 15372 Docente acceso: docente1 a docente_probar_nivel
+WARNING 2025-06-29 16:40:14,526 middleware 15764 15372 URL no encontrada: /docente/nivel/1/probar/None
+DEBUG 2025-06-29 16:40:18,355 middleware 15764 15372 Usuario: docente1 - URL: docente_ver_niveles_modulo
+DEBUG 2025-06-29 16:40:18,357 decorators 15764 15372 Docente acceso: docente1 a docente_ver_niveles_modulo
+WARNING 2025-06-29 16:40:18,397 middleware 15764 15372 URL no encontrada: /docente/modulo/1/niveles/None
+DEBUG 2025-06-29 16:41:15,099 middleware 15764 15372 Usuario: docente1 - URL: docente_probar_nivel
+DEBUG 2025-06-29 16:41:15,101 decorators 15764 15372 Docente acceso: docente1 a docente_probar_nivel
+WARNING 2025-06-29 16:41:15,195 middleware 15764 15372 URL no encontrada: /docente/nivel/2/probar/None
+DEBUG 2025-06-29 16:41:29,021 middleware 15764 15372 Usuario: docente1 - URL: docente_probar_nivel
+DEBUG 2025-06-29 16:41:29,023 decorators 15764 15372 Docente acceso: docente1 a docente_probar_nivel
+WARNING 2025-06-29 16:41:29,076 middleware 15764 15372 URL no encontrada: /docente/nivel/2/probar/None
+DEBUG 2025-06-29 16:41:35,341 middleware 15764 15372 Usuario: docente1 - URL: docente_probar_nivel
+DEBUG 2025-06-29 16:41:35,343 decorators 15764 15372 Docente acceso: docente1 a docente_probar_nivel
+WARNING 2025-06-29 16:41:35,445 middleware 15764 15372 URL no encontrada: /docente/nivel/2/probar/None
+DEBUG 2025-06-29 16:41:41,803 middleware 15764 15372 Usuario: docente1 - URL: docente_ver_niveles_modulo
+DEBUG 2025-06-29 16:41:41,803 decorators 15764 15372 Docente acceso: docente1 a docente_ver_niveles_modulo
+WARNING 2025-06-29 16:41:41,851 middleware 15764 15372 URL no encontrada: /docente/modulo/1/niveles/None
+DEBUG 2025-06-29 16:42:31,380 middleware 15764 15372 Usuario: docente1 - URL: docente_probar_nivel
+DEBUG 2025-06-29 16:42:31,381 decorators 15764 15372 Docente acceso: docente1 a docente_probar_nivel
+WARNING 2025-06-29 16:42:31,463 middleware 15764 15372 URL no encontrada: /docente/nivel/3/probar/None
+DEBUG 2025-06-29 16:42:34,665 middleware 15764 15372 Usuario: docente1 - URL: docente_ver_niveles_modulo
+DEBUG 2025-06-29 16:42:34,667 decorators 15764 15372 Docente acceso: docente1 a docente_ver_niveles_modulo
+WARNING 2025-06-29 16:42:34,707 middleware 15764 15372 URL no encontrada: /docente/modulo/1/niveles/None
+DEBUG 2025-06-29 16:42:38,561 middleware 15764 15372 Usuario: docente1 - URL: clase_asignada
+DEBUG 2025-06-29 16:42:38,563 decorators 15764 15372 Docente acceso: docente1 a clases_asignadas_docente
+WARNING 2025-06-29 16:42:38,597 middleware 15764 15372 URL no encontrada: /docente/clase/None
+DEBUG 2025-06-29 16:42:45,754 middleware 15764 15372 Usuario: docente1 - URL: docente_ver_niveles_modulo
+DEBUG 2025-06-29 16:42:45,756 decorators 15764 15372 Docente acceso: docente1 a docente_ver_niveles_modulo
+WARNING 2025-06-29 16:42:45,790 middleware 15764 15372 URL no encontrada: /docente/modulo/2/niveles/None
+DEBUG 2025-06-29 16:42:47,754 middleware 15764 15372 Usuario: docente1 - URL: docente_probar_nivel
+DEBUG 2025-06-29 16:42:47,755 decorators 15764 15372 Docente acceso: docente1 a docente_probar_nivel
+WARNING 2025-06-29 16:42:47,793 middleware 15764 15372 URL no encontrada: /docente/nivel/4/probar/None
+DEBUG 2025-06-29 16:43:27,858 middleware 15764 15372 Usuario: docente1 - URL: docente_probar_nivel
+DEBUG 2025-06-29 16:43:27,860 decorators 15764 15372 Docente acceso: docente1 a docente_probar_nivel
+WARNING 2025-06-29 16:43:27,955 middleware 15764 15372 URL no encontrada: /docente/nivel/4/probar/None
+DEBUG 2025-06-29 16:43:32,030 middleware 15764 15372 Usuario: docente1 - URL: docente_ver_niveles_modulo
+DEBUG 2025-06-29 16:43:32,031 decorators 15764 15372 Docente acceso: docente1 a docente_ver_niveles_modulo
+WARNING 2025-06-29 16:43:32,081 middleware 15764 15372 URL no encontrada: /docente/modulo/2/niveles/None
+DEBUG 2025-06-29 16:43:58,086 middleware 15764 15372 Usuario: docente1 - URL: docente_probar_nivel
+DEBUG 2025-06-29 16:43:58,088 decorators 15764 15372 Docente acceso: docente1 a docente_probar_nivel
+WARNING 2025-06-29 16:43:58,166 middleware 15764 15372 URL no encontrada: /docente/nivel/5/probar/None
+DEBUG 2025-06-29 16:44:31,390 middleware 15764 15372 Usuario: docente1 - URL: docente_ver_niveles_modulo
+DEBUG 2025-06-29 16:44:31,392 decorators 15764 15372 Docente acceso: docente1 a docente_ver_niveles_modulo
+WARNING 2025-06-29 16:44:31,441 middleware 15764 15372 URL no encontrada: /docente/modulo/2/niveles/None
+DEBUG 2025-06-29 16:44:32,676 middleware 15764 15372 Usuario: docente1 - URL: docente_probar_nivel
+DEBUG 2025-06-29 16:44:32,678 decorators 15764 15372 Docente acceso: docente1 a docente_probar_nivel
+WARNING 2025-06-29 16:44:32,772 middleware 15764 15372 URL no encontrada: /docente/nivel/6/probar/None
+DEBUG 2025-06-29 16:44:35,987 middleware 15764 15372 Usuario: docente1 - URL: docente_ver_niveles_modulo
+DEBUG 2025-06-29 16:44:35,989 decorators 15764 15372 Docente acceso: docente1 a docente_ver_niveles_modulo
+WARNING 2025-06-29 16:44:36,026 middleware 15764 15372 URL no encontrada: /docente/modulo/2/niveles/None
+DEBUG 2025-06-29 16:44:37,528 middleware 15764 15372 Usuario: docente1 - URL: clase_asignada
+DEBUG 2025-06-29 16:44:37,531 decorators 15764 15372 Docente acceso: docente1 a clases_asignadas_docente
+WARNING 2025-06-29 16:44:37,576 middleware 15764 15372 URL no encontrada: /docente/clase/None
+DEBUG 2025-06-29 16:44:39,417 middleware 15764 15372 Usuario: docente1 - URL: matriculados_asignados
+DEBUG 2025-06-29 16:44:39,419 decorators 15764 15372 Docente acceso: docente1 a matriculados_asignados_docente
+WARNING 2025-06-29 16:44:39,511 middleware 15764 17528 URL no encontrada: /docente/matriculados/1/None
+DEBUG 2025-06-29 16:44:39,556 middleware 15764 17528 Usuario: docente1 - URL: tabla_matriculados_docente
+DEBUG 2025-06-29 16:44:39,558 decorators 15764 17528 Docente acceso: docente1 a vista_tabla_matriculados_docente
+DEBUG 2025-06-29 16:44:39,600 middleware 15764 15372 Usuario: docente1 - URL: tabla_matriculados_docente
+DEBUG 2025-06-29 16:44:39,602 decorators 15764 15372 Docente acceso: docente1 a vista_tabla_matriculados_docente
+DEBUG 2025-06-29 16:57:48,663 middleware 15764 17788 Usuario: docente1 - URL: matriculados_asignados
+DEBUG 2025-06-29 16:57:48,666 decorators 15764 17788 Docente acceso: docente1 a matriculados_asignados_docente
+WARNING 2025-06-29 16:57:48,791 middleware 15764 17788 URL no encontrada: /docente/matriculados/1/None
+DEBUG 2025-06-29 16:57:48,910 middleware 15764 17788 Usuario: docente1 - URL: tabla_matriculados_docente
+DEBUG 2025-06-29 16:57:48,912 decorators 15764 17788 Docente acceso: docente1 a vista_tabla_matriculados_docente
+DEBUG 2025-06-29 16:57:48,935 middleware 15764 10864 Usuario: docente1 - URL: tabla_matriculados_docente
+DEBUG 2025-06-29 16:57:48,937 decorators 15764 10864 Docente acceso: docente1 a vista_tabla_matriculados_docente
+DEBUG 2025-06-29 16:57:49,669 middleware 15764 10864 Usuario: docente1 - URL: matriculados_asignados
+DEBUG 2025-06-29 16:57:49,672 decorators 15764 10864 Docente acceso: docente1 a matriculados_asignados_docente
+WARNING 2025-06-29 16:57:49,717 middleware 15764 10864 URL no encontrada: /docente/matriculados/1/None
+DEBUG 2025-06-29 16:57:49,782 middleware 15764 10864 Usuario: docente1 - URL: tabla_matriculados_docente
+DEBUG 2025-06-29 16:57:49,784 decorators 15764 10864 Docente acceso: docente1 a vista_tabla_matriculados_docente
+DEBUG 2025-06-29 16:57:49,816 middleware 15764 17788 Usuario: docente1 - URL: tabla_matriculados_docente
+DEBUG 2025-06-29 16:57:49,818 decorators 15764 17788 Docente acceso: docente1 a vista_tabla_matriculados_docente
+DEBUG 2025-06-29 16:57:49,826 middleware 15764 10864 Usuario: docente1 - URL: matriculados_asignados
+DEBUG 2025-06-29 16:57:49,831 decorators 15764 10864 Docente acceso: docente1 a matriculados_asignados_docente
+WARNING 2025-06-29 16:57:49,968 middleware 15764 10864 URL no encontrada: /docente/matriculados/1/None
+DEBUG 2025-06-29 16:57:50,022 middleware 15764 10864 Usuario: docente1 - URL: tabla_matriculados_docente
+DEBUG 2025-06-29 16:57:50,024 decorators 15764 10864 Docente acceso: docente1 a vista_tabla_matriculados_docente
+DEBUG 2025-06-29 16:57:50,059 middleware 15764 17788 Usuario: docente1 - URL: tabla_matriculados_docente
+DEBUG 2025-06-29 16:57:50,060 decorators 15764 17788 Docente acceso: docente1 a vista_tabla_matriculados_docente
+DEBUG 2025-06-29 16:57:50,216 middleware 15764 17788 Usuario: docente1 - URL: matriculados_asignados
+DEBUG 2025-06-29 16:57:50,218 decorators 15764 17788 Docente acceso: docente1 a matriculados_asignados_docente
+WARNING 2025-06-29 16:57:50,266 middleware 15764 17788 URL no encontrada: /docente/matriculados/1/None
+DEBUG 2025-06-29 16:57:50,322 middleware 15764 17788 Usuario: docente1 - URL: tabla_matriculados_docente
+DEBUG 2025-06-29 16:57:50,325 decorators 15764 17788 Docente acceso: docente1 a vista_tabla_matriculados_docente
+DEBUG 2025-06-29 16:57:50,364 middleware 15764 17788 Usuario: docente1 - URL: tabla_matriculados_docente
+DEBUG 2025-06-29 16:57:50,364 decorators 15764 17788 Docente acceso: docente1 a vista_tabla_matriculados_docente
+DEBUG 2025-06-29 16:57:50,396 middleware 15764 10864 Usuario: docente1 - URL: matriculados_asignados
+DEBUG 2025-06-29 16:57:50,399 decorators 15764 10864 Docente acceso: docente1 a matriculados_asignados_docente
+WARNING 2025-06-29 16:57:50,507 middleware 15764 10864 URL no encontrada: /docente/matriculados/1/None
+DEBUG 2025-06-29 16:57:50,569 middleware 15764 10864 Usuario: docente1 - URL: tabla_matriculados_docente
+DEBUG 2025-06-29 16:57:50,572 decorators 15764 10864 Docente acceso: docente1 a vista_tabla_matriculados_docente
+DEBUG 2025-06-29 16:57:50,611 middleware 15764 17788 Usuario: docente1 - URL: tabla_matriculados_docente
+DEBUG 2025-06-29 16:57:50,614 decorators 15764 17788 Docente acceso: docente1 a vista_tabla_matriculados_docente
+DEBUG 2025-06-29 16:58:17,970 middleware 15764 17788 Usuario: docente1 - URL: crear_estudiante_docente
+DEBUG 2025-06-29 16:58:17,970 decorators 15764 17788 Docente acceso: docente1 a crear_estudiante_docente
+DEBUG 2025-06-29 16:58:18,015 middleware 15764 17788 Usuario: docente1 - URL: matriculados_asignados
+DEBUG 2025-06-29 16:58:18,016 decorators 15764 17788 Docente acceso: docente1 a matriculados_asignados_docente
+WARNING 2025-06-29 16:58:18,060 middleware 15764 17788 URL no encontrada: /docente/matriculados/1/None
+DEBUG 2025-06-29 16:58:18,123 middleware 15764 17788 Usuario: docente1 - URL: tabla_matriculados_docente
+DEBUG 2025-06-29 16:58:18,125 decorators 15764 17788 Docente acceso: docente1 a vista_tabla_matriculados_docente
+DEBUG 2025-06-29 16:58:18,156 middleware 15764 10864 Usuario: docente1 - URL: tabla_matriculados_docente
+DEBUG 2025-06-29 16:58:18,158 decorators 15764 10864 Docente acceso: docente1 a vista_tabla_matriculados_docente
+DEBUG 2025-06-29 16:58:40,231 middleware 15764 10864 Usuario: docente1 - URL: eliminar_matricula
+DEBUG 2025-06-29 16:58:40,251 middleware 15764 10864 Usuario: docente1 - URL: loguin_index
+DEBUG 2025-06-29 16:58:40,275 middleware 15764 10864 Usuario: docente1 - URL: core_docente
+DEBUG 2025-06-29 16:58:40,276 middleware 15764 10864 Usuario docente1 con grupos ['Docentes'] accediendo a core_docente
+DEBUG 2025-06-29 16:58:40,277 decorators 15764 10864 Docente acceso: docente1 a dashboard_docente
+DEBUG 2025-06-29 16:58:52,278 middleware 15764 10864 Usuario: docente1 - URL: eliminar_matricula
+DEBUG 2025-06-29 16:58:52,305 middleware 15764 10864 Usuario: docente1 - URL: loguin_index
+DEBUG 2025-06-29 16:58:52,325 middleware 15764 10864 Usuario: docente1 - URL: core_docente
+DEBUG 2025-06-29 16:58:52,328 middleware 15764 10864 Usuario docente1 con grupos ['Docentes'] accediendo a core_docente
+DEBUG 2025-06-29 16:58:52,329 decorators 15764 10864 Docente acceso: docente1 a dashboard_docente
+DEBUG 2025-06-29 16:59:12,613 middleware 15764 10864 Usuario: docente1 - URL: eliminar_matricula
+DEBUG 2025-06-29 16:59:12,638 middleware 15764 10864 Usuario: docente1 - URL: loguin_index
+DEBUG 2025-06-29 16:59:12,664 middleware 15764 10864 Usuario: docente1 - URL: core_docente
+DEBUG 2025-06-29 16:59:12,666 middleware 15764 10864 Usuario docente1 con grupos ['Docentes'] accediendo a core_docente
+DEBUG 2025-06-29 16:59:12,667 decorators 15764 10864 Docente acceso: docente1 a dashboard_docente
+DEBUG 2025-06-29 16:59:35,555 middleware 15764 10864 Usuario: docente1 - URL: clase_asignada
+DEBUG 2025-06-29 16:59:35,557 decorators 15764 10864 Docente acceso: docente1 a clases_asignadas_docente
+WARNING 2025-06-29 16:59:35,604 middleware 15764 10864 URL no encontrada: /docente/clase/None
+DEBUG 2025-06-29 16:59:39,236 middleware 15764 10864 Usuario: docente1 - URL: ver_notas_estudiantes
+DEBUG 2025-06-29 16:59:39,238 decorators 15764 10864 Docente acceso: docente1 a ver_notas_estudiantes
+WARNING 2025-06-29 16:59:39,330 middleware 15764 10864 URL no encontrada: /docente/clase/1/notas/None
+DEBUG 2025-06-29 16:59:42,832 middleware 15764 10864 Usuario: docente1 - URL: historial_intentos
+DEBUG 2025-06-29 16:59:42,834 decorators 15764 10864 Docente acceso: docente1 a historial_intentos
+DEBUG 2025-06-29 17:00:03,169 middleware 15764 10864 Usuario: docente1 - URL: reporte_intento_individual
+DEBUG 2025-06-29 17:00:03,171 decorators 15764 10864 Docente acceso: docente1 a generar_reporte_intento_individual_pdf

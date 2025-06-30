@@ -10,6 +10,8 @@
 
 {% block css %}
   <link rel="stylesheet" href="{% static 'css/Modulo-1/primer-nivel.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/sweetalert2.min.css' %}">
+  <script src="{% static 'js/sweetalert2.min.js' %}"></script>
   <style>
     body {
       background: linear-gradient(-45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ffa726, #ef5350);
@@ -1029,8 +1031,6 @@
 {% endblock %}
 
 {% block js %}
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
- 
 
   <script>
       // ✅ 1. DETECCIÓN ULTRA MEJORADA DE MODO DOCENTE
